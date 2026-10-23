@@ -424,9 +424,6 @@ export function generateInvoiceHtml(data: {
                   : ""
               }
             </div>
-            <div style="font-size: 9.5px; color: #555; text-align: center; margin-top: 30px;">
-              ผิด ตก ยกเว้น E. & O.E.
-            </div>
           </td>
 
           <!-- Right: Summary Table -->

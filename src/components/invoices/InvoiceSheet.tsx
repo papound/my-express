@@ -412,9 +412,6 @@ export function InvoiceSheet({
                   </span>
                 )}
               </div>
-              <div className="text-[10px] text-slate-500 text-center pt-2">
-                ผิด ตก ยกเว้น E. & O.E.
-              </div>
             </div>
 
             {/* Right: Summary Breakdown (5 cols) */}
