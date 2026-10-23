@@ -286,10 +286,20 @@ export function DashboardView() {
                         className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold ${
                           inv.RECTYP === "1"
                             ? "bg-emerald-50 text-emerald-700 border border-emerald-200/50"
-                            : "bg-indigo-50 text-indigo-700 border border-indigo-200/50"
+                            : inv.RECTYP === "3" || inv.RECTYP === "2"
+                            ? "bg-blue-50 text-blue-700 border border-blue-200/50"
+                            : inv.RECTYP === "5"
+                            ? "bg-rose-50 text-rose-700 border border-rose-200/50"
+                            : "bg-purple-50 text-purple-700 border border-purple-200/50"
                         }`}
                       >
-                        {inv.RECTYP === "1" ? "ขายสด" : "ขายเชื่อ"}
+                        {inv.RECTYP === "1"
+                          ? "ขายสด"
+                          : inv.RECTYP === "3" || inv.RECTYP === "2"
+                          ? "ขายเชื่อ"
+                          : inv.RECTYP === "5"
+                          ? "รับคืน"
+                          : "เงินมัดจำ"}
                       </span>
                     </td>
                     <td className="py-3 px-2">

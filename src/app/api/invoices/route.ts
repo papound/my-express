@@ -72,7 +72,11 @@ export async function GET(request: Request) {
 
     // Filter by rectyp
     if (rectyp !== "all") {
-      records = records.filter((r) => r.RECTYP === rectyp);
+      if (rectyp === "3" || rectyp === "2") {
+        records = records.filter((r) => r.RECTYP === "3" || r.RECTYP === "2");
+      } else {
+        records = records.filter((r) => r.RECTYP === rectyp);
+      }
     }
 
     // Filter by date range

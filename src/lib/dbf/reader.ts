@@ -135,11 +135,12 @@ export function formatAmount(amount: number): string {
  */
 export function getDocTypeName(rectyp: string): string {
   const types: Record<string, string> = {
+    "0": "เงินมัดจำรับ",
     "1": "ขายเงินสด",
-    "2": "ขายเงินเชื่อ",
-    "3": "รับคืนสินค้า",
+    "3": "ขายเงินเชื่อ",
     "4": "ใบเพิ่มหนี้",
-    "5": "ใบลดหนี้",
+    "5": "รับคืนสินค้า/ใบลดหนี้",
+    "9": "รับชำระหนี้",
   };
   return types[rectyp] ?? `ประเภท ${rectyp}`;
 }

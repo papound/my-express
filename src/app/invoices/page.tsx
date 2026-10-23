@@ -28,17 +28,29 @@ interface Invoice {
 }
 
 const TYPE_CONFIG: Record<string, { label: string; badgeClass: string }> = {
-  "1": {
-    label: "ขายสด",
-    badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
+  "3": {
+    label: "ขายเชื่อ",
+    badgeClass: "bg-blue-50 text-blue-700 border-blue-200/80",
   },
   "2": {
     label: "ขายเชื่อ",
     badgeClass: "bg-blue-50 text-blue-700 border-blue-200/80",
   },
-  "3": {
+  "1": {
+    label: "ขายสด",
+    badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
+  },
+  "5": {
     label: "รับคืน",
     badgeClass: "bg-rose-50 text-rose-700 border-rose-200/80",
+  },
+  "0": {
+    label: "มัดจำ",
+    badgeClass: "bg-purple-50 text-purple-700 border-purple-200/80",
+  },
+  "4": {
+    label: "เพิ่มหนี้",
+    badgeClass: "bg-amber-50 text-amber-700 border-amber-200/80",
   },
 };
 
@@ -139,9 +151,10 @@ export default function InvoicesPage() {
             <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60 overflow-x-auto max-w-full">
               {[
                 { id: "all", label: "ทั้งหมด" },
-                { id: "1", label: "ขายเงินสด" },
-                { id: "2", label: "ขายเงินเชื่อ" },
-                { id: "3", label: "รับคืน" },
+                { id: "3", label: "ขายเงินเชื่อ (IV)" },
+                { id: "1", label: "ขายเงินสด (HS)" },
+                { id: "5", label: "รับคืน (SR)" },
+                { id: "0", label: "เงินมัดจำ (AI)" },
               ].map((tab) => (
                 <button
                   key={tab.id}

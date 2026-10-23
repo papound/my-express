@@ -36,7 +36,7 @@ export async function GET() {
 
       totalSales += net;
       if (rectyp === "1") cashSales += net;
-      if (rectyp === "2") creditSales += net;
+      if (rectyp === "3" || rectyp === "2") creditSales += net;
       totalOutstanding += rem;
 
       return {
