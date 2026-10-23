@@ -5,6 +5,7 @@ import {
   generateSalesReturnHtml,
   generateAdvanceInvoiceHtml,
   generateCashSaleHtml,
+  generateReceiptHtml,
 } from "@/lib/pdf/templates";
 import { NextResponse } from "next/server";
 
@@ -16,13 +17,14 @@ export async function GET(
     const { docnum } = await params;
     const docNum = decodeURIComponent(docnum).trim();
 
-    const [rawTrn, rawMas, rawCrd, rawRm, rawInfo, rawTab] = await Promise.all([
+    const [rawTrn, rawMas, rawCrd, rawRm, rawInfo, rawTab, rawRcpIt] = await Promise.all([
       readAll<Record<string, unknown>>("ARTRN"),
       readAll<Record<string, unknown>>("ARMAS"),
       readAll<Record<string, unknown>>("STCRD"),
       readAll<Record<string, unknown>>("ARTRNRM"),
       readAll<Record<string, unknown>>("ISINFO"),
       readAll<Record<string, unknown>>("ISTAB"),
+      readAll<Record<string, unknown>>("ARRCPIT"),
     ]);
 
     const header = rawTrn.find((r) => cleanStr(r.DOCNUM) === docNum);
@@ -127,8 +129,40 @@ export async function GET(
       invoice.RECTYP === "0" || docNum.toUpperCase().startsWith("AI");
     const isCashSale =
       invoice.RECTYP === "1" || docNum.toUpperCase().startsWith("HS");
+    const isReceipt =
+      invoice.RECTYP === "9" || docNum.toUpperCase().startsWith("RE");
 
-    const html = isCashSale
+    const receiptItems = isReceipt
+      ? rawRcpIt
+          .filter((r) => cleanStr(r.RCPNUM) === docNum)
+          .map((r, idx) => {
+            const invNum = cleanStr(r.DOCNUM);
+            const refInv = rawTrn.find((t) => cleanStr(t.DOCNUM) === invNum);
+            return {
+              SEQNUM: String(idx + 1),
+              DOCNUM: invNum,
+              DOCDAT: refInv ? cleanDate(refInv.DOCDAT) : null,
+              DUEDAT: refInv ? cleanDate(refInv.DUEDAT) : null,
+              AMOUNT: refInv
+                ? cleanNum(refInv.NETAMT) || cleanNum(refInv.AMOUNT)
+                : cleanNum(r.RCVAMT),
+              REMAMT: refInv ? cleanNum(refInv.REMAMT) : 0,
+              RCVAMT: cleanNum(r.RCVAMT),
+              VATAMT: cleanNum(r.VATAMT),
+            };
+          })
+      : [];
+
+    const html = isReceipt
+      ? generateReceiptHtml({
+          invoice,
+          customer: customerData,
+          items: receiptItems,
+          receiptItems,
+          remarks,
+          company,
+        })
+      : isCashSale
       ? generateCashSaleHtml({
           invoice,
           customer: customerData,

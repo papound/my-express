@@ -10,7 +10,7 @@ export async function GET(
     const docNum = decodeURIComponent(docnum).trim();
 
     // Load all required tables in parallel
-    const [rawTrn, rawMas, rawCrd, rawRm, rawShip, rawInfo, rawTab] =
+    const [rawTrn, rawMas, rawCrd, rawRm, rawShip, rawInfo, rawTab, rawRcpIt] =
       await Promise.all([
         readAll<Record<string, unknown>>("ARTRN"),
         readAll<Record<string, unknown>>("ARMAS"),
@@ -19,6 +19,7 @@ export async function GET(
         readAll<Record<string, unknown>>("ARSHIP"),
         readAll<Record<string, unknown>>("ISINFO"),
         readAll<Record<string, unknown>>("ISTAB"),
+        readAll<Record<string, unknown>>("ARRCPIT"),
       ]);
 
     // Find invoice header
@@ -145,10 +146,31 @@ export async function GET(
         }
       : null;
 
+    // For Receipt (RE / RECTYP === "9"), load applied invoices from ARRCPIT
+    const receiptItems = rawRcpIt
+      .filter((r) => cleanStr(r.RCPNUM) === docNum)
+      .map((r, idx) => {
+        const invNum = cleanStr(r.DOCNUM);
+        const refInv = rawTrn.find((t) => cleanStr(t.DOCNUM) === invNum);
+        return {
+          SEQNUM: String(idx + 1),
+          DOCNUM: invNum,
+          DOCDAT: refInv ? cleanDate(refInv.DOCDAT) : null,
+          DUEDAT: refInv ? cleanDate(refInv.DUEDAT) : null,
+          AMOUNT: refInv
+            ? cleanNum(refInv.NETAMT) || cleanNum(refInv.AMOUNT)
+            : cleanNum(r.RCVAMT),
+          REMAMT: refInv ? cleanNum(refInv.REMAMT) : 0,
+          RCVAMT: cleanNum(r.RCVAMT),
+          VATAMT: cleanNum(r.VATAMT),
+        };
+      });
+
     return NextResponse.json({
       invoice,
       customer: customerData,
-      items,
+      items: receiptItems.length > 0 ? receiptItems : items,
+      receiptItems,
       remarks,
       shipTo: shipTo
         ? {
