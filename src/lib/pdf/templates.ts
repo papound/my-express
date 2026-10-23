@@ -534,8 +534,8 @@ export function generateInvoiceHtml(data: {
             
             <div style="margin-bottom: 12px;">
               ${signatureBase64 ? `
-                <div style="margin-bottom: -6px;">
-                  <img src="${signatureBase64}" style="height: 38px; width: auto; display: inline-block; vertical-align: bottom;" />
+                <div style="margin-bottom: -10px;">
+                  <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
                 </div>
               ` : `
                 <div style="height: 24px;"></div>
@@ -937,8 +937,8 @@ export function generateAdvanceInvoiceHtml(data: {
 
             <div style="margin-bottom: 12px;">
               ${signatureBase64 ? `
-                <div style="margin-bottom: -6px;">
-                  <img src="${signatureBase64}" style="height: 38px; width: auto; display: inline-block; vertical-align: bottom;" />
+                <div style="margin-bottom: -10px;">
+                  <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
                 </div>
               ` : `
                 <div style="height: 24px;"></div>
@@ -1331,8 +1331,8 @@ export function generateSalesReturnHtml(data: {
             <div style="font-weight: 700; font-size: 11px; margin-bottom: 14px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
             <div>
               ${signatureBase64 ? `
-                <div style="margin-bottom: -6px;">
-                  <img src="${signatureBase64}" style="height: 38px; width: auto; display: inline-block; vertical-align: bottom;" />
+                <div style="margin-bottom: -10px;">
+                  <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
                 </div>
               ` : `
                 <div style="height: 24px;"></div>
