@@ -1,5 +1,6 @@
 import { bahtText } from "@/lib/baht-text";
 import { getCompanyLogoBase64, getWatermarkLogoBase64 } from "@/lib/logo";
+export { generateCashSaleHtml } from "./cashSaleTemplate";
 
 function fmtMoney(n: number): string {
   return n.toLocaleString("th-TH", {

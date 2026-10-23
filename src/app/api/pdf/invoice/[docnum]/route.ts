@@ -4,6 +4,7 @@ import {
   generateInvoiceHtml,
   generateSalesReturnHtml,
   generateAdvanceInvoiceHtml,
+  generateCashSaleHtml,
 } from "@/lib/pdf/templates";
 import { NextResponse } from "next/server";
 
@@ -124,8 +125,18 @@ export async function GET(
       invoice.RECTYP === "5" || docNum.toUpperCase().startsWith("SR");
     const isAdvanceInvoice =
       invoice.RECTYP === "0" || docNum.toUpperCase().startsWith("AI");
+    const isCashSale =
+      invoice.RECTYP === "1" || docNum.toUpperCase().startsWith("HS");
 
-    const html = isAdvanceInvoice
+    const html = isCashSale
+      ? generateCashSaleHtml({
+          invoice,
+          customer: customerData,
+          items,
+          remarks,
+          company,
+        })
+      : isAdvanceInvoice
       ? generateAdvanceInvoiceHtml({
           invoice,
           customer: customerData,
