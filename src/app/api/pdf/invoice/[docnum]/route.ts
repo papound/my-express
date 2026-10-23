@@ -1,6 +1,6 @@
 import { readAll, cleanStr, cleanNum, cleanDate } from "@/lib/dbf/reader";
 import { renderHtmlToPdf } from "@/lib/pdf/renderer";
-import { generateInvoiceHtml } from "@/lib/pdf/templates";
+import { generateInvoiceHtml, generateSalesReturnHtml } from "@/lib/pdf/templates";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -50,6 +50,8 @@ export async function GET(
         DISC: cleanStr(r.DISC),
         DISCAMT: cleanNum(r.DISCAMT),
         TRNVAL: cleanNum(r.TRNVAL),
+        LOCCOD: cleanStr(r.LOCCOD),
+        RETSTK: cleanStr(r.RETSTK),
       }))
       .sort((a, b) => parseInt(a.SEQNUM || "0", 10) - parseInt(b.SEQNUM || "0", 10));
 
@@ -71,12 +73,17 @@ export async function GET(
         }
       : null;
 
+    const soNum = cleanStr(header.SONUM);
+    const refTrn = soNum ? rawTrn.find((r) => cleanStr(r.DOCNUM) === soNum) : null;
+    const soDat = refTrn ? cleanDate(refTrn.DOCDAT) : null;
+
     const invoice = {
       RECTYP: cleanStr(header.RECTYP),
       DOCNUM: cleanStr(header.DOCNUM),
       DOCDAT: cleanDate(header.DOCDAT),
       CUSCOD: cuscod,
-      SONUM: cleanStr(header.SONUM),
+      SONUM: soNum,
+      SODAT: soDat,
       YOUREF: cleanStr(header.YOUREF),
       SLMCOD: cleanStr(header.SLMCOD),
       AREACOD: cleanStr(header.AREACOD),
@@ -88,6 +95,7 @@ export async function GET(
       ADVAMT: cleanNum(header.ADVAMT),
       VATAMT: cleanNum(header.VATAMT),
       NETAMT: cleanNum(header.NETAMT),
+      IVCAMT: cleanNum(header.IVCAMT),
       VATRAT: cleanNum(header.VATRAT),
     };
 
@@ -105,28 +113,37 @@ export async function GET(
         }
       : null;
 
-    const html = generateInvoiceHtml({
-      invoice,
-      customer: customerData,
-      items,
-      remarks,
-      company,
-    });
+    const isSalesReturn =
+      invoice.RECTYP === "5" || docNum.toUpperCase().startsWith("SR");
+
+    const html = isSalesReturn
+      ? generateSalesReturnHtml({
+          invoice,
+          customer: customerData,
+          items,
+          remarks,
+          company,
+        })
+      : generateInvoiceHtml({
+          invoice,
+          customer: customerData,
+          items,
+          remarks,
+          company,
+        });
 
     const pdfBuffer = await renderHtmlToPdf(html);
 
     return new NextResponse(Buffer.from(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `inline; filename="invoice_${docNum}.pdf"`,
+        "Content-Disposition": `inline; filename="${docNum}.pdf"`,
       },
     });
   } catch (err) {
-    console.error("PDF generation error:", err);
-    return new NextResponse(
-      `เกิดข้อผิดพลาดในการสร้าง PDF: ${String(err)}`,
-      { status: 500 }
-    );
+    console.error("Invoice PDF error:", err);
+    return new NextResponse(`เกิดข้อผิดพลาดในการสร้าง PDF: ${String(err)}`, {
+      status: 500,
+    });
   }
 }
-

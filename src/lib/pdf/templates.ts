@@ -546,6 +546,396 @@ export function generateInvoiceHtml(data: {
 `;
 }
 
+export function generateSalesReturnHtml(data: {
+  invoice: any;
+  customer?: any;
+  items: any[];
+  remarks?: any[];
+  company?: any;
+}): string {
+  const { invoice, customer, items, remarks, company } = data;
+
+  const logoBase64 = getCompanyLogoBase64();
+  const watermarkBase64 = getWatermarkLogoBase64();
+
+  const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
+    if (!d) return "-";
+    const dateObj = typeof d === "string" ? new Date(d) : d;
+    if (isNaN(dateObj.getTime())) return "-";
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const buddhistYear = dateObj.getFullYear() + 543;
+    const yearShort = String(buddhistYear % 100).padStart(2, "0");
+    return `${day}/${month}/${yearShort}`;
+  };
+
+  const grossAmount = invoice.AMOUNT || 0;
+  const discountAmt = invoice.DISCAMT || 0;
+  const afterDiscount = invoice.AFTDISC || grossAmount - discountAmt;
+  const vatRate = invoice.VATRAT || 7;
+  const vatAmount = invoice.VATAMT || 0;
+  const netAmount = invoice.NETAMT || 0;
+  const origInvoiceVal = invoice.IVCAMT || afterDiscount;
+  const correctVal = 0;
+  const diffVal = origInvoiceVal - correctVal;
+
+  const ITEMS_PER_PAGE = 11;
+  const pageChunks: any[][] = [];
+  if (items.length <= ITEMS_PER_PAGE) {
+    pageChunks.push(items);
+  } else {
+    for (let i = 0; i < items.length; i += ITEMS_PER_PAGE) {
+      pageChunks.push(items.slice(i, i + ITEMS_PER_PAGE));
+    }
+  }
+
+  return `
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
+    @page {
+      size: A4;
+      margin: 8mm 10mm;
+    }
+    * {
+      box-sizing: border-box;
+      font-family: 'Sarabun', 'Noto Sans Thai', Tahoma, sans-serif;
+    }
+    body {
+      font-size: 11.5px;
+      line-height: 1.35;
+      color: #111;
+      margin: 0;
+      padding: 0;
+    }
+    .sr-page {
+      page-break-after: always;
+      position: relative;
+      min-height: 278mm;
+      max-height: 284mm;
+      box-sizing: border-box;
+      padding-bottom: 2mm;
+    }
+    .sr-page:last-child {
+      page-break-after: avoid;
+    }
+    .watermark-layer {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 410px;
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .content-layer {
+      position: relative;
+      z-index: 1;
+    }
+    .company-logo {
+      height: 56px;
+      width: 56px;
+      object-fit: contain;
+      margin-right: 12px;
+    }
+    .box-bordered {
+      border: 1px solid #444;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .items-table th {
+      border-bottom: 1px solid #444;
+      border-right: 1px solid #444;
+      padding: 4px 6px;
+      font-weight: 600;
+      text-align: center;
+      background-color: rgba(245, 245, 245, 0.6);
+    }
+    .items-table th:last-child {
+      border-right: none;
+    }
+    .items-table td {
+      border-right: 1px solid #444;
+      border-bottom: 1px solid #eee;
+      padding: 3.5px 6px;
+      vertical-align: top;
+    }
+    .items-table td:last-child {
+      border-right: none;
+    }
+    .font-mono { font-family: monospace; }
+  </style>
+</head>
+<body>
+  ${pageChunks
+    .map(
+      (chunkItems, pIdx) => `
+  <div class="sr-page">
+    ${watermarkBase64 ? `<img src="${watermarkBase64}" class="watermark-layer" alt="Watermark" />` : ""}
+
+    <div class="content-layer">
+      <!-- Header -->
+      <table style="width: 100%; margin-bottom: 4px; border-collapse: collapse;">
+        <tr>
+          <!-- Company details on Left -->
+          <td style="vertical-align: top; width: 62%;">
+            <div style="display: flex; align-items: flex-start;">
+              ${logoBase64 ? `<img src="${logoBase64}" class="company-logo" alt="Logo" />` : ""}
+              <div>
+                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+                <div style="font-size: 11px; color: #333; margin-top: 1px;">
+                  ${company?.ADDR01 || ""} ${company?.ADDR02 || ""}<br>
+                  ${company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                </div>
+                <div style="font-size: 11px; color: #333; margin-top: 2px;">
+                  <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี</span> &nbsp; <span class="font-mono font-bold">${company?.TAXID || "0105558016255"}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+
+          <!-- Title on Right -->
+          <td style="vertical-align: top; width: 38%; text-align: right; padding-top: 4px;">
+            <div style="font-size: 17px; font-weight: 700; color: #000; letter-spacing: 0.5px;">
+              ใบลดหนี้/ รับคืนสินค้า
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Customer & Document Info Box -->
+      <table class="box-bordered" style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 5px;">
+        <tr>
+          <!-- Left: Customer Info -->
+          <td style="width: 55%; vertical-align: top; padding: 6px 10px; border-right: 1px solid #444;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="width: 50px; font-weight: 600; vertical-align: top;">ลูกค้า</td>
+                <td style="vertical-align: top; font-weight: 600;">${invoice.CUSCOD}</td>
+              </tr>
+              <tr>
+                <td colspan="2" style="font-weight: 600; font-size: 11.5px; padding-top: 2px;">
+                  ${customer?.PRENAM ? customer.PRENAM + " " : ""}${customer?.CUSNAM || ""}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="color: #333; line-height: 1.35; padding-top: 2px;">
+                  ${customer?.ADDR01 || ""}<br>
+                  ${customer?.ADDR02 || ""}<br>
+                  ${customer?.ADDR03 || ""} ${customer?.ZIPCOD || ""}
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 4px;">อ้างอิง</td>
+                <td style="padding-top: 4px; color: #333;">${invoice.YOUREF || "-"}</td>
+              </tr>
+            </table>
+          </td>
+
+          <!-- Right: Document Info -->
+          <td style="width: 45%; vertical-align: top; padding: 6px 10px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+              <tr>
+                <td style="font-weight: 600; width: 110px;">เลขที่ใบลดหนี้</td>
+                <td style="text-align: right; font-family: monospace; font-weight: 700; font-size: 12.5px;">${invoice.DOCNUM}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 3px;">วันที่</td>
+                <td style="text-align: right; padding-top: 3px; font-weight: 600;">${fmtThaiDateShort(invoice.DOCDAT)}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 3px;">อ้างถึงใบกำกับภาษี</td>
+                <td style="text-align: right; padding-top: 3px; font-family: monospace;">
+                  ${invoice.SONUM || "-"} ${invoice.SODAT ? fmtThaiDateShort(invoice.SODAT) : ""}
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 3px;">พนักงานขาย</td>
+                <td style="text-align: right; padding-top: 3px;">${invoice.SLMCOD || "-"}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 3px;">เขตการขาย</td>
+                <td style="text-align: right; padding-top: 3px;">${invoice.AREACOD || "-"}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Subheader notice -->
+      <div style="font-size: 11px; font-weight: 500; margin-bottom: 5px;">
+        บริษัทได้รับคืนสินค้าและเครดิตบัญชีของท่านตามรายการต่อไปนี้ :-
+      </div>
+
+      <!-- Items Table Box -->
+      <div class="box-bordered" style="margin-bottom: 0; border-bottom: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th style="width: 5%;">No.</th>
+              <th style="width: 41%; text-align: left;">รหัสสินค้า/รายละเอียด</th>
+              <th style="width: 7%;">คลัง</th>
+              <th style="width: 8%;">รับคืน?</th>
+              <th style="width: 11%; text-align: right;">จำนวน</th>
+              <th style="width: 12%; text-align: right;">หน่วยละ</th>
+              <th style="width: 6%; text-align: right;">ส่วนลด</th>
+              <th style="width: 10%; text-align: right;">จำนวนเงิน</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${chunkItems
+              .map(
+                (it, idx) => `
+              <tr>
+                <td style="text-align: center; font-family: monospace;">${it.SEQNUM ? parseInt(it.SEQNUM, 10) : pIdx * ITEMS_PER_PAGE + idx + 1}</td>
+                <td style="text-align: left;">
+                  <span style="font-family: monospace; font-weight: 600;">${it.STKCOD}</span>
+                  ${it.STKDES || ""}
+                </td>
+                <td style="text-align: center; font-family: monospace;">${it.LOCCOD || "-"}</td>
+                <td style="text-align: center; font-family: monospace;">${it.RETSTK || "Y"}</td>
+                <td style="text-align: right; font-family: monospace;">${it.TRNQTY.toFixed(2)} ${it.TQUCOD || ""}</td>
+                <td style="text-align: right; font-family: monospace;">${it.UNITPR.toFixed(4)}</td>
+                <td style="text-align: right; font-family: monospace;">${it.DISC || ""}</td>
+                <td style="text-align: right; font-family: monospace; font-weight: 600;">${fmtMoney(it.TRNVAL)}</td>
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+
+      ${
+        pIdx === pageChunks.length - 1
+          ? `
+      <!-- Calculations & Summary Box -->
+      <table class="box-bordered" style="width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0;">
+        <tr>
+          <!-- Left: Reason for return -->
+          <td style="width: 50%; vertical-align: top; padding: 6px 10px; border-right: 1px solid #444;">
+            <div style="font-weight: 600; margin-bottom: 4px;">สาเหตุที่รับคืน:</div>
+            <div style="color: #333;">
+              ${
+                remarks && remarks.length > 0
+                  ? remarks.map((r: any) => `<div>${r.REMARK}</div>`).join("")
+                  : "-"
+              }
+            </div>
+          </td>
+
+          <!-- Right: Summary Table -->
+          <td style="width: 50%; vertical-align: top; padding: 4px 8px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+              <tr>
+                <td style="text-align: right; padding: 1.5px 4px;">รวม</td>
+                <td style="text-align: right; font-family: monospace; font-weight: 600; width: 100px;">${fmtMoney(grossAmount)}</td>
+              </tr>
+              <tr>
+                <td style="text-align: right; padding: 1.5px 4px;">หักส่วนลด ${discountAmt > 0 ? fmtMoney(discountAmt) : ""}</td>
+                <td style="text-align: right; font-family: monospace; width: 100px;">${fmtMoney(discountAmt)}</td>
+              </tr>
+              <tr>
+                <td style="text-align: right; padding: 1.5px 4px;">จำนวนเงินหลังหักส่วนลด</td>
+                <td style="text-align: right; font-family: monospace; font-weight: 600; width: 100px;">${fmtMoney(afterDiscount)}</td>
+              </tr>
+              <tr style="border-top: 1px dashed #aaa;">
+                <td style="text-align: right; padding: 1.5px 4px;">มูลค่าของสินค้าหรือบริการตามใบกำกับภาษีเดิม</td>
+                <td style="text-align: right; font-family: monospace; width: 100px;">${fmtMoney(origInvoiceVal)}</td>
+              </tr>
+              <tr>
+                <td style="text-align: right; padding: 1.5px 4px;">มูลค่าของสินค้าหรือบริการที่ถูกต้อง</td>
+                <td style="text-align: right; font-family: monospace; width: 100px;">${fmtMoney(correctVal)}</td>
+              </tr>
+              <tr>
+                <td style="text-align: right; padding: 1.5px 4px;">ผลต่าง</td>
+                <td style="text-align: right; font-family: monospace; width: 100px;">${fmtMoney(diffVal)}</td>
+              </tr>
+              <tr>
+                <td style="text-align: right; padding: 1.5px 4px;">จำนวนภาษีมูลค่าเพิ่ม ${vatRate.toFixed(2)} %</td>
+                <td style="text-align: right; font-family: monospace; font-weight: 600; width: 100px;">${fmtMoney(vatAmount)}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Full-width Total Row -->
+        <tr style="background-color: rgba(245, 245, 245, 0.7); border-top: 1px solid #444;">
+          <td style="padding: 6px 10px; font-weight: 600; border-right: 1px solid #444;">
+            (${bahtText(netAmount)}).
+          </td>
+          <td style="padding: 6px 10px;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="font-weight: 700;">จำนวนเงินรวมทั้งสิ้น</td>
+                <td style="text-align: right; font-family: monospace; font-weight: 700; font-size: 13px;">${fmtMoney(netAmount)}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Bottom Signatures Box -->
+      <table class="box-bordered" style="width: 100%; border-collapse: collapse; font-size: 10px; margin-top: 8px;">
+        <tr>
+          <!-- Left: Received -->
+          <td style="width: 60%; vertical-align: top; padding: 8px 12px; border-right: 1px solid #444;">
+            <table style="width: 100%; text-align: center;">
+              <tr>
+                <td style="width: 50%;">ได้รับสินค้าข้างต้นคืนเรียบร้อยแล้ว</td>
+                <td style="width: 50%;">ได้เก็บสินค้าข้างต้นในคลังสินค้าแล้ว</td>
+              </tr>
+              <tr>
+                <td style="padding-top: 25px;">___________________</td>
+                <td style="padding-top: 25px;">____________________</td>
+              </tr>
+              <tr>
+                <td style="font-size: 9.5px; padding-top: 2px;">แผนกรับสินค้า</td>
+                <td style="font-size: 9.5px; padding-top: 2px;">แผนกคลังสินค้า</td>
+              </tr>
+            </table>
+          </td>
+
+          <!-- Right: Authorized -->
+          <td style="width: 40%; vertical-align: top; padding: 8px 12px; text-align: center;">
+            <div style="font-size: 9.5px; color: #333;">ในนาม</div>
+            <div style="font-weight: 700; font-size: 11px; margin-bottom: 25px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+            <div>
+              ผู้รับมอบอำนาจ __________________
+            </div>
+          </td>
+        </tr>
+      </table>
+      `
+          : `
+      <!-- Table bottom border on continuation pages -->
+      <div style="border-bottom: 1px solid #444; height: 1px; width: 100%;"></div>
+      <div style="text-align: right; font-size: 10px; color: #555; margin-top: 4px;">
+        (ต่อหน้าถัดไป)
+      </div>
+      `
+      }
+    </div>
+  </div>
+  `
+    )
+    .join("")}
+</body>
+</html>
+`;
+}
+
+
 export function generateQuotationHtml(data: {
   quotation: any;
   customer?: any;

@@ -64,6 +64,7 @@ export async function GET(
         VATCOD: cleanStr(r.VATCOD),
         FREE: cleanStr(r.FREE),
         LOCCOD: cleanStr(r.LOCCOD),
+        RETSTK: cleanStr(r.RETSTK),
         PACKING: cleanStr(r.PACKING),
       }))
       .sort((a, b) => parseInt(a.SEQNUM || "0", 10) - parseInt(b.SEQNUM || "0", 10));
@@ -91,12 +92,17 @@ export async function GET(
         }
       : null;
 
+    const soNum = cleanStr(header.SONUM);
+    const refTrn = soNum ? rawTrn.find((r) => cleanStr(r.DOCNUM) === soNum) : null;
+    const soDat = refTrn ? cleanDate(refTrn.DOCDAT) : null;
+
     const invoice = {
       RECTYP: cleanStr(header.RECTYP),
       DOCNUM: cleanStr(header.DOCNUM),
       DOCDAT: cleanDate(header.DOCDAT),
       CUSCOD: cuscod,
-      SONUM: cleanStr(header.SONUM),
+      SONUM: soNum,
+      SODAT: soDat,
       DEPCOD: cleanStr(header.DEPCOD),
       FLGVAT: cleanStr(header.FLGVAT),
       SLMCOD: cleanStr(header.SLMCOD),
@@ -111,6 +117,7 @@ export async function GET(
       ADVAMT: cleanNum(header.ADVAMT),
       VATAMT: cleanNum(header.VATAMT),
       NETAMT: cleanNum(header.NETAMT),
+      IVCAMT: cleanNum(header.IVCAMT),
       TOTAL: cleanNum(header.TOTAL),
       RCVAMT: cleanNum(header.RCVAMT),
       REMAMT: cleanNum(header.REMAMT),

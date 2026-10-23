@@ -7,6 +7,10 @@ import {
   INVOICE_PAGES_CONFIG,
   type InvoiceData,
 } from "@/components/invoices/InvoiceSheet";
+import {
+  SalesReturnSheet,
+  type SalesReturnData,
+} from "@/components/sales-returns/SalesReturnSheet";
 
 export function InvoiceDetailModal({
   docnum,
@@ -15,7 +19,7 @@ export function InvoiceDetailModal({
   docnum: string | null;
   onClose: () => void;
 }) {
-  const [data, setData] = useState<InvoiceData | null>(null);
+  const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | number>(1);
@@ -59,6 +63,9 @@ export function InvoiceDetailModal({
 
   if (!docnum) return null;
 
+  const isSalesReturn =
+    data?.invoice?.RECTYP === "5" || docnum.toUpperCase().startsWith("SR");
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 md:p-6 overflow-y-auto">
       {/* Backdrop */}
@@ -73,7 +80,7 @@ export function InvoiceDetailModal({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 border-b border-slate-200 bg-slate-50 gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <span className="font-bold text-slate-800 text-xs sm:text-sm shrink-0">
-              รายละเอียด:
+              {isSalesReturn ? "ใบลดหนี้ / รับคืนสินค้า:" : "รายละเอียด:"}
             </span>
             <span className="font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200/60 text-xs truncate">
               {docnum}
@@ -86,10 +93,10 @@ export function InvoiceDetailModal({
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 hover:text-blue-700 hover:bg-blue-50 hover:border-blue-200 transition shadow-sm"
-              title="พิมพ์ PDF ครบ 4 สี"
+              title="พิมพ์ PDF"
             >
               <Printer size={14} className="text-blue-600" />
-              <span>พิมพ์ PDF (4 สี)</span>
+              <span>พิมพ์ PDF</span>
             </a>
 
             <button
@@ -102,8 +109,8 @@ export function InvoiceDetailModal({
           </div>
         </div>
 
-        {/* Modal Copy Switcher Tabs */}
-        {data && (
+        {/* Modal Copy Switcher Tabs (Only for regular continuous invoice) */}
+        {data && !isSalesReturn && (
           <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto">
             <button
               type="button"
@@ -153,6 +160,8 @@ export function InvoiceDetailModal({
             <div className="p-6 bg-red-50 text-red-700 rounded-2xl border border-red-200 text-sm text-center">
               {error || "ไม่พบข้อมูลเอกสาร"}
             </div>
+          ) : isSalesReturn ? (
+            <SalesReturnSheet data={data as SalesReturnData} />
           ) : activeTab === "all" ? (
             <div className="space-y-6">
               {INVOICE_PAGES_CONFIG.map((cfg) => (
@@ -166,14 +175,14 @@ export function InvoiceDetailModal({
                       {cfg.name} : {cfg.title} - {cfg.subtitle}
                     </span>
                   </div>
-                  <InvoiceSheet data={data} config={cfg} />
+                  <InvoiceSheet data={data as InvoiceData} config={cfg} />
                 </div>
               ))}
             </div>
           ) : (
             <div>
               {INVOICE_PAGES_CONFIG.filter((c) => c.page === activeTab).map((cfg) => (
-                <InvoiceSheet key={cfg.page} data={data} config={cfg} />
+                <InvoiceSheet key={cfg.page} data={data as InvoiceData} config={cfg} />
               ))}
             </div>
           )}
