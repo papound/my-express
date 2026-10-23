@@ -1,0 +1,3018 @@
+[Preference]
+	vert align=Center
+	horz align=Left
+	border=No
+	curve=0
+	font name=Angsana New
+	font size=14
+	bold=No
+	italic=No
+	underline=No
+	clr=0,0,0
+	bgclr=255,255,255
+	bdclr=0,0,0
+	bkmode=Transparent
+	secheight=0.2000 inch
+	secclr=255,255,255
+	pcurve=1
+	line clr=0,0,0
+	pixel=1
+	exc font name=
+	exc font size=
+	exc freeze=Yes
+[Report]
+	caption=Report
+	copy=2
+	edit copy=ทุกชุด
+	form=Yes
+	def scope=0
+	width=9.2400 inch
+	psize=0, "ตามเครื่องพิมพ์"
+	pw=8.2700
+	ph=11.6900
+	tblvw hi=200
+	tblvw mode=2
+	secvw wd=150
+	left margin=0.3000 inch
+	top margin=0.3500 inch
+	right margin=0.2000 inch
+	bot margin=0.0000 inch
+	set margin=No
+	supg=No
+	fix sum=Yes
+	printer=
+	col wd=1.0000
+	col gap=0.5000
+	printpref=2
+	multipg=2
+	sepset=No
+	horzalign=0
+	datefmt=
+	horgap=2.2000
+	vergap=1.2000
+	stwd=2.0000
+	sthg=1.0000
+	strow=5
+	stcol=4
+	st how column=1
+	st type=Junk A4
+	stcustom=No
+[File]
+	[Variable]
+		dimension=0,0,136,150
+
+	[Master File]
+		file name=ISTAX
+		alias=A
+		tag=ISTAX1
+		dimension=130,0,266,150
+
+[Table]
+	visible=Yes
+	can move=Yes
+	curvelt=1
+	curvert=1
+	curvelb=1
+	curverb=1
+	line clr=0,0,0
+	xpoint=[    83,  1323][  9190,  1323]
+	ypoint=[    83,  1323][    83,  2331]
+	[Cell]
+		name=C0,0
+	[EndCell]
+	visible=Yes
+	can move=Yes
+	curvelt=1
+	curvert=1
+	curvelb=1
+	curverb=1
+	line clr=0,0,0
+	xpoint=[    83,  2381][  9198,  2381]
+	ypoint=[    83,  2381][    83,  3307]
+	[Cell]
+		name=C0,0
+	[EndCell]
+	visible=Yes
+	can move=Yes
+	curvelt=1
+	curvert=1
+	curvelb=1
+	curverb=1
+	line clr=0,0,0
+	xpoint=[    83,  3366][  6223,  3366][  6940,  3366][  8057,  3366][  9207,  3366]
+	ypoint=[    83,  3366][    83,  4009][    83, 18940][    83, 19308][    83, 19664][    83, 20628][    83, 23252]
+	invisible line=[H2,0][H3,0][H3,1][V2,1][V3,1][V4,1][V5,1][V3,2][V4,2][V5,2][V3,3][V4,3][V5,3]
+	line width=[H3,2=2][H3,3=2]
+	[Cell]
+		name=C0,0
+		name=C1,0
+		name=C2,0
+		name=C3,0
+		name=C4,0
+		name=C5,0
+		name=C0,1
+		name=C1,1
+		name=C2,1
+		name=C3,1
+		name=C4,1
+		name=C5,1
+		name=C0,2
+		name=C1,2
+		name=C2,2
+		name=C3,2
+		name=C4,2
+		name=C5,2
+		name=C0,3
+		name=C1,3
+		name=C2,3
+		name=C3,3
+		name=C4,3
+		name=C5,3
+	[EndCell]
+[Section]
+[Ti]
+	name=Ti1
+	secheight=0.2800 inch
+	order objs=2
+	calculation= "1,[1-1].visible=.f."
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT1
+		visible=No
+		gridtype=1
+		print with=INIT
+		calculation= "1,type=VAL(ISTAX->TAXDES)","1,type=IIF(type<=0.or.type>6,6,type)","1,cond=VAL(ISTAX->TAXCOND)","1,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT","1,_amount=ISTAX->AMOUNT","1,_taxamt=ISTAX->TAXAMT","1,_taxdes=ISTAX->TAXDES","1,totamt=0","1,tottax=0","1,p_item=0"
+		order=1
+		dimension=146,0,586,265
+		exc dimension=146,0,586,265
+		insu=0
+
+		obj type=LABEL
+		caption=แบบฟอร์มนี้ สำหรับใช้พิมพ์ตามประกาศ #131
+		name=LABEL30
+		enable=No
+		gridtype=1
+		order=2
+		dimension=650,9,3216,259
+		exc dimension=650,9,3216,259
+
+[He]
+	name=He2
+	secheight=0.3500 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=หนังสือรับรองการหักภาษี ณ ที่จ่าย
+		name=LABEL1
+		gridtype=1
+		order=1
+		dimension=3462,0,6212,350
+		exc dimension=3746,0,6496,350
+		horz align=Center
+		font size=18
+		bold=Yes
+
+[He]
+	name=He3
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ตามมาตรา 50 ทวิ แห่งประมวลรัษฎากร
+		name=LABEL2
+		gridtype=1
+		order=1
+		dimension=3586,0,6039,265
+		exc dimension=3586,0,6039,265
+		horz align=Center
+
+[He]
+	name=He4
+	secheight=0.5490 inch
+	order objs=6
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ลำดับที่ *________
+		name=LABEL3
+		gridtype=1
+		order=1
+		dimension=98,0,1206,265
+		exc dimension=98,0,1206,265
+
+		obj type=LABEL
+		caption=ในแบบ
+		name=LABEL4
+		gridtype=1
+		order=2
+		dimension=1250,0,1710,265
+		exc dimension=1250,0,1710,265
+
+		obj type=TEXT
+		name=TEXT2
+		gridtype=1
+		print with=p_istax( ISTAX->TAXTYP, 55, 1, 0)
+		order=3
+		dimension=1742,0,4618,260
+		exc dimension=1742,0,4618,260
+		insu=0
+
+		obj type=LABEL
+		caption=เลขที่
+		name=LABEL5
+		gridtype=1
+		order=4
+		dimension=7426,0,7821,265
+		exc dimension=7426,0,7821,265
+
+		obj type=TEXT
+		name=TEXT3
+		gridtype=1
+		print with=num
+		calculation= "1,num=IIF(ISTAX->TAXNUM#'   ',ISTAX->TAXNUM,ISTAX->REFNUM)"
+		order=5
+		dimension=7874,0,9168,260
+		exc dimension=7874,0,9168,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT43
+		border=Yes
+		curve=3
+		gridtype=1
+		print with=_TEXTCOPY#
+		textcopy=ฉบับที่ 1. สำหรับผู้ถูกหักภาษี ณ ที่จ่าย ใช้แนบพร้อมกับแบบแสดงรายการภาษี~~0,15780518;ฉบับที่ 2. สำหรับผู้ถูกหักภาษี ณ ที่จ่าย เก็บไว้เป็นหลักฐาน~~0,12639424;ฉบับที่ 3. สำหรับฝ่ายบัญชี~~0,3775743;ฉบับที่ 4. สำหรับฝ่ายการเงิน~~0,14062335;
+		bkmode=Normal
+		order=6
+		dimension=2532,246,7063,549
+		exc dimension=2532,246,7063,549
+		horz align=Center
+		bgclr=225,225,225
+		insu=0
+
+[He]
+	name=He6
+	secheight=0.2800 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ผู้มีหน้าที่หักภาษี ณ ที่จ่าย:
+		name=LABEL6
+		gridtype=1
+		order=1
+		dimension=226,0,1967,267
+		exc dimension=226,0,1967,267
+		bold=Yes
+
+		obj type=LABEL
+		caption=เลขประจำตัวผู้เสียภาษี
+		name=LABEL7
+		gridtype=1
+		order=2
+		dimension=6098,0,7552,265
+		exc dimension=6098,0,7552,265
+
+		obj type=TEXT
+		name=TEXT23
+		gridtype=1
+		print with=p_taxid()
+		order=3
+		dimension=7577,9,9031,269
+		exc dimension=7577,9,9031,269
+		font size=18
+		bold=Yes
+		insu=0
+
+[He]
+	name=He7
+	secheight=0.2890 inch
+	order objs=3
+	shrink=No
+	exc visible=No
+	[Object]
+		obj type=LABEL
+		caption=ชื่อ
+		name=LABEL8
+		gridtype=1
+		order=1
+		dimension=386,0,790,265
+		exc dimension=386,0,790,265
+
+		obj type=TEXT
+		name=TEXT4
+		gridtype=1
+		print with=_NAME
+		order=2
+		dimension=1026,0,7204,272
+		exc dimension=1026,0,7204,272
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT5
+		gridtype=1
+		print with=p_orgtxt()
+		calculation= "1,OrgNumStr = @p_orgnum()","1,isBranch = IIF(val(OrgNumStr)>0,1,0)"
+		order=3
+		dimension=7577,0,8662,255
+		exc dimension=7577,0,8662,255
+		insu=0
+
+[He]
+	name=He8
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ที่อยู่
+		name=LABEL9
+		gridtype=1
+		order=1
+		dimension=386,0,864,265
+		exc dimension=386,0,864,265
+
+		obj type=TEXT
+		name=TEXT6
+		gridtype=1
+		print with=p_addr()
+		order=2
+		dimension=1026,0,9150,260
+		exc dimension=1026,0,9150,260
+		font size=16
+		insu=0
+
+[He]
+	name=He9
+	secheight=0.1280 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He10
+	secheight=0.2800 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ผู้ถูกหักภาษี ณ ที่จ่าย:
+		name=LABEL10
+		gridtype=1
+		order=1
+		dimension=226,0,1701,267
+		exc dimension=226,0,1701,267
+		bold=Yes
+
+		obj type=LABEL
+		caption=เลขประจำตัวผู้เสียภาษี
+		name=LABEL11
+		gridtype=1
+		order=2
+		dimension=6098,0,7552,265
+		exc dimension=6098,0,7552,265
+
+		obj type=TEXT
+		name=TEXT24
+		gridtype=1
+		print with=tax_id
+		calculation= "1,tax_id=A->TAXID"
+		order=3
+		dimension=7577,9,9031,269
+		exc dimension=7577,9,9031,269
+		font size=18
+		bold=Yes
+		insu=0
+
+[He]
+	name=He11
+	secheight=0.2800 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ชื่อ
+		name=LABEL12
+		gridtype=1
+		order=1
+		dimension=386,0,790,265
+		exc dimension=386,0,790,265
+
+		obj type=TEXT
+		name=TEXT7
+		gridtype=1
+		print with=xname
+		calculation= "1,xname=A->PRENAM-' '-A->NAME"
+		order=2
+		dimension=1026,0,7193,260
+		exc dimension=1026,0,7193,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=CHECK
+		caption=สาขาที่
+		name=CHECK8
+		calculation= "1,.visible=IIF(tax_id#'   '.and.A->ORGNUM>0,.t.,.f.)"
+		order=3
+		dimension=7713,0,8306,275
+		exc dimension=7713,0,8306,275
+
+		obj type=TEXT
+		name=TEXT8
+		print with=A->ORGNUM
+		calculation= "1,.visible=IIF(A->tax_id#'   '.and.A->ORGNUM>0,.t.,.f.)"
+		order=4
+		dimension=8355,10,8730,274
+		exc dimension=8355,10,8730,274
+		horz align=Right
+		insu=0
+
+		obj type=CHECK
+		caption=สำนักงานใหญ่
+		name=CHECK9
+		calculation= "1,.visible=IIF(A->tax_id#'   '.and.A->ORGNUM=0,.t.,.f.)"
+		order=5
+		dimension=7577,0,8669,275
+		exc dimension=7577,0,8669,275
+
+[He]
+	name=He12
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ที่อยู่
+		name=LABEL13
+		gridtype=1
+		order=1
+		dimension=386,0,864,265
+		exc dimension=386,0,864,265
+
+		obj type=TEXT
+		name=TEXT9
+		gridtype=1
+		print with=ISTAX->ADDR
+		order=2
+		dimension=1026,0,9142,260
+		exc dimension=1026,0,9142,260
+		font size=16
+		insu=0
+
+[He]
+	name=He13
+	secheight=0.1280 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He14
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ประเภทเงินได้พึงประเมินที่จ่าย
+		name=LABEL14
+		gridtype=1
+		order=1
+		dimension=1506,0,3344,265
+		exc dimension=1506,0,3344,265
+
+		obj type=LABEL
+		caption=วันเดือนปี
+		name=LABEL15
+		gridtype=1
+		order=2
+		dimension=6306,0,6896,265
+		exc dimension=6306,0,6896,265
+
+		obj type=LABEL
+		caption=จำนวนเงิน
+		name=LABEL16
+		gridtype=1
+		order=3
+		dimension=7218,0,7865,265
+		exc dimension=7218,0,7865,265
+
+		obj type=LABEL
+		caption=ภาษีที่หัก
+		name=LABEL17
+		gridtype=1
+		order=4
+		dimension=8338,0,9060,265
+		exc dimension=8338,0,9060,265
+
+[He]
+	name=He15
+	secheight=0.2890 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT10
+		gridtype=1
+		print with=xdes
+		calculation= "1,xdes=ISTAX->TAXDES-IIF(ISTAX->TAXDES2#'     ', ', '-ISTAX->TAXDES2,'                                                                                                                   ')"
+		order=1
+		dimension=1506,0,4506,260
+		exc dimension=1506,0,4506,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=LABEL
+		caption=ภาษี ที่จ่าย
+		name=LABEL18
+		gridtype=1
+		order=2
+		dimension=6290,0,6883,265
+		exc dimension=6290,0,6883,265
+
+		obj type=LABEL
+		caption=ที่จ่าย
+		name=LABEL19
+		gridtype=1
+		order=3
+		dimension=7330,0,7805,265
+		exc dimension=7330,0,7805,265
+
+		obj type=LABEL
+		caption=และนำส่งไว้
+		name=LABEL20
+		gridtype=1
+		order=4
+		dimension=8290,0,9178,265
+		exc dimension=8290,0,9178,265
+
+[He]
+	name=He16
+	secheight=0.1280 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He17
+	secheight=0.2840 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=1. เงินเดือน ค่าจ้าง เบี้ยเลี้ยง โบนัสฯลฯ ตาม ม.40(1)
+		name=LABEL21
+		gridtype=1
+		order=1
+		dimension=226,0,3050,259
+		exc dimension=226,0,3909,265
+
+[He]
+	name=He72
+	secheight=0.2840 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=1,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT11
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=1,_taxdes,'                         ')"
+		order=1
+		dimension=379,0,5289,260
+		exc dimension=379,0,5289,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT98
+		gridtype=1
+		print with=pd1
+		calculation= "1,pd1=IIF(type=1,_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT100
+		gridtype=1
+		print with=pa1
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa1=IIF(type=1,_amount,0)","1,totamt=totamt+pa1"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT101
+		gridtype=1
+		print with=pt1
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt1=IIF(type=1,_taxamt,0)","1,tottax=tottax+pt1","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He24
+	secheight=0.2750 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=1,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT87
+		visible=No
+		gridtype=1
+		print with=xpt1
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1667,265
+		exc dimension=1339,0,1667,265
+		insu=0
+
+[He]
+	name=He71
+	secheight=0.2840 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=1.and.p_item<2,.t.,.f.)"
+	shrink=No
+	exc visible=No
+	[Object]
+		obj type=TEXT
+		name=TEXT81
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=1,_taxdes,'                         ')"
+		order=1
+		dimension=379,0,5289,260
+		exc dimension=379,0,5289,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT78
+		gridtype=1
+		print with=pd1
+		calculation= "1,pd1=IIF(type=1,_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT79
+		gridtype=1
+		print with=pa1
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa1=IIF(type=1,_amount,0)","1,totamt=totamt+pa1"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT80
+		gridtype=1
+		print with=pt1
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt1=IIF(type=1,_taxamt,0)","1,tottax=tottax+pt1","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He18
+	secheight=0.3100 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=2. ค่าธรรมเนียม ค่านายหน้า ฯลฯ ตามมาตรา 40(2)
+		name=LABEL22
+		gridtype=1
+		order=1
+		dimension=234,16,3025,275
+		exc dimension=234,16,3025,275
+
+[He]
+	name=He73
+	secheight=0.3100 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=2.and.p_item<2,.t.,.f.)"
+	shrink=No
+	exc visible=No
+	[Object]
+		obj type=TEXT
+		name=TEXT103
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=2,_taxdes,'                         ')"
+		order=1
+		dimension=379,0,5289,260
+		exc dimension=379,0,5289,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT12
+		gridtype=1
+		print with=pd2
+		calculation= "1,pd2=IIF(type=2,_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT13
+		gridtype=1
+		print with=pa2
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa2=IIF(type=2,_amount,0)","1,totamt=totamt+pa2"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT102
+		gridtype=1
+		print with=pt2
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt2=IIF(type=2,_taxamt,0)","1,tottax=tottax+pt2","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He25
+	secheight=0.2750 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=2.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT27
+		visible=No
+		gridtype=1
+		print with=xpt2
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1667,265
+		exc dimension=1339,0,1667,265
+		insu=0
+
+[He]
+	name=He74
+	secheight=0.3100 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=2.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT104
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=2,_taxdes,'                         ')"
+		order=1
+		dimension=379,0,5289,260
+		exc dimension=379,0,5289,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT14
+		gridtype=1
+		print with=pd2
+		calculation= "1,pd2=IIF(type=2,_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT15
+		gridtype=1
+		print with=pa2
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa2=IIF(type=2,_amount,0)","1,totamt=totamt+pa2"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT16
+		gridtype=1
+		print with=pt2
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt2=IIF(type=2,_taxamt,0)","1,tottax=tottax+pt2","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He19
+	secheight=0.2840 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=3. ค่าแห่งลิขสิทธิ์ ฯลฯ ตามมาตรา 40(3)
+		name=LABEL23
+		gridtype=1
+		order=1
+		dimension=226,0,2493,258
+		exc dimension=226,0,2493,258
+
+[He]
+	name=He75
+	secheight=0.2840 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=3.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT108
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=3,_taxdes,'                         ')"
+		order=1
+		dimension=379,0,5289,260
+		exc dimension=379,0,5289,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT105
+		gridtype=1
+		print with=pd3
+		calculation= "1,pd3=IIF(type=3,_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT106
+		gridtype=1
+		print with=pa3
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa3=IIF(type=3,_amount,0)","1,totamt=totamt+pa3"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT107
+		gridtype=1
+		print with=pt3
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt3=IIF(type=3,_taxamt,0)","1,tottax=tottax+pt3","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He26
+	secheight=0.2750 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=3.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT26
+		visible=No
+		gridtype=1
+		print with=xpt3
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1667,265
+		exc dimension=1339,0,1667,265
+		insu=0
+
+[He]
+	name=He76
+	secheight=0.2840 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=3.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT109
+		gridtype=1
+		print with=pd3
+		calculation= "1,pd3=IIF(type=3,_taxdat,ctod('        '))"
+		order=1
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT110
+		gridtype=1
+		print with=pa3
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa3=IIF(type=3,_amount,0)","1,totamt=totamt+pa3"
+		order=2
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT111
+		gridtype=1
+		print with=pt3
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt3=IIF(type=3,_taxamt,0)","1,tottax=tottax+pt3","1,p_item=p_item+1"
+		order=3
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT112
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=3,_taxdes,'                         ')"
+		order=4
+		dimension=379,0,5289,260
+		exc dimension=379,0,5289,260
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He20
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=4. (ก) ค่าดอกเบี้ย ฯลฯ ตามมาตรา 40(4)(ก)
+		name=LABEL24
+		gridtype=1
+		order=1
+		dimension=226,0,3902,265
+		exc dimension=226,0,3902,265
+
+[He]
+	name=He77
+	secheight=0.2980 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ก)'.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT113
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=4.AND._taxdes='4(ก)',_taxdes,'                         ')"
+		order=1
+		dimension=539,0,5449,260
+		exc dimension=539,0,5449,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT17
+		gridtype=1
+		print with=pd4A
+		calculation= "1,pd4A=IIF(type=4.AND._taxdes='4(ก)',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT18
+		gridtype=1
+		print with=pa4A
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4A=IIF(type=4.AND._taxdes='4(ก)',_amount,0)","1,totamt=totamt+pa4A"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT19
+		gridtype=1
+		print with=pt4A
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4A=IIF(type=4.AND._taxdes='4(ก)',_taxamt,0)","1,tottax=tottax+pt4A","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He27
+	secheight=0.2980 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ก)'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT28
+		visible=No
+		gridtype=1
+		print with=xpt4a
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1667,265
+		exc dimension=1339,0,1667,265
+		insu=0
+
+[He]
+	name=He78
+	secheight=0.2980 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ก)'.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT20
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=4.AND._taxdes='4(ก)',_taxdes,'                         ')"
+		order=1
+		dimension=539,0,5449,260
+		exc dimension=539,0,5449,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT21
+		gridtype=1
+		print with=pd4A
+		calculation= "1,pd4A=IIF(type=4.AND._taxdes='4(ก)',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT22
+		gridtype=1
+		print with=pa4A
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4A=IIF(type=4.AND._taxdes='4(ก)',_amount,0)","1,totamt=totamt+pa4A"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT114
+		gridtype=1
+		print with=pt4A
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4A=IIF(type=4.AND._taxdes='4(ก)',_taxamt,0)","1,tottax=tottax+pt4A","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He21
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=(ข)
+		name=LABEL25
+		gridtype=1
+		order=1
+		dimension=386,0,686,265
+		exc dimension=386,0,686,265
+
+		obj type=LABEL
+		caption=เงินปันผล เงินส่วนแบ่งกำไร ฯลฯ ตาม ม.40(4)(ข) 
+		name=LABEL26
+		gridtype=1
+		order=2
+		dimension=706,0,3511,265
+		exc dimension=706,0,3511,265
+
+[He]
+	name=He22
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=(1)
+		name=LABEL27
+		gridtype=1
+		order=1
+		dimension=706,0,1006,265
+		exc dimension=706,0,1006,265
+
+		obj type=LABEL
+		caption=กรณีผู้ได้รับเงินปันผลได้รับเครดิตภาษี โดยจ่ายจาก
+		name=LABEL28
+		gridtype=1
+		order=2
+		dimension=1026,0,4343,265
+		exc dimension=1026,0,4343,265
+
+[He]
+	name=He23
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=กำไรสุทธิของกิจการที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราดังนี้
+		name=LABEL29
+		gridtype=1
+		order=1
+		dimension=1026,0,6165,265
+		exc dimension=1026,0,6165,265
+
+[He]
+	name=He5
+	secheight=0.2790 inch
+	order objs=4
+	shrink=No
+	exc visible=No
+	[Object]
+		obj type=CHECK
+		caption=(1.1) อัตราร้อยละ 30 ของกำไรสุทธิ
+		name=CHECK4
+		calculation= "1,.check=IIF(type=4.AND._taxdes='4(ข)1.1', .t., .f.)"
+		order=1
+		dimension=844,0,4342,250
+		exc dimension=844,0,4342,250
+		check=No
+
+		obj type=TEXT
+		name=TEXT70
+		gridtype=1
+		print with=pd4B11
+		calculation= "1,pd4B11=IIF(type=4.AND._taxdes='4(ข)1.1',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT71
+		gridtype=1
+		print with=pa4B11
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B11=IIF(type=4.AND._taxdes='4(ข)1.1',_amount,0)","1,totamt=totamt+pa4B11"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT72
+		gridtype=1
+		print with=pt4B11
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B11=IIF(type=4.AND._taxdes='4(ข)1.1',_taxamt,0)","1,tottax=tottax+pt4B11","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)1.1', 1,0)"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He68
+	secheight=0.2840 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)1.1'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT25
+		visible=No
+		gridtype=1
+		print with=xpt4b11
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1823,265
+		exc dimension=1339,0,1823,265
+		insu=0
+
+[He]
+	name=He62
+	secheight=0.2750 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=CHECK
+		caption=(1.2) อัตราร้อยละ 25 ของกำไรสุทธิ
+		name=CHECK10
+		calculation= "1,.check=IIF(type=4.AND._taxdes='4(ข)1.2', .t., .f.)"
+		order=1
+		dimension=844,15,4342,265
+		exc dimension=844,15,4342,265
+		check=No
+
+		obj type=TEXT
+		name=TEXT84
+		gridtype=1
+		print with=pd4B12
+		calculation= "1,pd4B12=IIF(type=4.AND._taxdes='4(ข)1.2',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,5,6938,265
+		exc dimension=6258,5,6938,265
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT88
+		gridtype=1
+		print with=pa4B12
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B12=IIF(type=4.AND._taxdes='4(ข)1.2',_amount,0)","1,totamt=totamt+pa4B12"
+		order=3
+		dimension=6978,5,7998,265
+		exc dimension=6978,5,7998,265
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT89
+		gridtype=1
+		print with=pt4B12
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B12=IIF(type=4.AND._taxdes='4(ข)1.2',_taxamt,0)","1,tottax=tottax+pt4B12","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)1.2'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,5,9161,265
+		exc dimension=8082,5,9161,265
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He63
+	secheight=0.2750 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)1.2'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT91
+		visible=No
+		gridtype=1
+		print with=xpt4b12
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1823,265
+		exc dimension=1339,0,1823,265
+		insu=0
+
+[He]
+	name=He64
+	secheight=0.2750 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=CHECK
+		caption=(1.3) อัตราร้อยละ 20 ของกำไรสุทธิ
+		name=CHECK11
+		calculation= "1,.check=IIF(type=4.AND._taxdes='4(ข)1.3', .t., .f.)"
+		order=1
+		dimension=844,14,4342,264
+		exc dimension=844,14,4342,264
+		check=No
+
+		obj type=TEXT
+		name=TEXT90
+		gridtype=1
+		print with=pd4B13
+		calculation= "1,pd4B13=IIF(type=4.AND._taxdes='4(ข)1.3',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,4,6938,264
+		exc dimension=6258,4,6938,264
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT92
+		gridtype=1
+		print with=pa4B13
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B13=IIF(type=4.AND._taxdes='4(ข)1.3',_amount,0)","1,totamt=totamt+pa4B13"
+		order=3
+		dimension=6978,4,7998,264
+		exc dimension=6978,4,7998,264
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT93
+		gridtype=1
+		print with=pt4B13
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B13=IIF(type=4.AND._taxdes='4(ข)1.3',_taxamt,0)","1,tottax=tottax+pt4B13","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)1.3'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,4,9161,264
+		exc dimension=8082,4,9161,264
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He65
+	secheight=0.2750 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)1.3'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT95
+		visible=No
+		gridtype=1
+		print with=xpt4b13
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1823,265
+		exc dimension=1339,0,1823,265
+		insu=0
+
+[He]
+	name=He66
+	secheight=0.2960 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=CHECK
+		caption=(1.4) อัตราอื่นๆ(ระบุ)........... ของกำไรสุทธิ
+		name=CHECK12
+		calculation= "1,.check=IIF(type=4.AND._taxdes='4(ข)1.4', .t., .f.)"
+		order=1
+		dimension=844,10,4342,260
+		exc dimension=844,10,4342,260
+		check=No
+
+[He]
+	name=He79
+	secheight=0.2960 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)1.4'.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT118
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=4.AND._taxdes='4(ข)1.4',_taxdes,'                            ')"
+		order=1
+		dimension=1347,0,6049,260
+		exc dimension=1347,0,6049,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT115
+		gridtype=1
+		print with=pd4B14
+		calculation= "1,pd4B14=IIF(type=4.AND._taxdes='4(ข)1.4',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT116
+		gridtype=1
+		print with=pa4B14
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B14=IIF(type=4.AND._taxdes='4(ข)1.4',_amount,0)","1,totamt=totamt+pa4B14"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT117
+		gridtype=1
+		print with=pt4B14
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B14=IIF(type=4.AND._taxdes='4(ข)1.4',_taxamt,0)","1,tottax=tottax+pt4B14","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)1.4'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He67
+	secheight=0.2960 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)1.4'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT99
+		visible=No
+		gridtype=1
+		print with=xpt4b14
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1823,265
+		exc dimension=1339,0,1823,265
+		insu=0
+
+[He]
+	name=He80
+	secheight=0.2960 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)1.4'.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT122
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=4.AND._taxdes='4(ข)1.4',_taxdes,'                            ')"
+		order=1
+		dimension=1347,0,6049,260
+		exc dimension=1347,0,6049,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT119
+		gridtype=1
+		print with=pd4B14
+		calculation= "1,pd4B14=IIF(type=4.AND._taxdes='4(ข)1.4',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT120
+		gridtype=1
+		print with=pa4B14
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B14=IIF(type=4.AND._taxdes='4(ข)1.4',_amount,0)","1,totamt=totamt+pa4B14"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT121
+		gridtype=1
+		print with=pt4B14
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B14=IIF(type=4.AND._taxdes='4(ข)1.4',_taxamt,0)","1,tottax=tottax+pt4B14","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)1.4'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He28
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=(2)
+		name=LABEL37
+		gridtype=1
+		order=1
+		dimension=706,0,1006,265
+		exc dimension=706,0,1006,265
+
+		obj type=LABEL
+		caption=กรณีผู้ได้รับเงินปันผลไม่ได้รับเครดิตภาษี เนื่องจากจ่าย
+		name=LABEL38
+		gridtype=1
+		order=2
+		dimension=1026,0,4346,265
+		exc dimension=1026,0,4346,265
+
+[He]
+	name=He29
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=(2.1) กำไรสุทธิของกิจการที่ได้รับยกเว้นภาษี
+		name=LABEL39
+		gridtype=1
+		order=1
+		dimension=1026,0,4340,265
+		exc dimension=1026,0,4340,265
+
+		obj type=TEXT
+		name=TEXT35
+		gridtype=1
+		print with=pd4B21
+		calculation= "1,pd4B21=IIF(type=4.AND._taxdes='4(ข)2.1',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT36
+		gridtype=1
+		print with=pa4B21
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B21=IIF(type=4.AND._taxdes='4(ข)2.1',_amount,0)","1,totamt=totamt+pa4B21"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT37
+		gridtype=1
+		print with=pt4B21
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B21=IIF(type=4.AND._taxdes='4(ข)2.1',_taxamt,0)","1,tottax=tottax+pt4B21","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)2.1'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He36
+	secheight=0.2750 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)2.1'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	exc visible=No
+	[Object]
+		obj type=TEXT
+		name=TEXT86
+		visible=No
+		gridtype=1
+		print with=xpt4b21
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1823,265
+		exc dimension=1339,0,1823,265
+		insu=0
+
+[He]
+	name=He30
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=(2.2) เงินปันผลหรือเงินส่วนแบ่งของกำไรที่ได้รับยกเว้น ไม่ต้องนำมารวมคำนวณเป็นรายได้
+		name=LABEL40
+		gridtype=1
+		order=1
+		dimension=1026,0,5867,258
+		exc dimension=1026,0,5926,267
+
+[He]
+	name=He31
+	secheight=0.2800 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)2.2'.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=เพื่อเสียภาษีเงินได้นิติบุคคล
+		name=LABEL41
+		gridtype=1
+		order=1
+		dimension=1323,0,3256,265
+		exc dimension=1323,0,3256,265
+
+		obj type=TEXT
+		name=TEXT46
+		gridtype=1
+		print with=pd4B22
+		calculation= "1,pd4B22=IIF(type=4.AND._taxdes='4(ข)2.2',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT38
+		gridtype=1
+		print with=pa4B22
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B22=IIF(type=4.AND._taxdes='4(ข)2.2',_amount,0)","1,totamt=totamt+pa4B22"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT39
+		gridtype=1
+		print with=pt4B22
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B22=IIF(type=4.AND._taxdes='4(ข)2.2',_taxamt,0)","1,tottax=tottax+pt4B22","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)2.2'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He42
+	secheight=0.2750 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)2.2'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT34
+		visible=No
+		gridtype=1
+		print with=xpt4b22
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1823,265
+		exc dimension=1339,0,1823,265
+		insu=0
+
+[He]
+	name=He33
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=(2.3) กำไรสุทธิส่วนที่ได้หักผลขาดทุนสุทธิยกมาไม่เกิน 5 ปี ก่อนรอบระยะเวลาบัญชีปีปัจจุบัน
+		name=LABEL43
+		gridtype=1
+		order=1
+		dimension=1026,0,6150,265
+		exc dimension=1026,0,6150,265
+
+		obj type=TEXT
+		name=TEXT40
+		gridtype=1
+		print with=pd4B23
+		calculation= "1,pd4B23=IIF(type=4.AND._taxdes='4(ข)2.3',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT41
+		gridtype=1
+		print with=pa4B23
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B23=IIF(type=4.AND._taxdes='4(ข)2.3',_amount,0)","1,totamt=totamt+pa4B23"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT42
+		gridtype=1
+		print with=pt4B23
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B23=IIF(type=4.AND._taxdes='4(ข)2.3',_taxamt,0)","1,tottax=tottax+pt4B23","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)2.3'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He58
+	secheight=0.2750 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)2.3'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT82
+		visible=No
+		gridtype=1
+		print with=xpt4b23
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,0,1823,265
+		exc dimension=1339,0,1823,265
+		insu=0
+
+[He]
+	name=He35
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	exc visible=No
+	[Object]
+		obj type=LABEL
+		caption=(2.4) กำไรที่รับรู้ทางบัญชีโดยวิธีส่วนได้เสีย (equity method)
+		name=LABEL45
+		gridtype=1
+		order=1
+		dimension=1026,0,6152,265
+		exc dimension=1026,0,6152,265
+
+		obj type=TEXT
+		name=TEXT0
+		gridtype=1
+		print with=pd4B24
+		calculation= "1,pd4B24=IIF(type=4.AND._taxdes='4(ข)2.4',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,10,6938,270
+		exc dimension=6258,10,6938,270
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT44
+		gridtype=1
+		print with=pa4B24
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B24=IIF(type=4.AND._taxdes='4(ข)2.4',_amount,0)","1,totamt=totamt+pa4B24"
+		order=3
+		dimension=6978,10,7998,270
+		exc dimension=6978,10,7998,270
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT45
+		gridtype=1
+		print with=pt4B24
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B24=IIF(type=4.AND._taxdes='4(ข)2.4',_taxamt,0)","1,tottax=tottax+pt4B24","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)2.4'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He55
+	secheight=0.2940 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)2.4'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT33
+		visible=No
+		gridtype=1
+		print with=xpt4b24
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,29,1823,294
+		exc dimension=1339,29,1823,294
+		insu=0
+
+[He]
+	name=He37
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=(2.5) อื่นๆ (ระบุ)........
+		name=LABEL48
+		gridtype=1
+		order=1
+		dimension=1026,0,2313,265
+		exc dimension=1026,0,2313,265
+
+[He]
+	name=He81
+	secheight=0.2860 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)2.5'.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT94
+		print with=des
+		calculation= "1,des=IIF(type=4.AND.ISTAX->TAXDES='4(ข)2.5',_taxdes,'                         ')"
+		order=1
+		dimension=1466,0,5273,260
+		exc dimension=1466,0,5273,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT96
+		gridtype=1
+		print with=pd4B25
+		calculation= "1,pd4B25=IIF(type=4.AND._taxdes='4(ข)2.5',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT97
+		gridtype=1
+		print with=pa4B25
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B25=IIF(type=4.AND._taxdes='4(ข)2.5',_amount,0)","1,totamt=totamt+pa4B25"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT123
+		gridtype=1
+		print with=pt4B25
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B25=IIF(type=4.AND._taxdes='4(ข)2.5',_taxamt,0)","1,tottax=tottax+pt4B25","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)2.5'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He60
+	secheight=0.2820 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)2.5'.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT83
+		visible=No
+		gridtype=1
+		print with=xpt4b25
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6) .and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1467,2,1951,267
+		exc dimension=1467,2,1951,267
+		insu=0
+
+[He]
+	name=He82
+	secheight=0.2860 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=4.and._taxdes='4(ข)2.5'.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT47
+		print with=des
+		calculation= "1,des=IIF(type=4.AND.ISTAX->TAXDES='4(ข)2.5',_taxdes,'                         ')"
+		order=1
+		dimension=1466,0,5273,260
+		exc dimension=1466,0,5273,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT48
+		gridtype=1
+		print with=pd4B25
+		calculation= "1,pd4B25=IIF(type=4.AND._taxdes='4(ข)2.5',_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT49
+		gridtype=1
+		print with=pa4B25
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa4B25=IIF(type=4.AND._taxdes='4(ข)2.5',_amount,0)","1,totamt=totamt+pa4B25"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT50
+		gridtype=1
+		print with=pt4B25
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt4B25=IIF(type=4.AND._taxdes='4(ข)2.5',_taxamt,0)","1,tottax=tottax+pt4B25","1,p_item=p_item+IIF(type=4.and._taxdes='4(ข)2.5'.and.p_item<2, 1,0)"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He38
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=5. การจ่ายเงินได้ที่ต้องหักภาษี ณ ที่จ่ายตามคำสั่งกรมสรรพากรที่ออกตามมาตรา 3เตรส   (ระบุ)........
+		name=LABEL51
+		gridtype=1
+		order=1
+		dimension=226,0,5390,265
+		exc dimension=226,0,5390,265
+
+[He]
+	name=He39
+	secheight=0.2890 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=5.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT51
+		print with=des
+		calculation= "1,des=IIF(type=5,_taxdes,'                         ')"
+		order=1
+		dimension=402,0,5320,260
+		exc dimension=402,0,5320,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT52
+		gridtype=1
+		print with=pd5
+		calculation= "1,pd5=IIF(type=5,_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT53
+		gridtype=1
+		print with=pa5
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa5=IIF(type=5,_amount,0)","1,totamt=totamt+pa5"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT54
+		gridtype=1
+		print with=pt5
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt5=IIF(type=5,_taxamt,0)","1,tottax=tottax+pt5","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He32
+	secheight=0.2950 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=5.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	exc visible=No
+	[Object]
+		obj type=TEXT
+		name=TEXT29
+		visible=No
+		gridtype=1
+		print with=xpt5
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6).and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,30,1667,295
+		exc dimension=1339,30,1667,295
+		insu=0
+
+[He]
+	name=He69
+	secheight=0.2890 inch
+	order objs=4
+	calculation= "1,.enable=IIF(type=5.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT30
+		print with=des
+		calculation= "1,des=IIF(type=5,_taxdes,'                         ')"
+		order=1
+		dimension=402,0,5320,260
+		exc dimension=402,0,5320,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT31
+		gridtype=1
+		print with=pd5
+		calculation= "1,pd5=IIF(type=5,_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT32
+		gridtype=1
+		print with=pa5
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa5=IIF(type=5,_amount,0)","1,totamt=totamt+pa5"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT73
+		gridtype=1
+		print with=pt5
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt5=IIF(type=5,_taxamt,0)","1,tottax=tottax+pt5","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He40
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=(เช่น รางวัล ส่วนลดหรือประโยชน์ใดๆ เนื่องจากการส่งเสริมการขาย รางวัลในการประกวด การแข่งขัน 
+		name=LABEL53
+		gridtype=1
+		order=1
+		dimension=386,0,6153,265
+		exc dimension=386,0,6153,265
+
+[He]
+	name=He41
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=การชิงโชค ค่าแสดงของนักแสดงสาธารณะ ค่าขนส่ง ค่าบริการ ค่าเบี้ยประกันวินาศภัย ฯลฯ)
+		name=LABEL54
+		gridtype=1
+		order=1
+		dimension=386,0,5486,265
+		exc dimension=386,0,5486,265
+
+[He]
+	name=He43
+	secheight=0.2800 inch
+	order objs=5
+	calculation= "1,type=IIF(ISTAX->AMOUNT2>=0.01.and.p_item<2, 6, type)"
+	shrink=No
+	exc visible=No
+	[Object]
+		obj type=LABEL
+		caption=6. อื่นๆ (ระบุ)....
+		name=LABEL56
+		gridtype=1
+		order=1
+		dimension=226,0,1176,265
+		exc dimension=226,0,1143,265
+
+		obj type=TEXT
+		name=TEXT55
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=6,_taxdes,'                         ')"
+		order=2
+		dimension=1243,0,6153,260
+		exc dimension=1426,0,6336,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT56
+		gridtype=1
+		print with=pd6
+		calculation= "1,pd6=IIF(type=6,_taxdat,ctod('        '))"
+		order=3
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT57
+		gridtype=1
+		print with=pa6
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa6=IIF(type=6,_amount,0)","1,totamt=totamt+pa6"
+		order=4
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT58
+		gridtype=1
+		print with=pt6
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt6=IIF(type=6,_taxamt,0)","1,tottax=tottax+pt6","1,p_item=p_item+1"
+		order=5
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He34
+	secheight=0.2840 inch
+	order objs=1
+	calculation= "1,.enable=IIF(type=6.and.p_item<2,.t.,.f.)"
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT85
+		visible=No
+		gridtype=1
+		print with=xpt6
+		calculation= "1,type=VAL(ISTAX->TAXDES2)","1,type=IIF((type<=0.or.type>6).and.ISTAX->AMOUNT2>=0.01,6,type)","0,cond=VAL(ISTAX->TAXCOND2)","0,cond=IIF(cond<=0.or.cond > 4, 4, cond)","1,_taxdat=ISTAX->TAXDAT2","1,_amount=ISTAX->AMOUNT2","1,_taxamt=ISTAX->TAXAMT2","1,_taxdes=ISTAX->TAXDES2"
+		order=1
+		dimension=1339,8,1667,273
+		exc dimension=1339,8,1667,273
+		insu=0
+
+[He]
+	name=He70
+	secheight=0.2750 inch
+	order objs=4
+	calculation= "1,type=IIF(ISTAX->AMOUNT2>=0.01.and.p_item<2, 6, type)","1,.enable=IIF(type=6.and.p_item<2,.t.,.f.)"
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT74
+		gridtype=1
+		print with=des
+		calculation= "1,des=IIF(type=6,_taxdes,'                         ')"
+		order=1
+		dimension=1243,0,6153,260
+		exc dimension=1426,0,6336,260
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT75
+		gridtype=1
+		print with=pd6
+		calculation= "1,pd6=IIF(type=6,_taxdat,ctod('        '))"
+		order=2
+		dimension=6258,0,6938,260
+		exc dimension=6258,0,6938,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT76
+		gridtype=1
+		print with=pa6
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pa6=IIF(type=6,_amount,0)","1,totamt=totamt+pa6"
+		order=3
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT77
+		gridtype=1
+		print with=pt6
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,pt6=IIF(type=6,_taxamt,0)","1,tottax=tottax+pt6","1,p_item=p_item+1"
+		order=4
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He44
+	secheight=0.1280 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He45
+	secheight=0.3190 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=รวมเงินที่จ่ายและภาษีที่หักนำส่ง
+		name=LABEL57
+		curve=3
+		gridtype=1
+		order=1
+		dimension=1826,0,4009,308
+		exc dimension=1826,0,4009,308
+		horz align=Center
+		bgclr=225,225,225
+		font size=16
+		bold=Yes
+
+		obj type=TEXT
+		name=TEXT59
+		gridtype=1
+		print with=totamt
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,totamt=IIF(str(totamt,15,2)#str(ISTAX->AMOUNT+ISTAX->AMOUNT2,15,2), 99999999999.99, totamt)"
+		order=2
+		dimension=6978,0,7998,260
+		exc dimension=6978,0,7998,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=TEXT
+		name=TEXT60
+		gridtype=1
+		print with=tottax
+		format=ZZ,ZZZ,ZZZ.ZZ
+		calculation= "1,tottax=IIF(str(tottax,15,2)#str(ISTAX->TAXAMT+ISTAX->TAXAMT2,15,2), 99999999999.99, tottax)"
+		order=3
+		dimension=8082,0,9161,260
+		exc dimension=8082,0,9161,260
+		horz align=Right
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He46
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=รวมเงินภาษีที่หักนำส่ง
+		name=LABEL58
+		gridtype=1
+		order=1
+		dimension=226,0,1630,265
+		exc dimension=226,0,1630,265
+
+		obj type=TEXT
+		name=TEXT61
+		gridtype=1
+		print with=t_baht( tottax )
+		order=2
+		dimension=1810,0,9107,260
+		exc dimension=1810,0,9107,260
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He47
+	secheight=0.1280 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He48
+	visible=No
+	secheight=0.2800 inch
+	order objs=9
+	shrink=No
+	exc visible=No
+	[Object]
+		obj type=LABEL
+		caption=ผู้จ่ายเงิน
+		name=LABEL59
+		gridtype=1
+		order=1
+		dimension=1346,0,2040,265
+		exc dimension=1346,0,2040,265
+
+		obj type=LABEL
+		caption=[
+		name=LABEL60
+		gridtype=1
+		order=2
+		dimension=2320,0,2460,265
+		exc dimension=2320,0,2460,265
+
+		obj type=TEXT
+		name=TEXT62
+		gridtype=1
+		print with=condx
+		calculation= "1,condx=IIF(cond=1,' x','  ')"
+		order=3
+		dimension=2466,0,2666,260
+		exc dimension=2466,0,2666,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=LABEL
+		caption=]
+		name=LABEL61
+		gridtype=1
+		order=4
+		dimension=2706,0,2846,265
+		exc dimension=2706,0,2846,265
+
+		obj type=LABEL
+		caption=หักภาษี ณ ที่จ่าย
+		name=LABEL62
+		gridtype=1
+		order=5
+		dimension=2866,0,3944,265
+		exc dimension=2866,0,3944,265
+
+		obj type=LABEL
+		caption=[
+		name=LABEL63
+		gridtype=1
+		order=6
+		dimension=4562,0,4702,265
+		exc dimension=4562,0,4702,265
+
+		obj type=TEXT
+		name=TEXT63
+		gridtype=1
+		print with=condx
+		calculation= "1,condx=IIF(cond=2,' x','  ')"
+		order=7
+		dimension=4706,0,4906,260
+		exc dimension=4706,0,4906,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=LABEL
+		caption=]
+		name=LABEL64
+		gridtype=1
+		order=8
+		dimension=4946,0,5086,265
+		exc dimension=4946,0,5086,265
+
+		obj type=LABEL
+		caption=ออกให้ตลอดไป
+		name=LABEL65
+		gridtype=1
+		order=9
+		dimension=5106,0,6191,265
+		exc dimension=5106,0,6191,265
+
+[He]
+	name=He49
+	visible=No
+	secheight=0.2800 inch
+	order objs=8
+	shrink=No
+	exc visible=No
+	[Object]
+		obj type=LABEL
+		caption=[
+		name=LABEL66
+		gridtype=1
+		order=1
+		dimension=2320,0,2460,265
+		exc dimension=2320,0,2460,265
+
+		obj type=TEXT
+		name=TEXT64
+		gridtype=1
+		print with=condx
+		calculation= "1,condx=IIF(cond=3,' x','  ')"
+		order=2
+		dimension=2466,0,2666,260
+		exc dimension=2466,0,2666,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=LABEL
+		caption=]
+		name=LABEL67
+		gridtype=1
+		order=3
+		dimension=2706,0,2846,265
+		exc dimension=2706,0,2846,265
+
+		obj type=LABEL
+		caption=ออกภาษีให้ครั้งเดียว
+		name=LABEL68
+		gridtype=1
+		order=4
+		dimension=2866,0,4158,265
+		exc dimension=2866,0,4158,265
+
+		obj type=LABEL
+		caption=[
+		name=LABEL69
+		gridtype=1
+		order=5
+		dimension=4562,0,4702,265
+		exc dimension=4562,0,4702,265
+
+		obj type=TEXT
+		name=TEXT65
+		gridtype=1
+		print with=condx
+		calculation= "1,condx=IIF(cond=4,' x','  ')"
+		order=6
+		dimension=4706,0,4906,260
+		exc dimension=4706,0,4906,260
+		horz align=Center
+		font size=16
+		bold=Yes
+		insu=0
+
+		obj type=LABEL
+		caption=]
+		name=LABEL70
+		gridtype=1
+		order=7
+		dimension=4946,0,5086,265
+		exc dimension=4946,0,5086,265
+
+		obj type=LABEL
+		caption=อื่นๆ (ระบุ) ..............................
+		name=LABEL71
+		gridtype=1
+		order=8
+		dimension=5106,0,7056,265
+		exc dimension=5106,0,7056,265
+
+[He]
+	name=He1
+	secheight=0.2800 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ผู้จ่ายเงิน
+		name=LABEL32
+		gridtype=1
+		order=1
+		dimension=1329,15,2023,280
+		exc dimension=1329,15,2023,280
+
+		obj type=CHECK
+		caption=หักภาษี ณ ที่จ่าย
+		name=CHECK1
+		calculation= "1,.check=IIF(COND=1, .t., .f.)"
+		order=2
+		dimension=2317,26,3583,276
+		exc dimension=2317,26,3583,276
+		check=No
+
+		obj type=CHECK
+		caption=ออกให้ตลอดไป
+		name=CHECK2
+		calculation= "1,.check=IIF(COND=2, .t., .f.)"
+		order=3
+		dimension=3805,26,5071,276
+		exc dimension=3805,26,5071,276
+		check=No
+
+		obj type=CHECK
+		caption=ออกภาษีให้ครั้งเดียว
+		name=CHECK0
+		calculation= "1,.check=IIF(COND=3, .t., .f.)"
+		order=4
+		dimension=5381,26,6647,276
+		exc dimension=5381,26,6647,276
+		check=No
+
+		obj type=CHECK
+		caption=อื่นๆ (ระบุ) ..............................
+		name=CHECK3
+		calculation= "1,.check=IIF(COND=4, .t., .f.)"
+		order=5
+		dimension=6949,26,8965,276
+		exc dimension=6949,26,8965,276
+		check=No
+
+[He]
+	name=He50
+	secheight=0.1280 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He51
+	enable=No
+	secheight=0.2800 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=เงินสะสมเข้ากองทุนประกันสังคม
+		name=LABEL72
+		gridtype=1
+		order=1
+		dimension=226,0,2209,265
+		exc dimension=226,0,2209,265
+
+		obj type=TEXT
+		name=TEXT66
+		gridtype=1
+		print with=ISTAX->SOCIALAMT
+		format=ZZ,ZZZ,ZZZ.ZZ
+		order=2
+		dimension=5666,0,6745,260
+		exc dimension=5666,0,6745,260
+		horz align=Right
+		insu=0
+
+		obj type=LABEL
+		caption=บาท
+		name=LABEL73
+		gridtype=1
+		order=3
+		dimension=6866,0,7343,265
+		exc dimension=6866,0,7343,265
+
+[He]
+	name=He52
+	enable=No
+	secheight=0.2800 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=เงินสะสมจ่ายเข้ากองทุนสำรองเลี้ยงชีพ
+		name=LABEL74
+		gridtype=1
+		order=1
+		dimension=226,0,2454,265
+		exc dimension=226,0,2454,265
+
+		obj type=LABEL
+		caption=ใบอนุญาตเลขที่
+		name=LABEL75
+		gridtype=1
+		order=2
+		dimension=3186,0,4247,265
+		exc dimension=3186,0,4247,265
+
+		obj type=TEXT
+		name=TEXT67
+		visible=No
+		gridtype=1
+		print with=POVIDNT_ID
+		order=3
+		dimension=4386,0,5626,260
+		exc dimension=4386,0,5626,260
+		insu=0
+
+		obj type=TEXT
+		name=TEXT68
+		gridtype=1
+		print with=ISTAX->POVDNT
+		format=ZZ,ZZZ,ZZZ.ZZ
+		order=4
+		dimension=5666,0,6745,260
+		exc dimension=5666,0,6745,260
+		horz align=Right
+		insu=0
+
+		obj type=LABEL
+		caption=บาท
+		name=LABEL76
+		gridtype=1
+		order=5
+		dimension=6866,0,7343,265
+		exc dimension=6866,0,7343,265
+
+[He]
+	name=He53
+	enable=No
+	secheight=0.1280 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He54
+	secheight=0.4090 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ขอรับรองว่าข้อความและตัวเลขดังกล่าวข้างต้นถูกต้องตรงกับความเป็นจริงทุกประการ
+		name=LABEL77
+		gridtype=1
+		order=1
+		dimension=226,0,4841,265
+		exc dimension=226,0,4841,265
+
+[He]
+	name=He56
+	secheight=0.2700 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ผู้มีหน้าที่หักภาษี ณ.ที่จ่าย
+		name=LABEL78
+		gridtype=1
+		order=1
+		dimension=2946,0,4499,265
+		exc dimension=2946,0,4499,265
+
+		obj type=LABEL
+		caption=....................................................
+		name=LABEL79
+		gridtype=1
+		order=2
+		dimension=5058,0,6718,265
+		exc dimension=5058,0,6718,265
+		horz align=Center
+
+		obj type=LABEL
+		caption=ประทับตรา
+		name=LABEL80
+		gridtype=1
+		order=3
+		dimension=7570,0,8402,265
+		exc dimension=7570,0,8402,265
+		horz align=Center
+
+[He]
+	name=He57
+	secheight=0.3400 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=วันเดือนปี ที่ออกหนังสือรับรองฯ
+		name=LABEL81
+		gridtype=1
+		order=1
+		dimension=2946,0,4886,265
+		exc dimension=2946,0,4886,265
+
+		obj type=TEXT
+		name=TEXT69
+		gridtype=1
+		print with=ISTAX->TAXDAT
+		order=2
+		dimension=5426,0,6330,260
+		exc dimension=5426,0,6330,260
+		horz align=Center
+		bold=Yes
+		insu=0
+
+		obj type=LABEL
+		caption=นิติบุคคล
+		name=LABEL50
+		gridtype=1
+		order=3
+		dimension=7634,15,8348,280
+		exc dimension=7634,15,8348,280
+		horz align=Center
+
+[He]
+	name=He83
+	enable=No
+	secheight=0.3230 inch
+	order objs=9
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=พิมพ์โดย
+		name=LABEL0
+		gridtype=1
+		order=1
+		dimension=1266,0,1984,255
+		exc dimension=1266,0,1984,255
+
+		obj type=TEXT
+		name=TEXT124
+		gridtype=1
+		print with=p_userid()
+		order=2
+		dimension=2066,0,3226,255
+		exc dimension=2066,0,3226,255
+		insu=0
+
+		obj type=LABEL
+		caption=วันที่
+		name=LABEL33
+		gridtype=1
+		order=3
+		dimension=3266,0,3758,255
+		exc dimension=3266,0,3758,255
+
+		obj type=TEXT
+		name=TEXT125
+		gridtype=1
+		print with=@d_prndat()
+		order=4
+		dimension=3906,0,4666,255
+		exc dimension=3906,0,4666,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT126
+		gridtype=1
+		print with=s_prntim()
+		order=5
+		dimension=4706,0,5306,255
+		exc dimension=4706,0,5306,255
+		insu=0
+
+		obj type=LABEL
+		caption=พิมพ์ครั้งที่
+		name=LABEL34
+		gridtype=1
+		order=6
+		dimension=5346,0,6143,255
+		exc dimension=5346,0,6143,255
+
+		obj type=TEXT
+		name=TEXT127
+		gridtype=1
+		print with=@n_prncnt()
+		format=999
+		order=7
+		dimension=6386,0,6725,255
+		exc dimension=6386,0,6725,255
+		insu=0
+
+		obj type=LABEL
+		caption=บันทึกโดย
+		name=LABEL35
+		gridtype=1
+		order=8
+		dimension=7026,0,7821,255
+		exc dimension=7026,0,7821,255
+
+		obj type=TEXT
+		name=TEXT128
+		gridtype=1
+		print with=A->USERID
+		order=9
+		dimension=7826,0,8560,255
+		exc dimension=7826,0,8560,255
+		insu=0
+
+[He]
+	name=He59
+	secheight=0.2500 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=หมายเหตุ      * ให้สามารถอ้างอิงหรือสอบยันกันได้ระหว่างลำดับที่ตามหนังสือรับรองฯ กับแบบยื่นรายการภาษีหัก ณ ที่จ่าย
+		name=LABEL83
+		gridtype=1
+		order=1
+		dimension=226,0,6209,225
+		exc dimension=226,0,6209,225
+		font size=12
+
+[He]
+	name=He61
+	secheight=0.2700 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=คำเตือน
+		name=LABEL85
+		gridtype=1
+		order=1
+		dimension=226,0,750,225
+		exc dimension=226,0,692,192
+		font size=12
+
+		obj type=LABEL
+		caption=ผู้มีหน้าที่ออกหนังสือรับรองการหักภาษี ณ ที่จ่าย ฝ่าฝืนไม่ปฏิบัติตามมาตรา 50 ทวิ แห่งประมวลรัษฎากร ต้องรับโทษทางอาญาตามมาตรา 35 แห่งประมวลรัษฎากร
+		name=LABEL86
+		gridtype=1
+		order=2
+		dimension=882,0,9015,225
+		exc dimension=882,0,9015,225
+		font size=12
+
+[Bo]
+	name=Bo1
+	secheight=0.1280 inch
+	order objs=0
+	shrink=Yes

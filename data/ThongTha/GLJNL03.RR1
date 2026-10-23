@@ -1,0 +1,195 @@
+* GLJNL.RL - ¾ÔÁ¾ì Journal Voucher
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+Ti:: ~INIT
+He:$E\NAME                                             $E
+He:~ADDR
+He:                                                               àÅ¢·Õè   ~VOUCHER
+He:                                                               ÇÑ¹·Õè   ~VOUDAT
+He:~JNLNAM
+He:ÃÒÂÅÐàÍÕÂ´        ~H_DESCRP
+He:€…………………………………………‰…………………………………………………………………………………………………………………‰………………………………………‰………………………………………
+He:„    àÅ¢·ÕèºÑ­ªÕ „                ÃÒÂÅÐàÍÕÂ´                 „     à´ºÔ·     „     à¤Ã´Ôµ    „
+He:†…………………………………………Š…………………………………………………………………………………………………………………Š………………………………………Š………………………………………‡
+**:  xxxxxxxxx1xxxxx  xxxxxxxxx1xxxxxxxxx2xxxxxxxxx3xxxxxxxxx4x  999,999,999.99  999,999,999.99
+Ih::	;1 gljnlit->voucher gljnl->voucher
+Ib:  ~ACCNUM          ~ACCNAM                                    ~DRAMT          ~CRAMT		;1
+*Ib:                     ~DESCRP																;1
+Ih::    ;2 bktrn->voucher gljnl->voucher
+Ib:        àªç¤#     ~CHQNUM         ~CHQDAT ~CHQAMT               ~BANK           ~BRANCH        ;2
+Ih::    ;3 isvat->vatrec+isvat->docnum 'S'+gljnl->voucher
+Ib:~PVATÀÒÉÕ¢ÒÂ#     ~REFNUM         ~VATDAT ~AMT01       ~VAT01       ~VATP ;3
+Ih::    ;4 isvat->vatrec+isvat->docnum 'P'+gljnl->voucher
+Ib:~PVAT ÀÒÉÕ«×éÍ#   ~REFNUM         ~VATDAT ~AMT01       ~VAT01       ~VATP ;4
+Ib:~02                       ¢Í¤×¹äÁèä´é     ~AMT02       ~VAT02   ;4
+Ih::    ;5 istax->refnum gljnl->voucher
+Ib: ~PTAXãºËÑ¡ÀÒÉÕàÅ¢·Õè   ~TAXNUM      ~TAXDAT   ~TAXP ;5
+Ib:        ÂÍ´¨èÒÂ ~PAYAMT        ËÑ¡äÇé   ~RATE %~TAXAMT      ÊÓËÃÑº  ~TAXDES    ;5
+Ib:~I2     ÂÍ´#2   ~PAYAMT2       ËÑ¡äÇé   ~RATE2%~TAXAMT2     ÊÓËÃÑº  ~TAXDES2   ;5
+Bt:„                „                                           „               „               „
+Fo:†…………………………………………ˆ…………………………………………………………………………………………………………………Š………………………………………Š………………………………………‡
+Su:„~BAHT                                                   ÃÇÁ „~TOTDR         „~TOTCR         „
+Su:†……………………………………………………………………………………‰………………………………………………………………………Š………………………………………ˆ………………………………………‡
+*Su:„ËÁÒÂàËµØ                                                                                    „
+*Su:„ ~HREM1                                                                                     „
+*Su:„ ~HREM2                                                                                     „
+*Su:„ ~HREM3                                                                                     „
+*Su:„ ~HREM4                                                                                     „
+*Su:„ ~HREM5                                                                                     „
+*Su:†……………………………………………………………………………………‰………………………………………………………………………Š…………………………………………………………………………………‡
+Su:„                                „                           „    ä´éÃÑºà§Ô¹¶Ù¡µéÍ§àÃÕÂºÃéÍÂ „
+Su:„ ¼Ùé¨Ñ´·Ó    _____________      „ ¼ÙéµÃÇ¨ÊÍº ______________ „                               „
+Su:†……………………………………………………………………………………Š………………………………………………………………………‡ ___________________________   „
+Su:„                                „                           „       ____/___/_____          „
+Su:„ ¼ÙéÃÑºÃÍ§¶Ù¡µéÍ§ _____________ „ ¼ÙéÍ¹ØÁÑµÔ ______________ „           ¼ÙéÃÑºà§Ô¹          „
+*Su:„ ¾ÔÁ¾ìâ´Â  ~PRNBY         ÇÑ¹·Õè  ~PRNDAT   ~PRNTIM ¾ÔÁ¾ì¤ÃÑé§·Õè~PRNCNT ºÑ¹·Ö¡â´Â ~RECBY   „
+Su:‚……………………………………………………………………………………ˆ………………………………………………………………………ˆ…………………………………………………………………………………ƒ
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+Top=0
+Left=0
+Tabs=4
+Right=94
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=GLJNL.TXT
+Print Control=\027\033\001
+Fix Summary Line=ON
+Select Scope=OFF
+*Form=ON
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=gljnl
+Alias=A
+Tag=gljnl1
+System=DATA_PATH
+
+[item file]
+File=gljnlit
+Alias=B
+Tag=gljnlit1
+System=DATA_PATH
+
+File=bktrn
+Alias=X
+Tag=bktrn13
+System=DATA_PATH
+
+File=isvat
+Alias=Y
+Tag=isvat1
+System=DATA_PATH
+
+File=istax
+Alias=T
+Tag=istax1
+System=DATA_PATH
+
+[relate file]
+File=glacc
+Alias=R
+Tag=glacc1
+System=DATA_PATH
+Master file=gljnlit
+Master-Related Field=ACCNUM+DEPCOD
+
+File=isrun
+Alias=Y
+Tag=isrun3
+System=DATA_PATH
+Master file=gljnl
+Master-Related Field='GL'+JNLTYP
+
+File=bkmas
+Alias=Z
+Tag=bkmas1
+System=DATA_PATH
+Master file=bktrn
+Master-Related Field=BNKACC
+
+[data spec]
+*		    len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:		len,	"pict",			 	"data",				"exp"
+~INIT:		0,		"",					"",					"totdr=0; totcr=0"
+~ADDR:		0,		"",					"p_addr()",			""
+~TAXID:		0,		"",					"p_taxid()",		""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~VOUCHER:	0,		"",					"GLJNL->VOUCHER",	""
+*~VOUCHER:	0,		"",					"voucher",			"voucher = SUBSTR(GLJNL->VOUCHER,3,10)"
+~VOUDAT:	0,		"",					"GLJNL->VOUDAT",	""
+~ACCNUM:	0,		"",					"GLJNLIT->ACCNUM",	""
+~ACCNAM:   43,		"",					"GLACC->ACCNAM",	""
+~H_DESCRP:  0,		"",					"GLJNL->DESCRP",	""
+~DESCRP:   41,		"",					"GLJNLIT->DESCRP",	""
+~DRAMT:		0,		"ZZZ,ZZZ,ZZZ.ZZ",	"dramt",			"dramt = IIF(GLJNLIT->TRNTYP='0', GLJNLIT->AMOUNT, 0); totdr=totdr+dramt"
+~CRAMT:		0,		"ZZZ,ZZZ,ZZZ.ZZ",	"cramt",			"cramt = IIF(GLJNLIT->TRNTYP='1', GLJNLIT->AMOUNT, 0); totcr=totcr+cramt"
+~TOTDR:		0,		"ZZZ,ZZZ,ZZZ.ZZ",	"totdr",			""
+~TOTCR:		0,		"ZZZ,ZZZ,ZZZ.ZZ",	"totcr",			""
+~BAHT:		0,		"",					"t_baht(totdr)",	""
+
+~CHQNUM:	0,		"",					"BKTRN->CHQNUM",	""
+~CHQDAT:	0,		"",					"BKTRN->CHQDAT",    ""
+~CHQAMT:	0,		"999,999,999.99",   "BKTRN->AMOUNT",    ""
+~BANK:  	0,		"",					"bank", 			"bank = @p_istab(BKTRN->BNKCOD,01,0,10); bank=IIF(BKTRN->BKTRNTYP='QR',bank+'    ',SUBSTR(BKMAS->SHORTNAM,1,10))"
+~BRANCH:	0,		"",					"branch", 			"branch = IIF(BKTRN->BKTRNTYP='QR',BKTRN->BRANCH,'                      ')"
+~JNLNAM:	0,		"",					"ISRUN->POSDES",    ""
+
+~DEP:		0,		"",					"GLJNLIT->DEPCOD",	""
+~P_ISDEP:	0,		"",					"p_isdep( GLJNLIT->DEPCOD )",	""
+
+~DOCNEW:	0,		"",					"num",				"num=IIF(ISVAT->NEWNUM#' ',ISVAT->NEWNUM,ISVAT->DOCNUM)"
+~DOCNUM:	0,		"",					"ISVAT->DOCNUM",	""
+~NEWNUM:	0,		"",					"ISVAT->NEWNUM",	""
+~REFNUM:	0,		"",					"ISVAT->REFNUM",	""
+~DOCDAT:	0,		"",					"ISVAT->DOCDAT",	""
+~VATDAT:	0,		"",					"ISVAT->VATDAT",	""
+~VATREM:	0,		"",					"ISVAT->REMARK",	""
+~VATDES:	0,		"",					"ISVAT->DESCRP",	""
+~PVAT:		0,		"",					"",					"prd = @format_date( ISVAT->VATPRD, MM/YY )"
+~VATP:		0,		"",					"vat_prd",			"vat_prd=IIF( SUBSTR(DTOS(ISVAT->VATPRD),1,6) # SUBSTR(DTOS(ISVAT->VATDAT),1,6), '(Â×è¹ÃÇÁã¹§Ç´ '+prd+ISVAT->LATE+')', '                     ')"
+~AMT01:		0,		"99,999,999.99",	"ISVAT->AMT01",		""
+~VAT01:		0,		"9,999,999.99",		"ISVAT->VAT01",		""
+~02:		0,		"",					"02",				"02=IIF(ISVAT->AMT02 > 0 .or. ISVAT->VAT02 > 0, ' ', ':')"
+~AMT02:		0,		"99,999,999.99",	"ISVAT->AMT02",		""
+~VAT02:		0,		"9,999,999.99",		"ISVAT->VAT02",		""
+
+~HREM1:		0,		"",					"p_hrem( GLJNL->VOUCHER,1 )",	""
+~HREM2:		0,		"",					"p_hrem( GLJNL->VOUCHER,2 )",	""
+~HREM3:		0,		"",					"p_hrem( GLJNL->VOUCHER,3 )",	""
+~HREM4:		0,		"",					"p_hrem( GLJNL->VOUCHER,4 )",	""
+~HREM5:		0,		"",					"p_hrem( GLJNL->VOUCHER,5 )",	""
+
+~TAXNUM:	0,		"",					"ISTAX->TAXNUM",	""
+~TAXDAT:	0,		"",					"ISTAX->TAXDAT",	""
+~TAXNAM:	0,		"",					"ISTAX->NAME",		""
+~TAXADDR:	0,		"",					"ISTAX->ADDR",		""
+~TAXID:		0,		"",					"ISTAX->TAXID",		""
+~TAXDES:	0,		"",					"ISTAX->TAXDES",	""
+~PTAX:		0,		"",					"",					"prd = @format_date( ISTAX->TAXPRD, MM/YY )"
+~TAXP:		0,		"",					"tax_prd",			"tax_prd=IIF( SUBSTR(DTOS(ISTAX->TAXPRD),1,6) # SUBSTR(DTOS(ISTAX->TAXDAT),1,6), '(Â×è¹ÃÇÁã¹§Ç´ '+prd+ISTAX->LATE+')', '                     ')"
+~PAYAMT:	0,		"99,999,999.99",	"ISTAX->AMOUNT",	""
+~RATE:		0,		"999.99",			"ISTAX->TAXRAT",	""
+~TAXAMT:	0,		"9,999,999.99",		"ISTAX->TAXAMT",	""
+~TAXCOND:   0,      "",                 "ISTAX->TAXCOND",   ""
+*Item#2
+~I2:        0,      "",                 "item2",            "item2=IIF(ISTAX->AMOUNT2 >=0.01 .or. ISTAX->TAXAMT2 >=0.01, 'ó','}')"
+~TAXDES2:   0,      "",                 "ISTAX->TAXDES2",   ""
+~PAYAMT2:   0,      "99,999,999.99",    "ISTAX->AMOUNT2",   ""
+~RATE2:     0,      "999.99",           "ISTAX->TAXRAT2",   ""
+~TAXAMT2:   0,      "9,999,999.99",     "ISTAX->TAXAMT2",   ""
+~TAXCOND2:  0,      "",                 "ISTAX->TAXCOND",   ""
+
+~PRNBY:		0,		"",					"p_userid()",		""
+~PRNDAT:	0,		"",					"@d_prndat()",		""
+~PRNTIM:	0,		"",					"s_prntim()",		""
+~PRNCNT:	0,		"999",				"@n_prncnt()",		""
+~RECBY:		0,		"",					"A->USERID",		""

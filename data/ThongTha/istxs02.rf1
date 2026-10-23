@@ -1,0 +1,222 @@
+* ISTAX2.RL - áººÂ×è¹ À§´.2 (Witholding Tax Listing)
+*
+[report frame]
+Ti::~INIT ~INIT1 ~INIT2 ~INIT3 ~PAGE_CLR ~LATE_CLR ~PAGE0 ~LATE  ~NOTPRN_FO
+He:
+He:      $EãºµèÍ À.§.´. 2 ~LATE           $E
+*He:      \NAME             `àÅ¢»ÃÐ¨ÓµÑÇ¼ÙéàÊÕÂÀÒÉÕÍÒ¡Ã $B~TAX_ID        $B    ÊÒ¢Ò·Õè ~FROMDEP
+He:      \NAME              `àÅ¢»ÃÐ¨ÓµÑÇ¼ÙéàÊÕÂÀÒÉÕÍÒ¡Ã $B~TAX_ID        $B
+*He:      ÊÒ¢Ò      ~P_ISDEP                                                                                      `( ) ÊÒ¢Ò·Õè ~FROMDEP
+He:      ÊÓËÃÑºà´×Í¹ ~PRD	`á¼è¹·Õè ~PAGE  ã¹¨Ó¹Ç¹ ...... á¼è¹
+He:      »ÃÐàÀ·à§Ô¹ä´é  [x] ~INCMSG
+He:€……………‰………………………………………………………………………………………………………………………………‰…………………………………………………………………………………………………………………………………………………………‰……………………………………‰………………
+He:„ÅÓ´Ñº„àÅ¢»ÃÐ¨ÓµÑÇ»ÃÐªÒª¹ ËÃ×ÍàÅ¢»ÃÐ¨ÓµÑÇ¼ÙéàÊÕÂÀÒÉÕ   „           ÃÒÂÅÐàÍÕÂ´à¡ÕèÂÇ¡Ñº¡ÒÃ¨èÒÂà§Ô¹ä´é¾Ö§»ÃÐàÁÔ¹    „à§Ô¹ÀÒÉÕ·ÕèËÑ¡„à§×èÍ¹„
+He:„  ·Õè„(1)àÅ¢·Õè»Ñ­ªÕà§Ô¹½Ò¡ (¢Í§¼ÙéÁÕà§Ô¹ä´é)         †……………………‰……………………………………………………………………‰………………‰………………………………………‡  áÅÐ¹ÓÊè§    „ ä¢   „
+He:„     „ª×èÍ¼ÙéÁÕà§Ô¹ä´é                                „ ÇÑ¹¨èÒÂ„   »ÃÐàÀ·à§Ô¹ä´é (1)      „ ÍÑµÃÒ„    à§Ô¹·Õè¨èÒÂ„   ã¹¤ÃÑé§¹Õé „  (2) „
+He:†……………Š………………………………………………………………………………………………………………………………Š……………………Š……………………………………………………………………Š………………Š………………………………………Š……………………………………Š………………‡
+*Gh::~CHK_LATE_CLR ~CHK_PAGE0   ;1 TAXPRD 0 6
+Gh::~INCTYP  ~CHK_LATE_CLR ~CHK_PAGE0    ;1 AUTHID
+Gh::~NOTPRN_FO
+Gh::~CHK_LATE_CLR ~CHK_PAGE0    ;2 TAXDAT 0 6
+Bo: ~SEQ  ~TAXID                                           ~TAXDAT   ~TAXDES                   ~RATE  ~AMOUNT         ~TAXAMT          ~TC
+Bo::~SUMAMOUNT  ~SUMTAXAMT
+Bo:         ~NAME
+Bo:~PNEG…Š………………………………………………………………………………………………………………………………Š……………………Š……………………………………………………………………Š………………Š………………………………………Š……………………………………Š………………‡
+Bt:„     „                                                „        „                          „      „               „              „      „
+*Gf::~PRN_FO    ;1
+*Gf:~L \FEED ;1
+Gf::~PPG……ˆ………………………………………………………………………………………………………………………………ˆ……………………ˆ……………………………………………………………………ˆ………………Š………………………………………Š……………………………………Š………………ƒ  ;1
+Gf:~PG    ÃÇÁÂÍ´à§Ô¹ä´éáÅÐÀÒÉÕ·Õè¹ÓÊè§ (ã¹á¼è¹¹Õé)                                                   „~SUMAMT1P      „~SUMTAX1P     „ ;1
+Gf:~PG                                                                                               ‚………………………………………ˆ……………………………………ƒ ;1
+Gf::„……………ˆ………………………………………………………………………………………………………………………………ˆ……………………ˆ……………………………………………………………………ˆ………………Š………………………………………Š……………………………………Š………………ƒ  ;1
+Gf:„ÃÇÁÂÍ´à§Ô¹ä´éáÅÐÀÒÉÕ·Õè¹ÓÊè§ ÊÓËÃÑº»ÃÐàÀ·à§Ô¹ä´é ~INCMSG                                         „~SUMAMT1       „~SUMTAX1      „ ~SUMGRP1~SUMGRP2~SUMGRP3~SUMGRP4~SUMGRP5 ~SUMGRP9 ~END_GRP~LATE_CLR~PAGE_CLR;1
+Gf:                                                                                                  ‚………………………………………ˆ……………………………………ƒ\FEED ;1
+*Gf:~L                                                                                               †………………………………………Š……………………………………‡ ;1
+*Gf:~L     ÃÇÁÂÍ´à§Ô¹ä´éáÅÐÀÒÉÕ·Õè¹ÓÊè§ ~LATE_SUM                                                    „~SUMAMT1       „~SUMTAX1      „ ;1
+*Gf:~L                                                                                               ‚………………………………………ˆ……………………………………ƒ ;1
+Fo:~PP………ˆ………………………………………………………………………………………………………………………………ˆ……………………ˆ……………………………………………………………………ˆ………………Š………………………………………Š……………………………………Š………………ƒ
+Fo:~P     ÃÇÁÂÍ´à§Ô¹ä´éáÅÐÀÒÉÕ·Õè¹ÓÊè§ (ã¹á¼è¹¹Õé)                                                   „~SUMAMT1P      „~SUMTAX1P     „ ~PAGE_CLR
+Fo:~P                                                                                                ‚………………………………………ˆ……………………………………ƒ
+Fo:~L                                                                                                †………………………………………Š……………………………………‡
+Fo:~L     ÃÇÁÂÍ´à§Ô¹ä´éáÅÐÀÒÉÕ·Õè¹ÓÊè§ ~LATE_SUM                                                     „~SUMAMT1       „~SUMTAX1      „
+Fo:~L                                                                                                ‚………………………………………ˆ……………………………………ƒ
+Su:~L \FEED
+Su:                                                                                                  €………………………………………‰……………………………………
+Su:       ÃÇÁÂÍ´à§Ô¹ä´éáÅÐÀÒÉÕ·Õè¹ÓÊè§·Ñé§ÊÔé¹ ~LATE_SUM                                             „~TOTAMT1       „~TOTTAX1      „
+Su:       ÃÇÁãºµèÍ À.§.´.2  ·Ñé§ÊÔé¹ ~T_PAGE    á¼è¹                                                 ‚………………………………………ˆ……………………………………ƒ
+Su:
+Su:                                         Å§ª×èÍ.........................................¼Ùé¨èÒÂà§Ô¹
+Su:                                             (.......................................)                    »ÃÐ·ÑºµÃÒ¹ÔµÔºØ¤¤Å
+Su:                                         µÓáË¹è§...........................................                   (¶éÒÁÕ)
+Su:                                         Â×è¹ÇÑ¹·Õè........à´×Í¹..................¾.È. .........
+Su:
+Su:       ËÁÒÂàËµØ (1) ãËé¡ÃÍ¡à©¾ÒÐ¡Ã³Õ¨èÒÂ´Í¡àºÕéÂà§Ô¹½Ò¡
+Su:               (2) à§×èÍ¹ä¢¡ÒÃËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ ãËé¡ÃÍ¡´Ñ§¹Õé
+Su:                   o ËÑ¡ ³ ·Õè¨èÒÂ ¡ÃÍ¡ 1   o ÍÍ¡ãËéµÅÍ´ä» ¡ÃÍ¡ 2      o ÍÍ¡ãËé¤ÃÑé§à´ÕÂÇ ¡ÃÍ¡ 3
+Su:\FEED
+Su:
+Su:         $BãºªèÇÂ¡ÃÍ¡ áººÂ×è¹ÃÒÂ¡ÒÃÀÒÉÕà§Ô¹ä´éËÑ¡ ³ ·Õè¨èÒÂ$B $EÀ.§.´.2$E
+Su:         µÒÁÁÒµÃÒ 59 áËè§»ÃÐÁÇÅÃÑÉ®Ò¡Ã
+Su:         ÊÓËÃÑº¡ÒÃËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂµÒÁÁÒµÃÒ 50(2) ¡Ã³Õ¡ÒÃ¨èÒÂà§Ô¹ä´é¾Ö§»ÃÐàÁÔ¹µÒÁÁÒµÃÒ 40(3) (4) áËè§»ÃÐÁÇÅÃÑÉ®Ò¡Ã
+Su:\LINE
+Su:         àÅ¢»ÃÐ¨ÓµÑÇ¼ÙéàÊÕÂÀÒÉÕÍÒ¡Ã         $B~TAX_ID        $B
+Su:         ª×èÍ¼ÙéÁÕË¹éÒ·ÕèËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ: ÊÒ¢Ò·Õè ~FROMDEP       
+Su:                  $B\NAME                                                                  $B
+Su:         ·ÕèÍÂÙè  ~ADDRESS
+Su:         â·ÃÈÑ¾·ì ~TEL
+Su:
+Su:\LINE
+Su:
+Su:         [~SN] Â×è¹»¡µÔ [~SL] Â×è¹à¾ÔèÁàµÔÁ¤ÃÑé§·Õè .......    à´×Í¹·Õè¨èÒÂà§Ô¹ä´é¾Ö§»ÃÐàÁÔ¹ $B~PRD            $B
+Su:
+Su:\LINE
+Su:
+Su:         ÁÕÃÒÂÅÐàÍÕÂ´¡ÒÃËÑ¡à»ç¹ÃÒÂ¼ÙéÁÕà§Ô¹ä´é  »ÃÒ¡¯µÒÁ $BãºµèÍ À.§.´.2$B ·Õèá¹ºÁÒ¾ÃéÍÁ¹Õé : ¨Ó¹Ç¹ $B~T_PAGE   $Bá¼è¹
+Su:
+Su:         $BÊÃØ»ÃÒÂ¡ÒÃÀÒÉÕ·Õè¹ÓÊè§                                                               ¨Ó¹Ç¹ÃÒÂ       à§Ô¹ä´é·Ñé§ÊÔé¹  ÀÒÉÕ·Õè¹ÓÊè§$B
+*Su:         1. ÃÇÁÂÍ´à§Ô¹ä´é·Ñé§ÊÔé¹ (ÃÇÁãºµèÍ·Ø¡©ºÑº) . . . . . . . . . . . $B~TOTAMT1        $B
+*Su:         2. ÃÇÁÂÍ´ÀÒÉÕ·Õè¹ÓÊè§·Ñé§ÊÔé¹ (ÃÇÁãºµèÍ·Ø¡©ºÑº)  . . . . . . . . $B~TOTTAX1        $B
+*Su:         3. à§Ô¹à¾ÔèÁ (¶éÒÁÕ)                       . . . . . . . . . . .
+*Su:         4. ÃÇÁÂÍ´ÀÒÉÕ·Õè¹ÓÊè§·Ñé§ÊÔé¹ áÅÐà§Ô¹à¾ÔèÁ (2+3) . . . . . . . . $B~TOTTAX1        $B
+Su:         1. à§Ô¹ä´éµÒÁÁÒµÃÒ 40(3) ¤èÒáËè§ÊÔ·¸Ôì ¤èÒáËè§¡Ùê´ÇÔÅÅì ÏÅÏ    . . . . . . . . . . . $B ~TOT_N1  ~TOT_AMT1       ~TOT_TAX1       $B
+Su:         2. à§Ô¹ä´éµÒÁÁÒµÃÒ 40(4)(¡) ´Í¡àºÕéÂà§Ô¹½Ò¡ ´Í¡àºÕéÂ¾Ñ¹¸ºÑµÃ ´Í¡àºÕéÂµÑëÇà§Ô¹  . . . $B ~TOT_N2  ~TOT_AMT2       ~TOT_TAX2       $B
+Su:         3. à§Ô¹ä´éµÒÁÁÒµÃÒ 40(4)(¢) à§Ô¹»Ñ¹¼Å ÏÅÏ  . . . . . . . . . . . . . . . . . . . . . $B ~TOT_N3  ~TOT_AMT3       ~TOT_TAX3       $B
+Su:         4. à§Ô¹ä´éµÒÁÁÒµÃÒ 40(4)(ª) à§Ô¹¼Å»ÃÐâÂª¹ì·Õèä´é¨Ò¡¡ÒÃâÍ¹ËØé¹ ÏÅÏ  . . . . . . . . . $B ~TOT_N4  ~TOT_AMT4       ~TOT_TAX4       $B
+Su:         5. à§Ô¹ä´éµÒÁÁÒµÃÒ 40(4)Í×è¹æ  . . . . . . . . . . . . . . . . . . . . . . . . . . . $B ~TOT_N5  ~TOT_AMT5       ~TOT_TAX5       $B
+Su:
+Su:         6. ÃÇÁ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . $B ~TOT_N9  ~TOT_AMT9       ~TOT_TAX9       $B
+Su:         7. à§Ô¹à¾ÔèÁ (¶éÒÁÕ)   . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                ?
+Su:         8. ÃÇÁÂÍ´ÀÒÉÕ·Õè¹ÓÊè§·Ñé§ÊÔé¹ áÅÐà§Ô¹à¾ÔèÁ (6+7)   . . . . . . . . . . . . . . . . . . . . . . . . . . . . . $B  ~TOT_TAX9      +?$B
+Su:
+Su:         µÑÇÍÑ¡ÉÃ ~BAHT
+Su:\LINE
+Su:
+Su:                                 ¢éÒ¾à¨éÒ¢ÍÃÑºÃÍ§ÇèÒ ÃÒÂ¡ÒÃ·Õèá¨é§äÇé¢éÒ§µé¹¹Õé à»ç¹ÃÒÂ¡ÒÃ·Õè¶Ù¡µéÍ§áÅÐ¤Ãº¶éÇ¹·Ø¡»ÃÐ¡ÒÃ
+Su:
+Su:                                         Å§ª×èÍ.........................................¼Ùé¨èÒÂà§Ô¹
+Su:                                             (.......................................)                    »ÃÐ·ÑºµÃÒ¹ÔµÔºØ¤¤Å
+Su:                                         µÓáË¹è§...........................................                   (¶éÒÁÕ)
+Su:                                         Â×è¹ÇÑ¹·Õè........à´×Í¹..................¾.È. .........
+Su:  ¾ÔÁ¾ìÇÑ¹·Õè \DATE    àÇÅÒ \TIME
+*Su:>>>> ¨ºÃÒÂ§Ò¹ <<<<
+[end frame]
+
+[print options]
+Top=0
+Left=0
+Right=136
+Lines=-45
+*¡ÓË¹´¤èÒ¢Í§ Lines à»ç¹àÅ¢µÔ´Åº à¾×èÍãËéâ»Ãá¡ÃÁãªé¤èÒ¹Õéá·¹¤èÒ·Õè¡ÓË¹´¨Ò¡´éÒ¹¹Í¡
+Output=Select, Printer, Screen, File,
+File Name=ISTAX.TXT
+Report Type=Listing
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, 8_Inch, Default
+8_Inch=\027\033\004
+15_Inch=\027\033\001
+*Printer=X
+Sort=TAXTYP+DTOS(TAXPRD)+AUTHID+DTOS(TAXDAT)+TAXNUM
+Query=TAXTYP='S02 '
+
+[master file]
+File=ISTAX
+Alias=A
+Tag=ISTAX2
+*Key=TAXTYP+DTOS(TAXPRD)+REFNUM+DTOS(TAXDAT)+RECTYP+REFNUM
+Filter=.NOT.DELETED()
+System=DATA_PATH
+
+[data spec]
+*               len (0)default, (>0)cut, (<0)cut to new line
+*~dat:          len, "pict",				"data",					"exp"
+~INIT:			0,		"",					"",						"page=0; totamt1=0;tottax1=0; opage=1; amt_01=0;tax_01=0"
+~INIT1:			0,		"",					"",						"typ0='*** ¤èÒ¢Í§»ÃÐàÀ· »éÍ¹äÁè¶Ù¡µéÍ§ ***                                '; typ1='(1) à§Ô¹ä´éµÒÁÁÒµÃÒ 40(3) ¤èÒáËè§ÅÔ¢ÊÔ·¸Ôì ¤èÒáËè§¡Ùê´ÇÔÅÅì ÏÅÏ    '; typ2='(2) à§Ô¹ä´éµÒÁÁÒµÃÒ 40(4)(¡) ´Í¡àºÕéÂà§Ô¹½Ò¡ ´Í¡àºÕéÂ¾Ñ¹¸ºÑµÃ      '"
+~INIT2:			0,		"",					"",						"typ3='(3) à§Ô¹ä´éµÒÁÁÒµÃÒ 40(4)(¢) à§Ô¹»Ñ¹¼Å ÏÅÏ                         '; typ4='(4) à§Ô¹ä´éµÒÁÁÒµÃÒ 40(4)(ª) ¼Å»ÃÐâÂª¹ì·Õèä´éÃÑº¨Ò¡¡ÒÃâÍ¹ËØé¹ ÏÅÏ  '; typ5='(5) à§Ô¹ä´éµÒÁÁÒµÃÒ 40(4) Í×è¹æ                                    '"
+~INIT3:			0,		"",					"",						"tot_n1=0; tot_amt1=0; tot_tax1=0; tot_n2=0; tot_amt2=0; tot_tax2=0; tot_n3=0; tot_amt3=0; tot_tax3=0; tot_n4=0; tot_amt4=0; tot_tax4=0; tot_n5=0; tot_amt5=0; tot_tax5=0;  tot_n9=0; tot_amt9=0; tot_tax9=0"
+~LATE:			0,	    "",					"latemsg",				"islate=@n_islate(); latemsg=IIF(islate>0,'(Â×è¹à¾ÔèÁàµÔÁ)', '               ')"
+~NOTPRN_FO:		0,		"",					"",						"isprn=':'; endgroup=0; gpage=1"
+~SN:			0,      "",					"sending",				"sending=IIF(islate>0,'  ',' x')"
+~SL:			0,      "",					"sending",				"sending=IIF(islate>0,' x','  ')"
+~PRN_FO:		0,		"",					"",						"isprn=IIF(islate>0,' ',':'); endgroup=1; opage=page"
+~L:				0,      "",					"isprn",				""
+~PPG:			0,      "",					"prnsumpage",			"prnsumpage=IIF(gpage=1,'}  ','‚……')"
+~PG:			0,      "",					"prnsumpage",			"prnsumpage=IIF(gpage=1,'} ','  ')"
+~PP:			0,      "",					"prnsumpage",			"prnsumpage=IIF(opage=1.and.endgroup=1,'} ','‚…')"
+~P:				0,      "",					"prnsumpage",			"prnsumpage=IIF(opage=1.and.endgroup=1,'}',' ')"
+~LATE_SUM:		0,		"",					"late_sum",				"fd=@Date1n(); td=@Date2n(); late_sum=latemsg+IIF(latemsg#'   ', ' §Ç´ '+fd+' ¶Ö§ '+td, '                          ')"
+~ADDRESS:		0,		"",					"p_addr()",				""
+~TAX_ID:		0,		"",					"p_taxid()",			""
+~TEL:			0,      "",					"p_telnum()",			""
+~FROMDATE:		0,		"",					"Date1n()",				""
+~TODATE:		0,		"",					"Date2n()",				""
+~FROMDEP:		0,		"",					"Dep1()",				""
+
+~PAGE:			0,	    "9999",				"page",					"page=page+1"
+~T_PAGE:		0,		"99,999",			"page",					""
+~G_PAGE:		0,		"99,999",			"gpage",				""
+~SEQ:			0,      "9999",				"seq",					"seq=seq+1; nn=nn+1"
+~T_SEQ:			0,		"9999",				"seq",					""
+~NAME:			-35,	"",					"A->NAME",				""
+~ADDR:			-50,	"",					"A->ADDR",				""
+~TAXID:			0,		"",					"A->TAXID",				""
+~TAXDAT:		0,		"",					"A->TAXDAT",			""
+~TAXNUM:		0,		"",					"A->TAXNUM",			""
+~REFNUM:		0,		"",					"A->REFNUM",			""
+~TAXDES:		-25,	"",					"A->TAXDES",			""
+~RATE:			0,	    "ZZ.ZZ",			"A->TAXRAT",			""
+~AMOUNT:		0,		"999,999,999.99",	"A->AMOUNT",			""
+~TAXAMT:		0,		"99,999,999.99",	"A->TAXAMT",			""
+~TC:			0,      "",					"A->TAXCOND",			""
+~SUMAMOUNT:		0,		"",					"",						"sumamt1=sumamt1+A->AMOUNT; totamt1=totamt1+A->AMOUNT; sumamtp1=sumamtp1+A->AMOUNT"
+~SUMTAXAMT:		0,		"",					"",						"sumtax1=sumtax1+A->TAXAMT; tottax1=tottax1+A->TAXAMT; sumtaxp1=sumtaxp1+A->TAXAMT"
+
+~SUMAMT1:		0,		"999,999,999.99",	"sumamt1",				""
+~SUMTAX1:		0,		"99,999,999.99",	"sumtax1",				""
+~SUMAMT1P:		0,		"999,999,999.99",	"sumamtp1",				"gpage=gpage+1"
+~SUMTAX1P:		0,		"99,999,999.99",	"sumtaxp1",				""
+
+~PRD:			0,      "´´´/»»»»",			"@d_fromprd()",			""
+~LATE_CLR:		0,		"",					"",						"sumamt1=0;sumtax1=0"
+~CHK_LATE_CLR:	0,		"",					"",						"sumamt1=IIF(islate>0,0,sumamt1); sumtax1=IIF(islate>0,0,sumtax1)"
+~SUMGRP1:		0,		"",					"",						"tot_n1=tot_n1+IIF(inctyp='1',nn,0); tot_amt1=tot_amt1+IIF(inctyp='1',sumamt1,0); tot_tax1=tot_tax1+IIF(inctyp='1',sumtax1,0)"
+~SUMGRP2:		0,		"",					"",						"tot_n2=tot_n2+IIF(inctyp='2',nn,0); tot_amt2=tot_amt2+IIF(inctyp='2',sumamt1,0); tot_tax2=tot_tax2+IIF(inctyp='2',sumtax1,0)"
+~SUMGRP3:		0,		"",					"",						"tot_n3=tot_n3+IIF(inctyp='3',nn,0); tot_amt3=tot_amt3+IIF(inctyp='3',sumamt1,0); tot_tax3=tot_tax3+IIF(inctyp='3',sumtax1,0)"
+~SUMGRP4:		0,		"",					"",						"tot_n4=tot_n4+IIF(inctyp='4',nn,0); tot_amt4=tot_amt4+IIF(inctyp='4',sumamt1,0); tot_tax4=tot_tax4+IIF(inctyp='4',sumtax1,0)"
+~SUMGRP5:		0,		"",					"",						"tot_n5=tot_n5+IIF(inctyp='5',nn,0); tot_amt5=tot_amt5+IIF(inctyp='5',sumamt1,0); tot_tax5=tot_tax5+IIF(inctyp='5',sumtax1,0)"
+~SUMGRP9:		0,		"",					"",						"tot_n9=tot_n1+tot_n2+tot_n3+tot_n4+tot_n5; tot_amt9=tot_amt1+tot_amt2+tot_amt3+tot_amt4+tot_amt5; tot_tax9=tot_tax1+tot_tax2+tot_tax3+tot_tax4+tot_tax5"
+~PAGE_CLR:		0,		"",					"",						"sumamtp1=0;sumtaxp1=0"
+~PAGE0:			0,		"",					"",						"page=0; seq=0"
+~CHK_PAGE0:		0,		"",					"",						"page=IIF(islate>0,0,page); seq=IIF(islate>0,0,seq)"
+
+~TOTAMT1:		0,		"999,999,999.99",	"totamt1",				""
+~TOTTAX1:		0,		"99,999,999.99",	"tottax1",				""
+~BAHT:			0,	    "",					"t_baht( tottax1 )",	""
+
+~DEP:			0,      "",					"A->DEPCOD",			""
+~P_ISDEP:		0,		"",					"p_isdep( A->DEPCOD )",	""
+
+~INCTYP:		0,		"",					"incmsg",				"nn=0; inctyp=SUBSTR(A->AUTHID,1,1); incmsg=IIF(A->AUTHID='1',typ1,IIF(A->AUTHID='2',typ2,IIF(A->AUTHID='3',typ3,IIF(A->AUTHID='4',typ4,IIF(A->AUTHID='5',typ5,typ0)))))"
+~INCMSG:		0,		"",					"incmsg",				""
+~TOT_N1:		0,		"ZZZ,ZZZ",			"tot_n1",				""
+~TOT_AMT1:		0,		"999,999,999.99",	"tot_amt1",				""
+~TOT_TAX1:		0,		"999,999,999.99",	"tot_tax1",				""
+~TOT_N2:		0,		"ZZZ,ZZZ",			"tot_n2",				""
+~TOT_AMT2:		0,		"999,999,999.99",	"tot_amt2",				""
+~TOT_TAX2:		0,		"999,999,999.99",	"tot_tax2",				""
+~TOT_N3:		0,		"ZZZ,ZZZ",			"tot_n3",				""
+~TOT_AMT3:		0,		"999,999,999.99",	"tot_amt3",				""
+~TOT_TAX3:		0,		"999,999,999.99",	"tot_tax3",				""
+~TOT_N4:		0,		"ZZZ,ZZZ",			"tot_n4",				""
+~TOT_AMT4:		0,		"999,999,999.99",	"tot_amt4",				""
+~TOT_TAX4:		0,		"999,999,999.99",	"tot_tax4",				""
+~TOT_N5:		0,		"ZZZ,ZZZ",			"tot_n5",				""
+~TOT_AMT5:		0,		"999,999,999.99",	"tot_amt5",				""
+~TOT_TAX5:		0,		"999,999,999.99",	"tot_tax5",				""
+~TOT_N9:		0,		"999,999",			"tot_n9",				""
+~TOT_AMT9:		0,		"999,999,999.99",	"tot_amt9",				""
+~TOT_TAX9:		0,		"999,999,999.99",	"tot_tax9",				""
+~END_GRP:		0,		"",					"",						"endgroup=1"
+~PNEG:			0,      "",					"prnNoEndG",			"prnNoEndG=IIF(endgroup=1,'}    ','†…………')"
+

@@ -1,0 +1,216 @@
+* STBALLC.RWT - Stock Balance of Location Report, Order by Stock Code
+*
+[report frame]
+Ti::~INIT  ~INIT2  ~CLR_LOC  ~CLR_LOT  ~CLR_SUB  ~CLR_C
+He:\NAME                                                    `หน้า   : \PAGE
+He:$Eสินค้าคงเหลือ เรียงตามรหัสสินค้า$E  ณ วันที่  ~ASDATE
+He:รหัสสินค้าจาก   ~FROMSTK             ถึง  ~TOSTK         `วันที่ : \DATE
+H1:หมวดสินค้าจาก   ~FROMGRP             ถึง  ~TOGRP
+H1:คลังสินค้าจาก   ~FROMLOC             ถึง  ~TOLOC      (คิดต้นทุนแยกตามคลังสินค้า)
+He:\LINE
+**He:  รหัสสินค้า/ชื่อสินค้า                                                                   ~H1                   ~H2                     มูลค่าคงเหลือ
+**He:~PL1   คลัง                                   ~H1         ~H2             มูลค่าในคลัง
+**He:~PL2          ล๊อตคงเหลือ                     ~H1         ~H2             มูลค่าในล๊อต
+**He:~PL3   คลัง   ล๊อตคงเหลือ                     ~H1         ~H2                  มูลค่า
+He:รหัสสินค้า/ชื่อสินค้า","","","","","","","~H1          ","","~H2             ","","มูลค่าคงเหลือ 
+He:~PL1         ","คลัง","","","","~H1          ","~H2          ","มูลค่าในคลัง
+He:~PL2         ","","","ล๊อตคงเหลือ","","~H1          ","~H2          ","มูลค่าในล๊อต
+He:~PL3         ","คลัง","","ล๊อตคงเหลือ","","~H1          ","~H2          ","มูลค่า
+He:\LINE
+Gh::~GETBAL             ;1 STKCOD
+Gh:~Z~STKCOD                          ~STKDES                                                                           ~TOTBAL        ~QUDES    ~UNITPR                 ~TOTVAL
+Gh:~C~STKCOD                          ~STKDES                                                                           ~CTOTBAL       ~CQUDES   ~XTOTBAL       ~XQUDES  ~TOTVAL
+Bo::~GETLOCBAL
+Bo:~PLOC1 ~LOCCOD~LOCDES                  ~LOCBAL        ~LOCPRI        ~LOCVAL
+Bo:~PLOC2 ~LOCCOD~LOCDES                  ~CLOCBAL       ~XLOCBAL       ~LOCVAL
+Ih:~PLOT  ~SEEKLOT                              ;1  stlotx->stkcod+stlotx->loccod  stloc->stkcod+stloc->loccod
+Ib:~PLOT  ~BAL ~CLOT ~XLOT ~VAL                 ;1
+Ib:~PLOT1        ~DOCDAT     ~DOCNUM         ~LOTBAL        ~LOTPRI        ~LOTVAL      ;1
+Ib:~PLOT2        ~DOCDAT     ~DOCNUM         ~CLOTBAL       ~XLOTBAL       ~LOTVAL      ;1
+Gf:~Z0    ~TEXT                           $B~TCX                          ~TV              ~WARNING  ~SETW                   $B     ;1
+Gf:~ZR    ~R_TXLOT  ~R_TXLOC  ;1
+Gf:~Z1    ~TEXT                           $B~TC            ~TX            ~TV              ~WARNING  ~SETW                   $B     ;1
+Gf:: ~CLR_LOT  ~CLR_LOC ;1
+**Su:~Z2                                                                                --------------           --------------          --------------   
+**Su:~Y1รวมทั้งสิ้น                                                    ~C_STK  สินค้า  $B~SXCQTY                   ~SUPRI                  ~SVAL         $B
+**Su:~Y2รวมทั้งสิ้น                                                    ~C_STK  สินค้า  $B~SCQTY                    ~SXQTY                  ~SVAL         $B
+**Su:~Z2                                                                                ==============           ==============          ==============             
+Su:~Z2","","","","","","","","------------------","","------------------","","-------------------   
+Su:~Y1","รวมทั้งสิ้น","","","","","","~C_STK     สินค้า","$B~SXCQTY          ","","~SUPRI          ","","~SVAL         $B
+Su:~Y2","รวมทั้งสิ้น","","","","","","~C_STK     สินค้า","$B~SCQTY           ","","~SXQTY          ","","~SVAL         $B
+Su:~Z2","","","","","","","","============","","============","","============             
+Su:~W$_หมายเหตุ$_ $B***ยอดรวมล๊อตไม่เท่ากับยอดคงเหลือ$B  สาเหตุอาจเกิดจาก :-
+Su:~W            1. เลือกพิมพ์ไม่ครบทุกคลังสินค้า
+Su:~W               วิธีแก้ไข ให้พิมพ์เฉพาะสินค้านี้ใหม่ และเลือกพิมพ์ทุกคลัง
+Su:~W            2. ยอดคงเหลือสินค้าติดลบ (ไม่มีล๊อตคงเหลือเพราะไม่มีการรับสินค้าเข้า)
+Su:~W               วิธีแก้ไข ถ้ายอมให้สินค้าติดลบได้ ก็ให้ละเลยคำเตือนนี้ไป  แต่ถ้าปิดงบบัญชีและส่งยอดทุกเดือน ก็ไม่ควรปล่อยให้สินค้าติดลบในวันสิ้นงวด-
+Su:~W                      มิฉะนั้นยอดสินค้าคงเหลือปลายงวดจะไม่ถูกต้อง (และก่อนปิดจะประมวลผลสิ้นปี ต้องปรับปรุงยอดไม่ให้ติดลบ)
+Su:~W            3. โปรแกรมคิดต้นทุน หรือหาล๊อตคงเหลือผิด
+Su:~W               วิธีแก้ไข ให้ไปสั่งคำนวณต้นทุนของสินค้าตัวที่ผิดพลาดนี้ใหม่ แล้วพิมพ์รายงานนี้อีกครั้ง
+Su:~W            4. เป็นการสั่งพิมพ์รายงานโดยกำหนดช่วงวันที่ย้อนหลัง โดยไม่ครอบคลุมถึงรายการที่ปรับปรุงจำนวนหรือมูลค่าเข้าไปในล๊อต เช่น
+Su:~W               มีรายการลดหนี้/ส่งคืนสินค้า หรือมีการปรับปรุงเพิ่ม/ลดต้นทุนสินค้าในล๊อตในภายหลัง
+Su:~W               แต่วันที่สิ้นสุดของรายงาน ไม่ครอบคลุมถึงรายการที่ปรับปรุงดังกล่าว
+Su:~W               วิธีแก้ไข สั่งพิมพ์รายงานนี้ใหม่ โดยกำหนดวันที่สิ้นสุดให้ครอบคลุมถึงรายการที่ปรับปรุงต้นทุนเข้าล๊อต (หรือละเลยคำเตือนไป)
+Su:>>>>  จบรายงาน  <<<<
+[end frame]
+
+[print options]
+Top=0
+Left=0
+Right=146
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=STBALLC.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, 8_Inch, Default
+8_Inch=\027\033\005
+15_Inch=\027\033\001
+Query=STMAS->STKTYP='0'
+Query=.AND.STKCOD>='Stk1()'.AND. STKCOD<='Stk2()'
+Query=.AND.STMAS->STKGRP>='StkGrp1()'.AND. STMAS->STKGRP<='StkGrp2()'
+Query=.AND.STLOC->LOCCOD>='Loc1()'.AND. STLOC->LOCCOD<='Loc2()'
+*Sort=STKCOD+LOCCOD
+DATE FORMAT=DD/MM/YYYY
+
+[master file]
+File=STLOC
+Alias=A
+Tag=STLOC1
+System=DATA_PATH
+
+[item file]
+File=ISTAB
+Alias=I
+Tag=ISTAB1
+System=DATA_PATH
+
+File=STLOTX
+Alias=C
+Tag=STCRD9
+System=DATA_PATH
+
+[relate file]
+File=STMAS
+Alias=M
+Tag=STMAS1
+System=DATA_PATH
+Master file=STLOC
+Master-Related Field=STKCOD
+
+File=isacc
+Alias=Y
+Tag=isacc1
+System=DATA_PATH
+Master file=stmas
+Master-Related Field='S'+ACCCOD
+
+[data spec]
+*~dat:      len,"pict",             "data",             "exp"
+~INIT:      0,  "",                 "",                 "GCQTY=0; GXQTY=0; GVAL=0; prn_remark=':'; p_cqucod=@n_isuse_cqu()"
+~INIT2:     0,  "",                 "",                 "p_stk0=@n_prt0(); p_loc=@n_prtloc(); p_loc0=@n_prtloc0(); p_negonly=@n_negonly(); p_lot=@n_prtlot(); PL1=IIF(p_loc=1.and.p_lot=0,' ','}'); PL2=IIF(p_lot=1.and.p_loc=0,' ','}'); PL3=IIF(p_lot=1.and.p_loc=1,' ','}')"
+~CLR_LOC:   0,  "",                 "",                 "TLOCBAL=0; TLOCVAL=0; TCLOCBAL=0; TXLOCBAL=0; c_loc=0"
+~CLR_LOT:   0,  "",                 "",                 "TLOTBAL=0; TLOTVAL=0; TCLOTBAL=0; TXLOTBAL=0; lot_bal=0; lot_val=0"
+~CLR_SUB:   0,  "",                 "",                 "SCQTY=0; SXQTY=0; SVAL=0; c_stk=0"
+~CLR_C:     0,  "",                 "",                 "c_grp=0; c_stk=0; g_stk=0"
+
+~FROMGRP:   0,  "",                 "StkGrp1()",        ""
+~TOGRP:     0,  "",                 "StkGrp2()",        ""
+~FROMSTK:   0,  "",                 "Stk1()",           ""
+~TOSTK:     0,  "",                 "Stk2()",           ""
+~FROMLOC:   0,  "",                 "Loc1()",           ""
+~TOLOC:     0,  "",                 "Loc2()",           ""
+~ASDATE:    0,  "d ดดด yyyy",       "@date_as()",       ""
+
+~H1:        0,  "",                 "H1",               "H1 = IIF(p_cqucod=1, 'หน่วยใหญ่', '  จำนวน  ')"
+~H2:        0,  "",                 "H2",               "H2 = IIF(p_cqucod=1, '   หน่วยย่อย ', 'ราคาต่อหน่วย')"
+~STKGRP:    0,  "",                 "stk_grp",          "stk_grp = @p_istab(STMAS->STKGRP,22,1,40)"
+~TSTKGRP:   0,  "",                 "stk_grp",          "c_grp=c_grp+1"
+~ACCSET:    0,  "",                 "acc_set",          "acc_set = ISACC->ACCDES - ' ('-ISACC->METHOD-')'"
+~TACCSET:   0,  "",                 "acc_set",          "c_grp=c_grp+1"
+
+~PL1:       0,  "",                 "PL1",              ""
+~PL2:       0,  "",                 "PL2",              ""
+~PL3:       0,  "",                 "PL3",              ""
+~GETBAL:    0,  "",                 "stmas_totbald()",  "is_fifo=@n_isfifo(); PLOT=IIF(is_fifo=1, ':', '}'); cft=STMAS->CFACTOR"
+~Z:         0,  "",                 "P",                "Z=IIF( p_stk0=0 .and. STR(STMAS->TOTBAL,15,4)='         0.0000' .and. STR(STMAS->TOTVAL,15,2)='           0.00' .and. STMAS->STKCOD#'     ', '}', ' ' ); P=IIF(p_cqucod=1,'}',Z); mas_totbal=STMAS->TOTBAL; mas_totval=STMAS->TOTVAL"
+~C:         0,  "",                 "P",                "P=IIF(p_cqucod=0,'}',Z)"
+~Z0:        0,  "",                 "P",                "is_err=IIF(is_fifo=1 .and.(STR(lot_bal,15,4) # STR(mas_totbal,15,4) .OR. STR(lot_val,13,2) # STR(mas_totval,13,2)), 1, 0 ); Z=IIF( (c_loc<=1.AND.is_err=0).OR.p_negonly=1, ':', Z ); P=IIF(p_cqucod=1,'}',Z)"
+~Z1:        0,  "",                 "P",                "P=IIF( p_cqucod=0,'}', Z)"
+~Z2:        0,  "",                 "Z2",               "Z2=IIF(p_negonly=1, ':', ' ' )"
+~Y1:        0,  "",                 "Y",                "Y=IIF(p_cqucod=1,'}',Z2)"
+~Y2:        0,  "",                 "Y",                "Y=IIF(p_cqucod=0,'}',Z2)"
+~STOCK:     0,  "",                 "stock",            "stock=STLOC->STKCOD-'  '-STMAS->STKDES; c_stk=c_stk+IIF(Z#':', 1, 0)",B
+~STKCOD:    0,  "",                 "STLOC->STKCOD",    "",A
+~STKDES:    0,  "",                 "STMAS->STKDES",    "c_stk=c_stk+1",B
+~CTOTBAL:   0,  "ZZ,ZZZ,ZZZ,ZZZ",   "ctotbal",          "ctotbal=IIF(STMAS->CFACTOR>0, VAL(SUBSTR(STR(STMAS->TOTBAL/STMAS->CFACTOR,15,4),1,10)), 0); SCQTY=SCQTY+ctotbal",I
+*~CQUDES:   0,  "",                 "cqu",              "cqu=@p_istab( STMAS->CQUCOD,20,1,8 ); cqu=IIF(ctotbal#0.or.STMAS->CFACTOR>0, cqu, '        ')"
+~CQUDES:    0,  "",                 "cqu",              "cqu=@p_istab( STMAS->CQUCOD,20,1,8 ); cqu=IIF(ctotbal#0.or.STMAS->CFACTOR>0, cqu-'x'-LTRIM(STR(STMAS->CFACTOR,10,0)), '                       ')",J
+~CFACTOR:   0,  "facZ(10)",         "STMAS->CFACTOR",   ""
+~XTOTBAL:   0,  "qty(14)",          "xtotbal",          "xtotbal=STMAS->TOTBAL-(ctotbal*STMAS->CFACTOR); SXQTY=SXQTY+xtotbal",K
+~XQUDES:    0,  "",                 "xqu",              "qu=@p_istab( STMAS->QUCOD,20,1,8 ); xqu=IIF(p_cqucod=1,qu,'        ')",L
+~TOTBAL:    0,  "qty(14)",          "STMAS->TOTBAL",    "SCQTY=SCQTY+STMAS->TOTBAL",I
+~QUDES:     0,  "",                 "p_istab( STMAS->QUCOD,20,1,8 )",   "",J
+~UNITPR:    0,  "priZ(14)",         "STMAS->UNITPR",    "",K
+~TOTVAL:    0,  "999,999,999.99",   "STMAS->TOTVAL",    "SVAL=SVAL+STMAS->TOTVAL",M
+
+~GETLOCBAL: 0,  "",                 "stloc_locbald()",  ""
+~PLOC1:     0,  "",                 "P",                "ploc=IIF( p_loc=0 .OR.( p_loc0=0 .AND.STR(STLOC->LOCBAL,15,4)='         0.0000' .and. STR(STLOC->LOCVAL,15,2)='           0.00'), '}', Z ); ploc = IIF(p_negonly=1 .AND. (STLOC->LOCBAL>=0 .AND. STLOC->LOCVAL>=0), ':', ploc ); P=IIF(p_cqucod=1,'}',ploc)"
+~PLOC2:     0,  "",                 "P",                "P=IIF(p_cqucod=0,'}',ploc)"
+*~LOCCOD:    0,  "",                 "STLOC->LOCCOD",    "c_loc=c_loc+1"
+~LOCCOD:    0,  "",                 "loc",               "loc=' '-''-STLOC->LOCCOD;c_loc=c_loc+1",C
+*~LOCCOD:    0,  "",                 "STLOC->LOCCOD",    "c_loc=c_loc+1",C
+~LOCDES:    21, "",                 "p_istab( STLOC->LOCCOD, 21, 1, 0 )",   "",D
+~LOCBAL:    0,  "qty(14)",          "STLOC->LOCBAL",    "TLOCBAL=TLOCBAL+STLOC->LOCBAL",F
+~LOCPRI:    0,  "priZ(14)",         "STLOC->UNITPR",    "",G
+~LOCVAL:    0,  "999,999,999.99",   "STLOC->LOCVAL",    "TLOCVAL=TLOCVAL+STLOC->LOCVAL",H
+~CLOCBAL:   0,  "ZZ,ZZZ,ZZZ,ZZZ",   "clocbal",          "clocbal=IIF(STMAS->CFACTOR>0, VAL(SUBSTR(STR(STLOC->LOCBAL/STMAS->CFACTOR,15,4),1,10)), 0); TCLOCBAL=TCLOCBAL+clocbal",F
+~XLOCBAL:   0,  "qty(14)",          "xlocbal",          "xlocbal=STLOC->LOCBAL-(clocbal*STMAS->CFACTOR); TXLOCBAL=TXLOCBAL+xlocbal",G
+
+
+
+~TEXT:      0,  "",                 "text",             "text=IIF(is_fifo=1, 'รวมล๊อตคงเหลือของทุกคลัง  ', 'รวมยอดคงเหลือของทุกคลัง   ')",C
+~TC:        0,  "ZZ,ZZZ,ZZZ,ZZZ",   "Q",                "Q=IIF(is_fifo=1, IIF(p_cqucod=1, TCLOTBAL, TLOTBAL), IIF(p_cqucod=1, TCLOCBAL, TLOCBAL))",F
+~TCX:       0,  "qtyZ(14)",         "Q",                "Q=IIF(is_fifo=1, IIF(p_cqucod=1, TCLOTBAL, TLOTBAL), IIF(p_cqucod=1, TCLOCBAL, TLOCBAL))",F
+~TX:        0,  "qty(14)",          "Q",                "Q=IIF(is_fifo=1, TXLOTBAL, TXLOCBAL)",G
+~TV:        0,  "999,999,999.99",   "V",                "V=IIF(is_fifo=1, TLOTVAL, TLOCVAL)",H
+~WARNING:   0,  "",                 "warn",             "warn=IIF(is_err=0, '                                  ', IIF(is_fifo=1,'*** ยอดรวมล๊อตไม่เท่ากับยอดคงเหลือ' , '*** ยอดรวมคลังไม่เท่ากับยอดคงเหลือ' ))",I
+~SETW:      0,  "",                 "",                 "prn_remark=IIF(is_err=1 .AND. is_fifo=1 .AND. p_negonly=0, ' ',prn_remark)"
+~SCQTY:     0,  "999,999,999,999",  "SCQTY",            "GCQTY=GCQTY+SCQTY"
+~SXCQTY:    0,  "qty(15)",          "SCQTY",            "GCQTY=GCQTY+SCQTY"
+~SUPRI:     0,  "priZ(14)",         "U",                "U=SVAL/SCQTY"
+~SXQTY:     0,  "qty(14)",          "SXQTY",            "GXQTY=GXQTY+SXQTY"
+~SVAL:      0,  "999,999,999.99",   "SVAL",             "GVAL=GVAL+SVAL"
+~GCQTY:     0,  "999,999,999,999",  "GCQTY",            ""
+~GXCQTY:    0,  "qty(15)",          "GCQTY",            ""
+~GUPRI:     0,  "priZ(14)",         "U",                "U=GVAL/GCQTY"
+~GXQTY:     0,  "qty(14)",          "GXQTY",            ""
+~GVAL:      0,  "999,999,999.99",   "GVAL",             ""
+
+~C_GRP:     0,  "99,999",           "c_grp",            ""
+~C_STK:     0,  "99,999",           "c_stk",            "g_stk=g_stk+c_stk"
+~G_STK:     0,  "99,999",           "g_stk",            ""
+~W:         0,  "",                 "prn_remark",       ""
+
+~ZR:        0,  "",                 "P",                "P=IIF( p_cqucod=0,'}', ':')"
+~R_TXLOT:   0,  "",                 "",                 "roundQ=IIF(TXLOTBAL > cft, VAL(SUBSTR(STR(TXLOTBAL/cft,15,4),1,10)), 0); TXLOTBAL=TXLOTBAL-(roundQ*cft); TCLOTBAL=TCLOTBAL+roundQ"
+~R_TXLOC:   0,  "",                 "",                 "roundQ=IIF(TXLOCBAL > cft, VAL(SUBSTR(STR(TXLOCBAL/cft,15,4),1,10)), 0); TXLOCBAL=TXLOCBAL-(roundQ*cft); TCLOCBAL=TCLOCBAL+roundQ"
+***
+~PLOT:      0,  "",                 "PLOT",             ""
+~PLOT1:     0,  "",                 "L",                "PLOT1 =IIF(is_fifo=0 .OR.p_lot=0 .OR.p_negonly=1, '}', IIF(STLOTX->LOTBAL=0 .AND.STLOTX->LOTVAL=0, ':', ' ')); L=IIF(p_cqucod=1,'}',PLOT1)"
+~PLOT2:     0,  "",                 "L",                "L=IIF(p_cqucod=0,'}',PLOT1)"
+~SEEKLOT:   0,  "",                 "seek_stlot()",     ""
+~BAL:       0,  "",                 "",                 "TLOTBAL=TLOTBAL+STLOTX->LOTBAL; lot_bal=lot_bal+STLOTX->LOTBAL"
+~CLOT:      0,  "",                 "",                 "clotbal=IIF(STMAS->CFACTOR>0, VAL(SUBSTR(STR(STLOTX->LOTBAL/STMAS->CFACTOR,15,4),1,10)), 0); TCLOTBAL=TCLOTBAL+clotbal"
+~XLOT:      0,  "",                 "",                 "xlotbal=STLOTX->LOTBAL-(clotbal*STMAS->CFACTOR); TXLOTBAL=TXLOTBAL+xlotbal"
+~VAL:       0,  "",                 "",                 "TLOTVAL=TLOTVAL+STLOTX->LOTVAL; lot_val=lot_val+STLOTX->LOTVAL"
+~DOCDAT:    0,  "",                 "STLOTX->DOCDAT",   ""  ,C
+~DOCNUM:    0,  "",                 "DES",              "DES=IIF( STLOTX->DOCNUM =' ', 'ยอดยกมา         ', STLOTX->DOCNUM- '-' -STLOTX->SEQNUM )"  ,D
+~LOTBAL:    0,  "qty(14)",          "STLOTX->LOTBAL",   ""   ,E
+~LOTPRI:    0,  "priZ(14)",         "UPRI",             "UPRI=STLOTX->LOTVAL/STLOTX->LOTBAL"  ,F
+~LOTVAL:    0,  "999,999,999.99",   "STLOTX->LOTVAL",   ""    ,G
+~CLOTBAL:   0,  "ZZ,ZZZ,ZZZ,ZZZ",   "clotbal",          ""    ,E
+~XLOTBAL:   0,  "qty(14)",          "xlotbal",          ""    ,F
+
+

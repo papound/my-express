@@ -1,0 +1,169 @@
+* ISTAX53.RL - แบบยื่น ภงด.53 (Witholding Tax Listing)
+*
+[report frame]
+Ti::~INIT ~PAGE_CLR ~LATE_CLR ~PAGE0 ~LATE  ~NOTPRN_FO
+He:
+He:      $Eใบต่อ ภ.ง.ด. 53 ~LATE           $E
+*He:      \NAME             `เลขประจำตัวผู้เสียภาษีอากร $B~TAX_ID        $B    สาขาที่ ~FROMDEP
+He:      \NAME              `เลขประจำตัวผู้เสียภาษีอากร $B~TAX_ID        $B
+*He:      สาขา      ~P_ISDEP                                                                                      `( ) สาขาที่ ~FROMDEP
+He:      สำหรับเดือน ~PRD                          `แผ่นที่ ~PAGE  ในจำนวน ...... แผ่น
+He:€……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+He:ลำดับชื่อผู้รับเงินได้พึงประเมิน   เลขประจำตัวผู้เสียภาษี         รายละเอียดเกี่ยวกับการจ่ายเงินได้พึงประเมิน  เงินภาษีที่หักเงื่อน
+He:  ที่   ที่อยู่ของผู้มีเงินได้                           ………………………………………………………………………………………………………………………………………  และนำส่ง     ไข   
+He:                                                          วันจ่าย   ประเภทเงินได้ (1)   อัตรา    เงินที่จ่าย   ในครั้งนี้   (2) 
+He:……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+*Gh::~CHK_LATE_CLR ~CHK_PAGE0   ;1 TAXPRD 0 6
+Gh::~CHK_LATE_CLR ~CHK_PAGE0    ;1 TAXDAT 0 6
+Gh::~NOTPRN_FO
+Bo: ~SEQ  ~NAME                                ~TAXID          ~TAXDAT   ~TAXDES               ~RATE  ~AMOUNT         ~TAXAMT          ~TC
+Bo::~SUMAMOUNT  ~SUMTAXAMT
+Bo:         ~ADDR
+Bo:……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+Bt:                                                                                                                                
+Gf::~PRN_FO    ;1
+Gf:~L \FEED ;1
+Fo:~PP………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+Fo:~P     รวมยอดเงินได้และภาษีที่นำส่ง (ในแผ่นนี้)                                                   ~SUMAMT1P      ~SUMTAX1P      ~PAGE_CLR
+Fo:~P                                                                                                ……………………………………………………………………………
+Fo:~L                                                                                                ……………………………………………………………………………
+Fo:~L     รวมยอดเงินได้และภาษีที่นำส่ง ~LATE_SUM                                                     ~SUMAMT1       ~SUMTAX1      
+Fo:~L                                                                                                ……………………………………………………………………………
+Su:~L \FEED
+Su:                                                                                                  €……………………………………………………………………………
+Su:       รวมยอดเงินได้และภาษีที่นำส่งทั้งสิ้น ~LATE_SUM                                             ~TOTAMT1       ~TOTTAX1      
+Su:       รวมใบต่อ ภ.ง.ด.53 ทั้งสิ้น ~T_PAGE    แผ่น                                                 ……………………………………………………………………………
+Su:
+Su:                                         ลงชื่อ.........................................ผู้จ่ายเงิน
+Su:                                             (.......................................)                    ประทับตรานิติบุคคล
+Su:                                         ตำแหน่ง...........................................                   (ถ้ามี)
+Su:                                         ยื่นวันที่........เดือน..................พ.ศ. .........
+Su:
+Su:       หมายเหตุ (1) ให้ระบุว่าจ่ายเป็นค่าอะไร เช่น ค่าเช่าอาคาร ค่าสอบบัญชี ค่าออกแบบ ค่าก่อสร้างโรงเรือน
+Su:                   ค่าซื้อเครื่องพิมพ์ดีด ค่าซื้อพืชผลทางการเกษตร (ยางพารา มันสำปะหลัง ปอ ข้าว ฯลฯ) 
+Su:                   ค่าจ้างทำของ ค่าจ้างโฆษณา ดอกเบี้ยเงินฝาก ดอกเบี้ยตั๋วเงิน เงินปันผล เงินส่วนแบ่งของกำไร
+Su:                   รางวัลในการประกวด การแข่งขัน การชิงโชค ฯลฯ
+Su:               (2) เงื่อนไขการหักภาษี ณ ที่จ่าย ให้กรอกดังนี้
+Su:                   o หัก ณ ที่จ่าย กรอก 1   o ออกภาษีให้ กรอก 2
+Su:\FEED
+Su:
+Su:         $Bใบช่วยกรอก แบบยื่นรายการภาษีเงินได้หัก ณ ที่จ่าย$B $Eภ.ง.ด.53$E
+Su:         ตามมาตรา 3 เตรส และมาตรา 69 ทวิ
+Su:         และการเสียภาษีตามมาตรา 65 จัตวา แห่งประมวลรัษฎากร
+Su:\LINE
+Su:         เลขประจำตัวผู้เสียภาษีอากร         $B~TAX_ID        $B
+Su:         ชื่อผู้มีหน้าที่หักภาษี ณ ที่จ่าย: สาขาที่ ~FROMDEP        `[~SN] ยื่นปกติ [~SL] ยื่นเพิ่มเติมครั้งที่ .......  
+Su:                  $B\NAME                                                                  $B
+Su:         ที่อยู่  ~ADDRESS
+Su:         โทรศัพท์ ~TEL
+Su:\LINE
+Su:
+Su:         นำส่งภาษีตาม                                                     เดือนที่จ่ายเงินได้พึงประเมิน $B~PRD            $B
+Su:         [ ] (1) มาตรา 3 เตรส  แห่งประมวลรัษฎากร
+Su:         [ ] (2) มาตรา 65 จัตวา แห่งประมวลรัษฎากร
+Su:         [ ] (1) มาตรา 69 ทวิ  แห่งประมวลรัษฎากร
+Su:\LINE
+Su:
+Su:         มีรายละเอียดการหักเป็นรายผู้มีเงินได้  ปรากฏตาม $Bใบต่อ ภ.ง.ด.53$B ที่แนบมาพร้อมนี้ : จำนวน $B~T_SEQ   $Bราย
+Su:
+Su:         $Bสรุปรายการภาษีที่นำส่ง$B
+Su:         1. รวมยอดเงินได้ทั้งสิ้น (รวมใบต่อทุกฉบับ) . . . . . . . . . . . $B~TOTAMT1        $B
+Su:         2. รวมยอดภาษีที่นำส่งทั้งสิ้น (รวมใบต่อทุกฉบับ)  . . . . . . . . $B~TOTTAX1        $B
+Su:         3. เงินเพิ่ม (ถ้ามี)                       . . . . . . . . . . .
+Su:         4. รวมยอดภาษีที่นำส่งทั้งสิ้น และเงินเพิ่ม (2+3) . . . . . . . . $B~TOTTAX1        $B
+Su:
+Su:         ตัวอักษร ~BAHT
+Su:\LINE
+Su:
+Su:                           ข้าพเจ้าขอรับรองว่า รายการที่แจ้งไว้ข้างต้นนี้ พร้อมกับใบต่อจำนวน $B~T_PAGE$B  ฉบับ
+Su:                                              เป็นรายการที่ถูกต้องและครบถ้วนทุกประการ
+Su:
+Su:                                         ลงชื่อ.........................................ผู้จ่ายเงิน
+Su:                                             (.......................................)                    ประทับตรานิติบุคคล
+Su:                                         ตำแหน่ง...........................................                   (ถ้ามี)
+Su:                                         ยื่นวันที่........เดือน..................พ.ศ. .........
+Su:  พิมพ์วันที่ \DATE    เวลา \TIME
+*Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=0
+Left=0
+Right=136
+Lines=-45
+*กำหนดค่าของ Lines เป็นเลขติดลบ เพื่อให้โปรแกรมใช้ค่านี้แทนค่าที่กำหนดจากด้านนอก
+Output=Select, Printer, Screen, File,
+File Name=ISTAX.TXT
+Report Type=Listing
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, 8_Inch, Default
+8_Inch=\027\033\004
+15_Inch=\027\033\001
+*Printer=X
+
+[master file]
+File=ISTAX
+Alias=A
+Tag=ISTAX2
+*Key=TAXTYP+DTOS(TAXPRD)+REFNUM+DTOS(TAXDAT)+RECTYP+REFNUM
+*Filter=.NOT.DELETED()
+System=DATA_PATH
+
+[data spec]
+*               len (0)default, (>0)cut, (<0)cut to new line
+*~dat:          len, "pict",				"data",					"exp"
+~INIT:			0,		"",					"",						"page=0; totamt1=0;tottax1=0; opage=1; amt_01=0;tax_01=0"
+~LATE:			0,	    "",					"latemsg",				"islate=@n_islate(); latemsg=IIF(islate>0,'(ยื่นเพิ่มเติม)', '               ')"
+~NOTPRN_FO:		0,		"",					"",						"isprn=':'; endgroup=0"
+~SN:			0,      "",					"sending",				"sending=IIF(islate>0,'  ',' x')"
+~SL:			0,      "",					"sending",				"sending=IIF(islate>0,' x','  ')"
+~PRN_FO:		0,		"",					"",						"isprn=IIF(islate>0,' ',':'); endgroup=1; opage=page"
+~L:				0,      "",					"isprn",				""
+~PP:			0,      "",					"prnsumpage",			"prnsumpage=IIF(opage=1.and.endgroup=1,': ','…')"
+~P:				0,      "",					"prnsumpage",			"prnsumpage=IIF(opage=1.and.endgroup=1,':',' ')"
+~LATE_SUM:		0,		"",					"late_sum",				"fd=@Date1n(); td=@Date2n(); late_sum=latemsg+IIF(latemsg#'   ', ' งวด '+fd+' ถึง '+td, '                          ')"
+~ADDRESS:		0,		"",					"p_addr()",				""
+~TAX_ID:		0,		"",					"p_taxid()",			""
+~TEL:			0,      "",					"p_telnum()",			""
+~FROMDATE:		0,		"",					"Date1n()",				""
+~TODATE:		0,		"",					"Date2n()",				""
+~FROMDEP:		0,		"",					"Dep1()",				""
+
+~PAGE:			0,	    "9999",				"page",					"page=page+1"
+~T_PAGE:		0,		"99,999",			"page",					""
+~SEQ:			0,      "9999",				"seq",					"seq=seq+1"
+~T_SEQ:			0,		"9999",				"seq",					""
+~NAME:			-35,	"",					"A->NAME",				""
+~ADDR:			-50,	"",					"A->ADDR",				""
+~TAXID:			0,		"",					"A->TAXID",				""
+~TAXDAT:		0,		"",					"A->TAXDAT",			""
+~TAXNUM:		0,		"",					"A->TAXNUM",			""
+~REFNUM:		0,		"",					"A->REFNUM",			""
+~TAXDES:		-20,	"",					"A->TAXDES",			""
+~RATE:			0,	    "ZZ.ZZ",			"A->TAXRAT",			""
+~AMOUNT:		0,		"999,999,999.99",	"A->AMOUNT",			""
+~TAXAMT:		0,		"99,999,999.99",	"A->TAXAMT",			""
+~TC:			0,      "",					"A->TAXCOND",			""
+~SUMAMOUNT:		0,		"",					"",						"sumamt1=sumamt1+A->AMOUNT; totamt1=totamt1+A->AMOUNT; sumamtp1=sumamtp1+A->AMOUNT"
+~SUMTAXAMT:		0,		"",					"",						"sumtax1=sumtax1+A->TAXAMT; tottax1=tottax1+A->TAXAMT; sumtaxp1=sumtaxp1+A->TAXAMT"
+
+~SUMAMT1:		0,		"999,999,999.99",	"sumamt1",				""
+~SUMTAX1:		0,		"99,999,999.99",	"sumtax1",				""
+~SUMAMT1P:		0,		"999,999,999.99",	"sumamtp1",				""
+~SUMTAX1P:		0,		"99,999,999.99",	"sumtaxp1",				""
+
+~PRD:			0,      "ดดด/ปปปป",			"@d_fromprd()",			""
+~LATE_CLR:		0,		"",					"",						"sumamt1=0;sumtax1=0"
+~CHK_LATE_CLR:	0,		"",					"",						"sumamt1=IIF(islate>0,0,sumamt1); sumtax1=IIF(islate>0,0,sumtax1)"
+~PAGE_CLR:		0,		"",					"",						"sumamtp1=0;sumtaxp1=0"
+~PAGE0:			0,		"",					"",						"page=0; seq=0"
+~CHK_PAGE0:		0,		"",					"",						"page=IIF(islate>0,0,page); seq=IIF(islate>0,0,seq)"
+
+~TOTAMT1:		0,		"999,999,999.99",	"totamt1",				""
+~TOTTAX1:		0,		"99,999,999.99",	"tottax1",				""
+~BAHT:			0,	    "",					"t_baht( tottax1 )",	""
+
+~DEP:			0,      "",					"A->DEPCOD",			""
+~P_ISDEP:		0,		"",					"p_isdep( A->DEPCOD )",	""

@@ -1,0 +1,152 @@
+* OESOC.RWT - S/O Report by Customer
+*
+[report frame]
+Ti::~INIT
+He:\NAME                                                    `หน้า   : \PAGE
+He:$Eรายงานใบสั่งขาย แยกตามลูกค้า$E
+He:วันที่จาก      ~FROMDATE      ถึง  ~TODATE               `วันที่ : \DATE
+H1:พนักงานขายจาก  ~FROMSLM       ถึง  ~TOSLM
+H1:รหัสลูกค้าจาก  ~FROMCUS       ถึง  ~TOCUS              เลือกแผนก      ~DEP
+He:\LINE
+He:   เลขที่       วันที่  พนักงานขาย  ส่งของวันที่ เครดิต V ส่วนลด    มูลค่าสินค้า     VAT.     รวมทั้งสิ้น ส่งหมด อ้างอิง
+He:~D   รายละเอียด                                        จำนวน          ราคาต่อหน่วย   ส่วนลด     จำนวนเงิน
+He:\LINE
+**: *SOxxxxxxx1xx DD/MM/YY xxxxxxxxx1 DD/MM/YY  ZZZ  9 xxxxxxxxx1999,999,999.9999,999,999.99999,999,999.99  Y
+Gh:$B~CUSTOMER                                                      $B ; 1 CUSCOD
+Bo:~F~SONUM       ~SODAT   ~SLMCOD    ~DLVDAT   ~TRM ~V~DISC     ~VALAMT       ~VATAMT      ~NETAMT         ~Y~YOUREF             ~II
+Ih::~I                  ;1 oesoit->sonum oeso->sonum
+Ib:     ~N ~ARTICLE                                ~ORDQTY   ~TQUCOD   ~UNITPR      ~DISC_I   ~NETAMT_I      ~DLVDAT_I ;1
+If:                     ;1
+Ih::                    ;2 artrnrm->docnum+artrnrm->seqnum oesoit->sonum+oesoit->seqnum
+Ib:        ~REMARK      ;2
+Ih:     หมายเหตุ:       ;3 artrnrm->docnum+'@' oeso->sonum+'@'
+Ib:     ~REMARK         ;3
+If:                     ;3
+Gf:                                                              -------------- ------------ -------------              ;1
+Gf:       รวม ~CUSNAME                                           $B~SUB1VAL      ~SUB1VAT     ~SUB1NET      $B ~C_SUB1  ;1
+Gf:                                                                                                                     ;1
+Su:                                                              ============== ============ =============
+Su:                              รวมทั้งสิ้น  ~CC    ใบ          $B~TOTVAL       ~TOTVAT      ~TOTNET       $B
+Su:                                                              ============== ============ =============
+Su:หมายเหตุ:  เอกสารที่มีเครื่องหมาย '*' นำหน้า คือ เอกสารที่ถูกยกเลิก เอกสารที่มีเครื่องหมาย '>' นำหน้า คือ เอกสารที่รออนุมัติให้เกินวงเงิน
+Su:
+Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=0
+Right=132
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=OESOC.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, 8_Inch, Default
+8_Inch=\027\033\004
+15_Inch=\027\033\001
+Query=DTOS(SODAT)>='Date1()'.AND.DTOS(SODAT)<='Date2()'
+Query=.AND.SLMCOD>='Slm1()'.AND.SLMCOD<='Slm2()'
+Query=.AND.CUSCOD>='Cus1()'.AND.CUSCOD<='Cus2()'.AND.SORECTYP='0'
+Sort=CUSCOD+SONUM
+
+[master file]
+File=OESO
+Alias=A
+Tag=OESO1
+System=DATA_PATH
+
+[item file]
+File=OESOIT
+Alias=B
+Tag=OESOIT1
+System=DATA_PATH
+
+File=artrnrm
+Alias=X
+Tag=artrnrm1
+System=DATA_PATH
+
+[relate file]
+File=OESLM
+Alias=C
+Tag=OESLM1
+System=DATA_PATH
+Master file=OESO
+Master-Related Field=SLMCOD
+
+File=ARMAS
+Alias=D
+Tag=ARMAS1
+System=DATA_PATH
+Master file=OESO
+Master-Related Field=CUSCOD
+
+File=STMAS
+Alias=E
+Tag=STMAS1
+System=DATA_PATH
+Master file=OESOIT
+Master-Related Field=STKCOD
+
+[data spec]
+*           len (0)default,(>0)cut,(<0)cut to new line
+*~dat:      len,"pict",             "data",         "exp"
+~INIT:      0,  "",                 "",             "p_det=@n_prn_detail(); prn_detail=IIF(p_det=0,':',' '); sub1val=0;sub1vat=0;sub1net=0; tot_val=0;totvat=0;totnet=0;cnt=0"
+~FROMDATE:  0,  "d ดดด ปปปป",       "@date1()",     ""
+~TODATE:    0,  "d ดดด ปปปป",       "@date2()",     ""
+~FROMCUS:   0,  "",                 "Cus1()",       ""
+~TOCUS:     0,  "",                 "Cus2()",       ""
+~FROMSLM:   0,  "",                 "Slm1()",       ""
+~TOSLM:     0,  "",                 "Slm2()",       ""
+~DEP:       0,  "",                 "Dep1()",       ""
+~TODEP:     0,  "",                 "Dep2()",       ""
+
+~CUSTOMER:  0,  "",                 "cus_nam",      "cus_nam = ARMAS->CUSNAM - ' /' - A->CUSCOD"
+~CUSNAME:   0,  "",                 "cus_nam",      ""
+~SALESMAN:  0,  "",                 "slm_nam",      "slm_nam = OESLM->SLMNAM - ' /' - A->SLMCOD"
+~SLMNAME:   0,  "",                 "slm_nam",      ""
+
+~F:         0,  "",                 "cancel",       "cancel=IIF(A->DOCSTAT='C',' *',IIF(A->DOCSTAT='O',' >','  ' ))"
+~SONUM:     0,  "",                 "A->SONUM",     "cnt=cnt+1"
+~SODAT:     0,  "",                 "A->SODAT",     ""
+~SLMCOD:    0,  "",                 "A->SLMCOD",    ""
+~CUSCOD:    0,  "",                 "A->CUSCOD",    ""
+~CUSNAM:    0,  "",                 "ARMAS->CUSNAM",""
+~V:         0,  "",                 "A->FLGVAT",    ""
+~AMOUNT:    0,  "99,999,999.99",    "A->AMOUNT",    ""
+~DISC:      0,  "",                 "A->DISC",      ""
+~VATAMT:    0,  "99,999,999.99",    "A->VATAMT",    "sub1vat=sub1vat+A->VATAMT"
+~VALAMT:    0,  "999,999,999.99",   "A->NETVAL",    "sub1val=sub1val+A->NETVAL"
+~NETAMT:    0,  "999,999,999.99",   "A->NETAMT",    "sub1net=sub1net+A->NETAMT"
+~DLVDAT:    0,  "",                 "A->DLVDAT",    ""
+~TRM:       0,  "ZZZ",              "A->PAYTRM",    ""
+~Y:         0,  "",                 "dlv_all",      "dlv_all=IIF(A->DOCSTAT = 'M','Y','N')"
+~YOUREF:    0,  "",                 "A->YOUREF",    ""
+
+~SUB1VAT:   0,  "99,999,999.99",    "sub1vat",      ""
+~SUB1VAL:   0,  "999,999,999.99",   "sub1val",      ""
+~SUB1NET:   0,  "999,999,999.99",   "sub1net",      ""
+~C_SUB1:    0,  "",                 "",             "tot_val=tot_val+sub1val; sub1val=0; totvat=totvat+sub1vat; sub1vat=0; totnet=totnet+sub1net; sub1net=0"
+~TOTVAT:    0,  "99,999,999.99",    "totvat",       ""
+~TOTVAL:    0,  "999,999,999.99",   "tot_val",      ""
+~TOTNET:    0,  "999,999,999.99",   "totnet",       ""
+
+~CC:        0,  "99,999",           "cnt",              ""
+~II:        0,  "",                 "",                 "seq=0"
+~N:         0,  "99",               "seq",              "seq=seq+1";A
+~ARTICLE:   31, "",                 "article",          "article=OESOIT->STKCOD-' '-OESOIT->STKDES";B
+~STKCOD:    0,  "",                 "OESOIT->STKCOD",   "";C
+~STKDES:    0,  "",                 "STMAS->STKDES",    "";D
+~ORDQTY:    0,  "qtyZ(10)",         "OESOIT->ORDQTY",   "";E
+~REMQTY:    0,  "qtyZ(10)",         "OESOIT->REMQTY",   "";F
+~TQUCOD:    0,  "",                 "p_istab( OESOIT->TQUCOD, 20, 1, 0 )",      "",;G
+~UNITPR:    0,  "priZ(12)",         "OESOIT->UNITPR",   "";H
+~DISC_I:    0,  "",                 "OESOIT->DISC",     "";I
+~NETAMT_I:  0,  "ZZZ,ZZZ,ZZZ.ZZ",   "OESOIT->TRNVAL",   "";J
+~DLVDAT_I:  0,  "",                 "dlvdat_i",         "dlvdat_i = IIF(OESOIT->DLVDAT#OESO->DLVDAT, OESOIT->DLVDAT, CTOD('        '))";K
+
+~D:         0,  "",                 "prn_detail",       ""
+~REMARK:    0,  "",                 "ARTRNRM->REMARK",  ""
+
+

@@ -1,0 +1,179 @@
+* ARRCP.RL - „∫‡ √Á®√—∫‡ß‘π (OFFICIAL RECEIPT)
+*
+[report frame]
+*** ºŸÈ„™È “¡“√∂‡ª≈’Ë¬π·ª≈ß·°È‰¢†‰¥Èµ“¡µÈÕß°“√†****************************************
+Ti:: ~INIT
+He:$E\NAME                                             $E
+He:~ADDR
+He:~TEL                                                                $E„∫‡ √Á®√—∫‡ß‘π$E
+He:‡≈¢ª√–®”µ—«ºŸÈ‡ ’¬¿“…’†~TAXID          ~P_ORGTXT       ~P_ORGSTR    
+He:
+He:  ≈Ÿ°§È“ ~CUSCOD     ~BILLTO                       ‡≈¢∑’Ë„∫‡ √Á®     ~RCPNUM
+He:  ~CUSNAM                                          «—π∑’Ë            ~RCPDAT
+He:  ~ADDR01
+He:  ~ADDR02                                          æπ—°ß“π¢“¬        ~SLMCOD
+He:  ~ADDR03
+He:  ‡≈¢ª√–®”µ—«ºŸÈ‡ ’¬¿“…’ ~TAXIDX        ~ORG
+He:ÄÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÅ
+He:Ñ No.Ñ  ‡≈¢∑’Ë„∫°”°—∫Ñ    «—π∑’Ë  Ñ†§√∫°”Àπ¥ Ñ   ®”π«π‡ß‘π   Ñ   ¬Õ¥§ß§È“ß   Ñ    ¬Õ¥™”√–    Ñ
+He:ÜÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖá
+**:  99    IV99999999      DD/MM/YY    DD/MM/YY   99,999,999.99   99,999,999.99   99,999,999.99
+Bo::
+Ih::					;1 arrcpit->rcpnum artrn->docnum
+Ib:  ~N   ~IVCNUM          ~IVCDAT     ~DUEDAT    ~NETAMT         ~REMAMT         ~RCVAMT		;1
+*Ih::                    ;2 stcrd->docnum arrcpit->docnum
+*Ib:        ~NN  ~ARTICLE                           ~QTY   ~TQUCOD    ~UNITPR     ~NETAMT_I		;2
+*Ih:ÜÖÖÖÖàÖ ™”√–‚¥¬Õ◊Ëπ†Êá;3 arrcpcq->rcpnum artrn->docnum
+*Ib: ~BY                   ~CHQNUM      ~CHQDAT    ~AMOUNT_Q       ~BNKCOD      ~RCVAMT_Q    ;3
+*If:ÜÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖá  ;3
+Bt:Ñ    Ñ               Ñ            Ñ          Ñ               Ñ               Ñ               Ñ
+Fo:ÜÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖá
+Su:Ñ~BAHT                                                          √«¡‡ªÁπ‡ß‘π  Ñ ~IVCAMT       Ñ
+Su:Ñ                                                                            ÇÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖá
+Su:Ñ°“√™”√–‡ß‘π¥È«¬‡™Á§®– ¡∫Ÿ√≥Ï‡¡◊ËÕ∫√‘…—∑‰¥È√—∫‡ß‘πµ“¡‡™Á§‡√’¬∫√ÈÕ¬                           Ñ
+Su:Ñ ‡ß‘π ¥    ____________                                                                     Ñ
+Su:Ñ ‡™Á§∏π“§“√†____________ ‡™Á§‡≈¢∑’Ë†__________ ≈ß«—π∑’Ë†___/___/___ ®”π«π‡ß‘π†_____________ Ñ
+Su:Ñ ‡™Á§∏π“§“√†____________ ‡™Á§‡≈¢∑’Ë†__________ ≈ß«—π∑’Ë†___/___/___ ®”π«π‡ß‘π†_____________ Ñ
+*Su:ÜÖÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖá
+*Su:Ñ    ¥/∫ √—∫   Ñ    ‡ß‘π ¥ (A) Ñ ™”√–‚¥¬Õ◊ËπÊ BÑ¿“…’†≥†∑’Ë®Ë“¬ Ñ   Ë«π≈¥®Ë“¬ Ñ    (A)+(B)    Ñ
+*Su:Ñ ~INTRCV      Ñ ~CSHRCV       Ñ ~CHQRCV       Ñ~TAX           Ñ~DISCAMT     Ñ ~RCVNET       Ñ
+*Su:ÜÖÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖá
+*Su:Ñ                                                «—π∑’Ë√—∫‡ß‘π  ~COLLECT                     Ñ
+Su:Ñ                                          „ππ“¡ \NAME                                       Ñ
+Su:Ñ                                                                                            Ñ
+Su:Ñ ºŸÈ√—∫‡ß‘π†________________†«—π∑’Ë†___/___/___ ºŸÈ√—∫¡Õ∫Õ”π“®††__________________          Ñ
+*Su:Ñ æ‘¡æÏ‚¥¬  ~PRNBY        «—π∑’Ë  ~PRNDAT   ~PRNTIM æ‘¡æÏ§√—Èß∑’Ë~PRNCNT ∫—π∑÷°‚¥¬ ~RECBY    Ñ
+Su:ÇÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÉ
+[end frame]
+
+*** §” —ËßµËÕ®“°π’È†ºŸÈ„™È‰¡Ë§«√·°È‰¢†****************************************
+
+[print options]
+Top=0
+Left=0
+Tabs=4
+Right=94
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=ARRCP.TXT
+Print Control=\027\033\001
+Fix Summary Line=ON
+Select Scope=OFF
+*Form=ON
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=artrn
+Alias=A
+Tag=artrn1
+System=DATA_PATH
+
+[item file]
+File=arrcpit
+Alias=B
+Tag=arrcpit1
+System=DATA_PATH
+
+File=arrcpcq
+Alias=D
+Tag=arrcpcq1
+System=DATA_PATH
+
+File=stcrd
+Alias=E
+Tag=stcrd5
+System=DATA_PATH
+
+[relate file]
+File=armas
+Alias=R
+Tag=armas1
+System=DATA_PATH
+Master file=artrn
+Master-Related Field=CUSCOD
+
+[data spec]
+*		    len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:		len,	"pict",			 	"data",				"exp"
+~ADDR:		0,		"",					"p_addr()",			""
+~TAXID:		0,		"",					"p_taxid()",		""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:		0,		"",					"",					"seq=0"
+~RCPNUM:	0,		"",					"ARTRN->DOCNUM",	""
+~RCPDAT:	0,		"",					"ARTRN->DUEDAT",	""
+~CUSCOD:	0,		"",					"ARTRN->CUSCOD",	""
+~CUSNAM:	0,		"",					"cus_nam",			"cus_nam = ARMAS->PRENAM - '†' - ARMAS->CUSNAM"
+~ADDR01:	0,		"",					"ARMAS->ADDR01",	""
+~ADDR02:	0,		"",					"ARMAS->ADDR02",	""
+~ADDR03:	0,		"",					"addr_03",			"addr_03 = ARMAS->ADDR03 - '†' - ARMAS->ZIPCOD"
+~SLMCOD:   27,		"",					"slm",				"slm = ARTRN->SLMCOD-'-'-OESLM->SLMNAM"
+~IVCAMT:	0,		"99,999,999.99",	"ARTRN->IVCAMT",	""
+~BAHT:		0,		"",					"t_baht(ARTRN->IVCAMT)"		""
+*~BAHT:		0,		"",					"t_baht(ARTRN->CSHRCV+ARTRN->CHQRCV)",	""
+
+~N:			0,		"99",				"seq",				"seq=seq+1; q=0"
+~IVCNUM:	0,		"",					"ARRCPIT->DOCNUM",	""
+~IVCDAT:	0,		"",					"ARTRNX->DOCDAT",	""
+~DUEDAT:	0,		"",					"ARTRNX->DUEDAT",	""
+~BILNUM:	0,		"",					"ARTRNX->BILNUM",	""
+~NETAMT:	0,		"99,999,999.99",	"ARTRNX->NETAMT",	""
+~REMAMT:	0,		"ZZ,ZZZ,ZZZ.ZZ",	"ARTRNX->REMAMT",	""
+~RCVAMT:	0,		"99,999,999.99",	"rcv",				"rcv = IIF(ARRCPIT->RECTYP='0'.or.ARRCPIT->RECTYP='5',ARRCPIT->RCVAMT*-1,ARRCPIT->RCVAMT)"
+
+~BY:        0,      "",                 "p_isrun( ARRCPCQ->CHQNUM, ZR, 1, 0)", ""
+~CHQNUM:	0,		"",					"chqnum",			"chqnum= substr(ARRCPCQ->CHQNUM,3,10)"
+~CHQDAT:	0,		"",					"BKTRN->CHQDAT",	""
+~BNKCOD:	0,		"",					"p_istab( BKTRN->BNKCOD, 01, 0, 0)",	""
+~AMOUNT_Q:	0,		"ZZ,ZZZ,ZZZ.ZZ",	"BKTRN->AMOUNT",	""
+~REMAMT_Q:	0,		"ZZ,ZZZ,ZZZ.ZZ",	"BKTRN->REMAMT",	""
+~RCVAMT_Q:	0,		"ZZ,ZZZ,ZZZ.ZZ",	"ARRCPCQ->RCVAMT",	""
+
+~INTRCV:	0,		"9,999,999.99",		"ARTRN->INTRCV",	""
+~CSHRCV:	0,		"99,999,999.99",	"ARTRN->CSHRCV",	""
+~CHQRCV:	0,		"99,999,999.99",	"ARTRN->CHQRCV",	""
+~TAX:		0,		"9,999,999.99",		"ARTRN->TAX",		""
+~DISCAMT:	0,		"9,999,999.99",		"ARTRN->DISCAMT",	""
+~RCVNET:	0,		"99,999,999.99",	"net",				"net=IIF(STR(ARTRN->NETAMT,15,2) = STR(ARTRN->IVCAMT,15,2), ARTRN->CSHRCV+ARTRN->CHQRCV, 99999999999.99)"
+~COLLECT:	0,		"",					"ARTRN->DOCDAT",	""
+
+~HREM1:		0,		"",					"p_hrem(A->DOCNUM,1)",		""
+~HREM2:		0,		"",					"p_hrem(A->DOCNUM,2)",		""
+~HREM3:		0,		"",					"p_hrem(A->DOCNUM,3)",		""
+~HREM4:		0,		"",					"p_hrem(A->DOCNUM,4)",		""
+~HREM5:		0,		"",					"p_hrem(A->DOCNUM,5)",		""
+
+~DEP:		0,		"",					"A->DEPCOD",				""
+~P_ISDEP:	0,		"",					"p_isdep( A->DEPCOD )",		""
+
+~NN:		0,		"99",               "q",				"q=q+1"
+~ARTICLE:	43,		"",                 "article",			"article = STCRD->STKCOD - '†' - STCRD->STKDES"
+~STKCOD:	15,		"",                 "STCRD->STKCOD",	""
+~STKDES:	28,		"",                 "STCRD->STKDES",	""
+~L:			0,		"",                 "STCRD->LOCCOD",	""
+~QTY:		0,		"ZZ,ZZZ",           "STCRD->TRNQTY",	""
+~TQUCOD:	9,		"",                 "p_istab( STCRD->TQUCOD,  20, 1, 0 )",      ""
+~UNITPR:	0,		"ZZZ,ZZZ.ZZ",       "STCRD->UNITPR",	""
+~DISC_I:	0,		"",                 "STCRD->DISC",		""
+~NETAMT_I:	0,		"ZZ,ZZZ,ZZZ.ZZ",    "STCRD->TRNVAL",	""
+~REMARK:	0,		"",                 "ARTRNRM->REMARK",	""
+~MQTY:		0,		"ZZ,ZZZ",           "mqty",				"mqty = STCRD->TRNQTY * STCRD->TFACTOR"
+~MQUCOD:	0,		"",                 "p_istab( STMAS->QUCOD,  20, 1, 0 )",       "",
+
+~PRNBY:		0,		"",					"p_userid()",		""
+~PRNDAT:	0,		"",					"@d_prndat()",		""
+~PRNTIM:	0,		"",					"s_prntim()",		""
+~PRNCNT:	0,		"999",				"@n_prncnt()",		""
+~RECBY:		0,		"",					"A->USERID",		""
+
+~P_ORGTXT:	0,		"",                 "p_orgtxt()",       ""
+~P_ORG:		0,		"",                 "p_orgnum()",       ""
+~P_ORGSTR:	0,		"",                 "p_orgstr()",       ""
+~BILLTO:	0,		"",                 "A->BILLTO",        "tax_id=@TAXID()"
+~TAXIDX:	0,		"",                 "tax_id",           ""
+*~ORG:       0,      "",                 "org",              "org=IIF(tax_id#'   '.AND.A->ORGNUM>=0,IIF(A->ORGNUM=0,'† ”π—°ß“π„À≠Ë†††', '† “¢“∑’Ë†'   -LTRIM(STR(A->ORGNUM,5,0))),'              ')"
+~ORG:		0,		"",					"org",				"br=@p_orgnum_00009( A->ORGNUM ); org=IIF(tax_id#'   '.AND.A->ORGNUM>=0,IIF(A->ORGNUM=0,'† ”π—°ß“π„À≠Ë††', '† “¢“∑’Ë†'-br),'               ')"
+~SEEKCUS:	0,		"",                 "SeekCus()",        ""

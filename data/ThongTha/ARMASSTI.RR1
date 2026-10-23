@@ -1,0 +1,112 @@
+*
+* áºº¿ÍÃìÁÊÓËÃÑº¾ÔÁ¾ìª×èÍ/·ÕèÍÂÙèÅÙ¡¤éÒÅ§ÊµÔ¤à¡ÍÃì à¾×èÍ»Ô´Ë¹éÒ«Í§¨´ËÁÒÂ
+* ãªéÊµÔ¡à¡ÍÃì :-
+*	- áºº 3 ¤ÍÅÑÁ¹ì   ¢¹Ò´¢Í§ÊµÔ¡à¡ÍÃìáµèÅÐÍÑ¹ = 10.2 x 3.6 «Á.
+*	- 
+*
+[report frame]
+Bo::~SKIP
+Bo:¶Ö§  ~CONTACT                                      ¶Ö§  ~BCONTACT                                     ¶Ö§  ~CCONTACT
+Bo:     ~CUSNAM                                            ~BCUSNAM                                           ~CCUSNAM
+Bo:     ~ADDR01                                            ~BADDR01                                           ~CADDR01
+Bo:     ~ADDR_02                                           ~BADDR_02                                          ~CADDR_02
+Bo:     ~ADDR_03                                           ~BADDR_03                                          ~CADDR_03
+Bo:~NEXT
+*Bo:\027\074\039
+[end frame]
+
+[print options]
+Top=0
+Left=0
+Right=50
+Lines=6
+Output=Select, Printer, Screen, File,
+File Name=ARMASSTI.TXT
+*Print Control=\027\033\001\027\067\000\011
+Print Control=\027\033\001\027\067\000\012
+Fix Foot Line=OFF
+Select Page=OFF
+Select Scope=ON
+*Iteration=ON
+*Condition=SLMCOD='..........' .AND. CUSTYP='00'
+Feed After Print=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=ARMAS
+Alias=A
+Tag=ARMAS1
+System=DATA_PATH
+
+[relate file]
+File=B
+Clone From=ARMAS
+Alias=B
+Tag=ARMAS1
+System=DATA_PATH
+Master file=ARMAS
+Master-Related Field=CUSCOD
+
+File=C
+Clone From=ARMAS
+Alias=C
+Tag=ARMAS1
+System=DATA_PATH
+Master file=B
+Master-Related Field=CUSCOD
+
+[data spec]
+*~dat:		len	"pict",			"data",				"exp"
+~CONTACT:	0,	"",				"ARMAS->CONTACT",	""
+~CUSNAM:   50,	"",				"name",				"name = ARMAS->PRENAM - ' ' - ARMAS->CUSNAM"
+~ADDR01:	0,	"",				"ARMAS->ADDR01",	""
+~ADDR02:	0,	"",				"ARMAS->ADDR02",	""
+~ADDR03:	0,	"",				"ARMAS->ADDR03",	""
+~ADDR_02:  50,	"",				"addr_02",			"addr_02 = IIF(A->ADDR03='     ', A->ADDR02 - '   ' - A->ZIPCOD, A->ADDR02+'        ')"
+~ADDR_03:  50,	"",				"addr_03",			"addr_03 = IIF(A->ADDR03#'     ', A->ADDR03 - '   ' - A->ZIPCOD, A->ADDR03+'        ')"
+~ZIP:		0,	"",				"ARMAS->ZIPCOD",	""
+~CUSCOD:	0,	"",				"ARMAS->CUSCOD",	""
+
+~TELNUM:	0,	"",				"ARMAS->TELNUM",	""
+~PAYCOND:	0,	"",				"ARMAS->PAYCOND",	""
+~SLMCOD:	0,	"",				"ARMAS->SLMCOD",	""
+~AREA:		0,	"",				"ARMAS->AREACOD",	""
+~TRM:		0,	"",				"ARMAS->PAYTRM",	""
+~PRI:		0,	"",				"ARMAS->TABPR",		""
+~DISC:		0,	"",				"ARMAS->DISC",		""
+~CRLINE:	0,	"99,999,999.99","ARMAS->CRLINE",	""
+~ACCNUM:	0,	"",				"ARMAS->ACCNUM",	""
+~DLVBY:		0,	"",				"ARMAS->DLVBY",		""
+~REMARK:	0,	"",				"ARMAS->REMARK",	""
+
+~HREM1:		0,	"",				"x1",				"x1=@p_hrem( A->CUSCOD,1 )"
+~HREM2:		0,	"",				"x2",				"x2=@p_hrem( A->CUSCOD,2 )"
+~HREM3:		0,	"",				"x3",				"x3=@p_hrem( A->CUSCOD,3 )"
+~HREM4:		0,	"",				"x4",				"x4=@p_hrem( A->CUSCOD,4 )"
+~HREM5:		0,	"",				"x5",				"x5=@p_hrem( A->CUSCOD,5 )"
+
+~SKIP:		0,	"",				"",					"@r_skip(B);@r_skip(C)"
+~NEXT:		0,	"",				"",					"@r_skip(ARMAS,2)"
+
+~BCONTACT:	0,	"",				"B->CONTACT",		""
+~BCUSNAM:  50,	"",				"name",				"name = B->PRENAM - ' ' - B->CUSNAM"
+~BADDR01:	0,	"",				"B->ADDR01",		""
+~BADDR02:	0,	"",				"B->ADDR02",		""
+~BADDR03:	0,	"",				"B->ADDR03",		""
+~BADDR_02: 50,	"",				"addr_02",			"addr_02 = IIF(B->ADDR03='     ', B->ADDR02 - '   ' - B->ZIPCOD, B->ADDR02+'        ')"
+~BADDR_03: 50,	"",				"addr_03",			"addr_03 = IIF(B->ADDR03#'     ', B->ADDR03 - '   ' - B->ZIPCOD, B->ADDR03+'        ')"
+~BZIP:		0,	"",				"B->ZIPCOD",		""
+~BCUSCOD:	0,	"",				"B->CUSCOD",		""
+*-----------
+~CCONTACT:	0,	"",				"C->CONTACT",		""
+~CCUSNAM:  50,	"",				"name",				"name = C->PRENAM - ' ' - C->CUSNAM"
+~CADDR01:	0,	"",				"C->ADDR01",		""
+~CADDR02:	0,	"",				"C->ADDR02",		""
+~CADDR03:	0,	"",				"C->ADDR03",		""
+~CADDR_02: 50,	"",				"addr_02",			"addr_02 = IIF(C->ADDR03='     ', C->ADDR02 - '   ' - C->ZIPCOD, C->ADDR02+'        ')"
+~CADDR_03: 50,	"",				"addr_03",			"addr_03 = IIF(C->ADDR03#'     ', C->ADDR03 - '   ' - C->ZIPCOD, C->ADDR03+'        ')"
+~CZIP:		0,	"",				"C->ZIPCOD",		""
+~CCUSCOD:	0,	"",				"C->CUSCOD",		""
+

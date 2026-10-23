@@ -1,0 +1,89 @@
+* พิมพ์ชื่อที่อยู่ลูกค้า เพื่อจ่าหน้าซองจดหมาย
+*
+[report frame]
+*** ผู้ใช้สามารถเปลี่ยนแปลงแก้ไข ได้ตามต้องการ ****************************************
+Bo:ห้างหุ้นส่วนจำกัด เอส.เค.ควิก พาร์ท
+Bo:149/2 ถนนพุทธมณฑลสาย 3 แขวงศาลาธรรมสพน์
+Bo:เขตทวีวัฒนา  กรุงเทพมหานคร  10170
+Bo:
+Bo:
+Bo:
+Bo:
+Bo:                     
+Bo:                                กรุณาส่ง ~SUPNAM
+Bo:                                         ~ADDR01
+Bo:                                         ~ADDR02
+Bo:                                         $E~ZIP $E
+Bo:                                          
+Bo:                                 
+[end frame]
+
+*** คำสั่งต่อจากนี้ ผู้ใช้ไม่ควรแก้ไข ****************************************
+
+[print options]
+Top=0
+Left=0
+Right=84
+Lines=12
+Output=Select, Printer, Screen, File,
+File Name=ARMASENV.TXT
+Print Control=\027\033\001
+Fix Summary Line=OFF
+Select Page=OFF
+Select Scope=OFF
+*Iteration=ON
+*Condition=SLMCOD='1234567890'.and.AREACOD='12'
+*Feed After Print=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=ARMAS
+Alias=A
+Tag=ARMAS1
+System=DATA_PATH
+
+[data spec]
+*~dat:      len,    "pict",             "data",             "exp"
+~CONTACT:   0,      "",                 "ARMAS->CONTACT",   ""
+~SUPNAM:    0,      "",                 "name",             "name = APMAS->PRENAM - ' ' - APMAS->SUPNAM"
+~ADDR01:    0,      "",                 "APMAS->ADDR01",    ""
+~ADDR02:    0,      "",                 "APMAS->ADDR02",    ""
+~ADDR03:    0,      "",                 "APMAS->ADDR03",    ""
+~ZIP:       0,      "",                 "APMAS->ZIPCOD",    ""
+~SUPCOD:    0,      "",                 "APMAS->SUPCOD",    ""
+
+~TELNUM:    0,      "",                 "APMAS->TELNUM",    ""
+~PAYCOND:   0,      "",                 "APMAS->PAYCOND",   ""
+~SLMCOD:    0,      "",                 "APMAS->SLMCOD",    ""
+~AREA:      0,      "",                 "APMAS->AREACOD",   ""
+~TRM:       0,      "",                 "APMAS->PAYTRM",    ""
+~PRI:       0,      "",                 "APMAS->TABPR",     ""
+~DISC:      0,      "",                 "APMAS->DISC",      ""
+~CRLINE:    0,      "99,999,999.99",    "APMAS->CRLINE",    ""
+~ACCNUM:    0,      "",                 "APMAS->ACCNUM",    ""
+~DLVBY:     0,      "",                 "APMAS->DLVBY",     ""
+~REMARK:    0,      "",                 "APMAS->REMARK",    ""
+
+~HREM1:     0,      "",                 "x1",               "x1=@p_hrem( A->CUSCOD,1 )"
+~HREM2:     0,      "",                 "x2",               "x2=@p_hrem( A->CUSCOD,2 )"
+~HREM3:     0,      "",                 "x3",               "x3=@p_hrem( A->CUSCOD,3 )"
+~HREM4:     0,      "",                 "x4",               "x4=@p_hrem( A->CUSCOD,4 )"
+~HREM5:     0,      "",                 "x5",               "x5=@p_hrem( A->CUSCOD,5 )"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

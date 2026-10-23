@@ -1,0 +1,126 @@
+* ARBIL.RL - ãºÇÒ§ºÔÅ (BILLING SLIP)
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+Ti:: ~INIT
+He:$E\NAME                                             $E
+He:~ADDR
+He:~TEL                                                                $EãºÇÒ§ºÔÅ$E
+He:
+He:  ÅÙ¡¤éÒ ~CUSCOD                                   àÅ¢·ÕèãºÇÒ§ºÔÅ    ~BILNUM
+He:  ~CUSNAM
+He:  ~ADDR01                                          ÇÑ¹·Õè            ~BILDAT
+He:  ~ADDR02
+He:  ~ADDR03                                          à§×èÍ¹ä¢¡ÒÃªÓÃÐà§Ô¹ ~PAYCOND
+He:       ËÁÒÂàËµØ  ~REMARK
+He:€…………‰………………………………………‰………………………………‰…………………………‰………………………………………‰………………………………………‰………………………………………
+He:„ No.„  àÅ¢·Õèãº¡Ó¡Ñº„    ÇÑ¹·Õè  „ ¤Ãº¡ÓË¹´ „   ¨Ó¹Ç¹à§Ô¹   „    ªÓÃÐáÅéÇ   „   à§Ô¹¤§¤éÒ§  „
+He:†…………Š………………………………………Š………………………………Š…………………………Š………………………………………Š………………………………………Š………………………………………‡
+Bo::
+Ih::                    ;1 artrn->bilnum arbil->bilnum
+Ib: ~N     ~IVCNUM         ~IVCDAT     ~DUEDAT    ~NETAMT_I       ~RCVAMT_I       ~REMAMT_I ;1
+Bt:„    „               „            „          „               „               „               „
+Fo:†…………ˆ………………………………………ˆ………………………………ˆ…………………………ˆ………………………………………ˆ………………………………………Š………………………………………‡
+Su:„~BAHT                                                       ÃÇÁà§Ô¹·Ñé§ÊÔé¹ „ ~NETAMT       „
+Su:†…………………………………………………………………………………………………………………………………………………………………………………………………………ˆ………………………………………‡
+Su:„ ËÁÒÂàËµØ                                                                                   „
+Su:„                                                                                      „
+Su:„                                                                                      „
+Su:„                                                                                            „
+Su:„ ª×èÍ¼ÙéÃÑºÇÒ§ºÔÅ  ____________________    ã¹¹ÒÁ \NAME                                      „
+Su:„ ÇÑ¹·ÕèÃÑº       ___/___/___                                                                „
+Su:„ ÇÑ¹·Õè¹Ñ´ÃÑºàªç¤  ___/___/___             ª×èÍ¼ÙéÇÒ§ºÔÅ ____________________               „
+Su:„                                                                                            „
+*Su:„ ¾ÔÁ¾ìâ´Â  ~PRNBY         ÇÑ¹·Õè  ~PRNDAT   ~PRNTIM  ¤ÃÑé§·Õè~PRNCNT  ºÑ¹·Ö¡â´Â  ~RECBY     „
+Su:‚……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ƒ
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+Top=0
+Left=0
+Tabs=4
+Right=94
+Lines=38
+Output=Select, Printer, Screen, File,
+File Name=ARBIL.TXT
+Print Control=\027\033\001
+Fix Summary Line=ON
+Select Scope=OFF
+*Form=ON
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=arbil
+Alias=A
+Tag=arbil1
+System=DATA_PATH
+
+[item file]
+File=artrn
+Alias=B
+Tag=artrn4
+System=DATA_PATH
+
+[relate file]
+File=armas
+Alias=R
+Tag=armas1
+System=DATA_PATH
+Master file=arbil
+Master-Related Field=CUSCOD
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",             "exp"
+~ADDR:      0,      "",                 "p_addr()",         ""
+~TAXID:     0,      "",                 "p_taxid()",        ""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:      0,      "",                 "",                 "seq=0; sumbil=0"
+~BILNUM:    0,      "",                 "ARBIL->BILNUM",    ""
+~BILDAT:    0,      "",                 "ARBIL->BILDAT",    ""
+~CUSCOD:    0,      "",                 "ARBIL->CUSCOD",    ""
+~CUSNAM:    0,      "",                 "cus_nam",          "cus_nam = ARMAS->PRENAM - ' ' - ARMAS->CUSNAM"
+~ADDR01:    0,      "",                 "ARMAS->ADDR01",    ""
+~ADDR02:    0,      "",                 "ARMAS->ADDR02",    ""
+~ADDR03:    0,      "",                 "addr_03",          "addr_03 = ARMAS->ADDR03 - ' ' - ARMAS->ZIPCOD"
+~TELNUM:    0,      "",                 "ARMAS->TELNUM",    ""
+~PAYCOND:   0,      "",                 "ARBIL->PAYCOND",   ""
+~REMARK:    0,      "",                 "ARBIL->REMARK",    ""
+~BILOUT:    0,      "",                 "ARBIL->BILOUT",    ""
+~NETAMT:    0,      "99,999,999.99",    "bilamt",           "bilamt=IIF(STR(ARBIL->NETAMT,15,2) # STR(sumbil,15,2), 999999999999.99, ARBIL->NETAMT)"
+~BAHT:      0,      "",                 "t_baht(ARBIL->NETAMT)",    ""
+
+~N:         0,      "999",              "seq",              "seq=seq+1"
+~IVCNUM:    0,      "",                 "ARTRN->DOCNUM",    ""
+~IVCDAT:    0,      "",                 "ARTRN->DOCDAT",    ""
+*~DUEDAT:   0,      "",                 "ARTRN->DUEDAT",    ""
+~DUEDAT:    0,      "",                 "DUE",              "DUE=IIF(ARTRN->RECTYP='3',ARTRN->DUEDAT,CTOD('        '))"
+~NETAMT_I:  0,      "99,999,999.99",    "ARTRN->NETAMT",    ""
+~RCVAMT_I:  0,      "ZZ,ZZZ,ZZZ.ZZ",    "ARTRN->RCVAMT",    ""
+~REMAMT_I:  0,      "99,999,999.99",    "rem",              "rem = IIF(ARTRN->RECTYP='0'.or.ARTRN->RECTYP='5',ARTRN->REMAMT*-1,ARTRN->REMAMT); sumbil=sumbil+rem"
+
+~BEFVAT_I:  0,      "99,999,999.99",    "befvat",           "befvat = IIF(ARTRN->FLGVAT='1',ARTRN->NETAMT-ARTRN->VATAMT,ARTRN->TOTAL)"
+~VATAMT_I:  0,      "99,999,999.99",    "ARTRN->VATAMT",    ""
+~AFTVAT_I:  0,      "99,999,999.99",    "net",              "net = IIF(ARTRN->RECTYP='0'.or.ARTRN->RECTYP='5',ARTRN->NETAMT*-1,ARTRN->NETAMT); sumbil=sumbil+net"
+
+~HREM1:     0,      "",                 "p_hrem(A->BILNUM, 1)",     ""
+~HREM2:     0,      "",                 "p_hrem(A->BILNUM, 2)",     ""
+~HREM3:     0,      "",                 "p_hrem(A->BILNUM, 3)",     ""
+~HREM4:     0,      "",                 "p_hrem(A->BILNUM, 4)",     ""
+~HREM5:     0,      "",                 "p_hrem(A->BILNUM, 5)",     ""
+
+~DEP:       0,      "",                 "A->DEPCOD",                ""
+~P_ISDEP:   0,      "",                 "p_isdep( A->DEPCOD )",     ""
+
+~PRNBY:     0,      "",                 "p_userid()",       ""
+~PRNDAT:    0,      "",                 "@d_prndat()",      ""
+~PRNTIM:    0,      "",                 "s_prntim()",       ""
+~PRNCNT:    0,      "999",              "@n_prncnt()",      ""
+~RECBY:     0,      "",                 "A->USERID",        ""
+

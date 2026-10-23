@@ -1,0 +1,188 @@
+* ARRET.RLX - ãºÅ´Ë¹Õé (CREDIT NOTE)
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+Ti:: ~INIT
+He:$E\NAME                                             $E
+He:~ADDR
+He:~TEL                                                             $EãºÅ´Ë¹Õé/ÃÑº¤×¹ÊÔ¹¤éÒ$E
+He:                   àÅ¢»ÃÐ¨ÓµÑÇ¼ÙéàÊÕÂÀÒÉÕ ~TAXID
+He:  ÅÙ¡¤éÒ ~CUSCOD                                                  àÅ¢·ÕèãºÅ´Ë¹Õé     ~DOCNUM
+He:  ~CUSNAM                                                         ÇÑ¹·Õè             ~DOCDAT
+He:  ~ADDR01                                                    				   
+He:  ~ADDR02													     ÍéÒ§¶Ö§ãº¡Ó¡ÑºÀÒÉÕ ~IVCNUM      ~IVCDAT
+He:  ~ADDR03                                                         ¾¹Ñ¡§Ò¹¢ÒÂ         ~SLMCOD
+He:  ÍéÒ§ÍÔ§  ~YOUREF                                                à¢µ¡ÒÃ¢ÒÂ          ~AREA
+He:  ºÃÔÉÑ·ä´éÃÑº¤×¹ÊÔ¹¤éÒáÅÐà¤Ã´ÔµºÑ­ªÕ¢Í§·èÒ¹µÒÁÃÒÂ¡ÒÃµèÍä»¹Õé :-
+He:€…………‰…………………………………………………………………………………………………………………………‰…………‰…………………………………………………‰……………………………‰……………………………‰……………………………………
+He:„ No.„            ÃËÑÊÊÔ¹¤éÒ/ÃÒÂÅÐàÍÕÂ´             „¤ÅÑ§„ÃÑº¤×¹?  ¨Ó¹Ç¹     „   Ë¹èÇÂÅÐ „   ÊèÇ¹Å´  „  ~TXT0       „
+He:†…………Š…………………………………………………………………………………………………………………………Š…………Š…………………………………………………Š……………………………Š……………………………Š……………………………………‡
+Bo::
+Ih::					;1 stcrd->docnum artrn->docnum
+Ib: ~N    ~ARTICLE                                      ~L   ~R~QTY    ~TQUCOD   ~UNITPR     ~DISC_I     ~NETAMT_I      ;1
+Ih::					;2 artrnrm->docnum+artrnrm->seqnum stcrd->docnum+stcrd->seqnum
+Ib:       ~REMARK		;2
+Bt:„    „                                              „    „                   „           „           „              „
+Fo:†…………ˆ…………………………………………………………………………………………………………………………ˆ…………ˆ…………………………………………………ˆ……………………………ˆ……………………………Š……………………………………‡
+Su:„ÊÓàËµØ·ÕèÃÑº¤×¹:                                                                    ÃÇÁ             „~AMOUNT       „
+Su:„ ~HREM1                                                                         $_ËÑ¡$_ÊèÇ¹Å´ ~DISC     „~DISCAMT      „
+Su:„ ~HREM2                                                              ~TXT1                          „~TOTAL        „
+Su:„ ~HREM3                                                                                             †……………………………………‡
+Su:„ ~HREM4                                              ÁÙÅ¤èÒ¢Í§ÊÔ¹¤éÒËÃ×ÍºÃÔ¡ÒÃµÒÁãº¡Ó¡ÑºÀÒÉÕà´ÔÁ    „~IVCAMT       „
+Su:„ ~HREM5                                                       ÁÙÅ¤èÒ¢Í§ÊÔ¹¤éÒËÃ×ÍºÃÔ¡ÒÃ·Õè¶Ù¡µéÍ§   „~CORRECT      „
+Su:„                                                                                  ¼ÅµèÒ§            „~DIF          „
+Su:„                                                                        ¨Ó¹Ç¹ÀÒÉÕÁÙÅ¤èÒà¾ÔèÁ  ~VAT %„~VATAMT       „
+Su:„~BAHT                                                                         ¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹  „~CHKAMT       „
+*Su:„                                                                                                    „……………………………………„
+*Su:„                                                                        ÊÔ¹¤éÒÂ¡àÇé¹ÀÒÉÕÁÙÅ¤èÒà¾ÔèÁ „~AMTRATZ      „
+*Su:„                                                                        ÁÙÅ¤èÒÊÔ¹¤éÒÍÑµÃÒ     ~VAT %„~AMTRATX      „
+*Su:„                                                                        ¨Ó¹Ç¹à§Ô¹ÀÒÉÕÁÙÅ¤èÒà¾ÔèÁ    „~VATAMT       „
+*Su:„~BAHT                                                                         ¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹  „~NETAMT       „
+Su:†…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ˆ……………………………………‡
+Su:„ ä´éÃÑºÊÔ¹¤éÒ¢éÒ§µé¹¤×¹àÃÕÂºÃéÍÂáÅéÇ   ä´éà¡çºÊÔ¹¤éÒ¢éÒ§µé¹ã¹¤ÅÑ§ÊÔ¹¤éÒáÅéÇ                                        „
+Su:„                                                             ã¹¹ÒÁ \NAME                                           „
+Su:„    ___________________         ____________________                                                               „
+Su:„         á¼¹¡ÃÑºÊÔ¹¤éÒ               á¼¹¡¤ÅÑ§ÊÔ¹¤éÒ          ¼ÙéÃÑºÁÍºÍÓ¹Ò¨  __________________                    „
+*Su:„ ¾ÔÁ¾ìâ´Â  ~PRNBY         ÇÑ¹·Õè  ~PRNDAT   ~PRNTIM ¾ÔÁ¾ì¤ÃÑé§·Õè~PRNCNT  ºÑ¹·Ö¡â´Â ~RECBY                         „
+Su:‚…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ƒ
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+Top=0
+Left=0
+Tabs=4
+Right=117
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=ARRET.TXT
+Print Control=\018\027\103
+Fix Summary Line=ON
+Select Scope=OFF
+*Form=ON
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=artrn
+Alias=A
+Tag=artrn1
+System=DATA_PATH
+
+[item file]
+File=stcrd
+Alias=B
+Tag=stcrd5
+System=DATA_PATH
+
+File=artrnrm
+Alias=C
+Tag=artrnrm1
+System=DATA_PATH
+
+[relate file]
+File=armas
+Alias=R
+Tag=armas1
+System=DATA_PATH
+Master file=artrn
+Master-Related Field=CUSCOD
+
+File=stmas
+Alias=C
+Tag=stmas1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD
+
+File=stloc
+Alias=L
+Tag=stloc1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD+LOCCOD
+
+[data spec]
+*		    len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:		len,	"pict",			 	"data",				"exp"
+~ADDR:		0,		"",					"p_addr()",			""
+~TAXID:		0,		"",					"p_taxid()",		""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:		0,		"",					"",					"seq=0"
+~TXT0:		0,		"",		            "txt0",				"txt0 = IIF( ARTRN->FLGVAT <> '1', '  ¨Ó¹Ç¹à§Ô¹', 'ÃÒ¤ÒÃÇÁÀÒÉÕ')",
+~TXT1:		0,		"",		            "txt1",				"txt1 = IIF( ARTRN->FLGVAT <> '1', '¨Ó¹Ç¹à§Ô¹ËÅÑ§ËÑ¡ÊèÇ¹Å´', '¨Ó¹Ç¹à§Ô¹ËÅÑ§ËÑ¡ÊèÇ¹Å´')",
+~TXT2:		0,		"",		            "txt2",				"txt2 = IIF( ARTRN->FLGVAT <> '1', '¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹', '¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹')",
+~DOCNUM:	0,		"",					"ARTRN->DOCNUM",	""
+~DOCDAT:	0,		"",					"ARTRN->DOCDAT",	""
+~CUSCOD:	0,		"",					"ARTRN->CUSCOD",	""
+~CUSNAM:	0,		"",					"cus_nam",			"cus_nam = ARMAS->PRENAM - ' ' - ARMAS->CUSNAM"
+~ADDR01:	0,		"",					"ARMAS->ADDR01",	""
+~ADDR02:	0,		"",					"ARMAS->ADDR02",	""
+~ADDR03:	0,		"",					"addr_03",			"addr_03 = ARMAS->ADDR03 - ' ' - ARMAS->ZIPCOD"
+~YOUREF:	0,		"",					"ARTRN->YOUREF",	""
+~IVCNUM:	0,		"",					"ARTRN->SONUM",		""
+~IVCDAT:	0,		"",		            "get_ivcdat()",		""
+*~SLMCOD:   35,		"",					"slm",				"slm = ARTRN->SLMCOD-'-'-OESLM->SLMNAM"
+~SLMCOD:	22,		"",		            "OESLM->SLMNAM",	""
+~DUEDAT:	0,		"",					"ARTRN->DUEDAT",	""
+~AREA:		0,		"",					"p_istab( ARTRN->AREACOD, 40, 1, 40 )",			""
+~SONUM:		0,		"",					"ARTRN->SONUM",		""
+~FLGVAT:	0,		"Y",				"ARTRN->FLGVAT",	""
+~AMOUNT:	0,		"99,999,999.99",	"ARTRN->AMOUNT",	""
+~DISC:		0,		"",					"ARTRN->DISC",		""
+~DISCAMT:	0,		"99,999,999.99",	"ARTRN->DISCAMT",	""
+~TOTAL:		0,		"99,999,999.99",	"ARTRN->TOTAL",		""
+~VAT:		0,		"99.99",			"ARTRN->VATRAT",	""
+~VATAMT:	0,		"99,999,999.99",	"ARTRN->VATAMT",	""
+~CHKAMT:	0,		"99,999,999.99",    "netamt",			"netamt = IIF( ARTRN->FLGVAT = '1', dif + ARTRN->VATAMT, ARTRN->NETAMT )"
+~BAHT:		0,		"",					"t_baht(ARTRN->NETAMT)"							""
+
+~IVCAMT:    0,      "99,999,999.99",    "oldivc",           "oldivc = IIF(ARTRN->FLGVAT='1',((ARTRN->IVCAMT-ARTRN->AMTRAT0)*100/(100+ARTRN->VATRAT)+ARTRN->AMTRAT0),ARTRN->IVCAMT)"
+~CORRECT:	0,		"99,999,999.99",    "correct",			"correct = oldivc - IIF(ARTRN->FLGVAT='1', ARTRN->TOTAL-ARTRN->VATAMT, ARTRN->TOTAL)"
+~DIF:		0,		"99,999,999.99",    "dif",				"dif = oldivc - correct"
+~AMTRATZ:	0,		"99,999,999.99",	"AMTRATZ",			"AMTRATZ = ARTRN->AMTRAT0 - (ARTRN->AMTRAT0 * ARTRN->DISCAMT / ARTRN->AMOUNT)"
+~AMTRATX:	0,		"99,999,999.99",	"AMTRATX",			"AMTRATX = IIF(ARTRN->FLGVAT='1',ARTRN->TOTAL - AMTRATZ - ARTRN->VATAMT, ARTRN->TOTAL - AMTRATZ)"
+~NETAMT:	0,		"99,999,999.99",	"ARTRN->NETAMT",	""
+
+~N:			0,		"999",				"seq",				"seq=seq+1"
+*~ARTICLE:  45,		"",					"article",			"article = STCRD->STKDES - IIF(STCRD->STKCOD=' ', '                  ', ' [' - STCRD->STKCOD - ']')"
+~ARTICLE:  45,		"",					"article",			"article = STCRD->STKCOD - ' ' - STCRD->STKDES"
+~STKCOD:    0,		"",					"STCRD->STKCOD",	""
+~STKDES:   28,		"",					"STCRD->STKDES",	""
+~L:			0,		"",					"STCRD->LOCCOD",	""
+~R:			0,		"",		            "ret_stk",			"ret_stk = IIF(STCRD->RETSTK='Y','Y','N')"
+~QTY:		0,		"qtyZ(7)",			"STCRD->TRNQTY",	""
+~TQUCOD:	0,		"",					"p_istab( STCRD->TQUCOD,  20, 1, 0 )",		""
+~UNITPR:	0,		"priZ(10)",			"STCRD->UNITPR",	""
+~DISC_I:	0,		"",					"STCRD->DISC",		""
+~NETAMT_I:	0,		"ZZ,ZZZ,ZZZ.ZZ",	"STCRD->TRNVAL",	""
+~REMARK:	0,		"",					"ARTRNRM->REMARK",	""
+
+~HREM1:		0,		"",					"p_hrem(A->DOCNUM,1)",		""
+~HREM2:		0,		"",					"p_hrem(A->DOCNUM,2)",		""
+~HREM3:		0,		"",					"p_hrem(A->DOCNUM,3)",		""
+~HREM4:		0,		"",					"p_hrem(A->DOCNUM,4)",		""
+~HREM5:		0,		"",					"p_hrem(A->DOCNUM,5)",		""
+
+~DEP:		0,		"",					"A->DEPCOD",				""
+~P_ISDEP:	0,		"",					"p_isdep( A->DEPCOD )",		""
+~LOCAREA:	0,		"",					"STLOC->AREA",				""
+~RDOCNUM:	0,		"",					"STCRD->RDOCNUM",			""
+
+*~V:		0,		"",					"VAT_SYM",			"VAT_SYM = IIF(STCRD->VATCOD='0', ' ', 'V')"
+~V:			0,		"",					"STCRD->VATCOD",	""
+~SHIPTO:	0,		"",					"ARTRN->SHIPTO",	""
+~S_ADDR01:	0,		"",					"ARSHIP->ADDR01",	""
+~S_ADDR02:	0,		"",					"ARSHIP->ADDR02",	""
+~S_ADDR03:	0,		"",					"addr_03",			"addr_03 = ARSHIP->ADDR03 - ' ' - ARSHIP->ZIPCOD"
+~S_TELNUM:	0,		"",					"ARSHIP->TELNUM",	""
+
+~PRNBY:		0,		"",					"p_userid()",		""
+~PRNDAT:	0,		"",					"@d_prndat()",		""
+~PRNTIM:	0,		"",					"s_prntim()",		""
+~PRNCNT:	0,		"999",				"@n_prncnt()",		""
+~RECBY:		0,		"",					"A->USERID",		""

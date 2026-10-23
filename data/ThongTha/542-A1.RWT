@@ -1,0 +1,122 @@
+* GLLEDDEP.RWT - General Ledger Listing (แบบรวมแผนก)
+*
+[report frame]
+Ti::~INIT_VAR
+He:\NAME                                                    `หน้า   : \PAGE
+He:$Eรายงานแยกประเภททั่วไป$E (รวมแผนก)
+He:วันที่จาก    ~FROMDATE        ถึง  ~TODATE               `วันที่ : \DATE
+H1:เลขที่บัญชี  ~FROMACC         ถึง  ~TOACC            เลือกแผนก  ~FROMDEP
+He:\LINE
+He:  วันที่  สมุด  ใบสำคัญ               คำอธิบาย                                           เดบิท            เครดิต   สถานะ   ยอดคงเหลือ
+He:\LINE
+He:~X                     ~Y                                                         (ต่อ)$B
+*  dd/mm/yy  GEN   GLxxxxxxxx  xxxxxxxxx1xxxxxxxxx2xxxxxxxxx3xxxxxxxxx4xxxxxxxxx5 99,999,999,999.99 99,999,999,999.99 E 99,999,999,999.99
+Gh::   ; 1  GLACC->ACCNUM
+Bo::~BALFWD    ~A1
+Bo:$B~ACNUM          ~ACNAM                                                                                $B               ~BALANCE
+Ih::  ~INIT2 ;1 GLJNLIT->ACCNUM GLACC->ACCNUM
+Ib:~VDATE   ~MNE   ~VOUCHER     ~DESCRP                                           ~DB_AMT           ~CR_AMT           ~S~BALANCE          ~A2 ; 1
+If:                                                                               ----------------- -----------------          ; 1
+If:                                                                   รวม         $B~TOTDB            ~TOTCR           $B
+Gf:        ; 1
+Gf:~F\FEED ; 1
+Su:                                                                               ----------------- -----------------
+Su:                                   รวมทั้งสิ้น ~RS    รายการ  ~TC  บัญชี       ~GTDB             ~GTCR
+Su:                                                                               ================= =================
+Su: หมายเหตุ  ในช่อง 'สถานะ' ถ้ามีอักษร C จะหมายถึงว่า เป็นรายการที่ถูกยกเลิก
+Su:                                E จะหมายถึงว่า เป็นรายการที่แก้ไขเพิ่มเติม หลังจากผ่านบัญชีแล้ว (แก้ไขแบบมีร่องรอย)
+Su:
+Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=0
+Right=136
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=GLLEDGER.TXT
+Select Paper=15_Inch, 8_Inch, Default
+8_Inch=\027\033\004
+15_Inch=\027\033\001
+Query=ACCNUM>='Acc1()'.AND.ACCNUM<='Acc2()' .AND. GLACC->ACCTYP='0'
+
+[master file]
+File=GLACC
+Alias=A
+Tag=GLACC1
+System=DATA_PATH
+
+[item file]
+File=GLJNLIT
+Alias=J
+***Tag=GLJNLIT2
+Key=ACCNUM+DTOS(VOUDAT)+VOUCHER
+Index=GL
+Filter=.NOT.DELETED()
+System=DATA_PATH
+
+[relate file]
+File=GLBAL
+Alias=B
+Tag=GLBAL1
+System=DATA_PATH
+Master file=GLACC
+Master-Related Field=ACCNUM
+Relate Type=SCAN
+
+File=GLJNL
+Alias=H
+Tag=GLJNL1
+System=DATA_PATH
+Master file=GLJNLIT
+Master-Related Field=VOUCHER
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,"pict",                 "data",         "exp"
+~INIT_VAR:  0,  "",                     "",             "GTDB=0;GTCR=0;CNT=0;TAC=0;p=0; audit=@n_isAudit()"
+~INIT2:     0,  "",                     "",             "TOTDB=0;TOTCR=0;p=1"
+~FROMACC:   0,  "",                     "Acc1()",       ""
+~TOACC:     0,  "",                     "Acc2()",       ""
+~FROMDATE:  0,  "d ดดด ปปปป",           "@date1()",     ""
+~TODATE:    0,  "d ดดด ปปปป",           "@date2()",     ""
+~FROMDEP:   0,  "",                     "Dep1()",       ""
+~PF:        0,  "",                     "Period1()",    ""
+~PT:        0,  "",                     "Period2()",    ""
+~BALFWD:    0,  "",                     "amt",          "BALANCE=@nBAL_LDX()"
+***~ACNUM:     0,  "",                  "A->ACCNUM",    ""
+~ACNUM:     0,  "",                     "A->ACCNUM",    "xaccnum = A->ACCNUM"
+~DEP:       0,  "",                     "J->DEPCOD",    ""
+~ACNAM:     0,  "",                     "A->ACCNAM",    "xaccnam = A->ACCNAM"
+~VDATE:     0,  "",                     "J->VOUDAT",    "", 0, 1
+~MNE:       0,  "",                     "mne_jnl()",    ""
+~VOUCHER:   0,  "",                     "J->VOUCHER",   "DB_AMT=IIF(J->TRNTYP='0', J->AMOUNT, 0)"
+~DESCRP:    0,  "",                     "J->DESCRP",    "CR_AMT=IIF(J->TRNTYP='1', J->AMOUNT, 0)"
+~DB_AMT:    0,  "ZZ,ZZZ,ZZZ,ZZZ.ZZ",    "DB_AMT",       "TOTDB=TOTDB+DB_AMT;BALANCE=BALANCE+DB_AMT"
+~CR_AMT:    0,  "ZZ,ZZZ,ZZZ,ZZZ.ZZ",    "CR_AMT",       "TOTCR=TOTCR+CR_AMT;BALANCE=BALANCE-CR_AMT"
+~TOTDB:     0,  "99,999,999,999.99",    "TOTDB",        "GTDB=GTDB+TOTDB;p=0"
+~TOTCR:     0,  "99,999,999,999.99",    "TOTCR",        "GTCR=GTCR+TOTCR"
+~GTDB:      0,  "99,999,999,999.99",    "GTDB",         ""
+~GTCR:      0,  "99,999,999,999.99",    "GTCR",         ""
+~BALANCE:   0,  "(99,999,999,999.99)",  "BALANCE",      ""
+~A1:        0,  "",                     "",             "TAC=TAC+1"
+~A2:        0,  "",                     "",             "CNT=CNT+1"
+~RS:        0,  "99,999",               "CNT",          ""
+~TC:        0,  "999",                  "TAC",          ""
+~S:         0,  "",                     "POST",         "POST=IIF(GLJNL->DOCSTAT='C','C',IIF(GLJNL->TRNSTAT='U','U',IIF(audit=1.AND.GLJNLIT->ADJUST='Y','E',' ')))"
+***~X:      0,  "",                     "x",            "x=IIF(p=1,'$B'+B->ACCNUM,'}                ')"
+~X:         0,  "",                     "x",            "x=IIF(p=1,'$B'+xaccnum,'}                ')"
+~Y:         0,  "",                     "xaccnam",      ""
+~L:         0,  "",                     "x",            "x=@p_all();x=IIF(x='Y','}',' ')"
+~F:         0,  "",                     "x",            "x=@p_all();x=IIF(x='Y',' ','}')"
+
+
+
+
+
+
+
+
+
+
+

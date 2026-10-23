@@ -1,0 +1,233 @@
+* ARCSH.RL - บิลเงินสด (CASH RECEIPT)
+*
+[report frame]
+*** ผู้ใช้สามารถเปลี่ยนแปลงแก้ไข ได้ตามต้องการ ****************************************
+Ti:: ~INIT~BILLTO
+He:
+He:
+He:
+He:
+He:
+He:\027\074\040         ~CUSNAM                                                                     ~DOCNUM
+He:\027\074\035         ~ADDR01                                                                     ~DOCDAT    
+He:\027\074\015         ~ADDR02                                                                           
+He:\027\074\015         เลขประจำตัวผู้เสียภาษี ~TAXIDX       ~ORG            
+He:       
+He:   
+He:\027\074\40        ~CUSCOD              ~SONUM                                        ~DUEDAT               ~SLMCOD                                                                                             
+He:\027\074\10
+He:\027\074\20
+Bo::
+Ih::                     ;1 stcrd->docnum artrn->docnum
+Ib:~N   ~STKCOD      ~STKDES                                          ~QTY ~TQUCOD~UNITPR   ~DISC_I      ~NETAMT_I      ;1
+Ih::                    ;2 artrnrm->docnum+artrnrm->seqnum stcrd->rdocnum
+Ib:      ~REMARK        ;2
+Ih::                    ;3 artrnrm->docnum+artrnrm->seqnum stcrd->docnum+stcrd->seqnum
+Ib:      ~REMARK        ;3
+Fo:
+Su:\027\074\040                                                                                                      ~AMOUNT
+Su:\027\074\025                                                                                         ~DISC        ~DISCAMT
+Su:\027\074\020                                                                                             7 %      ~VATAMT
+*Su:                                                                                       #~ADVNUM      ~ADVAMT
+Su: \027\074\025~BAHT                                                                                                ~CHKAMT
+*Su:                                                                                               ~CHKAMT
+*Su:
+*Su:  ~HREM3                                                                                              ~AMTRATZ
+*Su:  ~HREM4                                                                                     ~VAT  %  ~AMTRATX
+*Su:  ~HREM5                                                                                              ~VATAMT
+*Su:  ~BAHT                                                                                               ~NETAMT
+*Su:
+*Su:  พิมพ์โดย  ~PRNBY            วันที่  ~PRNDAT   ~PRNTIM       พิมพ์ครั้งที่~PRNCNT   บันทึกโดย ~RECBY
+[end frame]
+
+*** คำสั่งต่อจากนี้ ผู้ใช้ไม่ควรแก้ไข ****************************************
+
+[print options]
+FEED LEVEL=17,17,1
+Top=0
+Left=0
+Tabs=4
+Right=117
+Lines=36
+Output=Select, Printer, Screen, File,
+File Name=ARIVC.TXT
+Print Control=\027\033\000\027\103
+Fix Summary Line=ON
+Select Scope=OFF
+*Form=ON
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=artrn
+Alias=A
+Tag=artrn1
+System=DATA_PATH
+
+[item file]
+File=stcrd
+Alias=B
+Tag=stcrd5
+System=DATA_PATH
+
+File=artrnrm
+Alias=C
+Tag=artrnrm1
+System=DATA_PATH
+
+[relate file]
+File=armas
+Alias=R
+Tag=armas1
+System=DATA_PATH
+Master file=artrn
+Master-Related Field=CUSCOD
+
+File=stmas
+Alias=C
+Tag=stmas1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD
+
+File=oeso
+Alias=Y
+Tag=oeso1
+System=DATA_PATH
+Master file=artrn
+Master-Related Field=SONUM
+
+File=stloc
+Alias=L
+Tag=stloc1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD+LOCCOD
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",             "exp"
+~ADDR:      0,      "",                 "p_addr()",         ""
+~TAXID:     0,      "",                 "p_taxid()",        ""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:      0,      "",                 "",                 "seq=0; sumamt0=0; sumamt1=0"
+~TXT0:      0,      "",                 "txt0",             "txt0 = IIF( ARTRN->FLGVAT <> '1', '  จำนวนเงิน', 'ราคารวมภาษี')",
+*~TXT1:     0,      "",                 "txt1",             "txt1 = IIF( ARTRN->FLGVAT <> '1', 'จำนวนเงินหลังหักส่วนลด', 'จำนวนเงินรวมทั้งสิ้น  ')",
+~TXT1:      0,      "",                 "txt1",             "txt1 = IIF( ARTRN->FLGVAT <> '1', 'จำนวนเงินหลังหักมัดจำ ', 'จำนวนเงินรวมทั้งสิ้น  ')",
+~TXT2:      0,      "",                 "txt2",             "txt2 = IIF( ARTRN->FLGVAT <> '1', 'จำนวนเงินรวมทั้งสิ้น', 'ราคาสินค้า          ')",
+*~DOCNUM:   0,      "",                 "doc_num",          "doc_num=SUBSTR(ARTRN->DOCNUM, 3, 8)"
+~DOCNUM:    0,      "",                 "ARTRN->DOCNUM",    ""
+~DOCDAT:    0,      "",                 "ARTRN->DOCDAT",    ""
+~CUSCOD:    0,      "",                 "ARTRN->CUSCOD",    ""
+~CUSNAM:    0,      "",                 "cus_nam",          "cus_nam = ARMAS->PRENAM - ' ' - ARMAS->CUSNAM"
+~ADDR01:    0,      "",                 "ARMAS->ADDR01",    ""
+~ADDR02:    0,      "",                 "ARMAS->ADDR02",    ""
+~ADDR03:    0,      "",                 "addr_03",          "addr_03 = ARMAS->ADDR03 - ' ' - ARMAS->ZIPCOD"
+~TELNUM:    0,      "",                 "ARMAS->TELNUM",    ""
+~YOUREF:    0,      "",                 "ARTRN->YOUREF",    ""
+~SLMCOD:   35,      "",                 "slm",              "slm = ARTRN->SLMCOD-'-'-OESLM->SLMNAM"
+~CR:        0,      "ZZZ",              "ARTRN->PAYTRM",    ""
+~DUEDAT:    0,      "",                 "ARTRN->DUEDAT",    ""
+~DLVBY:     0,      "",                 "p_istab( ARTRN->DLVBY, 41, 1, 40 )",           ""
+~AREA:      0,      "",                 "p_istab( ARTRN->AREACOD, 40, 1, 40 )",         ""
+~SONUM:     0,      "",                 "ARTRN->SONUM",     ""
+~SODAT:     0,      "",                 "OESO->SODAT",      ""
+~FLGVAT:    0,      "Y",                "ARTRN->FLGVAT",    ""
+~AMOUNT:    0,      "99,999,999.99",    "ARTRN->AMOUNT",    ""
+~DISC:      0,      "",                 "ARTRN->DISC",      ""
+~DISCAMT:   0,      "99,999,999.99",    "ARTRN->DISCAMT",   ""
+~AFTDISC:   0,      "99,999,999.99",    "ARTRN->AFTDISC",   ""
+~ADVNUM:    0,      "",                 "ARTRN->ADVNUM",    ""
+~ADVAMT:    0,      "99,999,999.99",    "ARTRN->ADVAMT",    ""
+~TOTAL:     0,      "99,999,999.99",    "ARTRN->TOTAL",     ""
+~VAT:       0,      "99.99",            "ARTRN->VATRAT",    ""
+~VATAMT:    0,      "99,999,999.99",    "ARTRN->VATAMT",    ""
+~CHKAMT:    0,      "99,999,999.99",    "netamt",           "netamt = IIF( ARTRN->FLGVAT <> '1', ARTRN->NETAMT, ARTRN->TOTAL - ARTRN->VATAMT)"
+~BAHT:      0,      "",                 "t_baht(ARTRN->NETAMT)"                         ""
+
+~N:         0,      "999",              "seq",              "seq=seq+1"
+~ARTICLE:  49,      "",                 "article",          "article = STCRD->STKCOD - ' ' - STCRD->STKDES"
+~STKCOD:    0,      "",                 "STCRD->STKCOD",    ""
+~STKDES:    0,      "",                 "STCRD->STKDES",    ""
+~L:         0,      "",                 "STCRD->LOCCOD",    ""
+~QTY:       0,      "qtyZ(7)",          "STCRD->TRNQTY",    ""
+~TQUCOD:    8,      "",                 "p_istab( STCRD->TQUCOD,  20, 1, 0 )",      ""
+~UNITPR:    0,      "999,999.99",       "STCRD->UNITPR",    ""
+~DISC_I:    0,      "",                 "STCRD->DISC",      ""
+~NETAMT_I:  0,      "ZZ,ZZZ,ZZZ.ZZ",    "STCRD->TRNVAL",    ""
+~SONUM_I:   0,      "",                 "STCRD->RDOCNUM",   ""
+~REMARK:    0,      "",                 "ARTRNRM->REMARK",  ""
+~MQTY:      0,      "ZZ,ZZZ",           "mqty",             "mqty = STCRD->TRNQTY * STCRD->TFACTOR"
+~MQUCOD:    0,      "",                 "p_istab( STMAS->QUCOD,  20, 1, 0 )",       "",
+
+~NETAMT0:   0,      "ZZ,ZZZ,ZZZ.ZZ",    "amt0",             "amt0=IIF(STCRD->VATCOD='0', STCRD->TRNVAL, 0); sumamt0 =sumamt0+amt0"
+~NETAMT1:   0,      "ZZ,ZZZ,ZZZ.ZZ",    "amt1",             "amt1=IIF(STCRD->VATCOD#'0', STCRD->TRNVAL, 0); sumamt1 =sumamt1+amt1"
+~SUMAMT0:   0,      "99,999,999.99",    "sumamt0",          ""
+~SUMAMT1:   0,      "99,999,999.99",    "sumamt1",          ""
+
+~HREM1:     0,      "",                 "p_hrem( A->DOCNUM,1,A->SONUM )",   ""
+~HREM2:     0,      "",                 "p_hrem( A->DOCNUM,2,A->SONUM )",   ""
+~HREM3:     0,      "",                 "p_hrem( A->DOCNUM,3,A->SONUM )",   ""
+~HREM4:     0,      "",                 "p_hrem( A->DOCNUM,4,A->SONUM )",   ""
+~HREM5:     0,      "",                 "p_hrem( A->DOCNUM,5,A->SONUM )",   ""
+
+~DEP:       0,      "",                 "A->DEPCOD",                ""
+~P_ISDEP:   0,      "",                 "p_isdep( A->DEPCOD )",     ""
+~LOCAREA:   0,      "",                 "STLOC->AREA",              ""
+~RDOCNUM:   0,      "",                 "so",                       "so = SUBSTR( STCRD->RDOCNUM,1,12)"
+
+~NETAMT:    0,      "99,999,999.99",    "ARTRN->NETAMT",    ""
+~AMTRATZ:   0,      "99,999,999.99",    "AMTRATZ",          "AMTRATZ = ARTRN->AMTRAT0 - (ARTRN->AMTRAT0 * ARTRN->DISCAMT / ARTRN->AMOUNT)"
+~AMTRATX:   0,      "99,999,999.99",    "AMTRATX",          "AMTRATX = IIF(ARTRN->FLGVAT='1',ARTRN->TOTAL - AMTRATZ - ARTRN->VATAMT, ARTRN->TOTAL - AMTRATZ)"
+*~V:        0,      "",                 "VAT_SYM",          "VAT_SYM = IIF(STCRD->VATCOD='0', ' ', 'V')"
+~V:         0,      "",                 "STCRD->VATCOD",    ""
+~SHIPTO:    0,      "",                 "ARTRN->SHIPTO",    ""
+~S_ADDR01:  0,      "",                 "ARSHIP->ADDR01",   ""
+~S_ADDR02:  0,      "",                 "ARSHIP->ADDR02",   ""
+~S_ADDR03:  0,      "",                 "addr_03",          "addr_03 = ARSHIP->ADDR03 - ' ' - ARSHIP->ZIPCOD"
+~S_TELNUM:  0,      "",                 "ARSHIP->TELNUM",   ""
+
+~PRNBY:     0,      "",                 "p_userid()",       ""
+~PRNDAT:    0,      "",                 "@d_prndat()",      ""
+~PRNTIM:    0,      "",                 "s_prntim()",       ""
+~PRNCNT:    0,      "999",              "@n_prncnt()",      ""
+~RECBY:     0,      "",                 "A->USERID",        ""
+
+~P_ORGTXT:  0,      "",                 "p_orgtxt()",       ""
+~P_ORG:     0,      "",                 "p_orgnum()",       ""
+~P_ORGSTR:  0,      "",                 "p_orgstr()",       ""
+~BILLTO:    0,      "",                 "A->BILLTO",        "tax_id=@TAXID()"
+~TAXIDX:    0,      "",                 "tax_id",           ""
+~ORG:       0,      "",                 "org",              "org=IIF(tax_id#'   '.AND.A->ORGNUM>=0,IIF(A->ORGNUM=0,' สำนักงานใหญ่   ', ' สาขาที่ '   -LTRIM(STR(A->ORGNUM,5,0))),'              ')"
+*~ORG:      0,      "",                 "org",              "br=@p_orgnum_00009( A->ORGNUM ); org=IIF(tax_id#'   '.AND.A->ORGNUM>=0,IIF(A->ORGNUM=0,' สำนักงานใหญ่  ', ' สาขาที่ '-br),'               ')"
+~SEEKCUS:   0,      "",                 "SeekCus()",        ""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

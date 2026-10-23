@@ -1,0 +1,114 @@
+* APBIL.RL - ãºÃÑºÇÒ§ºÔÅ (BILLING SLIP)
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+Ti:: ~INIT
+He:$E\NAME                                             $E
+He:~ADDR
+He:~TEL                                                                $EãºÃÑºÇÒ§ºÔÅ$E
+He:
+He:  ¼Ùé¨ÓË¹èÒÂ ~SUPCOD                                 àÅ¢·Õè            ~BILNUM
+He:  ~SUPNAM
+He:  ~ADDR01                                            ÇÑ¹·Õè            ~BILDAT
+He:  ~ADDR02                                            à§×èÍ¹ä¢¡ÒÃªÓÃÐà§Ô¹ ~PAYCOND
+He:       ËÁÒÂàËµØ ~REMARK
+He:€…………‰………………………………………‰………………………………‰…………………………‰………………………………………‰………………………………………‰………………………………………
+He:„ No.„   àÅ¢·ÕèãºÃÑº „    ÇÑ¹·Õè  „ ¤Ãº¡ÓË¹´ „   ¨Ó¹Ç¹à§Ô¹   „     ¨èÒÂáÅéÇ  „   à§Ô¹¤§¤éÒ§  „
+He:†…………Š………………………………………Š………………………………Š…………………………Š………………………………………Š………………………………………Š………………………………………‡
+Bo::
+Ih::                    ;1 aptrn->bilnum apbil->bilnum
+Ib: ~N     ~RCVNUM         ~RCVDAT     ~DUEDAT    ~NETAMT_I       ~PAYAMT_I       ~REMAMT_I ;1
+Bt:„    „               „            „          „               „               „               „
+Fo:†…………ˆ………………………………………ˆ………………………………ˆ…………………………ˆ………………………………………ˆ………………………………………Š………………………………………‡
+Su:„~BAHT                                                       ÃÇÁà§Ô¹·Ñé§ÊÔé¹ „ ~NETAMT       „
+Su:„                                                                            ‚………………………………………‡
+Su:„ ËÁÒÂàËµØ                                                                                   „
+Su:„  ~HREM1                                                                                    „
+Su:„  ~HREM2                                                                                    „
+Su:„                                                                                            „
+Su:„ ª×èÍ¼ÙéÃÑºÇÒ§ºÔÅ ____________________                                                      „
+Su:„ ÇÑ¹·ÕèÃÑº  ___/___/___                                                                     „
+Su:„ ÇÑ¹·Õè¹Ñ´ÃÑºàªç¤ ___/___/___                                                               „
+Su:„                                                                                            „
+Su:‚……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ƒ
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+Top=0
+Left=0
+Tabs=4
+Right=94
+Lines=43
+Output=Select, Printer, Screen, File,
+File Name=APBIL.TXT
+Print Control=\027\033\001
+Fix Summary Line=ON
+Select Scope=OFF
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=apbil
+Alias=A
+Tag=apbil1
+System=DATA_PATH
+
+[item file]
+File=aptrn
+Alias=B
+Tag=aptrn4
+System=DATA_PATH
+
+[relate file]
+File=apmas
+Alias=R
+Tag=apmas1
+System=DATA_PATH
+Master file=apbil
+Master-Related Field=SUPCOD
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",             "exp"
+~ADDR:      0,      "",                 "p_addr()",         ""
+~TAXID:     0,      "",                 "p_taxid()",        ""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:      0,      "",                 "",                 "seq=0; sumbil=0"
+~BILNUM:    0,      "",                 "APBIL->BILNUM",    ""
+~BILDAT:    0,      "",                 "APBIL->BILDAT",    ""
+~SUPCOD:    0,      "",                 "APBIL->SUPCOD",    ""
+~SUPNAM:    0,      "",                 "sup_nam",          "sup_nam = APMAS->PRENAM - ' ' - APMAS->SUPNAM"
+~ADDR01:    0,      "",                 "APMAS->ADDR01",    ""
+~ADDR02:    0,      "",                 "addr_02",          "addr_02 = APMAS->ADDR02 - ' ' - APMAS->ZIPCOD"
+~PAYCOND:   0,      "",                 "APBIL->PAYCOND",   ""
+~REMARK:    0,      "",                 "APBIL->REMARK",    ""
+~NETAMT:    0,      "99,999,999.99",    "bilamt",           "bilamt=IIF(STR(APBIL->NETAMT,15,2) # STR(sumbil,15,2), 999999999999.99, APBIL->NETAMT)"
+~BAHT:      0,      "",                 "t_baht(APBIL->NETAMT)",    ""
+
+~N:         0,      "999",              "seq",              "seq=seq+1"
+~RCVNUM:    0,      "",                 "APTRN->DOCNUM",    ""
+~RCVDAT:    0,      "",                 "APTRN->DOCDAT",    ""
+*~DUEDAT:   0,      "",                 "APTRN->DUEDAT",    ""
+~DUEDAT:    0,      "",                 "DUE",              "DUE=IIF(APTRN->RECTYP='3',APTRN->DUEDAT,CTOD('        '))"
+~NETAMT_I:  0,      "ZZ,ZZZ,ZZZ.ZZ",    "APTRN->NETAMT",    ""
+~PAYAMT_I:  0,      "ZZ,ZZZ,ZZZ.ZZ",    "APTRN->PAYAMT",    ""
+~REMAMT_I:  0,      "ZZ,ZZZ,ZZZ.ZZ",    "rem",              "rem = IIF(APTRN->RECTYP='0'.or.APTRN->RECTYP='5',APTRN->REMAMT*-1,APTRN->REMAMT); sumbil=sumbil+rem"
+
+~HREM1:     0,      "",                 "p_hrem(A->BILNUM, 1)",    ""
+~HREM2:     0,      "",                 "p_hrem(A->BILNUM, 2)",    ""
+~HREM3:     0,      "",                 "p_hrem(A->BILNUM, 3)",    ""
+~HREM4:     0,      "",                 "p_hrem(A->BILNUM, 4)",    ""
+~HREM5:     0,      "",                 "p_hrem(A->BILNUM, 5)",    ""
+
+~DEP:       0,      "",                 "A->DEPCOD",                ""
+~P_ISDEP:   0,      "",                 "p_isdep( A->DEPCOD )",     ""
+
+
+
+
+

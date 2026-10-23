@@ -1,0 +1,123 @@
+* STTRN4.RL - ãºâÍ¹ÂéÒÂÊÔ¹¤éÒ (STOCK RELOCATION DOCUMENT)
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+Ti::~INIT
+He:$E\NAME                                             $E
+He:                                                  $EãºâÍ¹ÂéÒÂÊÔ¹¤éÒ$E
+He:
+He:¨Ò¡¤ÅÑ§  : ~LOCCOD~LOCCODT                         àÅ¢·ÕèàÍ¡ÊÒÃ      ~DOCNUM
+He:à¢éÒ¤ÅÑ§ : ~PEOPLE~PEOPLET                         ÇÑ¹·Õè            ~DOCDAT
+He:ËÁÒÂàËµØ : ~REMARK                                                                      
+He:€…………‰…………………………………………………………………………………………………………………………………………………………………………‰…………………………………………………………
+He:„ No.„                      ÃÒÂ¡ÒÃÊÔ¹¤éÒ                              „        ¨Ó¹Ç¹         „
+He:†…………Š…………………………………………………………………………………………………………………………………………………………………………Š…………………………………………………………‡
+Bo::
+Ih::		;1	STCRD->docnum STTRN->docnum
+Ib: ~N    ~ARTICLE                                                        ~QTY         ~TQUCOD 	; 1
+Ih::					;2 artrnrm->docnum+artrnrm->seqnum stcrd->docnum+stcrd->seqnum
+Ib:~Z     ~REMARKS		;2
+Bt:„    „                                                                „                      „
+Fo:†…………ˆ…………………………………………………………………………………………………………………………………………………………………………ˆ…………………………………………………………‡
+Su:„ ËÁÒÂàËµØà¾ÔèÁàµÔÁ :                                                                        „
+Su:„  ~HREM1                                                                                    „
+Su:„  ~HREM2                                                                                    „
+Su:„  ~HREM3                                                                                    „
+*Su:„  ~HREM4                                                                                    „
+*Su:„  ~HREM5                                                                                    „
+Su:„                                                                                            „
+Su:„ ¼ÙéµÃÇ¨ÊÍº __________________ ÇÑ¹·Õè ___/___/___                                           „
+Su:„                                                                                            „
+*Su:„ ¾ÔÁ¾ìâ´Â  ~PRNBY         ÇÑ¹·Õè  ~PRNDAT   ~PRNTIM ¾ÔÁ¾ì¤ÃÑé§·Õè~PRNCNT ºÑ¹·Ö¡â´Â ~RECBY   „
+Su:‚……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ƒ
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+Top=0
+Left=0
+Tabs=4
+Right=94
+Lines=38
+Output=Select, Printer, Screen, File,
+File Name=STTRN4.TXT
+Print Control=\027\033\001
+Fix Foot Line=OFF
+Fix Summary Line=ON
+Select Scope=OFF
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=sttrn
+Alias=A
+Tag=sttrn1
+System=DATA_PATH
+
+[item file]
+File=stcrd
+Alias=B
+Tag=stcrd3
+System=DATA_PATH
+
+File=artrnrm
+Alias=C
+Tag=artrnrm1
+System=DATA_PATH
+
+[relate file]
+File=stmas
+Alias=C
+Tag=stmas1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD
+
+[data spec]
+*		    len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:		len,	"pict",			 	"data",					"exp"
+~INIT:		0,		"",					"",						"seq=0;TTRNVAL=0"
+~DOCNUM:	0,		"",					"STTRN->DOCNUM",		""
+~DOCDAT:	0,		"",					"STTRN->DOCDAT",		""
+~REMARK:	0,		"",					"STTRN->REMARK",		""
+~PEOPLE:	0,		"",					"STTRN->PEOPLE",		""
+~PEOPLET:	0,		"",					"p_istab( STTRN->PEOPLE,  21, 1, 0 )",		""
+~LOCCOD:	0,		"",					"STTRN->LOCCOD",		""
+~LOCCODT:	0,		"",					"p_istab( STTRN->LOCCOD,  21, 1, 0 )",		""
+
+~N:			0,		"999",				"seq",				"seq=seq+1"
+~ARTICLE:  60,		"",					"article",			"article = STCRD->STKCOD - ' ' - STMAS->STKDES"
+*~ARTICLE:  60,		"",					"article",			"article = STCRD->STKCOD - ' ' - STCRD->STKDES"
+~STKCOD:   15,		"",					"STCRD->STKCOD",	""
+~STKDES:   42,		"",					"STMAS->STKDES",	""
+~QTY:		0,		"qtyZ(11)",			"STCRD->TRNQTY",	""
+~XQTY:		0,		"qtyZ(11)",			"STCRD->XTRNQTY",	""
+~TQUCOD:	8,		"",					"p_istab( STCRD->TQUCOD,  20, 1, 0 )",		"",
+~LOC:		0,		"",					"STCRD->LOCCOD",	""
+~LOCT:		0,		"",					"p_istab( STCRD->LOCCOD,  21, 1, 0 )",		""
+~UNITPR:	0,		"priZ(11)",			"STCRD->UNITPR",	""
+~XTRNVAL:	0,		"ZZ,ZZZ,ZZZ.ZZ",	"STCRD->XTRNVAL",	"TTRNVAL=TTRNVAL+IIF(STMAS->STKTYP='1',0,STCRD->XTRNVAL)"
+~TTRNVAL:	0,		"99,999,999.99",	"TTRNVAL",			""
+~SALVAL:	0,		"ZZ,ZZZ,ZZZ.ZZ",	"STCRD->SALVAL",	""
+~REM:		0,		"",					"STCRD->REMARK",	""
+~REMARKS:	0,		"",					"ARTRNRM->REMARK",	""
+~Z:			0,		"",					"Z",				"Z=IIF(STCRD->PSTKCOD=' ','„',':')"
+
+~DEP:		0,		"",					"A->DEPCOD",				""
+~P_ISDEP:	0,		"",					"p_isdep( A->DEPCOD )",		""
+
+~HREM1:		0,		"",					"p_hrem( A->DOCNUM,1 )",	""
+~HREM2:		0,		"",					"p_hrem( A->DOCNUM,2 )",	""
+~HREM3:		0,		"",					"p_hrem( A->DOCNUM,3 )",	""
+~HREM4:		0,		"",					"p_hrem( A->DOCNUM,4 )",	""
+~HREM5:		0,		"",					"p_hrem( A->DOCNUM,5 )",	""
+
+~PRNBY:		0,		"",					"p_userid()",		""
+~PRNDAT:	0,		"",					"@d_prndat()",		""
+~PRNTIM:	0,		"",					"s_prntim()",		""
+~PRNCNT:	0,		"999",				"@n_prncnt()",		""
+~RECBY:		0,		"",					"A->USERID",		""

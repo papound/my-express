@@ -1,0 +1,92 @@
+* STTOPQ.RWT - Top Quantity Sold Report
+*
+[report frame]
+Ti::~INIT_VAR
+He:\NAME                            ","","","","","","","","หน้า",": \PAGE
+He:$Eรายงานการจัดลำดับยอดขาย$E ตามปริมาณ  (~TOP ลำดับแรก)
+He:วันที่จาก       ~FROMDATE            ถึง  ~TODATE ","","","","","","","","วันที",": \DATE
+H1:รหัสสินค้าจาก   ~FROMSTK             ถึง  ~TOSTK
+H1:หมวดสินค้าจาก   ~FROMGRP             ถึง  ~TOGRP             เลือกแผนก  ~FROMDEP
+He:\LINE
+He:ลำดับ","รหัสสินค้า","รายละเอียด","หน่วยนับ","ปริมาณขายสุทธิ","มูลค่าขาย","(%)","ต้นทุนขายสุทธิ","กำไรขั้นต้น","(%)
+He:\LINE
+*  xxxx  xxxxxxxxx1xxxxxxxxx2xxxxxxxxx3xxxxxxxxx4xxxxxxxxx5x xxxxxxxx 9,999,999.999 9999,999,999.99 999.99 9999,999,999.99 999,999,999.99 99,999.99
+Bo:~NN   ~STKCOD                            ~STKDES                                ~QUDES   ~SALQTY       ~SALVAL         ~PC    ~TRNVAL         ~PROFIT        ~PFRAT
+Su:                                                                                 ---------------        --------------- --------------
+Su:                      รวมทั้งสิ้น                                                $B~TSALVAL        ~TPC   ~TTRNVAL        ~TPROFIT       ~TPF     $B
+Su:                                                                                 ===============        =============== ==============
+Su:หมายเหตุ:    ปริมาณขายสุทธิ(ของแถมไม่นำมาคิด) = ปริมาณที่ขายสด+ขายเชื่อ-รับคืน
+Su:             มูลค่าขาย                   = จำนวนเงินขายสด+ขายเชื่อ-รับคืน
+Su:             ต้นทุนขายสุทธิ              = (ต้นทุนขายสด+ต้นทุนขายเชื่อ+ต้นทุนของที่แถม) - (ต้นทุนที่รับคืน+ต้นทุนของแถมที่รับคืน)
+Su:             % ของมูลค่าขายคิดจากยอดขายรวมของสินค้าทุกตัว
+Su:>>>>  จบรายงาน  <<<<
+[end frame]
+
+[print options]
+Top=0
+Left=0
+Right=144
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=STTOPQ.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, 8_Inch, Default
+8_Inch=\027\033\005
+15_Inch=\027\033\001
+Query=STKGRP>='StkGrp1()'.AND. STKGRP<='StkGrp2()'
+DATE FORMAT=DD/MM/YY
+
+[master file]
+File=A
+Alias=A
+Key=STR(TRNQTY,15,4)+STR(SALVAL,15,2)
+Descending=Y
+System=DATA_PATH
+
+[relate file]
+File=STMAS
+Alias=B
+Tag=STMAS1
+System=DATA_PATH
+Master file=A
+Master-Related Field=STKCOD
+
+[data spec]
+*~dat:      len,"pict",             "data",         "exp"
+~INIT_VAR:  0,  "",                 "",             "TSALVAL=0;TTRNVAL=0;TPROFIT=0;tt=@n_totsal()"
+~FROMSTK:   0,  "",                 "Stk1()",       ""
+~TOSTK:     0,  "",                 "Stk2()",       ""
+~FROMDATE:  0,  "d ดดด yyyy",       "@date1()",     ""
+~TODATE:    0,  "d ดดด yyyy",       "@date2()",     ""
+~FROMGRP:   0,  "",                 "StkGrp1()",    ""
+~TOGRP:     0,  "",                 "StkGrp2()",    ""
+~FROMDEP:   0,  "",                 "Dep1()",       ""
+
+~TOP:       0,  "9999",             "prntop()",     ""
+~NN:        4,  "",                 "prncount()",   ""
+~ARTICLE:   50, "",                 "ARTICLE",      "ARTICLE=A->STKCOD-'  '-A->STKDES"
+~STKCOD:    0,  "",                 "A->STKCOD",    "",B
+~STKDES:    0,  "",                 "A->STKDES",    "",C
+*~QUDES:    0,  "",                 "p_istab(A->QUCOD,20,1,8)", ""
+~QUDES:     0,  "",                 "p_cqu()",       "nouse=@save_cfactor()",D
+~CHECKTOP:  0,  "",                 "check_top()",  ""
+
+*~SALQTY:   0,  "qty(13)",          "A->TRNQTY",    ""
+~SALQTY:    0,  "",                 "Q",            "Q=@s_cqu( A->TRNQTY,13 )",E
+~SALVAL:    0,  "9999,999,999.99",  "A->SALVAL",    "TSALVAL=TSALVAL+A->SALVAL",F
+~TRNVAL:    0,  "9999,999,999.99",  "A->TRNVAL",    "TTRNVAL=TTRNVAL+A->TRNVAL; PROFIT=A->SALVAL - A->TRNVAL; PFRAT= PROFIT*100/A->SALVAL",H
+~PROFIT:    0,  "999,999,999.99",   "PROFIT",       "TPROFIT=TPROFIT+PROFIT",I
+~PFRAT:     0,  "99,999.99",        "PFRAT",        "",J
+~TSALVAL:   0,  "9999,999,999.99",  "TSALVAL",      "",F
+~TTRNVAL:   0,  "9999,999,999.99",  "TTRNVAL",      "",H
+~TPROFIT:   0,  "999,999,999.99",   "TPROFIT",      "TPF=TPROFIT*100/TSALVAL",I
+~TPF:       0,  "99,999.99",        "TPF",          "",J
+
+~PC:        0,  "999.99",           "pct",          "pct=A->SALVAL * 100 / tt",G
+~TPC:       0,  "999.99",           "pct",          "pct=TSALVAL * 100 / tt",G
+
+
+
+

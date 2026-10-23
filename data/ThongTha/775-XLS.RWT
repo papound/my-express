@@ -1,0 +1,268 @@
+* STSALSC.RWT - Sales Summary Report by Salesmen, Customer, Stock Code
+*
+[report frame]
+Ti::~INIT ~INIT2 ~CLR_C ~CLR_T ~CLR_S ~CLR_V
+He:\NAME                                                                                  `หน้า   : \PAGE
+He:$Eรายงานสรุปยอดขาย แยกตามพนักงานขาย ลูกค้า$E
+He:วันที่จาก       ~FROMDATE            ถึง  ~TODATE                                      `วันที่ : \DATE
+H1:รหัสพนักงานขาย  ~FROMSLM             ถึง  ~TOSLM
+H1:รหัสลูกค้า      ~FROMCUS             ถึง  ~TOCUS
+H1:รหัสสินค้าจาก   ~FROMSTK             ถึง  ~TOSTK
+H1:หมวดสินค้าจาก   ~FROMGRP             ถึง  ~TOGRP
+*H1:คลังสินค้าจาก   ~FROMLOC             ถึง  ~TOLOC
+H1:เขตการขายจาก    ~FROMAREA            ถึง  ~TOAREA             เลือกแผนก  ~FROMDEP
+He:\LINE                                                <                                         จำนวน                                         >  <                                                             มูลค่า                                                   >
+*He:    รายการสินค้า/รหัส                                        ขายสด        ขายเชื่อ    ของแถม        รับคืน  รับคืนของแถม      ขายสุทธิ  หน่วยนับ        ขายสด         ขายเชื่อ        เพิ่มหนี้  ลดหนี้/รับคืน     ขายสุทธิ  -   ต้นทุนขาย  +  ต้นทุนรับคืน  =กำไรขั้นต้น  (%)
+*He:~E    เลขที่เอกสาร       วันที่      จำนวน         มูลค่าขาย          ต้นทุน  หมายเหตุ  ลูกค้า      พนักงานขาย    จำนวนขาย  หน่วย   อัตรา   ราคาต่อหน่วย  V    ส่วนลด       จำนวนเงิน    ส่วนลดรวม  เพื่อเอกสาร   รับคืนสินค้า?  เป็นของแถม?
+He:รายการสินค้า/รหัส","","","","ขายสด","ขายเชื่อ","ของแถม","รับคืน","รับคืนของแถม","ขายสุทธิ","หน่วยนับ","ขายสด","ขายเชื่อ","เพิ่มหนี้","ลดหนี้/รับคืน","ขายสุทธิ","-  ต้นทุนขาย","+  ต้นทุนรับคืน","=  กำไรขั้นต้น","(%)
+He:~E","เลขที่เอกสาร","วันที่","จำนวน","","มูลค่าขาย","","ต้นทุน","หมายเหตุ","ลูกค้า","พนักงานขาย","จำนวนขาย","หน่วย","อัตรา","ราคาต่อหน่วย","V","ส่วนลด","จำนวนเงิน","ส่วนลดรวม","เพื่อเอกสาร","รับคืนสินค้า?","เป็นของแถม?
+He:\LINE
+**:                                                     9,999,999.999 9,999,999.999 999,999.999 9,999,999.999 999,999.999 9,999,999.999           999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 99,999.99
+Gh:$B~SALESMAN                                                             $B   ; 1 SLMCOD
+Gh:  $B~CUSTOMER                                                             $B ; 2 PEOPLE
+Gh:~D  ~STKDES            ~KEEPQU       ;3 STKCOD
+Bo:~ISHS ~SUMHS ~SUMFS
+Bo:~ISIV ~SUMIV ~SUMFS
+Bo:~ISDR ~SUMDR
+Bo:~ISSR ~SUMSR ~SUMFR
+Bo:~E  ~DOCNUM          ~DOCDAT    ~XTRNQTY   ~R~SAL          ~F~COS               ~LOSS   ~CUSCOD     ~SLMCOD     ~TRNQTY    ~Q ~TFACTOR   ~UNITPR        ~V~DISC       ~TRNVAL          ~G_DISC      ~RDOCNUM          ~RET          ~FREE
+Gf:    ~TSTKDES                                         ~QHS          ~QIV          ~QFS        ~QSR          ~QFR        ~QNET          ~QUDES   ~VHS           ~VIV           ~VDR           ~VSR           ~VNET          ~VCOS          ~VCSR          ~VPF          ~VPERC     ~CLR_V  ;3
+Gf:~E   ;3
+Gf:                                                     -------------  ------------  ----------  ------------  ----------  ------------            -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------   ;2
+Gf:    รวมลูกค้า ~TCUSTOMER             ~C_STK  สินค้า  $B~SQHS         ~SQIV         ~SQFS       ~SQSR         ~SQFR       ~SQNET                  ~SVHS          ~SVIV          ~SVDR          ~SVSR          ~SVNET         ~SVCOS         ~SVCSR         ~SVPF         ~SPERC   $B ~CLR_S ;2
+Gf:~E   ;2
+Gf:                                                     -------------  ------------  ----------  ------------  ----------  ------------            -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------   ;1
+Gf:  รวมยอดของ ~TSALESMAN                               $B~TQHS         ~TQIV         ~TQFS       ~TQSR         ~TQFR       ~TQNET                  ~TVHS          ~TVIV          ~TVDR          ~TVSR          ~TVNET         ~TVCOS         ~TVCSR         ~TVPF         ~TPERC   $B ~CLR_T ;1
+Gf:                                                     =============  ============  ==========  ============  ==========  ============            =============  =============  =============  =============  =============  =============  =============  =============   ;1
+Su:รวมทั้งสิ้น  พนักงานขาย ~C_SLM ราย                   $B~GQHS         ~GQIV         ~GQFS       ~GQSR         ~GQFR       ~GQNET                  ~GVHS          ~GVIV          ~GVDR          ~GVSR          ~GVNET         ~GVCOS         ~GVCSR         ~GVPF         ~GPERC   $B
+Su:                                                     =============  ============  ==========  ============  ==========  ============            =============  =============  =============  =============  =============  =============  =============  =============
+Su:~NOTE หมายเหตุ:  รายการขายที่มีเครื่องหมาย '***' อยู่ในช่องหมายเหตุ คือ รายการที่ยอดขายสุทธิต่ำกว่าต้นทุน
+Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=0
+Left=0
+Right=271
+Lines=40
+Output=Select, Printer, Screen, File,
+File Name=STSALS.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, Default
+*Select Paper=15_Inch, 8_Inch, Default
+8_Inch=\027\033\005
+15_Inch=\027\033\005
+Query=DTOS(DOCDAT)>='Date1()'.AND.DTOS(DOCDAT)<='Date2()'
+Query=.AND.(POSOPR='9'.OR.POSOPR='2'.OR.POSOPR='=')
+Query=.AND.SLMCOD>='Slm1()'.AND. SLMCOD<='Slm2()'
+Query=.AND.PEOPLE>='Cus1()'.AND. PEOPLE<='Cus2()'
+Query=.AND.STKCOD>='Stk1()'.AND. STKCOD<='Stk2()'
+Query=.AND.LOCCOD>='Loc1()'.AND. LOCCOD<='Loc2()'
+Query=.AND.ARTRN->AREACOD>='Area1()'.AND. ARTRN->AREACOD<='Area2()'
+Query=.AND.STMAS->STKGRP>='StkGrp1()'.AND. STMAS->STKGRP<='StkGrp2()'
+Query=.AND.PSTKCOD='  '
+Sort=SLMCOD+PEOPLE+STKCOD
+
+[master file]
+File=STCRD
+Alias=A
+Tag=STCRD3
+System=DATA_PATH
+
+[relate file]
+File=STMAS
+Alias=B
+Tag=STMAS1
+System=DATA_PATH
+Master file=A
+Master-Related Field=STKCOD
+
+File=OESLM
+Alias=C
+Tag=OESLM1
+System=DATA_PATH
+Master file=A
+Master-Related Field=SLMCOD
+
+File=ARMAS
+Alias=D
+Tag=ARMAS1
+System=DATA_PATH
+Master file=A
+Master-Related Field=PEOPLE
+
+File=ARTRN
+Alias=H
+Tag=ARTRN1
+System=DATA_PATH
+Master file=STCRD
+Master-Related Field=DOCNUM
+
+[data spec]
+*~dat:      len,"pict",             "data",         "exp"
+~INIT:      0,  "",                 "",             "p_det=@n_stcrd_detail(); prn_detail=IIF(p_det=0,':',' '); have_loss=0; exe_detail=IIF(p_det=0,'}',' ')"
+~INIT2:     0,  "",                 "",             "GQHS=0;GQIV=0;GQFS=0;GQSR=0;GQFR=0; GVHS=0;GVIV=0;GVDR=0;GVSR=0;GVCOS=0;GVCSR=0;GVPF=0; GQNET=0;GVNET=0; g_stk=0"
+~CLR_C:     0,  "",                 "",             "c_slm=0; c_cus=0; c_grp=0; c_loc=0; c_area=0; c_dlv=0"
+~CLR_S:     0,  "",                 "",             "SQHS=0;SQIV=0;SQFS=0;SQSR=0;SQFR=0; SVHS=0;SVIV=0;SVDR=0;SVSR=0;SVCOS=0;SVCSR=0;SVPF=0; SQNET=0;SVNET=0; SCNT=0; s_stk=0"
+~CLR_T:     0,  "",                 "",             "TQHS=0;TQIV=0;TQFS=0;TQSR=0;TQFR=0; TVHS=0;TVIV=0;TVDR=0;TVSR=0;TVCOS=0;TVCSR=0;TVPF=0; TQNET=0;TVNET=0; TCNT=0; t_stk=0"
+~CLR_V:     0,  "",                 "",             "QHS=0;QIV=0;QFS=0;QSR=0;QFR=0; VHS=0;VIV=0;VDR=0;VSR=0;VCOS=0;VCSR=0;VPF=0; QNET=0;VNET=0; c_item=0"
+~FROMDATE:  0,  "d ดดด ปปปป",       "@date1()",     ""
+~TODATE:    0,  "d ดดด ปปปป",       "@date2()",     ""
+~FROMSLM:   0,  "",                 "Slm1()",       ""
+~TOSLM:     0,  "",                 "Slm2()",       ""
+~FROMCUS:   0,  "",                 "Cus1()",       ""
+~TOCUS:     0,  "",                 "Cus2()",       ""
+~FROMSTK:   0,  "",                 "Stk1()",       ""
+~TOSTK:     0,  "",                 "Stk2()",       ""
+~FROMGRP:   0,  "",                 "StkGrp1()",    ""
+~TOGRP:     0,  "",                 "StkGrp2()",    ""
+~FROMLOC:   0,  "",                 "Loc1()",       ""
+~TOLOC:     0,  "",                 "Loc2()",       ""
+~FROMAREA:  0,  "",                 "Area1()",      ""
+~TOAREA:    0,  "",                 "Area2()",      ""
+~FROMDEP:   0,  "",                 "Dep1()",       ""
+
+~SALESMAN:  0,  "",                 "slm_nam",      "slm_nam = OESLM->SLMNAM - ' /' - A->SLMCOD"
+~TSALESMAN: 50, "",                 "slm_nam",      "c_slm=c_slm+1"
+~CUSTOMER:  0,  "",                 "cus_nam",      "cus_nam = ARMAS->CUSNAM - ' /' - A->PEOPLE"
+~TCUSTOMER: 23, "",                 "cus_nam",      "c_cus=c_cus+1"
+~STKGRP:    0,  "",                 "stk_grp",      "stk_grp = @p_istab(STMAS->STKGRP,22,1,40)"
+~TSTKGRP:   25, "",                 "stk_grp",      "c_grp=c_grp+1"
+~LOCDES:    0,  "",                 "loc_des",      "loc_des = @p_istab(A->LOCCOD,21,1,40); loc_des = loc_des - ' /' - A->LOCCOD"
+~TLOCDES:   25, "",                 "loc_des",      "c_loc=c_loc+1"
+~AREACOD:   0,  "",                 "area_des",     "area_des = @p_istab(ARTRN->AREACOD,40,1,40)"
+~TAREACOD:  25, "",                 "area_des",     "c_area=c_area+1"
+~DLVBY:     0,  "",                 "dlv_by",       "dlv_by = @p_istab(ARTRN->DLVBY,41,1,40)"
+~TDLVBY:    25, "",                 "dlv_by",       "c_dlv=c_dlv+1"
+~STKDES:    0,  "",                 "stk_des",      "stk_des = B->STKDES - ' /' - A->STKCOD"
+~TSTKDES:   50, "",                 "stk_des",      "s_stk=s_stk+1"
+~KEEPQU:    0,  "",                 "save_cfactor()", "qu_des = @p_istab(STMAS->QUCOD,20,1,8); qu_cod=STMAS->QUCOD"
+*~QUDES:    0,  "",                 "qu_des",       "",K
+~QUDES:     0,  "",                 "p_cqu()",       "",K
+
+~ISHS:      0,  "",                 "k",            "k=IIF(A->POSOPR='9'.AND.ARTRN->RECTYP='1',':','}')"
+~ISIV:      0,  "",                 "k",            "k=IIF(A->POSOPR='9'.AND.ARTRN->RECTYP='3',':','}')"
+~ISDR:      0,  "",                 "k",            "k=IIF(A->POSOPR='=',':','}')"
+~ISSR:      0,  "",                 "k",            "k=IIF(A->POSOPR='2',':','}')"
+~SUMHS:     0,  "",                 "",             "QHS=QHS+IIF(A->FREE#'Y',A->XTRNQTY,0); VHS=VHS+A->NETVAL; VCOS=VCOS+A->XTRNVAL"
+~SUMIV:     0,  "",                 "",             "QIV=QIV+IIF(A->FREE#'Y',A->XTRNQTY,0); VIV=VIV+A->NETVAL; VCOS=VCOS+A->XTRNVAL"
+~SUMFS:     0,  "",                 "",             "QFS=QFS+IIF(A->FREE='Y',A->XTRNQTY,0)"
+~SUMDR:     0,  "",                 "",             "VDR=VDR+A->NETVAL"
+~SUMSR:     0,  "",                 "",             "QSR=QSR+IIF(A->RETSTK='Y'.AND.A->FREE#'Y',A->XTRNQTY,0); VSR=VSR+A->NETVAL; VCSR=VCSR+A->XTRNVAL"
+~SUMFR:     0,  "",                 "",             "QFR=QFR+IIF(A->RETSTK='Y'.AND.A->FREE='Y',A->XTRNQTY,0)"
+
+~QHS:       0,  "",                 "Q",            "Q=@s_cqu( QHS,13 ); SQHS=SQHS+QHS",E
+~QIV:       0,  "",                 "Q",            "Q=@s_cqu( QIV,13 ); SQIV=SQIV+QIV",F
+~QFS:       0,  "",                 "Q",            "Q=@s_cqu( QFS,11 ); SQFS=SQFS+QFS",G
+~QSR:       0,  "",                 "Q",            "Q=@s_cqu( QSR,13 ); SQSR=SQSR+QSR",H
+~QFR:       0,  "",                 "Q",            "Q=@s_cqu( QFR,11 ); SQFR=SQFR+QFR",I
+~QNET:      0,  "",                 "Q",            "QNET=QHS+QIV-QSR; Q=@s_cqu( QNET,13 ); SQNET=SQNET+QNET",J
+
+~VHS:       0,  "999,999,999.99",   "VHS",          "SVHS=SVHS+VHS",L
+~VIV:       0,  "999,999,999.99",   "VIV",          "SVIV=SVIV+VIV",M
+~VDR:       0,  "999,999,999.99",   "VDR",          "SVDR=SVDR+VDR",N
+~VSR:       0,  "999,999,999.99",   "VSR",          "SVSR=SVSR+VSR",O
+~VNET:      0,  "999,999,999.99",   "VNET",         "VNET=VHS+VIV+VDR-VSR; SVNET=SVNET+VNET",P
+~VCOS:      0,  "999,999,999.99",   "VCOS",         "SVCOS=SVCOS+VCOS",Q
+~VCSR:      0,  "999,999,999.99",   "VCSR",         "SVCSR=SVCSR+VCSR",R
+~VPF:       0,  "999,999,999.99",   "VPF",          "VPF=VNET-VCOS+VCSR; SVPF=SVPF+VPF",S
+~VPERC:     0,  "99,999.99",        "VPERC",        "VPERC=VPF*100/VNET",T
+
+~SQHS:      0,  "qty(13)",          "SQHS",         "TQHS=TQHS+SQHS",E
+~SQIV:      0,  "qty(13)",          "SQIV",         "TQIV=TQIV+SQIV",F
+~SQFS:      0,  "qty(11)",          "SQFS",         "TQFS=TQFS+SQFS",G
+~SQDR:      0,  "qty(13)",          "SQDR",         "TQDR=TQDR+SQDR"
+~SQSR:      0,  "qty(13)",          "SQSR",         "TQSR=TQSR+SQSR",H
+~SQFR:      0,  "qty(11)",          "SQFR",         "TQFR=TQFR+SQFR",I
+~SQNET:     0,  "qty(13)",          "SQNET",        "TQNET=TQNET+SQNET",J
+
+~SVHS:      0,  "999,999,999.99",   "SVHS",         "TVHS=TVHS+SVHS",L
+~SVIV:      0,  "999,999,999.99",   "SVIV",         "TVIV=TVIV+SVIV",M
+~SVDR:      0,  "999,999,999.99",   "SVDR",         "TVDR=TVDR+SVDR",N
+~SVSR:      0,  "999,999,999.99",   "SVSR",         "TVSR=TVSR+SVSR",O
+~SVNET:     0,  "999,999,999.99",   "SVNET",        "TVNET=TVNET+SVNET",P
+~SVCOS:     0,  "999,999,999.99",   "SVCOS",        "TVCOS=TVCOS+SVCOS",Q
+~SVCSR:     0,  "999,999,999.99",   "SVCSR",        "TVCSR=TVCSR+SVCSR",R
+~SVPF:      0,  "999,999,999.99",   "SVPF",         "SVPF=SVNET-SVCOS+SVCSR; TVPF=TVPF+SVPF",S
+~SPERC:     0,  "99,999.99",        "SPERC",        "SPERC=SVPF*100/SVNET",T
+
+~TQHS:      0,  "qty(13)",          "TQHS",         "GQHS=GQHS+TQHS",E
+~TQIV:      0,  "qty(13)",          "TQIV",         "GQIV=GQIV+TQIV",F
+~TQFS:      0,  "qty(11)",          "TQFS",         "GQFS=GQFS+TQFS",G
+~TQDR:      0,  "qty(13)",          "TQDR",         "GQDR=GQDR+TQDR"
+~TQSR:      0,  "qty(13)",          "TQSR",         "GQSR=GQSR+TQSR",H
+~TQFR:      0,  "qty(11)",          "TQFR",         "GQFR=GQFR+TQFR",I
+~TQNET:     0,  "qty(13)",          "TQNET",        "GQNET=GQNET+TQNET",J
+
+~TVHS:      0,  "999,999,999.99",   "TVHS",         "GVHS=GVHS+TVHS",L
+~TVIV:      0,  "999,999,999.99",   "TVIV",         "GVIV=GVIV+TVIV",M
+~TVDR:      0,  "999,999,999.99",   "TVDR",         "GVDR=GVDR+TVDR",N
+~TVSR:      0,  "999,999,999.99",   "TVSR",         "GVSR=GVSR+TVSR",O
+~TVNET:     0,  "999,999,999.99",   "TVNET",        "GVNET=GVNET+TVNET",P
+~TVCOS:     0,  "999,999,999.99",   "TVCOS",        "GVCOS=GVCOS+TVCOS",Q
+~TVCSR:     0,  "999,999,999.99",   "TVCSR",        "GVCSR=GVCSR+TVCSR",R
+~TVPF:      0,  "999,999,999.99",   "TVPF",         "TVPF=TVNET-TVCOS+TVCSR; GVPF=GVPF+TVPF",S
+~TPERC:     0,  "99,999.99",        "TPERC",        "TPERC=TVPF*100/TVNET",T
+
+~GQHS:      0,  "qty(13)",          "GQHS",         "",E
+~GQIV:      0,  "qty(13)",          "GQIV",         "",F
+~GQFS:      0,  "qty(11)",          "GQFS",         "",G
+~GQDR:      0,  "qty(13)",          "GQDR",         ""
+~GQSR:      0,  "qty(13)",          "GQSR",         "",H
+~GQFR:      0,  "qty(11)",          "GQFR",         "",I
+~GQNET:     0,  "qty(13)",          "GQNET",        "",J
+
+~GVHS:      0,  "999,999,999.99",   "GVHS",         "",L
+~GVIV:      0,  "999,999,999.99",   "GVIV",         "",M
+~GVDR:      0,  "999,999,999.99",   "GVDR",         "",N
+~GVSR:      0,  "999,999,999.99",   "GVSR",         "",O
+~GVNET:     0,  "999,999,999.99",   "GVNET",        "",P
+~GVCOS:     0,  "999,999,999.99",   "GVCOS",        "",Q
+~GVCSR:     0,  "999,999,999.99",   "GVCSR",        "",R
+~GVPF:      0,  "999,999,999.99",   "GVPF",         "",S
+~GPERC:     0,  "99,999.99",        "GPERC",        "GPERC=GVPF*100/GVNET",T
+
+~C_ITEM:    0,  "999,999",          "c_item",       ""
+~C_STK:     0,  "99,999",           "s_stk",        "t_stk=t_stk+s_stk"
+~T_STK:     0,  "99,999",           "t_stk",        "g_stk=g_stk+t_stk"
+~G_STK:     0,  "99,999",           "g_stk",        ""
+~C_SLM:     0,  "99,999",           "c_slm",        ""
+~C_CUS:     0,  "99,999",           "c_cus",        ""
+~C_GRP:     0,  "99,999",           "c_grp",        ""
+~C_LOC:     0,  "99,999",           "c_loc",        ""
+~C_AREA:    0,  "99,999",           "c_area",       ""
+~C_DLV:     0,  "99,999",           "c_dlv",        ""
+
+~D:         0,  "",                 "prn_detail",   ""
+~E:         0,  "",                 "exe_detail",   ""
+~DOCNUM:    0,  "",                 "num",          "num = A->DOCNUM - '-' - A->SEQNUM; c_item=c_item+1",B
+~DOCDAT:    0,  "วว/ดด/ปปปป",       "A->DOCDAT",    "",C
+~XTRNQTY:   0,  "qty(10)",          "A->XTRNQTY",   "",D
+~SAL:       0,  "99,999,999.99",    "A->NETVAL",    "",F
+~COS:       0,  "99,999,999.99",    "A->XTRNVAL",   "",H
+~R:         0,  "",                 "isret",        "isret  = IIF(A->RETSTK='Y','R',' ')",E
+~RET:       0,  "",                 "isret",        "isret  = IIF(A->RETSTK='Y','Y',' ')",U
+~F:         0,  "",                 "isfree",       "isfree = IIF(A->FREE='Y','F',' ')",G
+~FREE:      0,  "",                 "isfree",       "isfree = IIF(A->FREE='Y','Y',' ')",V
+~CUSCOD:    0,  "",                 "A->PEOPLE",    "",J
+~SLMCOD:    0,  "",                 "A->SLMCOD",    "",K
+~TRNQTY:    0,  "qty(10)",          "A->TRNQTY",    "",L
+~Q:         0,  "",                 "qu",           "qu=IIF(A->TQUCOD=qu_cod .AND. A->TFACTOR # 1, '!'+A->TQUCOD, ' '+A->TQUCOD)",M
+~TFACTOR:   0,  "fac(10)",          "A->TFACTOR",   "",N
+~UNITPR:    0,  "pri(13)",          "A->UNITPR",    "",O
+~V:         0,  "",                 "ARTRN->FLGVAT","",P
+~DISC:      0,  "",                 "A->DISC",      "",Q
+~TRNVAL:    0,  "999,999,999.99",   "A->TRNVAL",    "",R
+~G_DISC:    0,  "",                 "ARTRN->DISC",  "",S
+~RDOCNUM:   0,  "",                 "rnum",         "rnum = IIF(A->RDOCNUM='    ','               ', SUBSTR(A->RDOCNUM,1,12) - '-' - SUBSTR(A->RDOCNUM,13,3))",T
+~LOSS:      0,  "",                 "is_loss",      "is_loss=IIF((ARTRN->RECTYP='1'.OR.ARTRN->RECTYP='3').AND.A->NETVAL < A->XTRNVAL.AND.A->FREE#'Y', '***', '   '); have_loss=IIF(is_loss='***',1,have_loss)",I
+~NOTE:      0,  "",                 "note",         "note=IIF(have_loss=1.AND.p_det=1,' ',':')"
+
+
+
+
+
+
+

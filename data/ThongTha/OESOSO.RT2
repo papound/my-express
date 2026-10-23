@@ -1,0 +1,1440 @@
+[Preference]
+	vert align=Center
+	horz align=Left
+	border=No
+	curve=0
+	font name=Microsoft Sans Serif
+	font size=16
+	bold=No
+	italic=No
+	underline=No
+	clr=0,0,0
+	bgclr=255,255,255
+	bdclr=0,0,0
+	bkmode=Transparent
+	secheight=0.2000 inch
+	secclr=255,255,255
+	pcurve=1
+	line clr=0,0,0
+	pixel=1
+	exc font name= 
+	exc font size=
+	exc freeze=Yes
+[Report]
+	caption=Report
+	edit copy=ทุกชุด
+	form=Yes
+	def scope=0
+	width=7.5880 inch
+	psize=0, "ตามเครื่องพิมพ์"
+	tblvw hi=200
+	tblvw mode=2
+	secvw wd=150
+	left margin=0.5000 inch
+	top margin=0.5000 inch
+	right margin=0.2500 inch
+	bot margin=0.2500 inch
+	set margin=Yes
+	fix sum=Yes
+	printer=
+	col wd=1.0000
+	col gap=0.5000
+	printpref=1
+	horzalign=0
+	condition=OFF
+	datefmt=
+	horgap=2.2000
+	vergap=1.2000
+	stwd=2.0000
+	sthg=1.0000
+	strow=5
+	stcol=4
+	st how column=1
+	st type=Junk A4
+[File]
+	[Variable]
+		dimension=0,0,100,150
+
+	[Master File]
+		file name=OESO
+		alias=A
+		tag=OESO1
+		dimension=100,0,200,150
+
+	[Related File]
+		file name=ARMAS
+		alias=R
+		tag=ARMAS1
+		master file=OESO
+		related fld=CUSCOD
+		dimension=500,0,600,150
+
+		file name=STMAS
+		alias=C
+		tag=STMAS1
+		master file=OESOIT
+		related fld=STKCOD
+		dimension=600,0,700,150
+
+		file name=STLOC
+		alias=L
+		tag=STLOC1
+		master file=OESOIT
+		related fld=STKCOD+LOCCOD
+		dimension=700,0,800,150
+
+	[Item File]
+		file name=OESOIT
+		alias=B
+		tag=OESOIT1
+		dimension=200,0,300,150
+
+		file name=ARTRNRM
+		alias=C
+		tag=ARTRNRM1
+		dimension=300,0,400,150
+
+		file name=STCRD
+		alias=D
+		tag=STCRD10
+		dimension=400,0,500,150
+
+[Section]
+[Ti]
+	name=Ti1
+	secheight=0.2760 inch
+	order objs=0
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT1
+		visible=No
+		print with=::INIT
+		calculation= "1,seq=0"
+		order=1
+		dimension=146,0,586,256
+		exc dimension=146,0,586,256
+
+[He]
+	name=He1
+	secheight=0.8750 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=PICT
+		name=PICT0
+		order=1
+		dimension=0,0,875,875
+		exc dimension=0,0,875,875
+		pict=LOGO
+		showfile=No
+		stretch=No
+
+		obj type=TEXT
+		name=TEXT2
+		print with=_NAME
+		order=2
+		dimension=975,0,7520,320
+		exc dimension=975,0,7520,320
+		font size=24
+
+		obj type=TEXT
+		name=TEXT3
+		print with=p_addr()
+		order=3
+		dimension=975,340,7520,596
+		exc dimension=975,340,7520,596
+		font size=18
+
+		obj type=TEXT
+		name=TEXT4
+		print with=p_telnum()
+		order=4
+		dimension=975,616,7520,872
+		exc dimension=975,616,7520,872
+		font size=18
+
+[He]
+	name=He3
+	secheight=0.3970 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=ใบสั่งขาย
+		name=LABEL1
+		order=1
+		dimension=5506,0,7149,377
+		exc dimension=5506,0,7149,377
+		font size=24
+
+[He]
+	name=He4
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=เลขประจำตัวผู้เสียภาษี 
+		name=LABEL2
+		order=1
+		dimension=1586,0,3406,256
+		exc dimension=1586,0,3406,256
+
+		obj type=TEXT
+		name=TEXT5
+		print with=p_taxid()
+		order=2
+		dimension=3426,0,7520,256
+		exc dimension=3426,0,7520,256
+
+[He]
+	name=He5
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=ลูกค้า
+		name=LABEL3
+		order=1
+		dimension=226,0,766,256
+		exc dimension=226,0,766,256
+
+		obj type=TEXT
+		name=TEXT6
+		print with=OESO->CUSCOD
+		order=2
+		dimension=786,0,2606,256
+		exc dimension=786,0,2606,256
+
+		obj type=LABEL
+		caption=เลขที่ใบสั่งขาย
+		name=LABEL4
+		order=3
+		dimension=4146,0,5581,256
+		exc dimension=4146,0,5581,256
+
+		obj type=TEXT
+		name=TEXT7
+		print with=OESO->SONUM
+		order=4
+		dimension=5586,0,7520,256
+		exc dimension=5586,0,7520,256
+
+[He]
+	name=He6
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT8
+		print with=cus_nam
+		calculation= "1,cus_nam = ARMAS->PRENAM - ' ' - ARMAS->CUSNAM"
+		order=1
+		dimension=226,0,7506,256
+		exc dimension=226,0,7506,256
+
+[He]
+	name=He7
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT9
+		print with=ARMAS->ADDR01
+		order=1
+		dimension=226,0,4126,256
+		exc dimension=226,0,4126,256
+
+		obj type=LABEL
+		caption=วันที่
+		name=LABEL5
+		order=2
+		dimension=4146,0,4769,256
+		exc dimension=4146,0,4769,256
+
+		obj type=TEXT
+		name=TEXT10
+		print with=OESO->SODAT
+		order=3
+		dimension=5586,0,7042,256
+		exc dimension=5586,0,7042,256
+
+[He]
+	name=He8
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT11
+		print with=ARMAS->ADDR02
+		order=1
+		dimension=226,0,7520,256
+		exc dimension=226,0,7520,256
+
+[He]
+	name=He9
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT12
+		print with=addr_03
+		calculation= "1,addr_03 = ARMAS->ADDR03 - ' ' - ARMAS->ZIPCOD"
+		order=1
+		dimension=226,0,4106,256
+		exc dimension=226,0,4106,256
+
+		obj type=LABEL
+		caption=วันที่ส่งของ
+		name=LABEL6
+		order=2
+		dimension=4146,0,5314,256
+		exc dimension=4146,0,5314,256
+
+		obj type=TEXT
+		name=TEXT13
+		print with=OESO->DLVDAT
+		order=3
+		dimension=5586,0,7042,256
+		exc dimension=5586,0,7042,256
+
+[He]
+	name=He10
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[He]
+	name=He11
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=อ้างอิง
+		name=LABEL7
+		order=1
+		dimension=226,0,989,256
+		exc dimension=226,0,989,256
+
+		obj type=TEXT
+		name=TEXT14
+		print with=OESO->YOUREF
+		order=2
+		dimension=1026,0,4126,256
+		exc dimension=1026,0,4126,256
+
+		obj type=LABEL
+		caption=พนักงานขาย
+		name=LABEL8
+		order=3
+		dimension=4146,0,5454,256
+		exc dimension=4146,0,5454,256
+
+		obj type=TEXT
+		name=TEXT15
+		print with=slm
+		calculation= "1,slm = OESO->SLMCOD-'-'-OESLM->SLMNAM"
+		order=4
+		dimension=5586,0,7520,256
+		exc dimension=5586,0,7520,256
+
+[He]
+	name=He12
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=ขนส่งโดย
+		name=LABEL9
+		order=1
+		dimension=226,0,1006,256
+		exc dimension=226,0,1006,256
+
+		obj type=TEXT
+		name=TEXT16
+		print with=p_istab( OESO->DLVBY, 41, 1, 40 )
+		order=2
+		dimension=1026,0,4106,256
+		exc dimension=1026,0,4106,256
+
+		obj type=LABEL
+		caption=เขตการขาย
+		name=LABEL10
+		order=3
+		dimension=4146,0,5359,256
+		exc dimension=4146,0,5359,256
+
+		obj type=TEXT
+		name=TEXT17
+		print with=p_istab( OESO->AREACOD, 40, 1, 40 )
+		order=4
+		dimension=5586,0,7520,256
+		exc dimension=5586,0,7520,256
+
+[He]
+	name=He13
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[He]
+	name=He14
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=No.
+		name=LABEL11
+		order=1
+		dimension=226,0,821,256
+		exc dimension=226,0,821,256
+
+		obj type=LABEL
+		caption=รหัสสินค้า/รายละเอียด
+		name=LABEL12
+		order=2
+		dimension=1506,0,3581,256
+		exc dimension=1506,0,3581,256
+
+		obj type=LABEL
+		caption=จำนวน
+		name=LABEL13
+		order=3
+		dimension=4466,0,5299,256
+		exc dimension=4466,0,5299,256
+
+		obj type=LABEL
+		caption=หน่วยละ
+		name=LABEL14
+		order=4
+		dimension=5666,0,6446,256
+		exc dimension=5666,0,6446,256
+
+		obj type=TEXT
+		name=TEXT18
+		print with=txt0
+		calculation= "1,txt0 = IIF( OESO->FLGVAT <> '1', '  จำนวนเงิน', 'ราคารวมภาษี')"
+		order=5
+		dimension=6466,0,7520,256
+		exc dimension=6466,0,7520,256
+
+[He]
+	name=He15
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[Bo]
+	name=Bo1
+	visible=No
+	secheight=0.1250 inch
+	order objs=0
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[Ih]
+	name=Ih11
+	secheight=0.1250 inch
+	order objs=0
+	master file=OESO
+	master expr=SONUM
+	item file=OESOIT
+	item expression=SONUM
+	section ID=1
+	level=1
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[Ib]
+	name=Ib11
+	secheight=0.2760 inch
+	order objs=0
+	section ID=1
+	level=1
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT19
+		print with=seq
+		format=999
+		calculation= "1,seq=seq+1"
+		order=1
+		dimension=146,0,386,256
+		exc dimension=146,0,386,256
+
+		obj type=TEXT
+		name=TEXT20
+		print with=article
+		calculation= "1,article = OESOIT->STKCOD - ' ' - OESOIT->STKDES"
+		order=2
+		dimension=626,0,4046,256
+		exc dimension=626,0,4046,256
+
+		obj type=TEXT
+		name=TEXT21
+		print with=OESOIT->ORDQTY
+		format=qtyZ(7)
+		order=3
+		dimension=4066,0,4626,256
+		exc dimension=4066,0,4626,256
+		horz align=Right
+
+		obj type=TEXT
+		name=TEXT22
+		print with=p_istab( OESOIT->TQUCOD,  20, 1, 0 )
+		order=4
+		dimension=4706,0,5406,256
+		exc dimension=4706,0,5406,256
+
+		obj type=TEXT
+		name=TEXT23
+		print with=OESOIT->UNITPR
+		format=priZ(10)
+		order=5
+		dimension=5426,0,6226,256
+		exc dimension=5426,0,6226,256
+		horz align=Right
+
+		obj type=TEXT
+		name=TEXT24
+		print with=OESOIT->TRNVAL
+		format=ZZ,ZZZ,ZZZ.ZZ
+		order=6
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Ih]
+	name=Ih21
+	secheight=0.1250 inch
+	order objs=0
+	master file=OESOIT
+	master expr=SONUM+SEQNUM
+	item file=ARTRNRM
+	item expression=DOCNUM+SEQNUM
+	section ID=2
+	level=2
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[Ib]
+	name=Ib21
+	secheight=0.2760 inch
+	order objs=0
+	section ID=2
+	level=2
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT25
+		print with=ARTRNRM->REMARK
+		order=1
+		dimension=626,0,7520,256
+		exc dimension=626,0,7520,256
+
+[If]
+	name=If21
+	secheight=0.2000 inch
+	order objs=0
+	section ID=2
+	level=2
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[Ih]
+	name=Ih31
+	enable=No
+	secheight=0.2760 inch
+	order objs=0
+	master file=OESOIT
+	master expr=SONUM+SEQNUM
+	item file=STCRD
+	item expression=RDOCNUM
+	section ID=3
+	level=2
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT26
+		visible=No
+		print with=::CLR
+		calculation= "1,sumq=0"
+		order=1
+		dimension=146,0,746,256
+		exc dimension=146,0,746,256
+
+[Ib]
+	name=Ib31
+	enable=No
+	secheight=0.2760 inch
+	order objs=0
+	section ID=3
+	level=2
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT27
+		print with=STCRD->DOCNUM
+		order=1
+		dimension=706,0,1726,256
+		exc dimension=706,0,1726,256
+
+		obj type=TEXT
+		name=TEXT28
+		print with=STCRD->DOCDAT
+		order=2
+		dimension=1746,0,2446,256
+		exc dimension=1746,0,2446,256
+
+		obj type=TEXT
+		name=TEXT29
+		print with=STCRD->TRNQTY
+		format=qty(10)
+		calculation= "1,sumq=sumq+STCRD->TRNQTY"
+		order=3
+		dimension=2466,0,3266,256
+		exc dimension=2466,0,3266,256
+		horz align=Right
+
+[If]
+	name=If31
+	enable=No
+	secheight=0.2760 inch
+	order objs=0
+	section ID=3
+	level=2
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=รวม
+		name=LABEL15
+		order=1
+		dimension=1826,0,2420,256
+		exc dimension=1826,0,2420,256
+
+		obj type=TEXT
+		name=TEXT30
+		print with=sumq
+		format=qty(10)
+		order=2
+		dimension=2466,0,3266,256
+		exc dimension=2466,0,3266,256
+		horz align=Right
+
+[If]
+	name=If11
+	secheight=0.2000 inch
+	order objs=0
+	section ID=1
+	level=1
+	shrink=Yes
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[Fo]
+	name=Fo1
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[Su]
+	name=Su1
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=หมายเหตุ
+		name=LABEL16
+		order=1
+		dimension=226,0,1268,256
+		exc dimension=226,0,1268,256
+
+		obj type=LABEL
+		caption=รวมเป็นเงิน
+		name=LABEL17
+		order=2
+		dimension=4066,0,5286,256
+		exc dimension=4066,0,5286,256
+
+		obj type=TEXT
+		name=TEXT31
+		print with=OESO->AMOUNT
+		format=99,999,999.99
+		order=3
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Su]
+	name=Su2
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT32
+		print with=p_hrem(A->SONUM,1)
+		order=1
+		dimension=306,0,4026,256
+		exc dimension=306,0,4026,256
+
+		obj type=LABEL
+		caption=หัก
+		name=LABEL18
+		underline=Yes
+		order=2
+		dimension=4066,0,4286,256
+		exc dimension=4066,0,4286,256
+
+		obj type=LABEL
+		caption=ส่วนลด
+		name=LABEL19
+		order=3
+		dimension=4306,0,5149,256
+		exc dimension=4306,0,5149,256
+
+		obj type=TEXT
+		name=TEXT33
+		print with=OESO->DISC
+		order=4
+		dimension=5426,0,6366,256
+		exc dimension=5426,0,6366,256
+
+		obj type=TEXT
+		name=TEXT34
+		print with=OESO->DISCAMT
+		format=99,999,999.99
+		order=5
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Su]
+	name=Su3
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT35
+		print with=p_hrem(A->SONUM,2)
+		order=1
+		dimension=306,0,4026,256
+		exc dimension=306,0,4026,256
+
+		obj type=TEXT
+		name=TEXT36
+		print with=txt1
+		calculation= "1,txt1 = IIF( OESO->FLGVAT <> '1', 'จำนวนเงินหลังหักส่วนลด', 'จำนวนเงินรวมทั้งสิ้น  ')"
+		order=2
+		dimension=4066,0,6346,256
+		exc dimension=4066,0,6346,256
+
+		obj type=TEXT
+		name=TEXT37
+		print with=OESO->TOTAL
+		format=99,999,999.99
+		order=3
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Su]
+	name=Su4
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT38
+		print with=p_hrem(A->SONUM,3)
+		order=1
+		dimension=306,0,4026,256
+		exc dimension=306,0,4026,256
+
+		obj type=LABEL
+		caption=จำนวนภาษีมูลค่าเพิ่ม
+		name=LABEL20
+		order=2
+		dimension=4066,0,5726,256
+		exc dimension=4066,0,5726,256
+
+		obj type=TEXT
+		name=TEXT39
+		print with=OESO->VATRAT
+		format=99.99
+		order=3
+		dimension=5746,0,6126,256
+		exc dimension=5746,0,6126,256
+		horz align=Right
+
+		obj type=LABEL
+		caption=%
+		name=LABEL21
+		order=4
+		dimension=6146,0,6366,256
+		exc dimension=6146,0,6366,256
+
+		obj type=TEXT
+		name=TEXT40
+		print with=OESO->VATAMT
+		format=99,999,999.99
+		order=5
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Su]
+	name=Su5
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT41
+		print with=t_baht(OESO->NETAMT)
+		order=1
+		dimension=146,0,4586,256
+		exc dimension=146,0,4586,256
+
+		obj type=TEXT
+		name=TEXT42
+		print with=txt2
+		calculation= "1,txt2 = IIF( OESO->FLGVAT <> '1', 'จำนวนเงินรวมทั้งสิ้น', 'ราคาสินค้า          ')"
+		order=2
+		dimension=4626,0,6346,256
+		exc dimension=4626,0,6346,256
+
+		obj type=TEXT
+		name=TEXT43
+		print with=netamt
+		format=99,999,999.99
+		calculation= "1,netamt = IIF( OESO->FLGVAT <> '1', OESO->NETAMT, OESO->TOTAL - OESO->VATAMT)"
+		order=3
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Su]
+	name=Su6
+	enable=No
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT44
+		print with=p_hrem(A->SONUM,3)
+		order=1
+		dimension=306,0,7520,256
+		exc dimension=306,0,7520,256
+
+[Su]
+	name=Su7
+	enable=No
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT45
+		print with=p_hrem(A->SONUM,4)
+		order=1
+		dimension=306,0,4026,256
+		exc dimension=306,0,4026,256
+
+		obj type=LABEL
+		caption=สินค้ายกเว้นภาษีมูลค่าเพิ่ม
+		name=LABEL22
+		order=2
+		dimension=4066,0,6366,256
+		exc dimension=4066,0,6366,256
+
+		obj type=TEXT
+		name=TEXT46
+		print with=AMTRATZ
+		format=99,999,999.99
+		calculation= "1,AMTRATZ = OESO->AMTRAT0 - (OESO->AMTRAT0 * OESO->DISCAMT / OESO->AMOUNT)"
+		order=3
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Su]
+	name=Su8
+	enable=No
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT47
+		print with=p_hrem(A->SONUM,5)
+		order=1
+		dimension=306,0,4026,256
+		exc dimension=306,0,4026,256
+
+		obj type=LABEL
+		caption=มูลค่าสินค้าอัตรา
+		name=LABEL23
+		order=2
+		dimension=4066,0,5566,256
+		exc dimension=4066,0,5566,256
+
+		obj type=TEXT
+		name=TEXT48
+		print with=OESO->VATRAT
+		format=99.99
+		order=3
+		dimension=5586,0,5986,256
+		exc dimension=5586,0,5986,256
+		horz align=Right
+
+		obj type=LABEL
+		caption=%
+		name=LABEL24
+		order=4
+		dimension=6066,0,6366,256
+		exc dimension=6066,0,6366,256
+
+		obj type=TEXT
+		name=TEXT49
+		print with=AMTRATX
+		format=99,999,999.99
+		calculation= "1,AMTRATX = IIF(OESO->FLGVAT='1',OESO->TOTAL - AMTRATZ - OESO->VATAMT, OESO->TOTAL - AMTRATZ)"
+		order=5
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Su]
+	name=Su9
+	enable=No
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=จำนวนเงินภาษีมูลค่าเพิ่ม
+		name=LABEL25
+		order=1
+		dimension=4066,0,6351,256
+		exc dimension=4066,0,6351,256
+
+		obj type=TEXT
+		name=TEXT50
+		print with=OESO->VATAMT
+		format=99,999,999.99
+		order=2
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Su]
+	name=Su10
+	enable=No
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=TEXT
+		name=TEXT51
+		print with=t_baht(OESO->NETAMT)
+		order=1
+		dimension=146,0,4586,256
+		exc dimension=146,0,4586,256
+
+		obj type=LABEL
+		caption=จำนวนเงินรวมทั้งสิ้น
+		name=LABEL26
+		order=2
+		dimension=4626,0,6366,256
+		exc dimension=4626,0,6366,256
+
+		obj type=TEXT
+		name=TEXT52
+		print with=OESO->NETAMT
+		format=99,999,999.99
+		order=3
+		dimension=6386,0,7426,256
+		exc dimension=6386,0,7426,256
+		horz align=Right
+
+[Su]
+	name=Su11
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[Su]
+	name=Su12
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+[Su]
+	name=Su13
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=ในนาม
+		name=LABEL27
+		order=1
+		dimension=3026,0,3486,256
+		exc dimension=3026,0,3486,256
+
+		obj type=TEXT
+		name=TEXT53
+		print with=_NAME
+		order=2
+		dimension=3506,0,7520,256
+		exc dimension=3506,0,7520,256
+
+[Su]
+	name=Su14
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=___________________
+		name=LABEL28
+		order=1
+		dimension=466,0,3034,256
+		exc dimension=466,0,3034,256
+
+[Su]
+	name=Su15
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=ผู้สั่งขายสินค้า
+		name=LABEL29
+		order=1
+		dimension=866,0,2252,256
+		exc dimension=866,0,2252,256
+
+		obj type=LABEL
+		caption=ผู้รับมอบอำนาจ  __________________
+		name=LABEL30
+		order=2
+		dimension=3026,0,6875,256
+		exc dimension=3026,0,6875,256
+
+[Su]
+	name=Su16
+	enable=No
+	secheight=0.2760 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No
+	[Object]
+		obj type=LABEL
+		caption=พิมพ์โดย
+		name=LABEL31
+		order=1
+		dimension=226,0,1006,256
+		exc dimension=226,0,1006,256
+
+		obj type=TEXT
+		name=TEXT54
+		print with=p_userid()
+		order=2
+		dimension=1026,0,2186,256
+		exc dimension=1026,0,2186,256
+
+		obj type=LABEL
+		caption=วันที่
+		name=LABEL32
+		order=3
+		dimension=2226,0,2849,256
+		exc dimension=2226,0,2849,256
+
+		obj type=TEXT
+		name=TEXT55
+		print with=@d_prndat()
+		order=4
+		dimension=2866,0,3626,256
+		exc dimension=2866,0,3626,256
+
+		obj type=TEXT
+		name=TEXT56
+		print with=s_prntim()
+		order=5
+		dimension=3666,0,4266,256
+		exc dimension=3666,0,4266,256
+
+		obj type=LABEL
+		caption=พิมพ์ครั้งที่
+		name=LABEL33
+		order=6
+		dimension=4306,0,5326,256
+		exc dimension=4306,0,5326,256
+
+		obj type=TEXT
+		name=TEXT57
+		print with=@n_prncnt()
+		format=999
+		order=7
+		dimension=5346,0,5586,256
+		exc dimension=5346,0,5586,256
+
+		obj type=LABEL
+		caption=บันทึกโดย
+		name=LABEL34
+		order=8
+		dimension=5986,0,6766,256
+		exc dimension=5986,0,6766,256
+
+		obj type=TEXT
+		name=TEXT58
+		print with=A->USERID
+		order=9
+		dimension=6786,0,7520,256
+		exc dimension=6786,0,7520,256
+
+[Su]
+	name=Su17
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+	n_sticker=
+	stlm=0.0500
+	sttm=0.0500
+	strm=0.0500
+	stbm=0.0500
+	sthorcenter=Yes
+	stvercenter=Yes
+	stfit=No

@@ -1,0 +1,1334 @@
+[Preference]
+	vert align=Center
+	horz align=Left
+	border=No
+	curve=0
+	font name=Angsana New
+	font size=14
+	bold=No
+	italic=No
+	underline=No
+	clr=0,0,0
+	bgclr=255,255,255
+	bdclr=0,0,0
+	bkmode=Transparent
+	secheight=0.2000 inch
+	secclr=255,255,255
+	pcurve=1
+	line clr=0,0,0
+	pixel=1
+	exc font name=
+	exc font size=
+	exc freeze=Yes
+[Report]
+	caption=Report
+	edit copy=ทุกชุด
+	form=Yes
+	def scope=0
+	width=7.5880 inch
+	psize=0, "ตามเครื่องพิมพ์"
+	pw=8.2700
+	ph=11.6900
+	tblvw hi=200
+	tblvw mode=2
+	secvw wd=150
+	left margin=0.5000 inch
+	top margin=0.5000 inch
+	right margin=0.2500 inch
+	bot margin=0.2500 inch
+	set margin=No
+	supg=No
+	fix sum=Yes
+	printer=
+	col wd=1.0000
+	col gap=0.5000
+	printpref=1
+	multipg=1
+	howpage=1
+	sepdoc=No
+	sepset=No
+	horzalign=0
+	condition=OFF
+	datefmt=
+	horgap=2.2000
+	vergap=1.2000
+	stwd=2.0000
+	sthg=1.0000
+	strow=5
+	stcol=4
+	st how column=1
+	st type=Junk A4
+	stcustom=No
+[File]
+	[Variable]
+		dimension=0,0,100,150
+
+	[Master File]
+		file name=ARTRN
+		alias=A
+		tag=ARTRN1
+		dimension=100,0,200,150
+
+	[Related File]
+		file name=ARMAS
+		alias=R
+		tag=ARMAS1
+		master file=ARTRN
+		related fld=CUSCOD
+		dimension=400,0,500,150
+
+		file name=STMAS
+		alias=C
+		tag=STMAS1
+		master file=STCRD
+		related fld=STKCOD
+		dimension=500,0,600,150
+
+		file name=OESO
+		alias=Y
+		tag=OESO1
+		master file=ARTRN
+		related fld=SONUM
+		dimension=600,0,700,150
+
+		file name=STLOC
+		alias=L
+		tag=STLOC1
+		master file=STCRD
+		related fld=STKCOD+LOCCOD
+		dimension=700,0,800,150
+
+	[Item File]
+		file name=STCRD
+		alias=B
+		tag=STCRD5
+		dimension=200,0,300,150
+
+		file name=ARTRNRM
+		alias=C
+		tag=ARTRNRM1
+		dimension=300,0,400,150
+
+[Section]
+[Ti]
+	name=Ti1
+	secheight=0.2880 inch
+	order objs=1
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT1
+		visible=No
+		print with=::INIT
+		calculation= "1,seq=0","1,sumamt0=0","1,sumamt1=0"
+		order=1
+		dimension=146,0,586,268
+		exc dimension=146,0,586,268
+		insu=0
+
+[He]
+	name=He1
+	secheight=0.9320 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=PICT
+		name=PICT0
+		order=1
+		dimension=0,0,875,875
+		exc dimension=0,0,875,875
+		pict=LOGO
+		showfile=No
+		stretch=No
+
+		obj type=TEXT
+		name=TEXT2
+		print with=_NAME
+		order=2
+		dimension=975,0,7520,356
+		exc dimension=975,0,7520,356
+		font size=22
+		insu=0
+
+		obj type=TEXT
+		name=TEXT3
+		print with=p_addr()
+		order=3
+		dimension=975,376,7520,644
+		exc dimension=975,376,7520,644
+		font size=16
+		insu=0
+
+		obj type=TEXT
+		name=TEXT4
+		print with=p_telnum()
+		order=4
+		dimension=975,664,7520,932
+		exc dimension=975,664,7520,932
+		font size=16
+		insu=0
+
+[He]
+	name=He3
+	secheight=0.4330 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ใบกำกับสินค้า/ใบกำกับภาษี
+		name=LABEL1
+		order=1
+		dimension=4066,0,6854,413
+		exc dimension=4066,0,6854,413
+		font size=22
+
+[He]
+	name=He4
+	secheight=0.2880 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=เลขประจำตัวผู้เสียภาษี 
+		name=LABEL2
+		order=1
+		dimension=66,0,1510,268
+		exc dimension=66,0,1510,268
+
+		obj type=TEXT
+		name=TEXT5
+		print with=p_taxid()
+		order=2
+		dimension=1906,0,3146,268
+		exc dimension=1906,0,3146,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT6
+		print with=p_orgtxt()
+		order=3
+		dimension=3186,0,4426,268
+		exc dimension=3186,0,4426,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT7
+		print with=p_orgstr()
+		order=4
+		dimension=4466,0,7520,268
+		exc dimension=4466,0,7520,268
+		insu=0
+
+[He]
+	name=He5
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He6
+	secheight=0.2880 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ลูกค้า
+		name=LABEL3
+		order=1
+		dimension=226,0,762,268
+		exc dimension=226,0,762,268
+
+		obj type=TEXT
+		name=TEXT8
+		print with=ARTRN->CUSCOD
+		order=2
+		dimension=786,0,1726,268
+		exc dimension=786,0,1726,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT9
+		print with=A->BILLTO
+		calculation= "1,tax_id=@TAXID()"
+		order=3
+		dimension=1746,0,2906,268
+		exc dimension=1746,0,2906,268
+		insu=0
+
+		obj type=LABEL
+		caption=เลขที่ใบกำกับ
+		name=LABEL4
+		order=4
+		dimension=4146,0,5112,268
+		exc dimension=4146,0,5112,268
+
+		obj type=TEXT
+		name=TEXT10
+		print with=ARTRN->DOCNUM
+		order=5
+		dimension=5586,0,6978,268
+		exc dimension=5586,0,6978,268
+		insu=0
+
+[He]
+	name=He7
+	secheight=0.2880 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT11
+		print with=cus_nam
+		calculation= "1,cus_nam = ARMAS->PRENAM - ' ' - ARMAS->CUSNAM"
+		order=1
+		dimension=226,0,4866,268
+		exc dimension=226,0,4866,268
+		insu=0
+
+[He]
+	name=He8
+	secheight=0.2880 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT12
+		print with=ARMAS->ADDR01
+		order=1
+		dimension=226,0,4126,268
+		exc dimension=226,0,4126,268
+		insu=0
+
+		obj type=LABEL
+		caption=วันที่
+		name=LABEL5
+		order=2
+		dimension=4146,0,4641,268
+		exc dimension=4146,0,4641,268
+
+		obj type=TEXT
+		name=TEXT13
+		print with=ARTRN->DOCDAT
+		order=3
+		dimension=5586,0,6514,268
+		exc dimension=5586,0,6514,268
+		insu=0
+
+[He]
+	name=He9
+	secheight=0.2880 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT14
+		print with=ARMAS->ADDR02
+		order=1
+		dimension=226,0,6026,268
+		exc dimension=226,0,6026,268
+		insu=0
+
+[He]
+	name=He10
+	secheight=0.2880 inch
+	order objs=6
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT15
+		print with=addr_03
+		calculation= "1,addr_03 = ARMAS->ADDR03 - ' ' - ARMAS->ZIPCOD"
+		order=1
+		dimension=226,0,4106,268
+		exc dimension=226,0,4106,268
+		insu=0
+
+		obj type=LABEL
+		caption=เครดิต
+		name=LABEL6
+		order=2
+		dimension=4146,0,4686,268
+		exc dimension=4146,0,4686,268
+
+		obj type=TEXT
+		name=TEXT16
+		print with=ARTRN->PAYTRM
+		format=ZZZ
+		order=3
+		dimension=4706,0,4946,268
+		exc dimension=4706,0,4946,268
+		insu=0
+
+		obj type=LABEL
+		caption=วัน
+		name=LABEL7
+		order=4
+		dimension=5026,0,5434,268
+		exc dimension=5026,0,5434,268
+
+		obj type=LABEL
+		caption=ครบกำหนด
+		name=LABEL8
+		order=5
+		dimension=5586,0,6286,268
+		exc dimension=5586,0,6286,268
+
+		obj type=TEXT
+		name=TEXT17
+		print with=ARTRN->DUEDAT
+		order=6
+		dimension=6306,0,7234,268
+		exc dimension=6306,0,7234,268
+		insu=0
+
+[He]
+	name=He11
+	secheight=0.2880 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=เลขประจำตัวผู้เสียภาษี
+		name=LABEL9
+		order=1
+		dimension=226,0,1638,268
+		exc dimension=226,0,1638,268
+
+		obj type=TEXT
+		name=TEXT18
+		print with=tax_id
+		order=2
+		dimension=2066,0,3226,268
+		exc dimension=2066,0,3226,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT19
+		print with=org
+		calculation= "1,br=@p_orgnum_00009( A->ORGNUM )","1,org=IIF(tax_id#'   '.AND.A->ORGNUM>=0,IIF(A->ORGNUM=0,' สำนักงานใหญ่  ', ' สาขาที่ '-br),'               ')"
+		order=3
+		dimension=3266,0,7520,268
+		exc dimension=3266,0,7520,268
+		insu=0
+
+[He]
+	name=He12
+	secheight=0.2880 inch
+	order objs=6
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=โทร.
+		name=LABEL10
+		order=1
+		dimension=226,0,606,268
+		exc dimension=226,0,606,268
+
+		obj type=TEXT
+		name=TEXT20
+		print with=ARMAS->TELNUM
+		order=2
+		dimension=626,0,4126,268
+		exc dimension=626,0,4126,268
+		insu=0
+
+		obj type=LABEL
+		caption=เลขที่ใบสั่งขาย
+		name=LABEL11
+		order=3
+		dimension=4146,0,5161,268
+		exc dimension=4146,0,5161,268
+
+		obj type=TEXT
+		name=TEXT21
+		print with=ARTRN->SONUM
+		order=4
+		dimension=5586,0,6526,268
+		exc dimension=5586,0,6526,268
+		insu=0
+
+		obj type=LABEL
+		caption=ลวท.
+		name=LABEL12
+		order=5
+		dimension=6546,0,6846,268
+		exc dimension=6546,0,6846,268
+
+		obj type=TEXT
+		name=TEXT22
+		print with=OESO->SODAT
+		order=6
+		dimension=6866,0,7520,268
+		exc dimension=6866,0,7520,268
+		insu=0
+
+[He]
+	name=He13
+	secheight=0.2880 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=อ้างอิง
+		name=LABEL13
+		order=1
+		dimension=226,0,805,268
+		exc dimension=226,0,805,268
+
+		obj type=TEXT
+		name=TEXT23
+		print with=ARTRN->YOUREF
+		order=2
+		dimension=1026,0,4126,268
+		exc dimension=1026,0,4126,268
+		insu=0
+
+		obj type=LABEL
+		caption=พนักงานขาย
+		name=LABEL14
+		order=3
+		dimension=4146,0,5056,268
+		exc dimension=4146,0,5056,268
+
+		obj type=TEXT
+		name=TEXT24
+		print with=slm
+		calculation= "1,slm = ARTRN->SLMCOD-'-'-OESLM->SLMNAM"
+		order=4
+		dimension=5586,0,7520,268
+		exc dimension=5586,0,7520,268
+		insu=0
+
+[He]
+	name=He14
+	secheight=0.2880 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ขนส่งโดย
+		name=LABEL15
+		order=1
+		dimension=226,0,999,268
+		exc dimension=226,0,999,268
+
+		obj type=TEXT
+		name=TEXT25
+		print with=p_istab( ARTRN->DLVBY, 41, 1, 40 )
+		order=2
+		dimension=1026,0,4106,268
+		exc dimension=1026,0,4106,268
+		insu=0
+
+		obj type=LABEL
+		caption=เขตการขาย
+		name=LABEL16
+		order=3
+		dimension=4146,0,4981,268
+		exc dimension=4146,0,4981,268
+
+		obj type=TEXT
+		name=TEXT26
+		print with=p_istab( ARTRN->AREACOD, 40, 1, 40 )
+		order=4
+		dimension=5586,0,7520,268
+		exc dimension=5586,0,7520,268
+		insu=0
+
+[He]
+	name=He15
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He16
+	secheight=0.2880 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=No.
+		name=LABEL17
+		order=1
+		dimension=226,0,664,268
+		exc dimension=226,0,664,268
+
+		obj type=LABEL
+		caption=รหัสสินค้า/รายละเอียด
+		name=LABEL18
+		order=2
+		dimension=1506,0,2928,268
+		exc dimension=1506,0,2928,268
+
+		obj type=LABEL
+		caption=จำนวน
+		name=LABEL19
+		order=3
+		dimension=4466,0,5087,268
+		exc dimension=4466,0,5087,268
+
+		obj type=LABEL
+		caption=หน่วยละ
+		name=LABEL20
+		order=4
+		dimension=5666,0,6378,268
+		exc dimension=5666,0,6378,268
+
+		obj type=TEXT
+		name=TEXT27
+		print with=txt0
+		calculation= "1,txt0 = IIF( ARTRN->FLGVAT <> '1', '  จำนวนเงิน', 'ราคารวมภาษี')"
+		order=5
+		dimension=6466,0,7520,268
+		exc dimension=6466,0,7520,268
+		insu=0
+
+[He]
+	name=He17
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+[Bo]
+	name=Bo1
+	visible=No
+	secheight=0.1250 inch
+	order objs=0
+	shrink=Yes
+[Ih]
+	name=Ih11
+	secheight=0.1250 inch
+	order objs=0
+	master file=ARTRN
+	master expr=DOCNUM
+	item file=STCRD
+	item expression=DOCNUM
+	section ID=1
+	level=1
+	shrink=Yes
+[Ib]
+	name=Ib11
+	secheight=0.2880 inch
+	order objs=6
+	section ID=1
+	level=1
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT28
+		print with=seq
+		format=999
+		calculation= "1,seq=seq+1"
+		order=1
+		dimension=146,0,386,268
+		exc dimension=146,0,386,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT29
+		print with=article
+		calculation= "1,article = STCRD->STKCOD - ' ' - STCRD->STKDES"
+		order=2
+		dimension=626,0,4046,268
+		exc dimension=626,0,4046,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT30
+		print with=STCRD->TRNQTY
+		format=qtyZ(7)
+		order=3
+		dimension=4066,0,4626,268
+		exc dimension=4066,0,4626,268
+		horz align=Right
+		insu=0
+
+		obj type=TEXT
+		name=TEXT31
+		print with=p_istab( STCRD->TQUCOD,  20, 1, 0 )
+		order=4
+		dimension=4706,0,5406,268
+		exc dimension=4706,0,5406,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT32
+		print with=STCRD->UNITPR
+		format=priZ(10)
+		order=5
+		dimension=5426,0,6226,268
+		exc dimension=5426,0,6226,268
+		horz align=Right
+		insu=0
+
+		obj type=TEXT
+		name=TEXT33
+		print with=STCRD->TRNVAL
+		format=ZZ,ZZZ,ZZZ.ZZ
+		order=6
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Ih]
+	name=Ih21
+	secheight=0.1250 inch
+	order objs=0
+	master file=STCRD
+	master expr=RDOCNUM
+	item file=ARTRNRM
+	item expression=DOCNUM+SEQNUM
+	section ID=2
+	level=2
+	shrink=Yes
+[Ib]
+	name=Ib21
+	secheight=0.2880 inch
+	order objs=1
+	section ID=2
+	level=2
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT34
+		print with=ARTRNRM->REMARK
+		order=1
+		dimension=626,0,6426,268
+		exc dimension=626,0,6426,268
+		insu=0
+
+[If]
+	name=If21
+	secheight=0.2000 inch
+	order objs=0
+	section ID=2
+	level=2
+	shrink=Yes
+[Ih]
+	name=Ih31
+	secheight=0.1250 inch
+	order objs=0
+	master file=STCRD
+	master expr=DOCNUM+SEQNUM
+	item file=ARTRNRM
+	item expression=DOCNUM+SEQNUM
+	section ID=3
+	level=2
+	shrink=Yes
+[Ib]
+	name=Ib31
+	secheight=0.2880 inch
+	order objs=1
+	section ID=3
+	level=2
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT35
+		print with=ARTRNRM->REMARK
+		order=1
+		dimension=626,0,6426,268
+		exc dimension=626,0,6426,268
+		insu=0
+
+[If]
+	name=If31
+	secheight=0.2000 inch
+	order objs=0
+	section ID=3
+	level=2
+	shrink=Yes
+[If]
+	name=If11
+	secheight=0.2000 inch
+	order objs=0
+	section ID=1
+	level=1
+	shrink=Yes
+[Fo]
+	name=Fo1
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+[Su]
+	name=Su1
+	secheight=0.2880 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=หมายเหตุ
+		name=LABEL21
+		order=1
+		dimension=146,0,892,268
+		exc dimension=146,0,892,268
+
+		obj type=LABEL
+		caption=รวมเป็นเงิน
+		name=LABEL22
+		order=2
+		dimension=4066,0,4924,268
+		exc dimension=4066,0,4924,268
+
+		obj type=TEXT
+		name=TEXT36
+		print with=ARTRN->AMOUNT
+		format=99,999,999.99
+		order=3
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su2
+	secheight=0.2880 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT37
+		print with=p_hrem( A->DOCNUM,1,A->SONUM )
+		order=1
+		dimension=226,0,4026,268
+		exc dimension=226,0,4026,268
+		insu=0
+
+		obj type=LABEL
+		caption=หัก
+		name=LABEL23
+		underline=Yes
+		order=2
+		dimension=4066,0,4286,268
+		exc dimension=4066,0,4286,268
+
+		obj type=LABEL
+		caption=ส่วนลด
+		name=LABEL24
+		order=3
+		dimension=4306,0,4954,268
+		exc dimension=4306,0,4954,268
+
+		obj type=TEXT
+		name=TEXT38
+		print with=ARTRN->DISC
+		order=4
+		dimension=5426,0,6366,268
+		exc dimension=5426,0,6366,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT39
+		print with=ARTRN->DISCAMT
+		format=99,999,999.99
+		order=5
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su3
+	secheight=0.2880 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT40
+		print with=p_hrem( A->DOCNUM,2,A->SONUM )
+		order=1
+		dimension=226,0,4026,268
+		exc dimension=226,0,4026,268
+		insu=0
+
+		obj type=LABEL
+		caption=ยอดหลังหักส่วนลด
+		name=LABEL25
+		order=2
+		dimension=4066,0,5332,268
+		exc dimension=4066,0,5332,268
+
+		obj type=TEXT
+		name=TEXT41
+		print with=ARTRN->AFTDISC
+		format=99,999,999.99
+		order=3
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su4
+	secheight=0.2880 inch
+	order objs=6
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT42
+		print with=p_hrem( A->DOCNUM,3,A->SONUM )
+		order=1
+		dimension=226,0,4026,268
+		exc dimension=226,0,4026,268
+		insu=0
+
+		obj type=LABEL
+		caption=หัก
+		name=LABEL26
+		underline=Yes
+		order=2
+		dimension=4066,0,4286,268
+		exc dimension=4066,0,4286,268
+
+		obj type=LABEL
+		caption=เงินมัดจำ
+		name=LABEL27
+		order=3
+		dimension=4306,0,5022,268
+		exc dimension=4306,0,5022,268
+
+		obj type=LABEL
+		caption=#
+		name=LABEL28
+		order=4
+		dimension=5266,0,5326,268
+		exc dimension=5266,0,5326,268
+
+		obj type=TEXT
+		name=TEXT43
+		print with=ARTRN->ADVNUM
+		order=5
+		dimension=5346,0,6366,268
+		exc dimension=5346,0,6366,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT44
+		print with=ARTRN->ADVAMT
+		format=99,999,999.99
+		order=6
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su5
+	secheight=0.2880 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT45
+		print with=p_hrem( A->DOCNUM,4,A->SONUM )
+		order=1
+		dimension=226,0,4026,268
+		exc dimension=226,0,4026,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT46
+		print with=txt1
+		calculation= "1,txt1 = IIF( ARTRN->FLGVAT <> '1', 'จำนวนเงินหลังหักมัดจำ ', 'จำนวนเงินรวมทั้งสิ้น  ')"
+		order=2
+		dimension=4066,0,6346,268
+		exc dimension=4066,0,6346,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT47
+		print with=ARTRN->TOTAL
+		format=99,999,999.99
+		order=3
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su6
+	secheight=0.2880 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT48
+		print with=p_hrem( A->DOCNUM,5,A->SONUM )
+		order=1
+		dimension=226,0,4026,268
+		exc dimension=226,0,4026,268
+		insu=0
+
+		obj type=LABEL
+		caption=จำนวนภาษีมูลค่าเพิ่ม
+		name=LABEL29
+		order=2
+		dimension=4066,0,5402,268
+		exc dimension=4066,0,5402,268
+
+		obj type=TEXT
+		name=TEXT49
+		print with=ARTRN->VATRAT
+		format=99.99
+		order=3
+		dimension=5746,0,6126,268
+		exc dimension=5746,0,6126,268
+		horz align=Right
+		insu=0
+
+		obj type=LABEL
+		caption=%
+		name=LABEL30
+		order=4
+		dimension=6146,0,6366,268
+		exc dimension=6146,0,6366,268
+
+		obj type=TEXT
+		name=TEXT50
+		print with=ARTRN->VATAMT
+		format=99,999,999.99
+		order=5
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su7
+	secheight=0.2880 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT51
+		print with=t_baht(ARTRN->NETAMT)
+		order=1
+		dimension=146,0,4586,268
+		exc dimension=146,0,4586,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT52
+		print with=txt2
+		calculation= "1,txt2 = IIF( ARTRN->FLGVAT <> '1', 'จำนวนเงินรวมทั้งสิ้น', 'ราคาสินค้า          ')"
+		order=2
+		dimension=4626,0,6346,268
+		exc dimension=4626,0,6346,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT53
+		print with=netamt
+		format=99,999,999.99
+		calculation= "1,netamt = IIF( ARTRN->FLGVAT <> '1', ARTRN->NETAMT, ARTRN->TOTAL - ARTRN->VATAMT)"
+		order=3
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su8
+	enable=No
+	secheight=0.2880 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT54
+		print with=p_hrem( A->DOCNUM,3,A->SONUM )
+		order=1
+		dimension=226,0,4866,268
+		exc dimension=226,0,4866,268
+		insu=0
+
+[Su]
+	name=Su9
+	enable=No
+	secheight=0.2880 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT55
+		print with=p_hrem( A->DOCNUM,4,A->SONUM )
+		order=1
+		dimension=226,0,4026,268
+		exc dimension=226,0,4026,268
+		insu=0
+
+		obj type=LABEL
+		caption=สินค้ายกเว้นภาษีมูลค่าเพิ่ม
+		name=LABEL31
+		order=2
+		dimension=4066,0,5672,268
+		exc dimension=4066,0,5672,268
+
+		obj type=TEXT
+		name=TEXT56
+		print with=AMTRATZ
+		format=99,999,999.99
+		calculation= "1,AMTRATZ = ARTRN->AMTRAT0 - (ARTRN->AMTRAT0 * ARTRN->DISCAMT / ARTRN->AMOUNT)"
+		order=3
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su10
+	enable=No
+	secheight=0.2880 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT57
+		print with=p_hrem( A->DOCNUM,5,A->SONUM )
+		order=1
+		dimension=226,0,4026,268
+		exc dimension=226,0,4026,268
+		insu=0
+
+		obj type=LABEL
+		caption=มูลค่าสินค้าอัตรา
+		name=LABEL32
+		order=2
+		dimension=4066,0,5187,268
+		exc dimension=4066,0,5187,268
+
+		obj type=TEXT
+		name=TEXT58
+		print with=ARTRN->VATRAT
+		format=99.99
+		order=3
+		dimension=5586,0,5986,268
+		exc dimension=5586,0,5986,268
+		horz align=Right
+		insu=0
+
+		obj type=LABEL
+		caption=%
+		name=LABEL33
+		order=4
+		dimension=6066,0,6366,268
+		exc dimension=6066,0,6366,268
+
+		obj type=TEXT
+		name=TEXT59
+		print with=AMTRATX
+		format=99,999,999.99
+		calculation= "1,AMTRATX = IIF(ARTRN->FLGVAT='1',ARTRN->TOTAL - AMTRATZ - ARTRN->VATAMT, ARTRN->TOTAL - AMTRATZ)"
+		order=5
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su11
+	enable=No
+	secheight=0.2880 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=จำนวนเงินภาษีมูลค่าเพิ่ม
+		name=LABEL34
+		order=1
+		dimension=4066,0,5585,268
+		exc dimension=4066,0,5585,268
+
+		obj type=TEXT
+		name=TEXT60
+		print with=ARTRN->VATAMT
+		format=99,999,999.99
+		order=2
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su12
+	enable=No
+	secheight=0.2880 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT61
+		print with=t_baht(ARTRN->NETAMT)
+		order=1
+		dimension=146,0,4586,268
+		exc dimension=146,0,4586,268
+		insu=0
+
+		obj type=LABEL
+		caption=จำนวนเงินรวมทั้งสิ้น
+		name=LABEL35
+		order=2
+		dimension=4626,0,5968,268
+		exc dimension=4626,0,5968,268
+
+		obj type=TEXT
+		name=TEXT62
+		print with=ARTRN->NETAMT
+		format=99,999,999.99
+		order=3
+		dimension=6386,0,7426,268
+		exc dimension=6386,0,7426,268
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su13
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+[Su]
+	name=Su14
+	secheight=0.2880 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ได้รับสินค้าตามรายการข้างบนนี้ไว้ถูกต้อง 
+		name=LABEL36
+		order=1
+		dimension=226,0,2675,268
+		exc dimension=226,0,2675,268
+
+[Su]
+	name=Su15
+	secheight=0.2880 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=และอยู่ในสภาพเรียบร้อยทุกประการ
+		name=LABEL37
+		order=1
+		dimension=226,0,2342,268
+		exc dimension=226,0,2342,268
+
+		obj type=LABEL
+		caption=ในนาม
+		name=LABEL38
+		order=2
+		dimension=3826,0,4286,268
+		exc dimension=3826,0,4286,268
+
+		obj type=TEXT
+		name=TEXT63
+		print with=_NAME
+		order=3
+		dimension=4306,0,7520,268
+		exc dimension=4306,0,7520,268
+		insu=0
+
+[Su]
+	name=Su16
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No
+[Su]
+	name=Su17
+	secheight=0.2880 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ผู้รับสินค้า ________________ วันที่ ___/___/___
+		name=LABEL39
+		order=1
+		dimension=226,0,3024,268
+		exc dimension=226,0,3024,268
+
+		obj type=LABEL
+		caption=ผู้รับมอบอำนาจ  __________________
+		name=LABEL40
+		order=2
+		dimension=4306,0,6589,268
+		exc dimension=4306,0,6589,268
+
+[Su]
+	name=Su18
+	enable=No
+	secheight=0.2880 inch
+	order objs=9
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=พิมพ์โดย
+		name=LABEL41
+		order=1
+		dimension=226,0,948,268
+		exc dimension=226,0,948,268
+
+		obj type=TEXT
+		name=TEXT64
+		print with=p_userid()
+		order=2
+		dimension=1026,0,2186,268
+		exc dimension=1026,0,2186,268
+		insu=0
+
+		obj type=LABEL
+		caption=วันที่
+		name=LABEL42
+		order=3
+		dimension=2226,0,2721,268
+		exc dimension=2226,0,2721,268
+
+		obj type=TEXT
+		name=TEXT65
+		print with=@d_prndat()
+		order=4
+		dimension=2866,0,3626,268
+		exc dimension=2866,0,3626,268
+		insu=0
+
+		obj type=TEXT
+		name=TEXT66
+		print with=s_prntim()
+		order=5
+		dimension=3666,0,4266,268
+		exc dimension=3666,0,4266,268
+		insu=0
+
+		obj type=LABEL
+		caption=พิมพ์ครั้งที่
+		name=LABEL43
+		order=6
+		dimension=4306,0,5108,268
+		exc dimension=4306,0,5108,268
+
+		obj type=TEXT
+		name=TEXT67
+		print with=@n_prncnt()
+		format=999
+		order=7
+		dimension=5346,0,5586,268
+		exc dimension=5346,0,5586,268
+		insu=0
+
+		obj type=LABEL
+		caption=บันทึกโดย
+		name=LABEL44
+		order=8
+		dimension=5986,0,6766,268
+		exc dimension=5986,0,6766,268
+
+		obj type=TEXT
+		name=TEXT68
+		print with=A->USERID
+		order=9
+		dimension=6786,0,7520,268
+		exc dimension=6786,0,7520,268
+		insu=0
+
+[Su]
+	name=Su19
+	secheight=0.1250 inch
+	order objs=0
+	shrink=No

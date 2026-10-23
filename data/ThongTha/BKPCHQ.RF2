@@ -1,0 +1,58 @@
+* BKPCHQ.RN1 - Print Post Date Cheque
+*
+[report frame]
+Bo:                                                                    ~CHQDAT   ~D1 ~D2 ~M1 ~M2 ~Y1 ~Y2 ~Y3 ~Y4
+Bo:
+Bo:
+Bo:                 ~NAME
+Bo: \027\074\042                   ~BAHT
+Bo: \027\074\038                                                                     ~AMOUNT
+[end frame]
+
+[print options]
+Left=0
+Right=132
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=BKPCHQ.TXT
+Print Control=\027\033\001
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=BKTRN
+Alias=A
+Tag=BKTRN3
+System=DATA_PATH
+
+[relate file]
+File=APMAS
+Alias=B
+Tag=APMAS1
+System=DATA_PATH
+Master file=BKTRN
+Master-Related Field=CUSCOD
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",             "exp"
+~CHQDAT:    0,       "",       "",             "x=dtos(a->CHQDAT); y=str(val(substr(x,1,4))+543,4)"
+~D1:               0,       "",       "D1",        "D1=SUBSTR(x,7,1)"
+~D2:               0,       "",       "D2",        "D2=SUBSTR(x,8,1)"
+~M1:               0,       "",       "M1",        "M1=SUBSTR(x,5,1)"
+~M2:               0,       "",       "M2",        "M2=SUBSTR(x,6,1)"
+~Y1:               0,        "",       "Y1",        "Y1=SUBSTR(y,1,1)"
+~Y2:               0,        "",       "Y2",        "Y2=SUBSTR(y,2,1)"
+~Y3:               0,        "",       "Y3",        "Y3=SUBSTR(y,3,1)"
+~Y4:               0,        "",       "Y4",        "Y4=SUBSTR(y,4,1)"
+
+~NAME:      0,      "",                 "A->NAME",          ""
+~AMOUNT:    0,      "***,***,**9.99",   "A->AMOUNT",        ""
+~BAHT:      0,      "",                 "t_baht(A->AMOUNT)",""
+
+
+

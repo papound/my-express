@@ -1,0 +1,177 @@
+* STCRD.RWT - Stock Card
+*
+[report frame]
+Ti::~PAGE0 ~INIT
+Gh::~PAGE0 ~GETOPNBAL ~SETMEM ~SETMEM1 ~SETQUCOD		; 1 STKCOD
+He:\NAME                                                                                                                                                                     `เลขประจำตัวผู้เสียภาษี  : ~TAXID
+He:$Bรายงานสินค้าและวัตถุดิบ$B  วันที่ ~DATE1          ถึง ~DATE2                                                                                                                              `หน้า  : ~PAGE
+He:~STOCK                                                                                                                                              คิดต้นทุนแบบ  : ~COST            ปริมาณนับเป็น    : ~QUDES
+*He:\LINE
+He:<------  ใบสำคัญ  ------> <------------  รายการรับ  -----------> <------------  รายการจ่าย  ----------> <------------   คงเหลือ  ------------> <--   เพื่อ  --> <--- เอกสาร ---> <---------- รายการ ---------->
+He:  วันที่    เลขที่               จำนวน  ราคาต่อหน่วย      มูลค่ารับ     จำนวน  ราคาต่อหน่วย     มูลค่าจ่าย     จำนวน  ราคาต่อหน่วย  มูลค่าคงเหลือ  เอกสาร            อ้างอิง
+*  dd/mm/yy xxxxxxxxx1xx xxx 9999,999.9--9999,999.9--999,999,999.9- 9999,999.9--9999,999.9--999,999,999.9- 9999,999.9--9999,999.9--999,999,999.9- xxxxxxxxx1xx xxx Xxxxxxxxx1xxxxxx xxxxxxxxx1xxxxxxxxx2xxxxxxxxx3
+He:\LINE
+He:         ยอดยกมา                                                                                        ~OBAL       ~OPRICE     ~OVAL
+Bo::~CLRSUM
+Ih::~SEEK_STCRD	   			;1 stcrd->stkcod stmas->stkcod
+Ib::~S0~S1~S2~S3~S4~S5~S6~S7~S8~S9~SA~SB~SD	;1
+Ib:~DOCDAT  ~DOCNUM          ~Q1         ~PRC1       ~VAL1          ~Q2         ~PRC2       ~VAL2          ~BAL        ~PRC        ~VAL           ~RDOCNUM         ~REFNUM          ~POSDES
+Ib:~AV      ปรับต้นทุนโดยโปรแกรม                     ~VALCHG1                               ~VALCHG2       ~BAL        ~PRC        ~VAL
+Ib::~SETMEM1
+Gf:                          ------------            -------------- ------------            -------------- ;1
+Gf:~X     รวม~C_ITEMรายการ   ~SUMQTY1                ~SUMVAL1       ~SUMQTY2                ~SUMVAL2       
+Gf:~C     รวม~C_ITEMรายการ   ~SUMQTY1                ~SUMVAL1       ~SUMQTY2                ~SUMVAL2         (คงเหลือ  ~CTOTBAL     ~CQUDES      ~XTOTBAL     ~XQUDES
+Gf:                          ============            ============== ============            ==============
+Gf:\FEED
+Su:\DLINE
+Su:รวมทั้งสิ้น~C_STK สินค้า  ~G_QTY1                 ~G_VAL1        ~G_QTY2                 ~G_VAL2        ~G_QTY                  ~G_VAL
+Su:\DLINE
+Su:~RM$_หมายเหตุ$_
+Su:~SW          - ยอดคงเหลือรวมทั้งสิ้นนี้ ยังไม่รวมยอดยกมา/ยกไปของสินค้าที่ไม่เคลื่อนไหว  หากจะนำยอดคงเหลือรวมทั้งสิ้นไปใช้ ควรจะพิมพ์รายงานนี้ใหม่โดยสั่งให้พิมพ์รายการไม่เคลื่อนไหวด้วย
+Su:~W_RECAL     - มีสินค้าบางตัว ยอดคงเหลือไม่ตรงตามที่ตรวจนับ (สังเกตุจากเครื่องหมาย *** ที่อยู่ในช่อง'เพื่อเอกสาร') ต้องไปสั่งให้คำนวณยอดสะสมของสินค้านั้นใหม่
+Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=0
+Left=0
+Right=207
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=STCRD.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, Default
+15_Inch=\027\033\004
+Subgroup=OFF
+Query=STMAS->STKGRP>='StkGrp1()'.AND.STMAS->STKGRP<='StkGrp2()'
+
+[master file]
+File=STMAS
+Alias=A
+Tag=STMAS1
+System=DATA_PATH
+Filter=STMAS->STKTYP='0'
+
+[item file]
+File=STCRD
+Alias=B
+Tag=STCRD1
+System=DATA_PATH
+Filter=(POSOPR #'3'.AND.POSOPR #'4'.AND.POSOPR#'='.AND.POSOPR #'2') .OR. (POSOPR ='2'.AND.RETSTK ='Y')
+
+File=ISTAB
+Alias=I
+Tag=ISTAB1
+System=DATA_PATH
+
+[relate file]
+File=ISRUN
+Alias=R
+Tag=ISRUN2
+System=DATA_PATH
+Master file=STCRD
+Master-Related Field=DOCNUM
+
+File=ARMAS
+Alias=C
+Tag=ARMAS1
+System=DATA_PATH
+Master file=STCRD
+Master-Related Field=PEOPLE
+
+File=APMAS
+Alias=D
+Tag=APMAS1
+System=DATA_PATH
+Master file=STCRD
+Master-Related Field=PEOPLE
+
+File=STTRN
+Alias=T
+Tag=STTRN1
+System=DATA_PATH
+Master file=STCRD
+Master-Related Field=DOCNUM
+
+[data spec]
+*~dat:		len,"pict",			"data",			"exp"
+~INIT:		0,	"",				"",				"c_stk=0; G_QTY1=0;G_VAL1=0;G_QTY2=0;G_VAL2=0;G_QTY=0;G_VAL=0; PRT_NOMOVE=@n_prtnomove(); SW=IIF(PRT_NOMOVE=0, ' ', '}'); w_recal='}'; p_cqucod=@n_isuse_cqu()"
+~PAGE0:		0,	"",				"",				"P=0"
+~PAGE:		0,	"99,999",		"P",			"P=P+1"
+~TAXID:		0,	"",				"p_taxid()",	""
+~DATE1:		0,	"d ดดด ปปปป",	"@date1()",		""
+~DATE2:		0,	"d ดดด ปปปป",	"@date2()",		""
+~SETMEM:	0,	"",				"",				"BAL=STMAS->TOTBAL;PRICE=STMAS->UNITPR;VAL=STMAS->TOTVAL;STKC=STMAS->STKCOD;STKD=STMAS->STKDES;c_item=0; is_fifo=@n_isfifo(); is_avg=IIF(is_fifo=0, 1, 0)"
+~SETMEM1:	0,	"",				"",				"OBAL=BAL;OPRICE=PRICE;OVAL=VAL"
+~SEEK_STCRD:0,	"",				"seek_begin()",	""
+~STOCK:		0,	"",				"stock",		"stock=STKC-'  $B'-STKD-'$B'"
+~STKCOD:	0,	"",				"STKC",			""
+~STKDES:	0,	"",				"STKD",			""
+~QUDES:		8,	"",				"qu",			""
+~GETOPNBAL:	0,	"",				"stmas_opnbald()","costtype=@t_costtype()"
+
+~OBAL:		0,	"qty(12)",			"OBAL",			""
+~OPRICE:	0,	"pri(12)",			"OPRICE",		""
+~OVAL:		0,	"999,999,999.99",	"OVAL",			""
+~BAL:		0,	"qty(12)",			"BAL",			""
+~PRC:		0,	"pri(12)",			"PRICE",		""
+~VAL:		0,	"999,999,999.99",	"VAL",			""
+~Q1:		0,	"qtyZ(12)",			"Q1",			"SUMQTY1=SUMQTY1+Q1"
+~PRC1:		0,	"priZ(12)",			"PRICE1",		""
+~VAL1:		0,	"ZZZ,ZZZ,ZZZ.ZZ",	"VAL1",			"SUMVAL1=SUMVAL1+VAL1"
+~VALCHG1:	0,	"zzz,zzz,zzz.zz",	"VALCHG1",		"VALCHG1=IIF(STCRD->VALCHG>0, STCRD->VALCHG, 0); SUMVAL1=SUMVAL1+VALCHG1; VAL=VAL+VALCHG1"
+~Q2:		0,	"qtyZ(12)",			"Q2",			"SUMQTY2=SUMQTY2+Q2"
+~PRC2:		0,	"priZ(12)",			"PRICE2",		""
+~VAL2:		0,	"ZZZ,ZZZ,ZZZ.ZZ",	"VAL2",			"SUMVAL2=SUMVAL2+VAL2"
+~VALCHG2:	0,	"zzz,zzz,zzz.zz",	"VALCHG2",		"VALCHG2=IIF(STCRD->VALCHG<0, 0-STCRD->VALCHG, 0); SUMVAL2=SUMVAL2+VALCHG2; VAL=VAL-VALCHG2; PRICE=IIF(BAL=0,0,VAL/BAL)"
+~C_ITEM:	0,	"99,999",			"c_item",		"c_stk=c_stk+1; G_QTY=G_QTY+BAL;G_VAL=G_VAL+VAL"
+~SUMQTY1:	0,	"qty(12)",			"SUMQTY1",		"G_QTY1=G_QTY1+SUMQTY1"
+~SUMVAL1:	0,	"999,999,999.99",	"SUMVAL1",		"G_VAL1=G_VAL1+SUMVAL1"
+~SUMQTY2:	0,	"qty(12)",			"SUMQTY2",		"G_QTY2=G_QTY2+SUMQTY2"
+~SUMVAL2:	0,	"999,999,999.99",	"SUMVAL2",		"G_VAL2=G_VAL2+SUMVAL2"
+
+~C_STK:		0,	"99,999",			"c_stk",		""
+~G_QTY:		0,	"qty(12)",			"G_QTY",		""
+~G_VAL:		0,	"999,999,999.99",	"G_VAL",		""
+~G_QTY1:	0,	"qty(12)",			"G_QTY1",		""
+~G_VAL1:	0,	"999,999,999.99",	"G_VAL1",		""
+~G_QTY2:	0,	"qty(12)",			"G_QTY2",		""
+~G_VAL2:	0,	"999,999,999.99",	"G_VAL2",		""
+
+~CLRSUM:	0,	"",		"",			"SUMQTY1=0; SUMVAL1=0; SUMQTY2=0; SUMVAL2=0"
+~S0:		0,	"",		"",			"c_item=c_item+1"
+~S1:		0,	"",		"",			"POS=@n_posopr(STCRD->POSOPR); T=STCRD->XTRNQTY; V=STCRD->XTRNVAL; PR=STCRD->XUNITPR"
+~S2:		0,	"",		"",			"SIDE=IIF(POS<=5.OR.POS=10, 1, 2 )"
+~S3:		0,	"",		"",			"SIDE=IIF(POS=8 .AND. T>0,1,SIDE)"
+~S4:		0,	"",		"",			"SIDE=IIF(POS=5, IIF( V < 0, 2, 1 ),SIDE )"
+~S5:		0,	"",		"",			"T=IIF(T<0,0-T,T); V=IIF(V<0,0-V,V)"
+~S6:		0,	"",		"",			"BAL=BAL+IIF(SIDE=1,T,0-T); BAL=VAL(STR(BAL,15,4)); VAL=VAL+IIF(SIDE=1,V,0-V); PRICE=IIF(BAL=0,0,VAL/BAL)"
+~S7:		0,	"",		"",			"Q1=IIF(SIDE=1,T,0); VAL1=IIF(SIDE=1,V,0); PRICE1=VAL1/Q1"
+~S8:		0,	"",		"",			"Q2=IIF(SIDE=2,T,0); VAL2=IIF(SIDE=2,V,0); PRICE2=IIF(SIDE=2,STCRD->XUNITPR,0)"
+~S9:		0,	"",		"",			"POSD=IIF(POS=0 .OR. POS=7,SUBSTR(APMAS->SUPNAM,1,30),ISRUN->POSDES)"
+~SA:		0,	"",		"",			"POSD=IIF(POS=2 .OR. POS=9,SUBSTR(ARMAS->CUSNAM,1,30),POSD)"
+~SB:		0,	"",		"",			"POSD=IIF(POS#0.AND.POS#7.AND.POS#2.AND.POS#9,SUBSTR(STTRN->REMARK,1,30),POSD)"
+~SD:		0,	"",		"",			"POSD=IIF(POSD='          ',ISRUN->POSDES,POSD)"
+~DOCDAT:	0,	"",		"STCRD->DOCDAT",""
+*~DOCNUM:	,	"",		"DOC",		"DOC=IIF(STCRD->REFNUM # '  ', STCRD->REFNUM+' ', STCRD->DOCNUM-'-'-STCRD->SEQNUM )"
+~DOCNUM:	0,	"",		"DOC",		"DOC=trim(STCRD->DOCNUM) + '-' + STCRD->SEQNUM; DOC=IIF(DOC='-','                ',DOC)"
+~REFNUM:	0,	"",		"STCRD->REFNUM",""
+~RDOCNUM:	0,	"",		"RDOC",		"RDOC=IIF(STCRD->RDOCNUM='  ', '                ', SUBSTR(STCRD->RDOCNUM,1,12)-'-'-SUBSTR(STCRD->RDOCNUM,13,3))"
+*~RDOCNUM:	0,	"",		"RDOC",		"RDOC=IIF(POS=10.OR.POS=11, IIF(STR(STCRD->PHYBAL,12,4)#STR(BAL,12,4),'***ไม่ตรงตามนับ','===ยอดตรวจนับ  '), IIF(STCRD->RDOCNUM='  ', '                ', SUBSTR(STCRD->RDOCNUM,1,12)-'-'-SUBSTR(STCRD->RDOCNUM,13,3))); w_recal=IIF(RDOC='***', ' ', w_recal)"
+~POSDES:   30,	"",		"POSD",		""
+~AV:		0,	"",		"AV",		"AV=IIF(is_avg=1.and.STR(STCRD->VALCHG,15,2) #'           0.00', ' ', '}')"
+~SW:		0,	"",		"SW",		""
+~W_RECAL:	0,	"",		"w_recal",	""
+~RM:		0,	"",		"re_mark",	"re_mark = IIF( SW=' '.OR.w_recal=' ', ' ', '}')"
+~COST:		0,	"",		"costtype",	""
+
+~SETQUCOD:	0,	"",					"",					"qu=@p_istab( STMAS->QUCOD,20,1,8 ); cqu=@p_istab( STMAS->CQUCOD,20,1,8 ); c_factor=STMAS->CFACTOR"
+~X:			0,	"",					"PX",				"PX=IIF(p_cqucod=0,' ','}')"
+~C:			0,	"",					"PC",				"PC=IIF(p_cqucod=0,'}',' ')"
+~CTOTBAL:	0,	"qtyZ(12)",			"ctotbal",			"ctotbal=IIF(c_factor>1, VAL(SUBSTR(STR(BAL/c_factor,15,4),1,10)), 0)"
+~CQUDES:	0,	"",					"cqu",				"cqu=IIF(ctotbal#0.or.c_factor>1, cqu-'x'-LTRIM(STR(c_factor,10,0)), '                       ')"
+~CFACTOR:	0,	"facZ(10)",			"c_factor",	""
+~XTOTBAL:	0,	"qty(12)",			"xtotbal",			"xtotbal=BAL-(ctotbal*c_factor)"
+~XQUDES:	0,	"",					"xqu",				"xqu=IIF(p_cqucod=1,qu,'        ');xqu=xqu-')'"

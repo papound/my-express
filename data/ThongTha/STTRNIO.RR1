@@ -1,0 +1,157 @@
+* STTRN8.RL - ใบปรับปรุงยอดสินค้า (STOCK ADJUSTMENT DOCUMENT)
+*
+[report frame]
+*** ผู้ใช้สามารถเปลี่ยนแปลงแก้ไข ได้ตามต้องการ ****************************************
+Ti:: ~INIT
+He: $E\NAME                                 $E
+He:                                                                                                           $Eใบเปลี่ยนสินค้า/อะหลั่ย$E
+He:                                                                                                                                    $Eหน้า :\P   / \TP$E  
+He:                                                                                                           เลขที่เอกสาร      ~DOCNUM
+He:                                                                                                           วันที่            ~DOCDAT
+He:     หมายเหตุ  : ~REMARK                                                                                   รายงานการตรวจทดสอบสินค้า/อะหลั่ย เลขที่ .....................
+He:+----+-----------------------------------------------------------------+-----------+-----------------+-------------------+--------+--------+----------------------+
+He:|    |                                                                 |   จำนวน   |     Lot. No.    |     Mfg.No.       |คลังสินค้า |ช่างเทคนิค|      / = ปกติ         |
+He:|ลำดับ|                     รหัสสินค้า/รายละเอียด                      |           |                 |                   +--------+--------|      X = ไม่ปกติ     |  
+He:|    |  Barcode                                                        |           |                 |                   | ภายนอก | ผลทดสอบ|         หมายเหตุ     |
+He:|----+-----------------------------------------------------------------+-----------+-----------------+-------------------+--------+--------+----------------------|
+Bo::
+Ih::         ;1  STCRD->docnum STTRN->docnum
+Ib:  ~N    ~ARTICLE                                                       ~QTY   ~QUCOD     ;1
+Ib:         ~BARCOD                                                                         ;1
+Ih::                     ;3 artrnrm->docnum+artrnrm->seqnum stcrd->docnum+stcrd->seqnum
+Ib:~Z       ~REMARKS     ;3
+Ih::                    ;4 STLOTSN->docnum+STLOTSN->seqnum stcrd->docnum+stcrd->seqnum
+*Ib:                                                                                     ~SERIAL                  ~LOTNUM                           ~CUTNUM      ;4
+Ib:                                                                                     ~LOTNUM           ~SERIAL         ;4        
+Bt:|     |                                                                |           |                 |                   |        |        |                      |
+Fo:|-----+----------------------------------------------------------------+-----------+-----------------+-------------------+--------+--------+----------------------+
+*Su:|                                                                                                                                                                 |
+*Su:|                                                                   ............/.............  ...../...../.....        ..................  ...../...../.....    |
+Su:|  ผู้จัดทำ   ~USERID                ~CHGDAT                                 หัวหน้าส่วนคลังสินค้า                             ผู้ดำเนินการ                       |
+Su:|  พิมพ์โดย  ~PRNBY       วันที่  ~PRNDAT   ~PRNTIM    พิมพ์ครั้งที่  ~PRNCNT                                                                                     |
+Su:+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+
+[end frame]
+
+*** คำสั่งต่อจากนี้ ผู้ใช้ไม่ควรแก้ไข ****************************************
+
+[print options]
+Debug=OFF
+Top=0
+Left=0
+Tabs=4
+Right=163
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=STTRN8.TXT
+After Finish Show=OFF
+Print Control=\027\033\004
+Report Type=Listing, Financial
+Fix Foot Line=OFF
+Fix Summary Line=ON
+Select Scope=OFF
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=sttrn
+Alias=A
+Tag=sttrn1
+*Path=
+System=DATA_PATH
+
+[item file]
+File=stcrd
+Alias=B
+Tag=stcrd3
+System=DATA_PATH
+
+File=artrnrm
+Alias=C
+Tag=artrnrm1
+System=DATA_PATH
+
+File=STLOTSN
+Alias=D
+Tag=STLOTSN1
+System=DATA_PATH
+
+[relate file]
+File=stmas
+Alias=E
+Tag=stmas1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD
+
+File=stloc
+Alias=L
+Tag=stloc1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD+LOCCOD
+
+File=scuser
+Alias=Z
+Tag=scuser1
+System=SECURE_PATH
+Master file=sttrn
+Master-Related Field='U'+USERID
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",                 "exp"
+~INIT:      0,      "",                 "",                     "seq=0;TTRNVAL=0"
+~DOCNUM:    0,      "",                 "STTRN->DOCNUM",        ""
+~DOCDAT:    0,      "",                 "STTRN->DOCDAT",        ""
+~REMARK:    0,      "",                 "STTRN->REMARK",        ""
+~PEOPLE:    0,      "",                 "STTRN->PEOPLE",        ""
+~PEOPLE:    0,      "",                 "p_istab( STTRN->PEOPLE,  21, 1, 0 )",      ""
+~LOCCOD:    0,      "",                 "STTRN->LOCCOD",        ""
+~LOCCODT:   0,      "",                 "p_istab( STTRN->LOCCOD,  21, 1, 0 )",      ""
+
+~N:         0,      "999",              "seq",              "seq=seq+1"
+~ARTICLE:  70,      "",                 "article",          "article = STCRD->STKCOD - ' :' - STMAS->STKDES"
+*~ARTICLE:  60,      "",                 "article",          "article = STCRD->STKCOD" 
+~STKCOD:   15,      "",                 "STCRD->STKCOD",    ""
+~STKDES:   45,      "",                 "STMAS->STKDES",    ""
+~BARCOD:   20,      "",                 "STMAS->BARCOD",    ""
+~QTY:       0,      "ZZ,ZZZ",           "STCRD->XTRNQTY",   ""
+*~QTY:      0,      "ZZ,ZZZ",           "STCRD->TRNQTY",    ""
+~QUCOD:     8,      "",                 "p_istab( STMAS->QUCOD,  20, 1, 0 )",       "",
+~TQUCOD:    8,      "",                 "p_istab( STCRD->TQUCOD,  20, 1, 0 )",      "",
+~LOC:       0,      "",                 "STCRD->LOCCOD",    ""
+~LOCT:      0,      "",                 "p_istab( STCRD->LOCCOD,  21, 1, 0 )",      ""
+~UNITPR:    0,      "ZZZ,ZZZ.ZZ",       "STCRD->UNITPR",    ""
+~TRNVAL:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "STCRD->TRNVAL",    "TTRNVAL=TTRNVAL+IIF(STMAS->STKTYP='1',0,STCRD->TRNVAL)"
+~TTRNVAL:   0,      "99,999,999.99",    "STTRN->TRNVAL",    ""
+~SALVAL:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "STCRD->SALVAL",    ""
+~REM:       0,      "",                 "STCRD->REMARK",    ""
+~REMARKS:  47,      "",                 "ARTRNRM->REMARK"   ""   
+*~REMARKS1: 9,      "",                 "rem_mark",         "rem_mark=SUBSTR(ARTRNRM->REMARK,42,9)"  
+~Z:         0,      "",                 "Z",                "Z=IIF(STCRD->PSTKCOD=' ',' ',':')"
+~SERIAL:    0,      "",                 "STLOTSN->SERIAL",      ""
+~LOTNUM:    0,      "",                 "STLOTSN->LOTNUM",      ""
+~CUTNUM:    0,      "",                 "STLOTSN->CUTNUM",      ""
+
+~DEP:       0,      "",                 "A->DEPCOD",                ""
+~P_ISDEP:   0,      "",                 "p_isdep( A->DEPCOD )",     ""
+~LOCAREA:   0,      "",                 "STLOC->AREA",              ""
+
+~PRNBY:     0,      "",                 "p_userid()",       ""
+~PRNDAT:    0,      "",                 "@d_prndat()",      ""
+~PRNTIM:    0,      "",                 "s_prntim()",       ""
+~PRNCNT:    0,      "999",              "@n_prncnt()",      ""
+~RECBY:     0,      "",                 "A->USERID",        ""
+
+*~USERID:    0,      "",                 "STTRN->USERID",    ""
+~CHGDAT:    0,      "",                 "STTRN->CHGDAT",    "" 
+~USERID:    24,      "",                 "userid",          "userid=SCUSER->RECDES"
+
+~HREM1:     0,      "",                 "p_hrem( A->DOCNUM,1 )",    ""
+~HREM2:     0,      "",                 "p_hrem( A->DOCNUM,2 )",    ""
+~HREM3:     0,      "",                 "p_hrem( A->DOCNUM,3 )",    ""
+~HREM4:     0,      "",                 "p_hrem( A->DOCNUM,4 )",    ""
+~HREM5:     0,      "",                 "p_hrem( A->DOCNUM,5 )",    ""

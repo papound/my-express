@@ -1,0 +1,67 @@
+* พิมพ์ชื่อที่อยู่ผู้จำหน่าย เพื่อจ่าหน้าซองจดหมาย
+*
+[report frame]
+*** ผู้ใช้สามารถเปลี่ยนแปลงแก้ไข ได้ตามต้องการ ****************************************
+Bo:
+Bo:
+Bo:
+Bo:
+Bo:
+Bo:						กรุณาส่ง
+Bo:  								~CONTACT
+Bo:  								~SUPNAM
+Bo:  								~ADDR01
+Bo:  								~ADDR02
+Bo:  								$E~ZIP $E
+Bo:
+[end frame]
+
+*** คำสั่งต่อจากนี้ ผู้ใช้ไม่ควรแก้ไข ****************************************
+
+[print options]
+Top=0
+Left=0
+Right=96
+Lines=12
+Output=Select, Printer, Screen, File,
+File Name=APMASENV.TXT
+Print Control=\027\033\001
+Fix Summary Line=OFF
+Select Page=OFF
+Select Scope=OFF
+*Iteration=ON
+*Condition=ON
+*Feed After Print=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=APMAS
+Alias=A
+Tag=APMAS1
+System=DATA_PATH
+
+[data spec]
+*~dat:  	len,    "pict",				"data",             "exp"
+~CONTACT:	0,		"",					"APMAS->CONTACT",	""
+~SUPNAM:    0,      "",         		"name",             "name = APMAS->PRENAM - ' ' - APMAS->SUPNAM"
+~ADDR01:    0,      "",         		"APMAS->ADDR01",    ""
+~ADDR02:    0,      "",         		"APMAS->ADDR02",	""
+~ADDR03:    0,      "",         		"APMAS->ADDR03",	""
+~ZIP:       0,      "",         		"APMAS->ZIPCOD",	""
+~SUPCOD:    0,      "",         		"APMAS->SUPCOD",    ""
+
+~TELNUM:	0,		"",					"APMAS->TELNUM",	""
+~PAYCOND:	0,		"",					"APMAS->PAYCOND",	""
+~TRM:		0,		"",					"APMAS->PAYTRM",	""
+~DISC:		0,		"",					"APMAS->DISC",		""
+~CRLINE:	0,		"99,999,999.99",	"APMAS->CRLINE",	""
+~ACCNUM:	0,		"",					"APMAS->ACCNUM",	""
+~REMARK:	0,		"",					"APMAS->REMARK",	""
+
+~HREM1:		0,		"",					"x1",				"x1=@p_hrem( A->SUPCOD,1 )"
+~HREM2:		0,		"",					"x2",				"x2=@p_hrem( A->SUPCOD,2 )"
+~HREM3:		0,		"",					"x3",				"x3=@p_hrem( A->SUPCOD,3 )"
+~HREM4:		0,		"",					"x4",				"x4=@p_hrem( A->SUPCOD,4 )"
+~HREM5:		0,		"",					"x5",				"x5=@p_hrem( A->SUPCOD,5 )"

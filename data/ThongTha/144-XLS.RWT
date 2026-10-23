@@ -1,0 +1,188 @@
+* ARTRNIVS.RWT - Invoice Report by Salesman
+*
+[report frame]
+Ti::~INIT ~INIT2
+He:\NAME                                                    `หน้า   : \PAGE
+He:$Eรายงานใบกำกับสินค้า แยกตามพนักงานขาย$E
+He:วันที่จาก   ~FROMDATE     ถึง  ~TODATE                   `วันที่ : \DATE
+H1:รหัสลูกค้า  ~FROMCUS      ถึง  ~TOCUS
+H1:พนักงานขาย  ~FROMSLM      ถึง  ~TOSLM          เลือกแผนก  ~DEP
+He:\LINE
+*He:   เลขที่       วันที่  ลูกค้า                                   V      ส่วนลด     มูลค่าสินค้า     VAT.        รวมทั้งสิ้น  ครบกำหนด ใบสั่งขาย  เก็บเงิน
+*He:~D   รายละเอียด                                         จำนวน          ราคาต่อหน่วย   ส่วนลด     จำนวนเงิน
+He:"เลขที่,"วันที่","ลูกค้า","","V","ส่วนลด","มูลค่าสินค้า","VAT.","รวมทั้งสิ้น","ครบกำหนด","ใบสั่งขาย","เก็บเงิน
+He:~D","","","รายละเอียด","จำนวน","","ราคาต่อหน่วย","ส่วนลด","จำนวนเงิน","","จากใบสั่งขาย",
+He:\LINE
+**: *IVxxxxxxx1xx DD/MM/YY xxxxxxxxx1xxxxxxxxx2xxxxxxxxx3xxxxxxxxx4 9 xxxxxxxxx1999,999,999.9999,999,999.99 999,999,999.99  DD/MM/YY xxxxxxxxx1xx   Y
+Gh:$B~SALESMAN                                                      $B ; 1 SLMCOD
+Bo:~F~DOCNUM      ~DOCDAT    ~CUSNAM                                  ~V~DISC     ~VALAMT       ~VATAMT       ~NETAMT         ~DUEDAT    ~SONUM      ~Y
+Bo:~9                                              ตัดใบรับมัดจำ#  ~ADVNUM    ~ADVAMT
+Ih::~I                  ;1 stcrd->docnum artrn->docnum
+Ib:     ~N  ~STKCOD               ~STKDES                                ~QTY      ~TQUCOD   ~UNITPR      ~DISC_I   ~NETAMT_I                           ~RDOCNUM     ;1
+If:                     ;1
+Ih::                    ;2 artrnrm->docnum+artrnrm->seqnum stcrd->rdocnum
+Ib:        ~REMARK      ;2
+Ih::                    ;3 artrnrm->docnum+artrnrm->seqnum stcrd->docnum+stcrd->seqnum
+Ib:        ~REMARK      ;3
+Ih:     หมายเหตุ:       ;4 artrnrm->docnum+'@' artrn->docnum+'@'
+Ib:       ~REMARK       ;4
+If:                     ;4
+*Ih::   รับชำระหนี้ด้วย ;5 arrcpit->docnum artrn->docnum
+*Ib:                           ~IT_RCPNUM ~IT_RCPDAT  ~IT_RCPDUE  ~IT_RCVAMT     ;5
+Gf:                                                                             -------------- ------------ --------------              ;1
+Gf:                     รวม ~SLMNAME                                            $B~SUB1VAL      ~SUB1VAT      ~SUB1NET      $B          ;1
+Gf:~1                   ยอดที่ตัดใบรับมัดจำ                                     $B~SUB1ADV                    ~SUB1ADVX     $B ~C_SUB1  ;1
+Gf:                                                                                                                                 ;1
+Su:                                                                             ============== ============ ==============
+Su:                     รวมทั้งสิ้น  ~CNT   ใบ                                  $B~TOTVAL       ~TOTVAT       ~TOTNET       $B
+Su:~0                   ยอดที่ตัดใบรับมัดจำ                                     $B~TOTADV                     ~TOTADVX      $B
+Su:                                                                             ============== ============ ==============
+Su:หมายเหตุ:  เอกสารที่มีเครื่องหมาย '*' นำหน้า คือ เอกสารที่ถูกยกเลิก         มี ~CX ใบ
+Su:                "------"     '>' นำหน้า คือ เอกสารที่รออนุมัติให้เกินวงเงิน มี ~CL ใบ
+Su:
+Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=0
+Right=158
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=ARTRNIVS.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, 8_Inch, Default
+8_Inch=\027\033\005
+15_Inch=\027\033\001
+Query=DTOS(DOCDAT)>='Date1()'.AND.DTOS(DOCDAT)<='Date2()'
+Query=.AND.SLMCOD>='Slm1()'.AND. SLMCOD<='Slm2()'
+Query=.AND.CUSCOD>='Cus1()'.AND. CUSCOD<='Cus2()'.AND.RECTYP='3'
+Sort=SLMCOD+DTOS(DOCDAT)+DOCNUM
+
+[master file]
+File=ARTRN
+Alias=A
+Tag=ARTRN1
+System=DATA_PATH
+
+[item file]
+File=STCRD
+Alias=B
+Tag=STCRD5
+System=DATA_PATH
+
+File=artrnrm
+Alias=X
+Tag=artrnrm1
+System=DATA_PATH
+
+File=arrcpit
+Alias=Y
+Tag=arrcpit2
+System=DATA_PATH
+
+[relate file]
+File=OESLM
+Alias=C
+Tag=OESLM1
+System=DATA_PATH
+Master file=ARTRN
+Master-Related Field=SLMCOD
+
+File=ARMAS
+Alias=D
+Tag=ARMAS1
+System=DATA_PATH
+Master file=ARTRN
+Master-Related Field=CUSCOD
+
+File=stmas
+Alias=E
+Tag=stmas1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD
+
+[data spec]
+*           len (0)default,(>0)cut,(<0)cut to new line
+*~dat:      len,"pict",             "data",         "exp"
+~INIT:      0,  "",                 "",             "p_det=@n_prn_detail(); prn_detail=IIF(p_det=0,':',' '); cnt=0;cx=0;cl=0"
+~INIT2:     0,  "",                 "",             "sub1aft=0;sub1adv=0;sub1val=0;sub1vat=0;sub1net=0; totaft=0;totadv=0;tot_val=0;totvat=0;totnet=0"
+~FROMDATE:  0,  "d ดดด yyyy",       "@date1()",     ""
+~TODATE:    0,  "d ดดด yyyy",       "@date2()",     ""
+~FROMCUS:   0,  "",                 "Cus1()",       ""
+~TOCUS:     0,  "",                 "Cus2()",       ""
+~FROMSLM:   0,  "",                 "Slm1()",       ""
+~TOSLM:     0,  "",                 "Slm2()",       ""
+~DEP:       0,  "",                 "Dep1()",       ""
+~TODEP:     0,  "",                 "Dep2()",       ""
+
+~CUSTOMER:  0,  "",                 "cus_nam",      "cus_nam = ARMAS->CUSNAM - ' /' - A->CUSCOD"
+~CUSNAME:   0,  "",                 "cus_nam",      ""
+~SALESMAN:  0,  "",                 "slm_nam",      "slm_nam = OESLM->SLMNAM - ' /' - A->SLMCOD"
+~SLMNAME:   0,  "",                 "slm_nam",      "",C
+
+~F:         0,  "",                 "cancel",       "cancel=IIF(A->DOCSTAT='C',' *',IIF(A->DOCSTAT='O',' >','  ' ))"
+~DOCNUM:    0,  "",                 "A->DOCNUM",    "cnt=cnt+1; cx=cx+IIF(cancel=' *',1,0); cl=cl+IIF(cancel=' >',1,0)"
+~DOCDAT:    0,  "วว/ดด/ปปปป",       "A->DOCDAT",    "",B
+~SLMCOD:    0,  "",                 "A->SLMCOD",    ""
+~CUSCOD:    0,  "",                 "A->CUSCOD",    ""
+~CUSNAM:   40,  "",                 "ARMAS->CUSNAM",   "",C
+~V:         0,  "",                 "A->FLGVAT",    "",E
+~AMOUNT:    0,  "99,999,999.99",    "A->AMOUNT",    ""
+~DISC:      0,  "",                 "A->DISC",      "",F
+~AFTAMT:    0,  "999,999,999.99",   "A->AFTDISC",   "sub1aft=sub1aft+A->AFTDISC"
+~ADVAMT:    0,  "999,999,999.99",   "A->ADVAMT",    "sub1adv=sub1adv+A->ADVAMT"
+~VALAMT:    0,  "999,999,999.99",   "A->NETVAL",    "sub1val=sub1val+A->NETVAL",G
+~VATAMT:    0,  "99,999,999.99",    "A->VATAMT",    "sub1vat=sub1vat+A->VATAMT",H
+~NETAMT:    0,  "999,999,999.99",   "A->NETAMT",    "sub1net=sub1net+A->NETAMT",I
+~DUEDAT:    0,  "วว/ดด/ปปปป",       "A->DUEDAT",    "",J
+~SONUM:     0,  "",                 "A->SONUM",     "",K
+~Y:         0,  "",                 "A->CMPLAPP",   "",L
+
+~SUB1AFT:   0,  "999,999,999.99",   "sub1aft",      ""
+~SUB1ADV:   0,  "999,999,999.99",   "sub1adv",      ""
+~SUB1VAL:   0,  "999,999,999.99",   "sub1val",      "",G
+~SUB1VAT:   0,  "99,999,999.99",    "sub1vat",      "",H
+~SUB1NET:   0,  "999,999,999.99",   "sub1net",      "",I
+~C_SUB1:    0,  "",                 "",             "totaft=totaft+sub1aft; sub1aft=0; totadv=totadv+sub1adv; sub1adv=0; tot_val=tot_val+sub1val; sub1val=0; totvat=totvat+sub1vat; sub1vat=0; totnet=totnet+sub1net; sub1net=0"
+~TOTAFT:    0,  "999,999,999.99",   "totaft",       ""
+~TOTADV:    0,  "999,999,999.99",   "totadv",       ""
+~TOTVAL:    0,  "999,999,999.99",   "tot_val",      "",G
+~TOTVAT:    0,  "99,999,999.99",    "totvat",       "",H
+~TOTNET:    0,  "999,999,999.99",   "totnet",       "",I
+
+~I:         0,  "",                 "",                 "seq=0"
+~N:         0,  "999",              "seq",              "seq=seq+1",B
+~ARTICLE:   39, "",                 "article",          "article=STCRD->STKCOD-'  '-STCRD->STKDES",C
+~STKCOD:    0,  "",                 "STCRD->STKCOD",    "",C
+~STKDES:    0,  "",                 "STMAS->STKDES",    "",D
+~L:         0,  "",                 "STCRD->LOCCOD",    ""
+~QTY:       0,  "qtyZ(10)",         "STCRD->TRNQTY",    "",E
+~TQUCOD:    0,  "",                 "p_istab( STCRD->TQUCOD, 20, 1, 0 )",   "",F
+~UNITPR:    0,  "priZ(12)",         "STCRD->UNITPR",    "",G
+~DISC_I:    0,  "",                 "STCRD->DISC",      "",H
+~NETAMT_I:  0,  "ZZZ,ZZZ,ZZZ.ZZ",   "STCRD->TRNVAL",    "",I
+~RDOCNUM:   0,  "",                 "RDOC",             "RDOC=IIF(STCRD->RDOCNUM='  ', '                ', SUBSTR(STCRD->RDOCNUM,1,12)-'-'-SUBSTR(STCRD->RDOCNUM,13,3))",K
+
+~D:         0,  "",                 "prn_detail",       ""
+~REMARK:    0,  "",                 "ARTRNRM->REMARK",  "",C
+
+~ADVNUM:    0,  "",                 "A->ADVNUM",        ""
+~SUB1ADVX:  0,  "999,999,999.99",   "tmp",              "tmp=sub1adv+sub1net"
+~TOTADVX:   0,  "999,999,999.99",   "tmp",              "tmp=totadv+totnet"
+~9:         0,  "",                 "prnadv",           "prnadv=IIF(A->ADVAMT>0,' ',':')"
+~1:         0,  "",                 "prnadv",           "prnadv=IIF(sub1adv>0,' ',':')"
+~0:         0,  "",                 "prnadv",           "prnadv=IIF(totadv>0,' ',':')"
+~CNT:       0,  "99,999",           "cnt",              ""
+~CX:        0,  "999",              "cx",               ""
+~CL:        0,  "999",              "cl",               ""
+
+~IT_RCPNUM: 0,  "",                 "ARRCPIT->RCPNUM",              ""
+~IT_RCPDAT: 0,  "",                 "arrcpit_get_re_data(DOCDAT)",  ""
+~IT_RCPDUE: 0,  "",                 "arrcpit_get_re_data(DUEDAT)",  ""
+~IT_RCVAMT: 0,  "99,999,999.99",    "ARRCPIT->RCVAMT",              ""
+
+
+

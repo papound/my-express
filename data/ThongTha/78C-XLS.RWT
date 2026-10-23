@@ -1,0 +1,208 @@
+* STPRXGS.RWT - Sales Summary Report (12 Period) by Stock Group+Stock Code
+*
+[report frame]
+Ti::~INIT_VAR ~INIT ~CLR_T
+He:\NAME                                                                                        `หน้า: \PAGE
+He:$Eรายงานสรุปยอดขาย แจกแจงเป็นงวด แยกตามหมวดสินค้า$E  จากงวด ~P1 ถึง ~P12
+He:หมวดสินค้าจาก   ~FROMGRP             ถึง  ~TOGRP                                             `วันที่: \DATE         
+H1:รหัสสินค้าจาก   ~FROMSTK             ถึง  ~TOSTK
+H1:รหัสลูกค้า      ~FROMCUS             ถึง  ~TOCUS
+H1:รหัสพนักงานขาย  ~FROMSLM             ถึง  ~TOSLM
+H1:คลังสินค้าจาก   ~FROMLOC             ถึง  ~TOLOC             เลือกแผนก  ~FROMDEP
+He:\LINE                                                                    <                                                               ยอดขายสุทธิแยกตามงวด                                                          >
+He:รหัสสินค้า","รายละเอียด","หน่วยนับ","~PRD1","~PRD2","~PRD3","~PRD4","~PRD5","~PRD6","~PRD7","~PRD8","~PRD9","~PRD10","~PRD11","~PRD12","รวม",
+He:\LINE
+*    xxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxx 999,999.999 999,999.999 999,999.999 999,999.999 999,999.999 999,999.999 999,999.999 999,999.999 999,999.999 999,999.999 999,999.999 999,999.999 9999,999.999 
+Gh:$Bหมวดสินค้า : ~STKGRP                                                             $B ;1 STMAS->STKGRP
+Bo:: ~SQ ~SUMQ
+*Bo:: ~SV ~SUMV
+Bo: ~STKCOD       ~STKDES                                           ~QUDES  ~SQ01       ~SQ02       ~SQ03       ~SQ04       ~SQ05       ~SQ06       ~SQ07       ~SQ08       ~SQ09       ~SQ10       ~SQ11       ~SQ12       ~SQ00        
+Gf:","","","-----------","-----------","-----------","-----------","-----------","-----------","------------","--------------","--------------","--------------","--------------","--------------","-------------- ; 1
+Gf:        รวม ~TSTKGRP                                                     $B~TSQ01      ~TSQ02      ~TSQ03      ~TSQ04      ~TSQ05      ~TSQ06      ~TSQ07      ~TSQ08      ~TSQ09      ~TSQ10      ~TSQ11      ~TSQ12      ~TSQ00       $B  ~CLR_T
+*Gf:                                                                         =========== =========== =========== =========== =========== =========== =========== =========== =========== =========== =========== =========== ============ 
+Gf:
+Su:","","","-----------","-----------","-----------","-----------","-----------","-----------","------------","--------------","--------------","--------------","--------------","--------------","--------------
+Su:                รวมทั้งสิ้น                                              $B~GSQ01      ~GSQ02      ~GSQ03      ~GSQ04      ~GSQ05      ~GSQ06      ~GSQ07      ~GSQ08      ~GSQ09      ~GSQ10      ~GSQ11      ~GSQ12      ~GSQ00       $B
+Su:","","","===========","===========","===========","===========","===========","===========","===========","===========","===========","===========","===========","===========
+Su:หมายเหตุ:    ยอดขายสุทธิ(ของแถมไม่นำมาคิด) = ปริมาณที่ขายสด+ขายเชื่อ-รับคืน
+*Su:             มูลค่าขาย                 = จำนวนเงินขายสด+ขายเชื่อ-ลดหนี้รับคืน
+Su:>>>>  จบรายงาน  <<<<
+[end frame]
+
+[print options]
+Top=0
+Left=0
+Right=230
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=STPRDGS.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, Default
+8_Inch=\027\033\004
+15_Inch=\027\033\004
+Query=STKGRP>='StkGrp1()'.AND. STKGRP<='StkGrp2()'
+Sort=STMAS->STKGRP+STKCOD
+Date format=วว/ดด/ปปปป
+
+[master file]
+File=A
+Alias=A
+Key=STKCOD
+System=DATA_PATH
+
+[relate file]
+File=OESLM
+Alias=R
+Tag=OESLM1
+System=DATA_PATH
+Master file=A
+Master-Related Field=SLMCOD
+
+File=STMAS
+Alias=B
+Tag=STMAS1
+System=DATA_PATH
+Master file=A
+Master-Related Field=STKCOD
+
+[data spec]
+*~dat:      len,"pict",             "data",         "exp"
+~INIT_VAR:  0,  "",                 "",             "GSQ00=0; GSQ01=0;GSQ02=0;GSQ03=0;GSQ04=0;GSQ05=0;GSQ06=0;GSQ07=0;GSQ08=0;GSQ09=0;GSQ10=0;GSQ11=0;GSQ12=0; GSV00=0; GSV01=0;GSV02=0;GSV03=0;GSV04=0;GSV05=0;GSV06=0;GSV07=0;GSV08=0;GSV09=0;GSV10=0;GSV11=0;GSV12=0; PRTZERO=@n_prt0()"
+~INIT:      0,  "",                 "",             "noused=@s_initfld24(); P12=@n_period12();P1=P12-11;P2=P12-10;P3=P12-9;P4=P12-8;P5=P12-7;P6=P12-6;P7=P12-5;P8=P12-4;P9=P12-3;P10=P12-2;P11=P12-1"
+~CLR_T:     0,  "",                 "",             "TSQ00=0; TSQ01=0;TSQ02=0;TSQ03=0;TSQ04=0;TSQ05=0;TSQ06=0;TSQ07=0;TSQ08=0;TSQ09=0;TSQ10=0;TSQ11=0;TSQ12=0; TSV00=0; TSV01=0;TSV02=0;TSV03=0;TSV04=0;TSV05=0;TSV06=0;TSV07=0;TSV08=0;TSV09=0;TSV10=0;TSV11=0;TSV12=0"
+~P1:        0,  "99",               "P1",           ""
+~P12:       0,  "99",               "P12",          ""
+~PRD1:      0,  "",                 "p_month( P1 )",    ""
+~PRD2:      0,  "",                 "p_month( P2 )",    ""
+~PRD3:      0,  "",                 "p_month( P3 )",    ""
+~PRD4:      0,  "",                 "p_month( P4 )",    ""
+~PRD5:      0,  "",                 "p_month( P5 )",    ""
+~PRD6:      0,  "",                 "p_month( P6 )",    ""
+~PRD7:      0,  "",                 "p_month( P7 )",    ""
+~PRD8:      0,  "",                 "p_month( P8 )",    ""
+~PRD9:      0,  "",                 "p_month( P9 )",    ""
+~PRD10:     0,  "",                 "p_month( P10 )",   ""
+~PRD11:     0,  "",                 "p_month( P11 )",   ""
+~PRD12:     0,  "",                 "p_month( P12 )",   ""
+~SQ:        0,  "",                 "",             "SQ01=@n_salq( P1 );SQ02=@n_salq( P2 );SQ03=@n_salq( P3 );SQ04=@n_salq( P4 );SQ05=@n_salq( P5 );SQ06=@n_salq( P6 );SQ07=@n_salq( P7 );SQ08=@n_salq( P8 );SQ09=@n_salq( P9 );SQ10=@n_salq( P10 );SQ11=@n_salq( P11 );SQ12=@n_salq( P12 )"
+~SV:        0,  "",                 "",             "SV01=@n_salv( P1 );SV02=@n_salv( P2 );SV03=@n_salv( P3 );SV04=@n_salv( P4 );SV05=@n_salv( P5 );SV06=@n_salv( P6 );SV07=@n_salv( P7 );SV08=@n_salv( P8 );SV09=@n_salv( P9 );SV10=@n_salv( P10 );SV11=@n_salv( P11 );SV12=@n_salv( P12 )"
+~SUMQ:      0,  "",                 "",             "SQ00=SQ01+SQ02+SQ03+SQ04+SQ05+SQ06+SQ07+SQ08+SQ09+SQ10+SQ11+SQ12"
+~SUMV:      0,  "",                 "",             "SV00=SV01+SV02+SV03+SV04+SV05+SV06+SV07+SV08+SV09+SV10+SV11+SV12"
+~FROMSTK:   0,  "",                 "Stk1()",       ""
+~TOSTK:     0,  "",                 "Stk2()",       ""
+~FROMSLM:   0,  "",                 "Slm1()",       ""
+~TOSLM:     0,  "",                 "Slm2()",       ""
+~FROMCUS:   0,  "",                 "Cus1()",       ""
+~TOCUS:     0,  "",                 "Cus2()",       ""
+~FROMSTK:   0,  "",                 "Stk1()",       ""
+~TOSTK:     0,  "",                 "Stk2()",       ""
+~FROMGRP:   0,  "",                 "StkGrp1()",    ""
+~TOGRP:     0,  "",                 "StkGrp2()",    ""
+~FROMLOC:   0,  "",                 "Loc1()",       ""
+~TOLOC:     0,  "",                 "Loc2()",       ""
+~FROMDEP:   0,  "",                 "Dep1()",       ""
+
+~STKGRP:    0,  "",                 "stk_grp",      "stk_grp = @p_istab(STMAS->STKGRP,22,1,40)"
+~TSTKGRP:  55,  "",                 "stk_grp",      ""
+~ARTICLE:  58,  "",                 "ARTICLE",      "ARTICLE=A->STKCOD-'  '-A->STKDES"
+~STKCOD:    0,  "",                 "A->STKCOD",    ""
+~STKDES:    0,  "",                 "A->STKDES",    "",B
+~TARTICLE:  0,  "",                 "ARTICLE",      ""
+*~QUDES:    0,  "",                 "p_istab(A->QUCOD,20,1,8)", ""
+~QUDES:     0,  "",                 "p_cqu()",       "nouse=@save_cfactor()",C
+~SLMNAM:    64, "",                 "slm_nam",      "slm_nam = OESLM->SLMNAM -'/ '- A->SLMCOD"
+
+~SQ01:      0,  "",                 "Q",        "TSQ01=TSQ01+SQ01; Q=@s_cqu( SQ01,11 )",D
+~SQ02:      0,  "",                 "Q",        "TSQ02=TSQ02+SQ02; Q=@s_cqu( SQ02,11 )",E
+~SQ03:      0,  "",                 "Q",        "TSQ03=TSQ03+SQ03; Q=@s_cqu( SQ03,11 )",F
+~SQ04:      0,  "",                 "Q",        "TSQ04=TSQ04+SQ04; Q=@s_cqu( SQ04,11 )",G
+~SQ05:      0,  "",                 "Q",        "TSQ05=TSQ05+SQ05; Q=@s_cqu( SQ05,11 )",H
+~SQ06:      0,  "",                 "Q",        "TSQ06=TSQ06+SQ06; Q=@s_cqu( SQ06,11 )",I
+~SQ07:      0,  "",                 "Q",        "TSQ07=TSQ07+SQ07; Q=@s_cqu( SQ07,11 )",J
+~SQ08:      0,  "",                 "Q",        "TSQ08=TSQ08+SQ08; Q=@s_cqu( SQ08,11 )",K
+~SQ09:      0,  "",                 "Q",        "TSQ09=TSQ09+SQ09; Q=@s_cqu( SQ09,11 )",L
+~SQ10:      0,  "",                 "Q",        "TSQ10=TSQ10+SQ10; Q=@s_cqu( SQ10,11 )",M
+~SQ11:      0,  "",                 "Q",        "TSQ11=TSQ11+SQ11; Q=@s_cqu( SQ11,11 )",N
+~SQ12:      0,  "",                 "Q",        "TSQ12=TSQ12+SQ12; Q=@s_cqu( SQ12,11 )",O
+~SQ00:      0,  "",                 "Q",        "TSQ00=TSQ00+SQ00; Q=@s_cqu( SQ00,12 )",P
+~SV01:      0,  "999,999,999.99",   "SV01",     "TSV01=TSV01+SV01",D                     
+~SV02:      0,  "999,999,999.99",   "SV02",     "TSV02=TSV02+SV02",E
+~SV03:      0,  "999,999,999.99",   "SV03",     "TSV03=TSV03+SV03",F
+~SV04:      0,  "999,999,999.99",   "SV04",     "TSV04=TSV04+SV04",G
+~SV05:      0,  "999,999,999.99",   "SV05",     "TSV05=TSV05+SV05",H
+~SV06:      0,  "999,999,999.99",   "SV06",     "TSV06=TSV06+SV06",I
+~SV07:      0,  "999,999,999.99",   "SV07",     "TSV07=TSV07+SV07",J
+~SV08:      0,  "999,999,999.99",   "SV08",     "TSV08=TSV08+SV08",K
+~SV09:      0,  "999,999,999.99",   "SV09",     "TSV09=TSV09+SV09",L
+~SV10:      0,  "999,999,999.99",   "SV10",     "TSV10=TSV10+SV10",M
+~SV11:      0,  "999,999,999.99",   "SV11",     "TSV11=TSV11+SV11",N
+~SV12:      0,  "999,999,999.99",   "SV12",     "TSV12=TSV12+SV12",O
+~SV00:      0,  "999,999,999.99",   "SV00",     "TSV00=TSV00+SV00",P
+*
+~TSQ01:     0,  "",                 "Q",        "GSQ01=GSQ01+TSQ01; Q=@s_cqu( TSQ01,11 )",D 
+~TSQ02:     0,  "",                 "Q",        "GSQ02=GSQ02+TSQ02; Q=@s_cqu( TSQ02,11 )",E 
+~TSQ03:     0,  "",                 "Q",        "GSQ03=GSQ03+TSQ03; Q=@s_cqu( TSQ03,11 )",F 
+~TSQ04:     0,  "",                 "Q",        "GSQ04=GSQ04+TSQ04; Q=@s_cqu( TSQ04,11 )",G 
+~TSQ05:     0,  "",                 "Q",        "GSQ05=GSQ05+TSQ05; Q=@s_cqu( TSQ05,11 )",H 
+~TSQ06:     0,  "",                 "Q",        "GSQ06=GSQ06+TSQ06; Q=@s_cqu( TSQ06,11 )",I 
+~TSQ07:     0,  "",                 "Q",        "GSQ07=GSQ07+TSQ07; Q=@s_cqu( TSQ07,11 )",J 
+~TSQ08:     0,  "",                 "Q",        "GSQ08=GSQ08+TSQ08; Q=@s_cqu( TSQ08,11 )",K 
+~TSQ09:     0,  "",                 "Q",        "GSQ09=GSQ09+TSQ09; Q=@s_cqu( TSQ09,11 )",L 
+~TSQ10:     0,  "",                 "Q",        "GSQ10=GSQ10+TSQ10; Q=@s_cqu( TSQ10,11 )",M 
+~TSQ11:     0,  "",                 "Q",        "GSQ11=GSQ11+TSQ11; Q=@s_cqu( TSQ11,11 )",N 
+~TSQ12:     0,  "",                 "Q",        "GSQ12=GSQ12+TSQ12; Q=@s_cqu( TSQ12,11 )",O 
+~TSQ00:     0,  "",                 "Q",        "GSQ00=GSQ00+TSQ00; Q=@s_cqu( TSQ00,12 )",P 
+~TSV01:     0,  "999,999,999.99",   "TSV01",    "GSV01=GSV01+TSV01",D
+~TSV02:     0,  "999,999,999.99",   "TSV02",    "GSV02=GSV02+TSV02",E
+~TSV03:     0,  "999,999,999.99",   "TSV03",    "GSV03=GSV03+TSV03",F
+~TSV04:     0,  "999,999,999.99",   "TSV04",    "GSV04=GSV04+TSV04",G
+~TSV05:     0,  "999,999,999.99",   "TSV05",    "GSV05=GSV05+TSV05",H
+~TSV06:     0,  "999,999,999.99",   "TSV06",    "GSV06=GSV06+TSV06",I
+~TSV07:     0,  "999,999,999.99",   "TSV07",    "GSV07=GSV07+TSV07",J
+~TSV08:     0,  "999,999,999.99",   "TSV08",    "GSV08=GSV08+TSV08",K
+~TSV09:     0,  "999,999,999.99",   "TSV09",    "GSV09=GSV09+TSV09",L
+~TSV10:     0,  "999,999,999.99",   "TSV10",    "GSV10=GSV10+TSV10",M
+~TSV11:     0,  "999,999,999.99",   "TSV11",    "GSV11=GSV11+TSV11",N
+~TSV12:     0,  "999,999,999.99",   "TSV12",    "GSV12=GSV12+TSV12",O
+~TSV00:     0,  "999,999,999.99",   "TSV00",    "GSV00=GSV00+TSV00",P
+*
+~GSQ01:     0,  "",                 "Q",        "Q=@s_cqu( GSQ01,11 )",D
+~GSQ02:     0,  "",                 "Q",        "Q=@s_cqu( GSQ02,11 )",E
+~GSQ03:     0,  "",                 "Q",        "Q=@s_cqu( GSQ03,11 )",F
+~GSQ04:     0,  "",                 "Q",        "Q=@s_cqu( GSQ04,11 )",G
+~GSQ05:     0,  "",                 "Q",        "Q=@s_cqu( GSQ05,11 )",H
+~GSQ06:     0,  "",                 "Q",        "Q=@s_cqu( GSQ06,11 )",I
+~GSQ07:     0,  "",                 "Q",        "Q=@s_cqu( GSQ07,11 )",J
+~GSQ08:     0,  "",                 "Q",        "Q=@s_cqu( GSQ08,11 )",K
+~GSQ09:     0,  "",                 "Q",        "Q=@s_cqu( GSQ09,11 )",L
+~GSQ10:     0,  "",                 "Q",        "Q=@s_cqu( GSQ10,11 )",M
+~GSQ11:     0,  "",                 "Q",        "Q=@s_cqu( GSQ11,11 )",N
+~GSQ12:     0,  "",                 "Q",        "Q=@s_cqu( GSQ12,11 )",O
+~GSQ00:     0,  "",                 "Q",        "Q=@s_cqu( GSQ00,12 )",P
+~GSV01:     0,  "999,999,999.99",   "GSV01",    "",D
+~GSV02:     0,  "999,999,999.99",   "GSV02",    "",E
+~GSV03:     0,  "999,999,999.99",   "GSV03",    "",F
+~GSV04:     0,  "999,999,999.99",   "GSV04",    "",G
+~GSV05:     0,  "999,999,999.99",   "GSV05",    "",H
+~GSV06:     0,  "999,999,999.99",   "GSV06",    "",I
+~GSV07:     0,  "999,999,999.99",   "GSV07",    "",J
+~GSV08:     0,  "999,999,999.99",   "GSV08",    "",K
+~GSV09:     0,  "999,999,999.99",   "GSV09",    "",L
+~GSV10:     0,  "999,999,999.99",   "GSV10",    "",M
+~GSV11:     0,  "999,999,999.99",   "GSV11",    "",N
+~GSV12:     0,  "999,999,999.99",   "GSV12",    "",O
+~GSV00:     0,  "999,999,999.99",   "GSV00",    "",P
+
+
+
+
+
+
+
+
+
+
+
+

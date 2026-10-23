@@ -1,0 +1,253 @@
+* ISTAX.RL2 - Ë¹Ñ§Ê×ÍÃÑºÃÍ§¡ÒÃËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ (WITHOLDING TAX's FORM)
+*
+* ËÁÒÂàËµØ: 1. ¶éÒµéÍ§¡ÒÃ¾ÔÁ¾ìãËéàÃçÇ¢Öé¹ ¤ÇÃÅºàÊé¹µÑé§·Õèà»ç¹¢Íº¢Í§áºº¿ÍÃìÁ·Ôé§
+*          2. µÒÁ»ÃÐ¡ÒÈ¡ÃÁÊÃÃ¾Ò¡Ãà¡ÕèÂÇ¡ÑºÀÒÉÕà§Ô¹ä´é©ºÑº·Õè 100 ¡ÓË¹´ãËé
+*             µéÍ§ÁÕ¢éÍ¤ÇÒÁÊèÇ¹ËÑÇ·Õè©ºÑºáÃ¡ áÅÐ©ºÑº·ÕèÊÍ§ áµ¡µèÒ§¡Ñ¹¹Ñé¹
+*             ¶éÒ¨ÐãªéÇÔ¸Õ¾ÔÁ¾ì¢éÍ¤ÇÒÁ·Ñé§ÊÍ§Å§ã¹©ºÑº·ÕèáÃ¡ áÅÐ©ºÑº·ÕèÊÍ§
+*             áÅéÇãªéÇÔ¸ÔµÔê¡Ë¹éÒ¢éÍ¤ÇÒÁà¾×èÍãËéµèÒ§¡Ñ¹ ÊÃÃ¾Ò¡Ãà¢µ1äÁèÍ¹Ø­Òµ
+*
+*             ¨ÐµéÍ§ãªéÇÔ¸Õ·ÓµÃÒÂÒ§¢éÍ¤ÇÒÁ¤¹ÅÐÍÑ¹ÁÒ»ÃÐ·Ñº©ºÑºáÃ¡áÅÐ©ºÑº·ÕèÊÍ§
+*             «Öè§¨ÐµéÍ§·ÓË¹Ñ§Ê×Í¢ÍÍ¹Ø­ÒµÍ¸Ôº´Õ¡ÃÁÊÃÃ¾Ò¡Ã¡Ñ¹àÍ§ (à¾ÃÒÐ·ÓäÁèµÃ§µÒÁáºº·Õè¡ÓË¹´)
+*               µÃÒÂÒ§ÍÑ¹áÃ¡     ©ºÑº·Õè 1. (ÊÓËÃÑº¼Ùé¶Ù¡ËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ ãªéá¹º¾ÃéÍÁ¡ÑºáººáÊ´§ÃÒÂ¡ÒÃÀÒÉÕ)
+*               µÃÒÂÒ§ÍÑ¹·ÕèÊÍ§  ©ºÑº·Õè 2. (ÊÓËÃÑº¼Ùé¶Ù¡ËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ à¡çºäÇéà»ç¹ËÅÑ¡°Ò¹)
+*
+*          3. áºº¿ÍÃìÁ¹Õé ·ÓµÒÁ»ÃÐ¡ÒÈÍ¸Ôº´ÕÏ à¡ÕèÂÇ¡ÑºÀÒÉÕà§Ô¹ä´é ©ºÑº·Õè 131 Å§ÇÑ¹·Õè 5 ¡.¾. 2547
+*             «Öè§¨ÐÁÕ¼ÅºÑ§¤ÑºãªéµÑé§áµè 1 àÁ.Â.2547 (à©¾ÒÐ¼Ùé·Õè¨èÒÂµÒÁ 40(4)(¢) à·èÒ¹Ñé¹
+*             ¶éÒÁÔãªè¡ÒÃ¨èÒÂ¨Ò¡ 40(4)(¢) ÊÒÁÒÃ¶ãªé¿ÍÃìÁà´ÔÁµèÍä»ä´é)
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+Ti:: ~INIT
+Ti:
+Ti:                                  $BË¹Ñ§Ê×ÍÃÑºÃÍ§¡ÒÃËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ$B
+Ti:                                µÒÁÁÒµÃÒ 50 ·ÇÔ áËè§»ÃÐÁÇÅÃÑÉ®Ò¡Ã
+Ti:  ÅÓ´Ñº·Õè *..... ã¹áºº ~TAXTYP                                       àÅ¢·Õè ~TAXNUM_X
+Ti:€……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+Ti:„ ¼ÙéÁÕË¹éÒ·ÕèËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ:     àÅ¢»ÃÐ¨ÓµÑÇ¼ÙéàÊÕÂÀÒÉÕ ~TAXID         ~P_ORGTXT         „
+Ti:„   ª×èÍ    \NAME                                                                            „
+Ti:„   ·ÕèÍÂÙè ~ADDR                                                                            „
+Ti:„                                                                                            „
+Ti:„ ¼Ùé¶Ù¡ËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ:           àÅ¢»ÃÐ¨ÓµÑÇ¼ÙéàÊÕÂÀÒÉÕ ~TAXIDX        ~ORG              „
+Ti:„   ª×èÍ    ~NAME                                                                            „
+Ti:„   ·ÕèÍÂÙè ~ADDRESS                                                                         „
+Ti:†……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………‡
+Ti:„                 »ÃÐàÀ·à§Ô¹ä´é¾Ö§»ÃÐàÁÔ¹·Õè¨èÒÂ        ÇÑ¹à´×Í¹»Õ   ¨Ó¹Ç¹à§Ô¹     ÀÒÉÕ·ÕèËÑ¡„
+Ti:„                 $B~DESCRPX                            $B  ÀÒÉÕ ·Õè¨èÒÂ   ·Õè¨èÒÂ    áÅÐ¹ÓÊè§äÇé„
+Ti:†……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………‡
+He:„ 1.à§Ô¹à´×Í¹ ¤èÒ¨éÒ§ àºÕéÂàÅÕéÂ§ âº¹ÑÊÏÅÏ µÒÁ Á.40(1)  ~PD1     ~PA1         ~PT1           „
+He:~XPT1   ~INIT2
+He:~XPT12                                                  ~PD1     ~PA1         ~PT1           „
+He:„ 2.¤èÒ¸ÃÃÁà¹ÕÂÁ ¤èÒ¹ÒÂË¹éÒ ÏÅÏ µÒÁÁÒµÃÒ 40(2)          ~PD2     ~PA2         ~PT2           „
+He:~XPT2   ~INIT2
+He:~XPT22                                                  ~PD2     ~PA2         ~PT2           „
+He:„ 3.¤èÒáËè§ÅÔ¢ÊÔ·¸Ôì ÏÅÏ µÒÁÁÒµÃÒ 40(3)                 ~PD3     ~PA3         ~PT3           „
+He:~XPT3   ~INIT2
+He:~XPT32                                                  ~PD3     ~PA3         ~PT3           „
+He:„ 4.(¡) ¤èÒ´Í¡àºÕéÂ ÏÅÏ µÒÁÁÒµÃÒ 40(4)(¡)               ~PD4A    ~PA4A        ~PT4A          „
+He:~XPT4A   ~INIT2
+He:„   (¢) à§Ô¹»Ñ¹¼Å à§Ô¹ÊèÇ¹áºè§¡ÓäÃ ÏÅÏ µÒÁ Á.40(4)(¢)                                        „
+He:„       (1) ¡Ã³Õ¼Ùéä´éÃÑºà§Ô¹»Ñ¹¼Åä´éÃÑºà¤Ã´ÔµÀÒÉÕ â´Â¨èÒÂ¨Ò¡                                „
+He:„           ¡ÓäÃÊØ·¸Ô¢Í§¡Ô¨¡ÒÃ·ÕèµéÍ§àÊÕÂÀÒÉÕà§Ô¹ä´é¹ÔµÔºØ¤¤Åã¹ÍÑµÃÒ´Ñ§¹Õé                   „
+He:„           (1.1) ÍÑµÃÒÃéÍÂÅÐ 30 ¢Í§¡ÓäÃÊØ·¸Ô           ~PD4B11  ~PA4B11      ~PT4B11        „
+He:~XPT4B11 ~INIT2
+He:„           (1.2) ÍÑµÃÒÃéÍÂÅÐ 25 ¢Í§¡ÓäÃÊØ·¸Ô           ~PD4B12  ~PA4B12      ~PT4B12        „
+He:~XPT4B12 ~INIT2
+He:„           (1.3) ÍÑµÃÒÃéÍÂÅÐ 20 ¢Í§¡ÓäÃÊØ·¸Ô           ~PD4B13  ~PA4B13      ~PT4B13        „
+He:~XPT4B13 ~INIT2
+He:„           (1.4) ÍÑµÃÒÍ×è¹æ(ÃÐºØ).....¢Í§¡ÓäÃÊØ·¸Ô     ~PD4B14  ~PA4B14      ~PT4B14        „
+He:~XPT4B14 ~INIT2
+He:„       (2) ¡Ã³Õ¼Ùéä´éÃÑºà§Ô¹»Ñ¹¼ÅäÁèä´éÃÑºà¤Ã´ÔµÀÒÉÕ à¹×èÍ§¨Ò¡¨èÒÂ                          „
+He:„           (2.1) ¡ÓäÃÊØ·¸Ô¢Í§¡Ô¨¡ÒÃ·Õèä´éÃÑºÂ¡àÇé¹ÀÒÉÕ ~PD4B21  ~PA4B21      ~PT4B21        „
+He:~XPT4B21 ~INIT2
+He:„           (2.2) à§Ô¹»Ñ¹¼ÅËÃ×Íà§Ô¹ÊèÇ¹áºè§¢Í§¡ÓäÃ·Õèä´éÃÑºÂ¡àÇé¹                            „
+He:„                 äÁèµéÍ§¹ÓÁÒÃÇÁ¤Ó¹Ç³à»ç¹ÃÒÂä´éà¾×èÍàÊÕÂÀÒÉÕ                                 „
+He:„                 à§Ô¹ä´é¹ÔµÔºØ¤¤Å                      ~PD4B22  ~PA4B22      ~PT4B22        „
+He:~XPT4B22 ~INIT2
+He:„           (2.3) ¡ÓäÃÊØ·¸ÔÊèÇ¹·Õèä´éËÑ¡¼Å¢Ò´·Ø¹ÊØ·¸ÔÂ¡ÁÒäÁèà¡Ô¹ 5 »Õ                        „
+He:„                 ¡èÍ¹ÃÍºÃÐÂÐàÇÅÒºÑ­ªÕ»Õ»Ñ¨¨ØºÑ¹        ~PD4B23  ~PA4B23      ~PT4B23        „
+He:~XPT4B23 ~INIT2
+He:„           (2.4) ¡ÓäÃ·ÕèÃÑºÃÙé·Ò§ºÑ­ªÕâ´ÂÇÔ¸ÕÊèÇ¹ä´éàÊÕÂ                                    „
+He:„                 (equity method)                       ~PD4B24  ~PA4B24      ~PT4B24        „
+He:~XPT4B24 ~INIT2
+He:„           (2.5) Í×è¹æ (ÃÐºØ) ~DESCRP425               ~PD4B25  ~PA4B25      ~PT4B25        „
+He:~XPT4B25 ~INIT2
+He:„ 5.¡ÒÃ¨èÒÂà§Ô¹ä´é·ÕèµéÍ§ËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂµÒÁ¤ÓÊÑè§¡ÃÁÊÃÃ¾Ò¡Ã·ÕèÍÍ¡µÒÁ                       „
+He:„   ÁÒµÃÒ 3àµÃÊ (ÃÐºØ) $B~DESCRP5                        $B ~PD5     ~PA5         ~PT5           „
+He:~XPT5 ~INIT2
+He:~XPT52                 $B~DESCRP5                        $B ~PD5     ~PA5         ~PT5           „
+He:„   (àªè¹ ÃÒ§ÇÑÅ ÊèÇ¹Å´ËÃ×Í»ÃÐâÂª¹ìã´æ à¹×èÍ§¨Ò¡¡ÒÃÊè§àÊÃÔÁ¡ÒÃ¢ÒÂ                            „
+He:„   ÃÒ§ÇÑÅã¹¡ÒÃ»ÃÐ¡Ç´ ¡ÒÃá¢è§¢Ñ¹ ¡ÒÃªÔ§âª¤ ¤èÒáÊ´§¢Í§¹Ñ¡áÊ´§                                 „
+He:„   ÊÒ¸ÒÃ³Ð ¤èÒ¢¹Êè§ ¤èÒºÃÔ¡ÒÃ ¤èÒàºÕéÂ»ÃÐ¡Ñ¹ÇÔ¹ÒÈÀÑÂ ÏÅÏ)                                   „
+He:„ 6.Í×è¹æ (ÃÐºØ) ~DESCRP6                               ~PD6     ~PA6         ~PT6           „
+He:~XPT6 ~INIT2
+He:~XPT62           ~DESCRP62                              ~PD6     ~PA6         ~PT6           „
+He:†……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………‡
+He:„                              ÃÇÁà§Ô¹·Õè¨èÒÂáÅÐÀÒÉÕ·ÕèËÑ¡¹ÓÊè§  ~TOTAMT      ~TOTTAX        „
+He:„ ÃÇÁà§Ô¹ÀÒÉÕ·ÕèËÑ¡¹ÓÊè§ ~BAHT                                                               „
+He:†……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………‡
+He:„               ¼Ùé¨èÒÂà§Ô¹  [~1 ] ËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ     [~2 ] ÍÍ¡ãËéµÅÍ´ä»                  „
+He:„                            [~3 ] ÍÍ¡ÀÒÉÕãËé¤ÃÑé§à´ÕÂÇ  [~4 ] Í×è¹æ (ÃÐºØ) ...............  „
+He:†……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………‡
+*He:„ à§Ô¹ÊÐÊÁà¢éÒ¡Í§·Ø¹»ÃÐ¡Ñ¹ÊÑ§¤Á                                       ~SOCIALAMT     ºÒ·     „
+*He:„ à§Ô¹ÊÐÊÁ¨èÒÂà¢éÒ¡Í§·Ø¹ÊÓÃÍ§àÅÕéÂ§ªÕ¾ ãºÍ¹Ø­ÒµàÅ¢·Õè ~POVIDNT_ID     ~POVDNT        ºÒ·     „
+*He:†……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………‡
+He:„ ¢ÍÃÑºÃÍ§ÇèÒ¢éÍ¤ÇÒÁáÅÐµÑÇàÅ¢´Ñ§¡ÅèÒÇ¢éÒ§µé¹¶Ù¡µéÍ§µÃ§¡Ñº¤ÇÒÁà»ç¹¨ÃÔ§·Ø¡»ÃÐ¡ÒÃ               „
+He:„                                                                                            „
+He:„                 ¼ÙéÁÕË¹éÒ·ÕèËÑ¡ÀÒÉÕ ³.·Õè¨èÒÂ  ..........................     »ÃÐ·ÑºµÃÒ    „
+He:„                 ÇÑ¹à´×Í¹»Õ ·ÕèÍÍ¡Ë¹Ñ§Ê×ÍÃÑºÃÍ§Ï         ~TAXDAT                ¹ÔµÔºØ¤¤Å   „
+*He:†……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………‡
+*He:„ ËÁÒÂàËµØ *ãËéÊÒÁÒÃ¶ÍéÒ§ÍÔ§ËÃ×ÍÊÍºÂÑ¹¡Ñ¹ä´éÃÐËÇèÒ§ÅÓ´Ñº·ÕèµÒÁË¹Ñ§Ê×ÍÃÑºÃÍ§Ï ¡ÑºáººÂ×è¹      „
+*He:„          ÃÒÂ¡ÒÃÀÒÉÕËÑ¡ ³ ·Õè¨èÒÂ                                                           „
+*He:„ ¤Óàµ×Í¹  ¼ÙéÁÕË¹éÒ·ÕèÍÍ¡Ë¹Ñ§Ê×ÍÃÑºÃÍ§¡ÒÃËÑ¡ÀÒÉÕ ³ ·Õè¨èÒÂ ½èÒ½×¹äÁè»¯ÔºÑµÔµÒÁÁÒµÃÒ 50 ·ÇÔ  „
+*He:„          áËè§»ÃÐÁÇÅÃÑÉ®Ò¡Ã µéÍ§ÃÑºâ·É·Ò§ÍÒ­ÒµÒÁÁÒµÃÒ 35 áËè§»ÃÐÁÇÅÃÑÉ®Ò¡Ã                  „
+He:‚……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ƒ
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+*Printer=X
+Top=0
+Left=2
+Tabs=4
+Right=94
+Lines=60
+Output=Select, Printer, Screen, File,
+File Name=ARIVC.TXT
+Print Control=\027\033\001
+Report Type=Listing, Financial
+Fix Summary Line=ON
+Select Scope=OFF
+*Form=ON
+Select Page=OFF
+Condition=OFF
+Feed Level=16,16,0
+
+[range of report]
+From=CUR
+
+[master file]
+File=istax
+Alias=A
+Tag=istax1
+System=DATA_PATH
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",             "exp"
+~ADDR:      0,      "",                 "p_addr()",         ""
+~TAXID:     0,      "",                 "p_taxid()",        ""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:      0,      "",                 "",                 "type=VAL(ISTAX->TAXDES);  type=IIF(type<=0.or.type>6,6,type); cond=VAL(ISTAX->TAXCOND);  cond=IIF(cond<=0.or.cond > 4, 4, cond); _taxdat=ISTAX->TAXDAT;  _amount=ISTAX->AMOUNT;  _taxamt=ISTAX->TAXAMT;  _taxdes=ISTAX->TAXDES; totamt=0; tottax=0; p_item=0"
+***~INIT2:  0,      "",                 "",                 "type=VAL(ISTAX->TAXDES2); type=IIF(type<=0.or.type>6,6,type);                                                                    _taxdat=ISTAX->TAXDAT2; _amount=ISTAX->AMOUNT2; _taxamt=ISTAX->TAXAMT2; _taxdes=ISTAX->TAXDES2"
+~INIT2:     0,      "",                 "",                 "type=VAL(ISTAX->TAXDES2); type=IIF((type<=0.or.type>6).and.ISTAX->AMOUNT2>=0.01,6,type);            _taxdat=ISTAX->TAXDAT2; _amount=ISTAX->AMOUNT2; _taxamt=ISTAX->TAXAMT2; _taxdes=ISTAX->TAXDES2"
+
+~NAME:      0,      "",                 "xname",            "xname=A->PRENAM-' '-A->NAME"
+~ADDRESS: -80,      "",                 "ISTAX->ADDR",      ""
+~TAX_ID:    0,      "",                 "ISTAX->TAXID",     ""
+~TAXTYP:    0,      "",                 "p_istax( ISTAX->TAXTYP, 55, 1, 0)",    ""
+~REFNUM:    0,      "",                 "ISTAX->REFNUM",    ""
+~TAXNUM:    0,      "",                 "ISTAX->TAXNUM",    ""
+~TAXNUM_X:  0,      "",                 "num",              "num=IIF(ISTAX->TAXNUM#'   ',ISTAX->TAXNUM,ISTAX->REFNUM)"
+*~TAXDAT:   0,      "",                 "p_date( ISTAX->TAXDAT)",   ""
+~TAXDAT:    0,      "",                 "ISTAX->TAXDAT",    ""
+~DEP:       0,      "",                 "ISTAX->DEPCOD",    ""
+~P_ISDEP:   0,      "",                 "p_isdep( ISTAX->DEPCOD )",     ""
+
+~PD1:       0,      "",                 "pd1",              "pd1=IIF(type=1,_taxdat,ctod('        '))"
+~PA1:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa1",              "pa1=IIF(type=1,_amount,0); totamt=totamt+pa1"
+~PT1:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt1",              "pt1=IIF(type=1,_taxamt,0); tottax=tottax+pt1; p_item=p_item+IIF(type=1,1,0)"
+~PD2:       0,      "",                 "pd2",              "pd2=IIF(type=2,_taxdat,ctod('        '))"
+~PA2:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa2",              "pa2=IIF(type=2,_amount,0); totamt=totamt+pa2"
+~PT2:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt2",              "pt2=IIF(type=2,_taxamt,0); tottax=tottax+pt2; p_item=p_item+IIF(type=2,1,0)"
+~PD3:       0,      "",                 "pd3",              "pd3=IIF(type=3,_taxdat,ctod('        '))"
+~PA3:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa3",              "pa3=IIF(type=3,_amount,0); totamt=totamt+pa3"
+~PT3:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt3",              "pt3=IIF(type=3,_taxamt,0); tottax=tottax+pt3; p_item=p_item+IIF(type=3,1,0)"
+~PD4A:      0,      "",                 "pd4A",             "pd4A=IIF(type=4.AND._taxdes='4(¡)',_taxdat,ctod('        '))"
+~PA4A:      0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4A",             "pa4A=IIF(type=4.AND._taxdes='4(¡)',_amount,0); totamt=totamt+pa4A"
+~PT4A:      0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4A",             "pt4A=IIF(type=4.AND._taxdes='4(¡)',_taxamt,0); tottax=tottax+pt4A; p_item=p_item+IIF(type=4.and._taxdes='4(¡)',1,0)"
+~PD4B11:    0,      "",                 "pd4B11",           "pd4B11=IIF(type=4.AND._taxdes='4(¢)1.1',_taxdat,ctod('        '))"
+~PA4B11:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4B11",           "pa4B11=IIF(type=4.AND._taxdes='4(¢)1.1',_amount,0); totamt=totamt+pa4B11"
+~PT4B11:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4B11",           "pt4B11=IIF(type=4.AND._taxdes='4(¢)1.1',_taxamt,0); tottax=tottax+pt4B11; p_item=p_item+IIF(type=4.and._taxdes='4(¢)1.1',1,0)"
+~PD4B12:    0,      "",                 "pd4B12",           "pd4B12=IIF(type=4.AND._taxdes='4(¢)1.2',_taxdat,ctod('        '))"
+~PA4B12:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4B12",           "pa4B12=IIF(type=4.AND._taxdes='4(¢)1.2',_amount,0); totamt=totamt+pa4B12"
+~PT4B12:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4B12",           "pt4B12=IIF(type=4.AND._taxdes='4(¢)1.2',_taxamt,0); tottax=tottax+pt4B12; p_item=p_item+IIF(type=4.and._taxdes='4(¢)1.2',1,0)"
+~PD4B13:    0,      "",                 "pd4B13",           "pd4B13=IIF(type=4.AND._taxdes='4(¢)1.3',_taxdat,ctod('        '))"
+~PA4B13:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4B13",           "pa4B13=IIF(type=4.AND._taxdes='4(¢)1.3',_amount,0); totamt=totamt+pa4B13"
+~PT4B13:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4B13",           "pt4B13=IIF(type=4.AND._taxdes='4(¢)1.3',_taxamt,0); tottax=tottax+pt4B13; p_item=p_item+IIF(type=4.and._taxdes='4(¢)1.3',1,0)"
+~PD4B14:    0,      "",                 "pd4B14",           "pd4B14=IIF(type=4.AND._taxdes='4(¢)1.4',_taxdat,ctod('        '))"
+~PA4B14:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4B14",           "pa4B14=IIF(type=4.AND._taxdes='4(¢)1.4',_amount,0); totamt=totamt+pa4B14"
+~PT4B14:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4B14",           "pt4B14=IIF(type=4.AND._taxdes='4(¢)1.4',_taxamt,0); tottax=tottax+pt4B14; p_item=p_item+IIF(type=4.and._taxdes='4(¢)1.4',1,0)"
+
+~PD4B21:    0,      "",                 "pd4B21",           "pd4B21=IIF(type=4.AND._taxdes='4(¢)2.1',_taxdat,ctod('        '))"
+~PA4B21:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4B21",           "pa4B21=IIF(type=4.AND._taxdes='4(¢)2.1',_amount,0); totamt=totamt+pa4B21"
+~PT4B21:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4B21",           "pt4B21=IIF(type=4.AND._taxdes='4(¢)2.1',_taxamt,0); tottax=tottax+pt4B21; p_item=p_item+IIF(type=4.and._taxdes='4(¢)2.1',1,0)"
+~PD4B22:    0,      "",                 "pd4B22",           "pd4B22=IIF(type=4.AND._taxdes='4(¢)2.2',_taxdat,ctod('        '))"
+~PA4B22:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4B22",           "pa4B22=IIF(type=4.AND._taxdes='4(¢)2.2',_amount,0); totamt=totamt+pa4B22"
+~PT4B22:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4B22",           "pt4B22=IIF(type=4.AND._taxdes='4(¢)2.2',_taxamt,0); tottax=tottax+pt4B22; p_item=p_item+IIF(type=4.and._taxdes='4(¢)2.2',1,0)"
+~PD4B23:    0,      "",                 "pd4B23",           "pd4B23=IIF(type=4.AND._taxdes='4(¢)2.3',_taxdat,ctod('        '))"
+~PA4B23:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4B23",           "pa4B23=IIF(type=4.AND._taxdes='4(¢)2.3',_amount,0); totamt=totamt+pa4B23"
+~PT4B23:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4B23",           "pt4B23=IIF(type=4.AND._taxdes='4(¢)2.3',_taxamt,0); tottax=tottax+pt4B23; p_item=p_item+IIF(type=4.and._taxdes='4(¢)2.3',1,0)"
+~PD4B24:    0,      "",                 "pd4B24",           "pd4B24=IIF(type=4.AND._taxdes='4(¢)2.4',_taxdat,ctod('        '))"
+~PA4B24:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4B24",           "pa4B24=IIF(type=4.AND._taxdes='4(¢)2.4',_amount,0); totamt=totamt+pa4B24"
+~PT4B24:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4B24",           "pt4B24=IIF(type=4.AND._taxdes='4(¢)2.4',_taxamt,0); tottax=tottax+pt4B24; p_item=p_item+IIF(type=4.and._taxdes='4(¢)2.4',1,0)"
+~PD4B25:    0,      "",                 "pd4B25",           "pd4B25=IIF(type=4.AND._taxdes='4(¢)2.5',_taxdat,ctod('        '))"
+~PA4B25:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa4B25",           "pa4B25=IIF(type=4.AND._taxdes='4(¢)2.5',_amount,0); totamt=totamt+pa4B25"
+~PT4B25:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt4B25",           "pt4B25=IIF(type=4.AND._taxdes='4(¢)2.5',_taxamt,0); tottax=tottax+pt4B25; p_item=p_item+IIF(type=4.and._taxdes='4(¢)2.5',1,0)"
+
+~PD5:       0,      "",                 "pd5",              "pd5=IIF(type=5,_taxdat,ctod('        '))"
+~PA5:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa5",              "pa5=IIF(type=5,_amount,0); totamt=totamt+pa5"
+~PT5:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt5",              "pt5=IIF(type=5,_taxamt,0); tottax=tottax+pt5; p_item=p_item+IIF(type=5,1,0)"
+~PD6:       0,      "",                 "pd6",              "pd6=IIF(type=6,_taxdat,ctod('        '))"
+~PA6:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pa6",              "pa6=IIF(type=6,_amount,0); totamt=totamt+pa6"
+~PT6:       0,      "ZZ,ZZZ,ZZZ.ZZ",    "pt6",              "pt6=IIF(type=6,_taxamt,0); tottax=tottax+pt6; p_item=p_item+IIF(type=6,1,0)"
+~DESCRP:    0,      "",                 "_taxdes",  ""
+~DESCRPX:   0,      "",                 "des",              "des=_taxdes-IIF(ISTAX->TAXDES2#'     ', ', '+ISTAX->TAXDES2, '                                   ')"
+~DESCRP5:   0,      "",                 "des",              "des=IIF(type=5,_taxdes,'                         ')"
+~DESCRP425: 0,      "",                 "des",              "des=IIF(type=4.AND._taxdes='4(¢)2.5',_taxdes,'                         ')"
+~DESCRP6:   0,      "",                 "des",              "des=IIF(type=6,_taxdes,'                         ')"
+~DESCRP62:  0,      "",                 "des",              "des=IIF(type=6,_taxdes,'                         ')"
+***~TOTAMT: 0,      "ZZ,ZZZ,ZZZ.ZZ",    "totamt",           ""
+~TOTAMT:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "totamt",           "totamt=IIF(str(totamt,15,2)#str(ISTAX->AMOUNT+ISTAX->AMOUNT2,15,2), 99999999999.99, totamt)"
+***~TOTTAX: 0,      "ZZ,ZZZ,ZZZ.ZZ",    "tottax",           ""
+~TOTTAX:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "tottax",           "tottax=IIF(str(tottax,15,2)#str(ISTAX->TAXAMT+ISTAX->TAXAMT2,15,2), 99999999999.99, tottax)"
+~BAHT:      0,      "",                 "t_baht( tottax )", ""
+
+~1:         0,      "",                 "condx",            "condx=IIF(cond=1,' x','  ')"
+~2:         0,      "",                 "condx",            "condx=IIF(cond=2,' x','  ')"
+~3:         0,      "",                 "condx",            "condx=IIF(cond=3,' x','  ')"
+~4:         0,      "",                 "condx",            "condx=IIF(cond=4,' x','  ')"
+~SOCIALAMT: 0,      "ZZ,ZZZ,ZZZ.ZZ",    "ISTAX->SOCIALAMT", ""
+~POVIDNT_ID: 0,     "",                 "",                 ""
+~POVDNT:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "ISTAX->POVDNT",    ""
+
+~XPT1:      0,      "",                 "xpt1",             "xpt1=IIF(type=1,':','}')"
+~XPT2:      0,      "",                 "xpt2",             "xpt2=IIF(type=2,':','}')"
+~XPT3:      0,      "",                 "xpt3",             "xpt3=IIF(type=3,':','}')"
+~XPT4A:     0,      "",                 "xpt4A",            "xpt4A=IIF(type=4.AND._taxdes='4(¡)',':','}')"
+~XPT4B11:   0,      "",                 "xpt4B11",          "xpt4B11=IIF(type=4.AND._taxdes='4(¢)1.1',':','}')"
+~XPT4B12:   0,      "",                 "xpt4B12",          "xpt4B12=IIF(type=4.AND._taxdes='4(¢)1.2',':','}')"
+~XPT4B13:   0,      "",                 "xpt4B13",          "xpt4B13=IIF(type=4.AND._taxdes='4(¢)1.3',':','}')"
+~XPT4B14:   0,      "",                 "xpt4B14",          "xpt4B14=IIF(type=4.AND._taxdes='4(¢)1.4',':','}')"
+~XPT4B21:   0,      "",                 "xpt4B21",          "xpt4B21=IIF(type=4.AND._taxdes='4(¢)2.1',':','}')"
+~XPT4B22:   0,      "",                 "xpt4B22",          "xpt4B22=IIF(type=4.AND._taxdes='4(¢)2.2',':','}')"
+~XPT4B23:   0,      "",                 "xpt4B23",          "xpt4B23=IIF(type=4.AND._taxdes='4(¢)2.3',':','}')"
+~XPT4B24:   0,      "",                 "xpt4B24",          "xpt4B24=IIF(type=4.AND._taxdes='4(¢)2.4',':','}')"
+~XPT4B25:   0,      "",                 "xpt4B25",          "xpt4B25=IIF(type=4.AND._taxdes='4(¢)2.5',':','}')"
+~XPT4B3:    0,      "",                 "xpt4B3",           "xpt4B3=IIF(type=4.AND._taxdes='4(¢)3',':','}')"
+~XPT5:      0,      "",                 "xpt5",             "xpt5=IIF(type=5,':','}')"
+~XPT6:      0,      "",                 "xpt6",             "xpt6=IIF(type=6,':','}')"
+
+~P_ORGTXT:  0,      "",                 "p_orgtxt()",       ""
+~P_ORG:     0,      "",                 "p_orgnum()",       ""
+~P_ORGSTR:  0,      "",                 "p_orgstr()",       ""
+~TAXIDX:    0,      "",                 "tax_id",           "tax_id=A->TAXID"
+~ORG:       0,      "",                 "org",              "org=IIF(tax_id#'   '.AND.A->ORGNUM>=0,IIF(A->ORGNUM=0,' ÊÓ¹Ñ¡§Ò¹ãË­è   ', ' ÊÒ¢Ò·Õè '   -LTRIM(STR(A->ORGNUM,5,0))),'              ')"
+
+~XPT12:     0,      "",                 "prn",              "prn=IIF(type=1.and.p_item<2,'„','}')"
+~XPT22:     0,      "",                 "prn",              "prn=IIF(type=2.and.p_item<2,'„','}')"
+~XPT32:     0,      "",                 "prn",              "prn=IIF(type=3.and.p_item<2,'„','}')"
+~XPT52:     0,      "",                 "prn",              "prn=IIF(type=5.and.p_item<2,'„','}')"
+~XPT62:     0,      "",                 "prn",              "prn=IIF(ISTAX->AMOUNT2>=0.01 .and. p_item<2,'„','}')"
+
+

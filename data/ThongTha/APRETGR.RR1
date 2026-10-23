@@ -1,0 +1,198 @@
+* APRET.RL - Print Debit Note
+*
+[report frame]
+*** ºŸÈ„™È “¡“√∂‡ª≈’Ë¬π·ª≈ß·°È‰¢†‰¥Èµ“¡µÈÕß°“√†****************************************
+Ti:: ~INIT
+He:$E\NAME                                             $E
+He:~ADDR
+He:~TEL                                                 $E„∫¢Õ≈¥Àπ’È/ Ëß§◊π ‘π§È“$E
+He:‡≈¢ª√–®”µ—«ºŸÈ‡ ’¬¿“…’†~TAXID          ~P_ORGTXT       ~P_ORGSTR    
+He:
+He:  ºŸÈ®”ÀπË“¬ ~SUPCOD    ~BILLBE                       ‡≈¢∑’Ë          ~DOCNUM
+He:  ~SUPNAM
+He:  ~ADDR01                                             «—π∑’Ë          ~DOCDAT
+He:  ~ADDR02                                             „∫√—∫ ‘π§È“#    ~RCVNUM      ~RCVDAT
+He:  ‡≈¢ª√–®”µ—«ºŸÈ‡ ’¬¿“…’ ~TAXIDX        ~ORG
+He:  ÕÈ“ß∂÷ß∫‘≈‡≈¢∑’Ë  ~O_REFNUM        ≈«∑.~O_REFDAT
+*He:  À¡“¬‡Àµÿ:         ‰¥È√—∫„∫°”°—∫¿“…’‡≈¢∑’Ë  ~REFNUM        ≈«∑.~VATDAT
+He:
+He:  ∫√‘…—∑¢Õ≈¥Àπ’È/ Ëß§◊π ‘π§È“µ“¡√“¬°“√µËÕ‰ªπ’È†:-
+He:ÄÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖâÖÖÖÖÖÖÖÖÖÖÖÖÖÖÅ
+He:Ñ No.Ñ            √À—  ‘π§È“/√“¬≈–‡Õ’¬¥        Ñ Ëß§◊π?  ®”π«π    Ñ   ÀπË«¬≈– Ñ ~TXT0        Ñ
+He:ÜÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖÖÖá
+Bo::
+Ih::                    ;1 stcrd->docnum aptrn->docnum
+Ib: ~N    ~ARTICLE                                 ~R~QTY    ~TQUCOD  ~UNITPR     ~NETAMT_I     ;1
+Ih::                    ;2 artrnrm->docnum+artrnrm->seqnum  stcrd->docnum+stcrd->seqnum
+Ib:       ~REMARK       ;2
+Bt:Ñ    Ñ                                         Ñ                  Ñ           Ñ              Ñ
+Fo:ÜÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖäÖÖÖÖÖÖÖÖÖÖÖÖÖÖá
+Su:ÑÀ¡“¬‡Àµÿ                                         √«¡‡ªÁπ‡ß‘π                 Ñ~AMOUNT       Ñ
+Su:Ñ ~HREM1                                          $_À—°$_ Ë«π≈¥        ~DISC      Ñ~DISCAMT      Ñ
+Su:Ñ ~HREM2                                          ~TXT1                       Ñ~TOTAL        Ñ
+Su:Ñ ~HREM3                                                                      ÜÖÖÖÖÖÖÖÖÖÖÖÖÖÖá
+Su:Ñ ~HREM4                       ¡Ÿ≈§Ë“¢Õß ‘π§È“À√◊Õ∫√‘°“√µ“¡„∫°”°—∫¿“…’‡¥‘¡    Ñ~RCVAMT       Ñ
+Su:Ñ ~HREM5                                ¡Ÿ≈§Ë“¢Õß ‘π§È“À√◊Õ∫√‘°“√∑’Ë∂Ÿ°µÈÕß   Ñ~CORRECT      Ñ
+Su:Ñ                                                           º≈µË“ß            Ñ~DIF          Ñ
+Su:Ñ                                                 ®”π«π¿“…’¡Ÿ≈§Ë“‡æ‘Ë¡ ~VAT % Ñ~VATAMT       Ñ
+Su:Ñ~BAHT                                                  ®”π«π‡ß‘π√«¡∑—Èß ‘Èπ  Ñ~CHKAMT       Ñ
+*Su:Ñ                                                                             ÑÖÖÖÖÖÖÖÖÖÖÖÖÖÖÑ
+*Su:Ñ                                                  ‘π§È“¬°‡«Èπ¿“…’¡Ÿ≈§Ë“‡æ‘Ë¡ Ñ~AMTRATZ      Ñ
+*Su:Ñ                                                 ¡Ÿ≈§Ë“ ‘π§È“Õ—µ√“    ~VAT % Ñ~AMTRATX      Ñ
+*Su:Ñ                                                 ®”π«π‡ß‘π¿“…’¡Ÿ≈§Ë“‡æ‘Ë¡    Ñ~VATAMT       Ñ
+*Su:Ñ~BAHT                                                   ®”π«π‡ß‘π√«¡∑—Èß ‘Èπ Ñ~NETAMT       Ñ
+Su:ÜÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖàÖÖÖÖÖÖÖÖÖÖÖÖÖÖá
+Su:Ñ ‰¥È√—∫ ‘π§È“¢È“ßµÈπ§◊π‡√’¬∫√ÈÕ¬·≈È«††††††‰¥È Ëß ‘π§È“¢È“ßµÈπ§◊π‡√’¬∫√ÈÕ¬·≈È«†††            Ñ
+Su:Ñ                                                                                            Ñ
+Su:Ñ    ___________________            ___________________                                      Ñ
+Su:Ñ       ≈“¬¡◊Õ™◊ËÕºŸÈ√—∫§◊π            ≈“¬¡◊Õ™◊ËÕºŸÈ Ëß§◊π   ºŸÈ√—∫¡Õ∫Õ”π“®††_______________ Ñ
+*Su:Ñ æ‘¡æÏ‚¥¬  ~PRNBY         «—π∑’Ë  ~PRNDAT   ~PRNTIM æ‘¡æÏ§√—Èß∑’Ë~PRNCNT ∫—π∑÷°‚¥¬ ~RECBY   Ñ
+Su:ÇÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÉ
+[end frame]
+
+*** §” —ËßµËÕ®“°π’È†ºŸÈ„™È‰¡Ë§«√·°È‰¢†****************************************
+
+[print options]
+Top=0
+Left=0
+Tabs=4
+Right=94
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=APRET.TXT
+Print Control=\027\033\001
+Fix Summary Line=ON
+Select Scope=OFF
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=aptrn
+Alias=A
+Tag=aptrn1
+System=DATA_PATH
+
+[item file]
+File=stcrd
+Alias=B
+Tag=stcrd5
+System=DATA_PATH
+
+File=artrnrm
+Alias=C
+Tag=artrnrm1
+System=DATA_PATH
+
+[relate file]
+File=apmas
+Alias=R
+Tag=apmas1
+System=DATA_PATH
+Master file=aptrn
+Master-Related Field=SUPCOD
+
+File=stmas
+Alias=C
+Tag=stmas1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD
+
+File=stloc
+Alias=L
+Tag=stloc1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD+LOCCOD
+
+File=aptrnx
+Clone From=aptrn
+Alias=M
+Tag=aptrn1
+System=DATA_PATH
+Master file=aptrn
+Master-Related Field=PONUM
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",             "exp"
+~ADDR:      0,      "",                 "p_addr()",         ""
+~TAXID:     0,      "",                 "p_taxid()",        ""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:      0,      "",                 "",                 "seq=0"
+~TXT0:      0,      "",                 "txt0",             "txt0 = IIF( APTRN->FLGVAT <> '1', '  ®”π«π‡ß‘π', '√“§“√«¡¿“…’')",
+~TXT1:      0,      "",                 "txt1",             "txt1 = IIF( APTRN->FLGVAT <> '1', '®”π«π‡ß‘πÀ≈—ßÀ—° Ë«π≈¥', '®”π«π‡ß‘π√«¡∑—Èß ‘Èπ  ')",
+~TXT2:      0,      "",                 "txt2",             "txt2 = IIF( APTRN->FLGVAT <> '1', '®”π«π‡ß‘π√«¡∑—Èß ‘Èπ', '√“§“ ‘π§È“          ')",
+~DOCNUM:    0,      "",                 "APTRN->DOCNUM",    ""
+~DOCDAT:    0,      "",                 "APTRN->DOCDAT",    ""
+~SUPCOD:    0,      "",                 "APTRN->SUPCOD",    ""
+~SUPNAM:    0,      "",                 "sup_nam",          "sup_nam = APMAS->PRENAM - '†' - APMAS->SUPNAM"
+~ADDR01:    0,      "",                 "APMAS->ADDR01",    ""
+~ADDR02:    0,      "",                 "addr_02",          "addr_02 = APMAS->ADDR02 - '†' - APMAS->ZIPCOD"
+~REFNUM:    0,      "",                 "APTRN->REFNUM",    ""
+~VATDAT:    0,      "",                 "vat_dat",          "vat_dat = IIF(APTRN->FLGVAT#'0'.AND.APTRN->REFNUM#'   ',APTRN->VATDAT,CTOD('        '))"
+~O_REFNUM:  0,      "",                 "APTRNX->REFNUM",   ""
+~O_REFDAT:  0,      "",                 "APTRNX->VATDAT",   ""
+~RCVNUM:    0,      "",                 "APTRN->PONUM",     ""
+~RCVDAT:    0,      "",                 "get_rcvdat()",     ""
+~DUEDAT:    0,      "",                 "APTRN->DUEDAT",    ""
+~PONUM:     0,      "",                 "APTRN->PONUM",     ""
+~FLGVAT:    0,      "Y",                "APTRN->FLGVAT",    ""
+~AMOUNT:    0,      "99,999,999.99",    "APTRN->AMOUNT",    ""
+~DISC:      0,      "",                 "APTRN->DISC",      ""
+~DISCAMT:   0,      "99,999,999.99",    "APTRN->DISCAMT",   ""
+~TOTAL:     0,      "99,999,999.99",    "APTRN->TOTAL",     ""
+~VAT:       0,      "99.99",            "APTRN->VATRAT",    ""
+~VATAMT:    0,      "99,999,999.99",    "APTRN->VATAMT",    ""
+~CHKAMT:    0,      "99,999,999.99",    "netamt",           "netamt = IIF( APTRN->FLGVAT = '1', dif + APTRN->VATAMT, APTRN->NETAMT )"
+~BAHT:      0,      "",                 "t_baht(APTRN->NETAMT)"                         ""
+
+~RCVAMT:    0,      "99,999,999.99",    "oldrcv",           "oldrcv = IIF(APTRN->FLGVAT='1',APTRN->RCVAMT*100/(100+APTRN->VATRAT),APTRN->RCVAMT)"
+~CORRECT:   0,      "99,999,999.99",    "correct",          "correct = oldrcv - IIF(APTRN->FLGVAT='1', APTRN->TOTAL-APTRN->VATAMT, APTRN->TOTAL)"
+~DIF:       0,      "99,999,999.99",    "dif",              "dif = oldrcv - correct"
+~AMTRATZ:   0,      "99,999,999.99",    "AMTRATZ",          "AMTRATZ = APTRN->AMTRAT0 - (APTRN->AMTRAT0 * APTRN->DISCAMT / APTRN->AMOUNT)"
+~AMTRATX:   0,      "99,999,999.99",    "AMTRATX",          "AMTRATX = IIF(APTRN->FLGVAT='1',APTRN->TOTAL - AMTRATZ - APTRN->VATAMT, APTRN->TOTAL - AMTRATZ)"
+~NETAMT:    0,      "99,999,999.99",    "APTRN->NETAMT",    ""
+
+~N:         0,      "999",              "seq",              "seq=seq+1"
+*~ARTICLE:  40,     "",                 "article",          "article = STCRD->STKDES - IIF(STCRD->STKCOD=' ', '                  ', '†[' - STCRD->STKCOD - ']')"
+~ARTICLE:  40,      "",                 "article",          "article = STCRD->STKCOD - '†' - STCRD->STKDES"
+~STKCOD:    0,      "",                 "STCRD->STKCOD",    ""
+~STKDES:   28,      "",                 "STCRD->STKDES",    ""
+~L:         0,      "",                 "STCRD->LOCCOD",    ""
+~R:         0,      "",                 "ret_stk",          "ret_stk = IIF(STCRD->RETSTK='Y','Y','N')"
+~QTY:       0,      "qtyZ(7)",          "STCRD->TRNQTY",    ""
+~TQUCOD:    0,      "",                 "p_istab( STCRD->TQUCOD,  20, 1, 0 )",      "",
+~UNITPR:    0,      "priZ(10)",         "STCRD->UNITPR",    ""
+~DISC_I:    0,      "",                 "STCRD->DISC",      ""
+~NETAMT_I:  0,      "ZZ,ZZZ,ZZZ.ZZ",    "STCRD->TRNVAL",    ""
+~REMARK:    0,      "",                 "ARTRNRM->REMARK",  ""
+
+~HREM1:     0,      "",                 "p_hrem(A->DOCNUM,1)",      ""
+~HREM2:     0,      "",                 "p_hrem(A->DOCNUM,2)",      ""
+~HREM3:     0,      "",                 "p_hrem(A->DOCNUM,3)",      ""
+~HREM4:     0,      "",                 "p_hrem(A->DOCNUM,4)",      ""
+~HREM5:     0,      "",                 "p_hrem(A->DOCNUM,5)",      ""
+
+~DEP:       0,      "",                 "A->DEPCOD",                ""
+~P_ISDEP:   0,      "",                 "p_isdep( A->DEPCOD )",     ""
+~LOCAREA:   0,      "",                 "STLOC->AREA",              ""
+~RDOCNUM:   0,      "",                 "STCRD->RDOCNUM",           ""
+
+~PRNBY:     0,      "",                 "p_userid()",       ""
+~PRNDAT:    0,      "",                 "@d_prndat()",      ""
+~PRNTIM:    0,      "",                 "s_prntim()",       ""
+~PRNCNT:    0,      "999",              "@n_prncnt()",      ""
+~RECBY:     0,      "",                 "A->USERID",        ""
+
+~P_ORGTXT:	0,		"",                 "p_orgtxt()",       ""
+~P_ORG:		0,		"",                 "p_orgnum()",       ""
+~P_ORGSTR:	0,		"",                 "p_orgstr()",       ""
+~BILLBE:	0,		"",                 "A->BILLBE",        "tax_id=@TAXID()"
+~TAXIDX:	0,		"",                 "tax_id",           ""
+~ORG:       0,      "",                 "org",              "org=IIF(tax_id#'   '.AND.A->ORGNUM>=0,IIF(A->ORGNUM=0,'† ”π—°ß“π„À≠Ë†††', '† “¢“∑’Ë†'   -LTRIM(STR(A->ORGNUM,5,0))),'              ')"
+*~ORG:		0,		"",					"org",				"br=@p_orgnum_00009( A->ORGNUM ); org=IIF(tax_id#'   '.AND.A->ORGNUM>=0,IIF(A->ORGNUM=0,'† ”π—°ß“π„À≠Ë††', '† “¢“∑’Ë†'-br),'               ')"
+~SEEKSUP:	0,		"",                 "SeekSup()",        ""

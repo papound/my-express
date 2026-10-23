@@ -1,0 +1,1417 @@
+[Preference]
+	vert align=Center
+	horz align=Left
+	border=No
+	curve=0
+	font name=Angsana New
+	font size=14
+	bold=No
+	italic=No
+	underline=No
+	clr=0,0,0
+	bgclr=255,255,255
+	bdclr=0,0,0
+	bkmode=Transparent
+	secheight=0.2000 inch
+	secclr=255,255,255
+	pcurve=0
+	line clr=0,0,0
+	pixel=1
+	exc font name=
+	exc font size=
+	exc freeze=Yes
+[Report]
+	caption=Report
+	edit copy=ทุกชุด
+	form=Yes
+	def scope=0
+	width=9.5360 inch
+	psize=0, "ตามเครื่องพิมพ์"
+	pw=8.2700
+	ph=11.6900
+	tblvw hi=200
+	tblvw mode=2
+	secvw wd=150
+	left margin=0.5000 inch
+	top margin=0.5000 inch
+	right margin=0.2500 inch
+	bot margin=0.2500 inch
+	set margin=No
+	supg=No
+	fix sum=Yes
+	hepg=No
+	printer=
+	prompt=
+	col wd=1.0000
+	col gap=0.5000
+	printpref=1
+	multipg=1
+	howpage=1
+	sepdoc=Yes
+	sepset=Yes
+	horzalign=0
+	datefmt=
+	horgap=2.2000
+	vergap=1.2000
+	stwd=2.0000
+	sthg=1.0000
+	strow=5
+	stcol=4
+	st how column=1
+	st type=Junk A4
+	stcustom=No
+[File]
+	[Variable]
+		dimension=0,0,136,150
+
+	[Master File]
+		file name=OESO
+		alias=A
+		tag=OESO1
+		dimension=130,0,266,150
+
+	[Item File]
+		file name=OESOIT
+		alias=B
+		tag=OESOIT1
+		dimension=260,0,396,150
+
+		file name=ARTRNRM
+		alias=C
+		tag=ARTRNRM1
+		dimension=390,0,526,150
+
+	[Related File]
+		file name=ARMAS
+		alias=R
+		tag=ARMAS1
+		master file=OESO
+		related fld=CUSCOD
+		dimension=520,0,656,150
+
+		file name=STMAS
+		alias=C
+		tag=STMAS1
+		master file=OESOIT
+		related fld=STKCOD
+		dimension=650,0,786,150
+
+[Table]
+	visible=Yes
+	can move=Yes
+	curvelt=1
+	curvert=1
+	curvelb=1
+	curverb=1
+	line clr=0,0,0
+	xpoint=[    75,  4346][   525,  4346][  4858,  4346][  6292,  4346][  7258,  4346][  8217,  4346][  9407,  4346]
+	ypoint=[    75,  4346][    75,  4753][    75,  6593][    75,  9573][    75, 11346]
+	invisible line=[V2,1][V3,1][V2,2][V3,2][V2,3][V3,3][V2,4][V3,4][V3,5]
+	[Cell]
+		name=C0,0
+		name=C1,0
+		name=C2,0
+		name=C3,0
+		name=C0,1
+		name=C1,1
+		name=C2,1
+		name=C3,1
+		name=C0,2
+		name=C1,2
+		name=C2,2
+		name=C3,2
+		name=C0,3
+		name=C1,3
+		name=C2,3
+		name=C3,3
+		name=C0,4
+		name=C1,4
+		name=C2,4
+		name=C3,4
+		name=C0,5
+		name=C1,5
+		name=C2,5
+		name=C3,5
+	[EndCell]
+	visible=Yes
+	can move=Yes
+	curvelt=1
+	curvert=1
+	curvelb=1
+	curverb=1
+	line clr=0,0,0
+	xpoint=[    75,  1717][  4825,  1717]
+	ypoint=[    75,  1717][    75,  3908]
+	[Cell]
+		name=C0,0
+	[EndCell]
+	visible=Yes
+	can move=Yes
+	curvelt=1
+	curvert=1
+	curvelb=1
+	curverb=1
+	line clr=0,0,0
+	xpoint=[  4873,  1717][  9398,  1717]
+	ypoint=[  4873,  1717][  4873,  3908]
+	[Cell]
+		name=C0,0
+	[EndCell]
+[WaterMark]
+	name=WMK0
+	visible=Yes
+	showon=
+	dimension=1000,4792,7676,9229
+	view edit=Yes
+	border=No
+	bdclr=0,0,0
+	pict=\\WIN-SERVER\Program Files\ExpressI\LOGOอ่อน2.bmp
+	showfile=No
+	stretch=Yes
+[Section]
+[Ti]
+	name=Ti1
+	secheight=0.2800 inch
+	order objs=1
+	calculation= "1,[1-1].visible=.f."
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT1
+		visible=No
+		gridtype=1
+		print with=INIT
+		calculation= "1,seq=0"
+		order=1
+		dimension=146,0,586,255
+		exc dimension=146,0,586,255
+		insu=0
+
+[He]
+	name=He1
+	secheight=0.9300 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=PICT
+		name=
+		order=1
+		dimension=0,0,875,875
+		exc dimension=0,0,875,875
+		pict=\\WIN-SERVER\Program Files\ExpressI\LOGO.bmp
+		showfile=No
+		stretch=No
+
+		obj type=TEXT
+		name=TEXT2
+		gridtype=1
+		print with=_NAME
+		order=2
+		dimension=975,0,9360,380
+		exc dimension=975,0,9360,380
+		font size=22
+		insu=0
+
+		obj type=TEXT
+		name=TEXT3
+		gridtype=1
+		print with=p_addr()
+		order=3
+		dimension=975,400,9360,655
+		exc dimension=975,400,9360,655
+		font size=16
+		insu=0
+
+		obj type=TEXT
+		name=TEXT4
+		gridtype=1
+		print with=p_telnum()
+		order=4
+		dimension=975,675,9360,930
+		exc dimension=975,675,9360,930
+		font size=16
+		insu=0
+
+[He]
+	name=He3
+	secheight=0.4390 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ใบเสนอราคา
+		name=LABEL1
+		gridtype=1
+		order=1
+		dimension=6354,0,7942,416
+		exc dimension=6354,0,7942,416
+		horz align=Center
+		font size=22
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT0
+		enable=No
+		gridtype=1
+		print with=_PAGE
+		format=99999
+		order=2
+		dimension=8844,128,9043,383
+		exc dimension=8844,128,9043,383
+		horz align=Right
+		insu=0
+
+		obj type=TEXT
+		name=TEXT54
+		enable=No
+		gridtype=1
+		print with=_TP
+		format=999
+		order=3
+		dimension=9181,128,9370,383
+		exc dimension=9181,128,9370,383
+		horz align=Right
+		insu=0
+
+		obj type=LABEL
+		caption=หน้า
+		name=LABEL0
+		enable=No
+		gridtype=1
+		order=4
+		dimension=8492,133,8834,383
+		exc dimension=8492,133,8834,383
+		horz align=Right
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=/
+		name=LABEL35
+		enable=No
+		gridtype=1
+		order=5
+		dimension=9062,132,9161,382
+		exc dimension=9062,132,9161,382
+		horz align=Right
+		vert=No
+		vdir=2
+
+[He]
+	name=He4
+	secheight=0.2000 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He5
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ถึง
+		name=LABEL2
+		gridtype=1
+		order=1
+		dimension=226,0,612,255
+		exc dimension=226,0,612,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT5
+		gridtype=1
+		print with=ARMAS->CONTACT
+		order=2
+		dimension=626,0,5006,255
+		exc dimension=626,0,5006,255
+		insu=0
+
+		obj type=LABEL
+		caption=เลขที่ใบเสนอราคา
+		name=LABEL3
+		gridtype=1
+		order=3
+		dimension=5026,0,6223,255
+		exc dimension=5026,0,6223,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT6
+		gridtype=1
+		print with=OESO->SONUM
+		order=4
+		dimension=6706,0,8062,255
+		exc dimension=6706,0,8062,255
+		font size=16
+		bold=Yes
+		insu=0
+
+[He]
+	name=He6
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT7
+		gridtype=1
+		print with=cus_nam
+		calculation= "1,cus_nam = ARMAS->PRENAM - ' ' - ARMAS->CUSNAM"
+		order=1
+		dimension=226,0,5402,255
+		exc dimension=226,0,5402,255
+		insu=0
+
+[He]
+	name=He7
+	secheight=0.2800 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT8
+		gridtype=1
+		print with=ARMAS->ADDR01
+		order=1
+		dimension=626,0,5406,255
+		exc dimension=626,0,5406,255
+		insu=0
+
+		obj type=LABEL
+		caption=วันที่
+		name=LABEL4
+		gridtype=1
+		order=2
+		dimension=5730,0,6222,255
+		exc dimension=5730,0,6222,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT9
+		gridtype=1
+		print with=OESO->SODAT
+		order=3
+		dimension=6706,0,7610,255
+		exc dimension=6706,0,7610,255
+		insu=0
+
+[He]
+	name=He8
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT10
+		gridtype=1
+		print with=ARMAS->ADDR02
+		order=1
+		dimension=626,0,5412,255
+		exc dimension=626,0,5412,255
+		insu=0
+
+[He]
+	name=He9
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT11
+		gridtype=1
+		print with=addr_03
+		calculation= "1,addr_03 = ARMAS->ADDR03 - ' ' - ARMAS->ZIPCOD"
+		order=1
+		dimension=626,0,5146,255
+		exc dimension=626,0,5146,255
+		insu=0
+
+[He]
+	name=He10
+	secheight=0.2800 inch
+	order objs=7
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=โทร.
+		name=LABEL5
+		gridtype=1
+		order=1
+		dimension=226,0,606,255
+		exc dimension=226,0,606,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT12
+		gridtype=1
+		print with=ARMAS->TELNUM
+		order=2
+		dimension=626,0,5006,255
+		exc dimension=626,0,5006,255
+		insu=0
+
+		obj type=LABEL
+		caption=ยืนราคา
+		name=LABEL6
+		gridtype=1
+		order=3
+		dimension=5026,0,5646,255
+		exc dimension=5026,0,5646,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT13
+		gridtype=1
+		print with=OESO->PAYTRM
+		format=99999
+		order=4
+		dimension=5666,0,5966,255
+		exc dimension=5666,0,5966,255
+		insu=0
+
+		obj type=LABEL
+		caption=วัน
+		name=LABEL7
+		gridtype=1
+		order=5
+		dimension=5986,0,6392,255
+		exc dimension=5986,0,6392,255
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=ถึงวันที่ 
+		name=LABEL8
+		gridtype=1
+		order=6
+		dimension=6706,0,7366,255
+		exc dimension=6706,0,7366,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT14
+		gridtype=1
+		print with=OESO->DLVDAT
+		order=7
+		dimension=7506,0,8410,255
+		exc dimension=7506,0,8410,255
+		insu=0
+
+[He]
+	name=He11
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=อ้างอิง
+		name=LABEL9
+		gridtype=1
+		order=1
+		dimension=226,0,803,255
+		exc dimension=226,0,803,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT15
+		gridtype=1
+		print with=OESO->YOUREF
+		order=2
+		dimension=946,0,4336,255
+		exc dimension=946,0,4336,255
+		insu=0
+
+		obj type=LABEL
+		caption=เงื่อนไขชำระเงิน
+		name=LABEL10
+		gridtype=1
+		order=3
+		dimension=5026,0,6122,255
+		exc dimension=5026,0,6122,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT16
+		gridtype=1
+		print with=term
+		calculation= "1,term = IIF(ARMAS->PAYTRM=0,'เงินสด            ', STR(ARMAS->PAYTRM,3,0)+' วัน หลังส่งมอบ')"
+		order=4
+		dimension=6706,0,9360,255
+		exc dimension=6706,0,9360,255
+		insu=0
+
+[He]
+	name=He12
+	secheight=0.2180 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He13
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=บริษัทฯ มีความยินดีที่จะเสนอราคาสินค้า ดังต่อไปนี้ :
+		name=LABEL11
+		gridtype=1
+		order=1
+		dimension=66,0,3027,255
+		exc dimension=66,0,3027,255
+		vert=No
+		vdir=2
+
+[He]
+	name=He14
+	secheight=0.1280 inch
+	order objs=0
+	shrink=No
+[He]
+	name=He15
+	secheight=0.2800 inch
+	order objs=6
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=No.
+		name=LABEL12
+		gridtype=1
+		order=1
+		dimension=226,0,663,255
+		exc dimension=226,0,663,255
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=รหัสสินค้า/รายละเอียด
+		name=LABEL13
+		gridtype=1
+		order=2
+		dimension=1986,0,3397,255
+		exc dimension=1986,0,3397,255
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=จำนวน
+		name=LABEL14
+		gridtype=1
+		order=3
+		dimension=5266,0,5883,255
+		exc dimension=5266,0,5883,255
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=หน่วยละ
+		name=LABEL15
+		gridtype=1
+		order=4
+		dimension=6546,0,7253,255
+		exc dimension=6546,0,7253,255
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=ส่วนลด
+		name=LABEL16
+		gridtype=1
+		order=5
+		dimension=7506,0,8149,255
+		exc dimension=7506,0,8149,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT17
+		gridtype=1
+		print with=txt0
+		calculation= "1,txt0 = IIF( OESO->FLGVAT <> '1', '  จำนวนเงิน', 'ราคารวมภาษี')"
+		order=6
+		dimension=8386,0,9360,255
+		exc dimension=8386,0,9360,255
+		horz align=Right
+		insu=0
+
+[He]
+	name=He16
+	secheight=0.2320 inch
+	order objs=0
+	shrink=No
+[Bo]
+	name=Bo1
+	visible=No
+	secheight=0.1280 inch
+	order objs=0
+	shrink=Yes
+[Ih]
+	name=Ih11
+	secheight=0.3720 inch
+	order objs=0
+	master file=OESO
+	master expr=SONUM
+	item file=OESOIT
+	item expression=SONUM
+	section ID=1
+	level=1
+	shrink=Yes
+[Ib]
+	name=Ib11
+	secheight=0.2800 inch
+	order objs=8
+	section ID=1
+	level=1
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT18
+		gridtype=1
+		print with=nn
+		format=ZZZ
+		calculation= "1,nn=IIF(OESOIT->TRNVAL > 0, 1, 0)","1,seq=seq+nn","1,nn=IIF(nn>0,seq,0)"
+		order=1
+		dimension=146,0,485,255
+		exc dimension=146,0,485,255
+		horz align=Center
+		insu=0
+
+		obj type=TEXT
+		name=TEXT19
+		gridtype=1
+		print with=OESOIT->STKDES
+		order=2
+		dimension=1616,0,4846,255
+		exc dimension=1616,0,4846,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT20
+		gridtype=1
+		print with=OESOIT->ORDQTY
+		format=qtyZ(7)
+		order=3
+		dimension=4866,0,5486,255
+		exc dimension=4866,0,5486,255
+		horz align=Right
+		insu=0
+
+		obj type=TEXT
+		name=TEXT21
+		gridtype=1
+		print with=p_istab( OESOIT->TQUCOD,  20, 1, 0 )
+		order=4
+		dimension=5506,0,6286,255
+		exc dimension=5506,0,6286,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT22
+		gridtype=1
+		print with=OESOIT->UNITPR
+		format=ZZ,ZZZ.ZZ
+		order=5
+		dimension=6306,0,7246,255
+		exc dimension=6306,0,7246,255
+		horz align=Right
+		insu=0
+
+		obj type=TEXT
+		name=TEXT23
+		gridtype=1
+		print with=OESOIT->DISC
+		order=6
+		dimension=7266,0,8206,255
+		exc dimension=7266,0,8206,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT24
+		gridtype=1
+		print with=OESOIT->TRNVAL
+		format=ZZ,ZZZ,ZZZ.ZZ
+		order=7
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+		obj type=TEXT
+		name=TEXT58
+		gridtype=1
+		print with=OESOIT->STKCOD
+		order=8
+		dimension=640,6,1588,261
+		exc dimension=640,6,1588,261
+		insu=0
+
+[Ih]
+	name=Ih21
+	secheight=0.1280 inch
+	order objs=0
+	master file=OESOIT
+	master expr=SONUM+SEQNUM
+	item file=ARTRNRM
+	item expression=DOCNUM+SEQNUM
+	section ID=2
+	level=2
+	shrink=Yes
+[Ib]
+	name=Ib21
+	secheight=0.2800 inch
+	order objs=1
+	section ID=2
+	level=2
+	shrink=Yes
+	[Object]
+		obj type=TEXT
+		name=TEXT25
+		gridtype=1
+		print with=ARTRNRM->REMARK
+		order=1
+		dimension=626,0,6276,255
+		exc dimension=626,0,6276,255
+		insu=0
+
+[If]
+	name=If21
+	secheight=0.2000 inch
+	order objs=0
+	section ID=2
+	level=2
+	shrink=Yes
+[If]
+	name=If11
+	secheight=0.2310 inch
+	order objs=0
+	section ID=1
+	level=1
+	shrink=Yes
+[Fo]
+	name=Fo1
+	secheight=0.1700 inch
+	order objs=0
+	shrink=No
+[Su]
+	name=Su1
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=รวมเป็นเงิน
+		name=LABEL17
+		gridtype=1
+		order=1
+		dimension=5906,0,6757,255
+		exc dimension=5906,0,6757,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT26
+		gridtype=1
+		print with=OESO->AMOUNT
+		format=99,999,999.99
+		order=2
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su2
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=หัก
+		name=LABEL18
+		gridtype=1
+		underline=Yes
+		order=1
+		dimension=5906,0,6126,255
+		exc dimension=5906,0,6126,255
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=ส่วนลด
+		name=LABEL19
+		gridtype=1
+		order=2
+		dimension=6146,0,6789,255
+		exc dimension=6146,0,6789,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT27
+		gridtype=1
+		print with=OESO->DISC
+		order=3
+		dimension=7266,0,8206,255
+		exc dimension=7266,0,8206,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT28
+		gridtype=1
+		print with=OESO->DISCAMT
+		format=99,999,999.99
+		order=4
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su3
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT29
+		gridtype=1
+		print with=txt1
+		calculation= "1,txt1 = IIF( OESO->FLGVAT <> '1', 'จำนวนเงินหลังหักส่วนลด', 'จำนวนเงินรวมทั้งสิ้น  ')"
+		order=1
+		dimension=5906,0,8186,255
+		exc dimension=5906,0,8186,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT30
+		gridtype=1
+		print with=OESO->TOTAL
+		format=99,999,999.99
+		order=2
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su4
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=จำนวนภาษีมูลค่าเพิ่ม
+		name=LABEL20
+		gridtype=1
+		order=1
+		dimension=5906,0,7233,255
+		exc dimension=5906,0,7233,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT31
+		gridtype=1
+		print with=OESO->VATRAT
+		format=99.99
+		order=2
+		dimension=7586,0,7966,255
+		exc dimension=7586,0,7966,255
+		horz align=Right
+		insu=0
+
+		obj type=LABEL
+		caption=%
+		name=LABEL21
+		gridtype=1
+		order=3
+		dimension=7986,0,8206,255
+		exc dimension=7986,0,8206,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT32
+		gridtype=1
+		print with=OESO->VATAMT
+		format=99,999,999.99
+		order=4
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su5
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=ตัวอักษร:
+		name=LABEL22
+		gridtype=1
+		order=1
+		dimension=226,0,926,255
+		exc dimension=226,0,926,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT33
+		gridtype=1
+		print with=t_baht(OESO->NETAMT)
+		order=2
+		dimension=946,0,5866,255
+		exc dimension=946,0,5866,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT34
+		gridtype=1
+		print with=txt2
+		calculation= "1,txt2 = IIF( OESO->FLGVAT <> '1', 'จำนวนเงินรวมทั้งสิ้น', 'ราคาสินค้า          ')"
+		order=3
+		dimension=5906,0,8186,255
+		exc dimension=5906,0,8186,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT35
+		gridtype=1
+		print with=netamt
+		format=99,999,999.99
+		calculation= "1,netamt = IIF( OESO->FLGVAT <> '1', OESO->NETAMT, OESO->TOTAL - OESO->VATAMT)"
+		order=4
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su6
+	enable=No
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT36
+		gridtype=1
+		print with=p_hrem(A->SONUM,3)
+		order=1
+		dimension=226,0,4746,255
+		exc dimension=226,0,4746,255
+		insu=0
+
+[Su]
+	name=Su7
+	enable=No
+	secheight=0.2800 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT37
+		gridtype=1
+		print with=p_hrem(A->SONUM,4)
+		order=1
+		dimension=226,0,5866,255
+		exc dimension=226,0,5866,255
+		insu=0
+
+		obj type=LABEL
+		caption=สินค้ายกเว้นภาษีมูลค่าเพิ่ม
+		name=LABEL23
+		gridtype=1
+		order=2
+		dimension=5906,0,7499,255
+		exc dimension=5906,0,7499,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT38
+		gridtype=1
+		print with=AMTRATZ
+		format=99,999,999.99
+		calculation= "1,AMTRATZ = OESO->AMTRAT0 - (OESO->AMTRAT0 * OESO->DISCAMT / OESO->AMOUNT)"
+		order=3
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su8
+	enable=No
+	secheight=0.2800 inch
+	order objs=5
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT39
+		gridtype=1
+		print with=p_hrem(A->SONUM,5)
+		order=1
+		dimension=226,0,5866,255
+		exc dimension=226,0,5866,255
+		insu=0
+
+		obj type=LABEL
+		caption=มูลค่าสินค้าอัตรา
+		name=LABEL24
+		gridtype=1
+		order=2
+		dimension=5906,0,7021,255
+		exc dimension=5906,0,7021,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT40
+		gridtype=1
+		print with=OESO->VATRAT
+		format=99.99
+		order=3
+		dimension=7426,0,7886,255
+		exc dimension=7426,0,7886,255
+		horz align=Right
+		insu=0
+
+		obj type=LABEL
+		caption=%
+		name=LABEL25
+		gridtype=1
+		order=4
+		dimension=7906,0,8206,255
+		exc dimension=7906,0,8206,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT41
+		gridtype=1
+		print with=AMTRATX
+		format=99,999,999.99
+		calculation= "1,AMTRATX = IIF(OESO->FLGVAT='1',OESO->TOTAL - AMTRATZ - OESO->VATAMT, OESO->TOTAL - AMTRATZ)"
+		order=5
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su9
+	enable=No
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=จำนวนเงินภาษีมูลค่าเพิ่ม
+		name=LABEL26
+		gridtype=1
+		order=1
+		dimension=5906,0,7413,255
+		exc dimension=5906,0,7413,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT42
+		gridtype=1
+		print with=OESO->VATAMT
+		format=99,999,999.99
+		order=2
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su10
+	enable=No
+	secheight=0.2800 inch
+	order objs=3
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT43
+		gridtype=1
+		print with=t_baht(OESO->NETAMT)
+		order=1
+		dimension=146,0,6426,255
+		exc dimension=146,0,6426,255
+		insu=0
+
+		obj type=LABEL
+		caption=จำนวนเงินรวมทั้งสิ้น
+		name=LABEL27
+		gridtype=1
+		order=2
+		dimension=6466,0,7796,255
+		exc dimension=6466,0,7796,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT44
+		gridtype=1
+		print with=OESO->NETAMT
+		format=99,999,999.99
+		order=3
+		dimension=8226,0,9360,255
+		exc dimension=8226,0,9360,255
+		horz align=Right
+		insu=0
+
+[Su]
+	name=Su11
+	secheight=0.1880 inch
+	order objs=0
+	shrink=No
+[Su]
+	name=Su12
+	secheight=0.2800 inch
+	order objs=2
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=หมายเหตุ:
+		name=LABEL28
+		gridtype=1
+		order=1
+		dimension=226,0,1002,255
+		exc dimension=226,0,1002,255
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=ขอแสดงความนับถือ
+		name=LABEL29
+		gridtype=1
+		order=2
+		dimension=7813,0,9248,255
+		exc dimension=7813,0,9248,255
+		horz align=Center
+		vert=No
+		vdir=2
+
+[Su]
+	name=Su13
+	secheight=0.2800 inch
+	order objs=1
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT45
+		gridtype=1
+		print with=p_hrem(A->SONUM,1)
+		order=1
+		dimension=386,0,4026,255
+		exc dimension=386,0,4026,255
+		insu=0
+
+[Su]
+	name=Su14
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT46
+		gridtype=1
+		print with=p_hrem(A->SONUM,2)
+		order=1
+		dimension=386,0,4016,255
+		exc dimension=386,0,4016,255
+		insu=0
+
+		obj type=LABEL
+		caption=_____________________
+		name=LABEL30
+		gridtype=1
+		order=2
+		dimension=7735,0,9335,255
+		exc dimension=7735,0,9335,255
+		horz align=Center
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=_____________________
+		name=LABEL36
+		gridtype=1
+		order=3
+		dimension=5966,0,7566,255
+		exc dimension=5966,0,7566,255
+		horz align=Center
+		vert=No
+		vdir=2
+
+		obj type=LABEL
+		caption=_____________________
+		name=LABEL37
+		gridtype=1
+		order=4
+		dimension=4143,0,5743,255
+		exc dimension=4143,0,5743,255
+		horz align=Center
+		vert=No
+		vdir=2
+
+[Su]
+	name=Su15
+	secheight=0.2800 inch
+	order objs=4
+	shrink=No
+	[Object]
+		obj type=TEXT
+		name=TEXT47
+		gridtype=1
+		print with=p_hrem(A->SONUM,3)
+		order=1
+		dimension=386,0,4026,255
+		exc dimension=386,0,4026,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT48
+		gridtype=1
+		print with=_TEXTCOPY#
+		textcopy=ผู้อนุมัติ~~0,16777215;
+		order=2
+		dimension=7835,0,9270,255
+		exc dimension=7835,0,9270,255
+		horz align=Center
+		insu=0
+
+		obj type=TEXT
+		name=TEXT55
+		gridtype=1
+		print with=_TEXTCOPY#
+		textcopy=ผู้รับทราบ~~0,16777215;
+		order=3
+		dimension=6066,0,7501,255
+		exc dimension=6066,0,7501,255
+		horz align=Center
+		insu=0
+
+		obj type=TEXT
+		name=TEXT56
+		gridtype=1
+		print with=_TEXTCOPY#
+		textcopy=ผู้ตรวจสอบ~~0,16777215;
+		order=4
+		dimension=4243,0,5678,255
+		exc dimension=4243,0,5678,255
+		horz align=Center
+		insu=0
+
+[Su]
+	name=Su16
+	enable=No
+	secheight=0.2800 inch
+	order objs=9
+	shrink=No
+	[Object]
+		obj type=LABEL
+		caption=พิมพ์โดย
+		name=LABEL31
+		gridtype=1
+		order=1
+		dimension=306,0,1024,255
+		exc dimension=306,0,1024,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT49
+		gridtype=1
+		print with=p_userid()
+		order=2
+		dimension=1106,0,2266,255
+		exc dimension=1106,0,2266,255
+		insu=0
+
+		obj type=LABEL
+		caption=วันที่
+		name=LABEL32
+		gridtype=1
+		order=3
+		dimension=2306,0,2798,255
+		exc dimension=2306,0,2798,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT50
+		gridtype=1
+		print with=@d_prndat()
+		order=4
+		dimension=2946,0,3706,255
+		exc dimension=2946,0,3706,255
+		insu=0
+
+		obj type=TEXT
+		name=TEXT51
+		gridtype=1
+		print with=s_prntim()
+		order=5
+		dimension=3746,0,4346,255
+		exc dimension=3746,0,4346,255
+		insu=0
+
+		obj type=LABEL
+		caption=พิมพ์ครั้งที่
+		name=LABEL33
+		gridtype=1
+		order=6
+		dimension=4386,0,5183,255
+		exc dimension=4386,0,5183,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT52
+		gridtype=1
+		print with=@n_prncnt()
+		format=999
+		order=7
+		dimension=5426,0,5765,255
+		exc dimension=5426,0,5765,255
+		insu=0
+
+		obj type=LABEL
+		caption=บันทึกโดย
+		name=LABEL34
+		gridtype=1
+		order=8
+		dimension=6866,0,7661,255
+		exc dimension=6866,0,7661,255
+		vert=No
+		vdir=2
+
+		obj type=TEXT
+		name=TEXT53
+		gridtype=1
+		print with=A->USERID
+		order=9
+		dimension=7666,0,8570,255
+		exc dimension=7666,0,8570,255
+		insu=0
+
+[Su]
+	name=Su17
+	secheight=0.2800 inch
+	order objs=0
+	shrink=No

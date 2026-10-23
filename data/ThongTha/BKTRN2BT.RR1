@@ -1,0 +1,113 @@
+* BKTRN2.RL - ãºâÍ¹à§Ô¹ÃÐËÇèÒ§ºÑ­ªÕ (Transfer Slip)
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+Ti:: ~INIT
+He:                                             $EãºâÍ¹à§Ô¹$E
+He:
+He:[ ÊèÇ¹¡ÒÃ¶Í¹à§Ô¹ ]                                                        àÅ¢·Õè  ~PAYINNUM
+He:ÊÒ¢Òà¨éÒ¢Í§ºÑ­ªÕ  ~FOR_BRANCH                                             ÇÑ¹·Õè  ~PAYINDAT
+He:ºÑ­ªÕª×èÍ  ~BNKNAM                           
+He:                                             àÅ¢·ÕèºÑ­ªÕ  ~BNKNUM
+He:ËÁÒÂàËµØ   ~REMARK
+He:€…………………………………………………………………………………………………………………………………………………………………………………………………………‰……………………………………
+He:„              ¨Ó¹Ç¹à§Ô¹¶Í¹à»ç¹µÑÇÍÑ¡ÉÃ                                      „   ¨Ó¹Ç¹à§Ô¹  „
+He:†…………………………………………………………………………………………………………………………………………………………………………………………………………Š……………………………………‡
+Bo:„ ~BAHT                                                                      „~AMOUNT       „
+Bo:„                                                                            „              „
+Bo:„                                                                            „              „
+Bo:„                                                                            „              „
+Bo:„                                                                            „              „
+Bo:„                                                                            „              „
+Bo:†…………………………………………………………………………………………………………………………………………………………………………………………………………ˆ……………………………………‡
+Bo:„                                                                                           „
+Bo:„    ¼Ùé¶Í¹    ____________________          ¼ÙéµÃÇ¨ÊÍº  ____________________               „
+Bo:„    ÇÑ¹·Õè    ___/___/___                     ÇÑ¹·Õè    ___/___/___                        „
+Bo:‚…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ƒ
+Bo:
+Bo:
+Bo:[ ÊèÇ¹¡ÒÃ¹Ó½Ò¡à§Ô¹ ]                                                      àÅ¢·Õè  ~PAYINNUM
+Bo:¼Ùé¹Ó½Ò¡  .................................                               ÇÑ¹·Õè  ~PAYINDAT
+Bo:ºÑ­ªÕª×èÍ  ~XBNKNAM                          ÊÒ¢Ò ~XFOR_BRANCH
+Bo:                                             àÅ¢·ÕèºÑ­ªÕ  ~XBNKNUM
+Bo:ËÁÒÂàËµØ   ~REMARK
+Bo:€…………………………………………………………………………………………………………………………………………………………………………………………………………‰……………………………………
+Bo:„              ¨Ó¹Ç¹à§Ô¹Ê´¹Ó½Ò¡ (µÑÇÍÑ¡ÉÃ)                                   „ ¨Ó¹Ç¹à§Ô¹Ê´  „
+Bo:†…………………………………………………………………………………………………………………………………………………………………………………………………………Š……………………………………‡
+Bo:„ ~BAHT                                                                      „~AMOUNT       „
+Bo:„                                                                            „              „
+Bo:„                                                                            „              „
+Bo:„                                                                            „              „
+Bo:„                                                                            „              „
+Bo:†…………………………………………………………………………………………………………………………………………………………………………………………………………ˆ……………………………………‡
+Bo:„                                                                                           „
+Bo:„    ¼Ùé¹Ó½Ò¡  ____________________          ¼ÙéµÃÇ¨ÊÍº  ____________________               „
+Bo:„    ÇÑ¹·Õè    ___/___/___                     ÇÑ¹·Õè    ___/___/___                        „
+Bo:‚…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ƒ
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+Left=0
+Tabs=4
+Right=94
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=BKTRN1.TXT
+Print Control=\027\033\001
+Fix Summary Line=ON
+Select Scope=OFF
+*Form=ON
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=bktrn
+Alias=A
+Tag=bktrn3
+System=DATA_PATH
+Filter=BKTRNTYP='BT'
+
+[relate file]
+File=bkmasx
+Clone From=bkmas
+Alias=R
+Tag=bkmas1
+System=DATA_PATH
+Master file=bktrn
+Master-Related Field=BNKCOD
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",             "exp"
+~ADDR:      0,      "",                 "p_addr()",         ""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:      0,      "",                 "",                 ""
+~BNKNAM:    0,      "",                 "BKMAS->BNKNAM",    ""
+~FOR_BRANCH: 0,     "",                 "BKMAS->BRANCH",    ""
+~BNKNUM:    0,      "",                 "BKMAS->BNKNUM",    ""
+~XBNKNAM:   0,      "",                 "BKMASX->BNKNAM",   ""
+~XFOR_BRANCH: 0,    "",                 "BKMASX->BRANCH",   ""
+~XBNKNUM:   0,      "",                 "BKMASX->BNKNUM",   ""
+~REFNUM:    0,      "",                 "BKTRN->REFNUM",    ""
+~PAYINNUM:  0,      "",                 "BKTRN->CHQNUM",    ""
+~PAYINDAT:  0,      "",                 "BKTRN->TRNDAT",    ""
+~AMOUNT:    0,      "99,999,999.99",    "BKTRN->AMOUNT",    ""
+~CHARGE:    0,      "99,999,999.99",    "BKTRN->CHARGE",    ""
+~VATAMT:    0,      "99,999,999.99",    "BKTRN->VATAMT",    ""
+~NETAMT:    0,      "99,999,999.99",    "BKTRN->NETAMT",    ""
+~REMARK:    0,      "",                 "BKTRN->REMARK",    ""
+
+*~BAHT:     0,      "",                 "t_baht(BKTRN->NETAMT)" ""
+~BAHT:      0,      "",                 "t_baht(BKTRN->AMOUNT)" ""
+
+~HREM1:     0,      "",                 "p_hrem(A->CHQNUM,1)",  ""
+~HREM2:     0,      "",                 "p_hrem(A->CHQNUM,2)",  ""
+~HREM3:     0,      "",                 "p_hrem(A->CHQNUM,3)",  ""
+~HREM4:     0,      "",                 "p_hrem(A->CHQNUM,4)",  ""
+~HREM5:     0,      "",                 "p_hrem(A->CHQNUM,5)",  ""
+

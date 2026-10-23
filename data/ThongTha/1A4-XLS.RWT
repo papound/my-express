@@ -1,0 +1,182 @@
+* ARBALAGD.RWT - A/R Balance Aging Detail Report
+*
+[report frame]
+Ti::~INIT ~INIT2 ~CLR_T
+He:\NAME                                                    `หน้า   : \PAGE
+He:$Eลูกหนี้คงค้างแบบละเอียด$E
+He:ณ วันที่  ~ASDATE                                        `วันที่ : \DATE
+H1:รหัสลูกค้า       ~FROMCUS      ถึง  ~TOCUS
+H1:ประเภทลูกค้าจาก  ~FROMCUSTYP   ถึง  ~TOCUSTYP
+H1:พนักงานขาย       ~FROMSLM      ถึง  ~TOSLM
+He:\LINE
+He:วันที่","เอกสาร#","พนักงานขาย","ยอดในบิล","ยอดชำระ","ยอดคงค้าง","................จะครบกำหนด...............","","","......................เกินกำหนด.........................","","","","รวมยอดหนี้ 
+He:~NOT_D ","","","","","","เกิน~ND2วัน","ภายใน~ND2วัน","ภายใน~ND1วัน","~PRD1  วัน","~PRD2  วัน","~PRD3  วัน","เกิน~PRD4  วัน","เกินไป(วัน)","ครบกำหนด
+He:~D","","ตัดยอดโดย","วันที่","ยอดที่ตัด","","เกิน~ND2วัน","ภายใน~ND2วัน","ภายใน~ND1วัน","~PRD1  วัน","~PRD2  วัน"," ~PRD3  วัน","เกิน~PRD4  วัน","เกินไป(วัน)","ครบกำหนด
+**:    DD/MM/YY  xxxxxxxxx1xx xxxxxxxxx1   999,999,999.99 999,999,999.99 999,999,999.99
+He:\LINE
+Gh:$Bประเภทลูกค้า : ~TABLE1                                         $B~KEPT_TAB1 ~CLR_S ; 1 ARMAS->CUSTYP
+Gh:  $B~CUSTOMER                                                                $B ~INIT_CUS ;2 CUSCOD
+Bo:    ~DOCDAT   ~DOCNUM      ~SLMCOD      ~NETAMT        ~RCVAMT        ~REMAMT        ~RCPERR~C~DUEOVR60     ~DUEIN60      ~DUEIN30        ~OVRDUE1      ~OVRDUE2      ~OVRDUE3      ~OVRDUE4           ~OVRDUE     ~DUEDAT
+Ih::                          ;1 ARRCPIT->DOCNUM A->DOCNUM
+Ib:~PRN                       ~IT_RCPNUM   ~IT_RCVDAT     ~IT_RCVAMT     ~CHK ;1
+Gf:","","","--------------","","-------------"," -------------"," -------------","-------------"," -------------"," -------------"," -------------","--------------                ;2
+Gf:    รวมลูกค้า ~TCUSTOMER                                    ~C_DOC ใบ $B~T_REM                  ~S_DUEOVR60   ~S_DUEIN60    ~S_DUEIN30      ~S_OVRDUE1    ~S_OVRDUE2    ~S_OVRDUE3    ~S_OVRDUE4    ~SUMTOT          $B ~CLR_T   ;2
+Gf:","","","--------------","","-------------"," -------------"," -------------","-------------"," -------------"," -------------"," -------------","--------------                ;2
+Gf:  $Bรวมตามประเภทลูกค้า ~TABLE1NAM                  $B~C_CUS ราย ~S_DOC ใบ $B~S_REM                  ~TOT0         ~TOT1         ~TOT2           ~TOT3         ~TOT4         ~TOT5         ~TOT6         ~TOTAL           $B~CLR_S ;1
+Gf:","","","==============","","=============","============="," =============","============="," ============="," =============","=============","==============     ;1
+Su:รวมทั้งสิ้น                              ลูกค้า  ~G_CUS ราย ~G_DOC ใบ $B~G_REM                  ~GTOT0        ~GTOT1        ~GTOT2          ~GTOT3        ~GTOT4        ~GTOT5        ~GTOT6        ~GTOTAL          $B
+Su:","","","==============","","=============","============="," =============","============="," ============="," ============="," ============="," ==============
+Su:~W$_หมายเหตุ$_ ยอดคงค้างที่มีเครื่องหมาย $B***$B อยู่ด้านท้ายหมายถึงว่า
+Su:~W        มีใบเสร็จบางใบยอดเงินไม่เรียบร้อย  ตรวจสอบโดยพิมพ์ใหม่โดยกำหนดค่า Y
+Su:~W        เพื่อให้พิมพ์การตัดยอดบางส่วนออกมาด้วย จะพบใบเสร็จที่ผิดพลาด
+Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=0
+Right=220
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=ARBALAGD.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, Default
+15_Inch=\027\033\004
+Query= CUSCOD>='Cus1()' .AND. CUSCOD<='Cus2()'
+Query= .AND. ARMAS->CUSTYP>='CusTyp1()'.AND. ARMAS->CUSTYP<='CusTyp2()'
+Query= .AND. DTOS(DOCDAT) <= 'AsDate()'
+Query= .AND. (DTOS(CMPLDAT) > 'AsDate()' .OR. DTOS(CMPLDAT) ='        ')
+Query= .AND. SLMCOD>='Slm1()' .AND. SLMCOD<='Slm2()'
+Sort=ARMAS->CUSTYP+CUSCOD+RECTYP+DTOS(DOCDAT)+DOCNUM
+
+[master file]
+File=ARTRN
+Alias=A
+Tag=ARTRN8
+System=DATA_PATH
+Filter= RECTYP='3'.OR.(RECTYP='4'.AND.CNTYP='2').OR.(RECTYP='5'.AND.CNTYP='2')
+
+[item file]
+File=ARRCPIT
+Alias=F
+Tag=ARRCPIT2
+System=DATA_PATH
+
+
+[relate file]
+File=ARMAS
+Alias=B
+Tag=ARMAS1
+System=DATA_PATH
+Master file=ARTRN
+Master-Related Field=CUSCOD
+
+*File=OESLM
+*Alias=C
+*Tag=OESLM1
+*System=DATA_PATH
+*Master file=ARTRN
+*Master-Related Field=SLMCOD
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,"pict",             "data",         "exp"
+~INIT:      0,  "",                 "init_tot()",   "p_det=@n_prn_arbal_detail(); prn_detail=IIF(p_det=0,':',' '); prn_remark=':'; gtot0=0;gtot1=0;gtot2=0;gtot3=0;gtot4=0;gtot5=0;gtot6=0;gtot=0"
+~INIT2:     0,  "",                 "",             "g_rem=0; g_doc=0; g_cus=0"
+~INIT_CUS:  0,  "",                 "init_cus()",   ""
+~CLR_T:     0,  "",                 "",             "t_rem=0; c_doc=0"
+~CLR_S:     0,  "",                 "init_tot()",   "s_rem=0; s_doc=0; c_cus=0"
+~ASDATE:    0,  "d ดดด yyyy",       "@date_as()",   "as_date=@AsDate()"
+~FROMCUS:   0,  "",                 "Cus1()",       ""
+~TOCUS:     0,  "",                 "Cus2()",       ""
+~FROMCUSTYP: 0, "",                 "CusTyp1()",    ""
+~TOCUSTYP:  0,  "",                 "CusTyp2()",    ""
+~FROMSLM:   0,  "",                 "Slm1()",       ""
+~TOSLM:     0,  "",                 "Slm2()",       ""
+~DEP:       0,  "",                 "Dep1()",       ""
+~TODEP:     0,  "",                 "Dep2()",       ""
+
+~TABLE1:    0,  "",                 "p_istab( ARMAS->CUSTYP,45,1,40)",      ""
+~KEPT_TAB1: 0,  "",                 "",             "tab1 = ISTAB->TYPDES"
+~TABLE1NAM: 0,  "",                 "tab1",         ""
+
+~CUSTOMER:  0,  "",                 "cus_nam",      "cus_nam = ARMAS->CUSNAM - ' /' - A->CUSCOD"
+~TCUSTOMER: 48, "",                 "cus_nam",      "c_cus=c_cus+1"
+~SALESMAN:  0,  "",                 "slm_nam",      "slm_nam = OESLM->SLMNAM - ' /' - A->SLMCOD"
+~TSALESMAN: 0,  "",                 "slm_nam",      "c_slm=c_slm+1"
+
+~DUEDAT:    0,  "",                 "A->DUEDAT",    ""   ,O
+~DOCNUM:    0,  "",                 "A->DOCNUM",    "c_doc=c_doc+1"  ,B
+~DOCDAT:    0,  "วว ดด ปปปป",       "A->DOCDAT",    ""  ,A
+~SLMCOD:    0,  "",                 "A->SLMCOD",    ""  ,C
+~BILNUM:    0,  "",                 "A->BILNUM",    ""
+~NETAMT:    0,  "999,999,999.99",   "A->NETAMT",    ""  ,D
+~RCVAMT:    0,  "999,999,999.99",   "A->RCVAMT",    ""  ,E
+~REMAMT:    0,  "999,999,999.99",   "remain",       "remain=IIF(A->RECTYP='5',0-A->REMAMT,A->REMAMT); t_rem=t_rem+remain"  ,F
+~RCPERR:    0,  "",                 "has_rcperr",   "rcperr=@n_rcperr(); has_rcperr=IIF(rcperr=1,'***','   '); prn_remark=IIF(rcperr=1, ' ',prn_remark)"
+~CHK:       0,  "",                 "chk",          "chk=IIF(ARTRNX->DOCSTAT='R','*** ยอดเงินไม่เรียบร้อย',  '                       ')"  ,F
+~W:         0,  "",                 "prn_remark",   ""
+
+~NOT_D:     0,  "",                 "pp",               "pp = IIF( p_det=0,' ',':' )"
+~D:         0,  "",                 "prn_detail",       ""
+~PRN:       0,  "",                 "prn",              "deduct=IIF( DTOS(ARTRNX->DOCDAT) <= as_date, ARRCPIT->RCVAMT, 0); prn=IIF(deduct=0,':',' ')"
+~IT_RCPNUM: 0,  "",                 "ARRCPIT->RCPNUM",  ""  ,C
+~IT_DOCNUM: 0,  "",                 "ARRCPIT->DOCNUM",  ""  
+~IT_RCVDAT: 0,  "",                 "ARTRNX->DOCDAT",   ""  ,D
+~IT_RCVAMT: 0,  "999,999,999.99",   "ARRCPIT->RCVAMT",  ""  ,E
+
+~T_REM:     0,  "999,999,999.99",   "t_rem",        "s_rem = s_rem + t_rem"   ,D
+~S_REM:     0,  "999,999,999.99",   "s_rem",        "g_rem = g_rem + s_rem"   ,D
+~G_REM:     0,  "999,999,999.99",   "g_rem",        ""                        ,D
+
+~C_DOC:     0,  "99,999",           "c_doc",        "s_doc=s_doc+c_doc"
+~S_DOC:     0,  "99,999",           "s_doc",        "g_doc=g_doc+s_doc"
+~G_DOC:     0,  "99,999",           "g_doc",        ""
+~C_SLM:     0,  "99,999",           "c_slm",        ""
+~C_CUS:     0,  "99,999",           "c_cus",        "g_cus=g_cus+c_cus"
+~G_CUS:     0,  "99,999",           "g_cus",        ""
+
+~ND1:           0,  "",                 "notdue1()",    ""
+~ND2:           0,  "",                 "notdue2()",    ""
+~PRD1:          0,  "",                 "ovrprd1()",    ""
+~PRD2:          0,  "",                 "ovrprd2()",    ""
+~PRD3:          0,  "",                 "ovrprd3()",    ""
+~PRD4:          0,  "",                 "ovrprd4()",    ""
+~C:             0,  "",                 "calprd()",     ""
+~DUEOVR60:      0,  "ZZZ,ZZZ,ZZZ.ZZ",   "prd0",         "prd0=@n_prd0()"  ,G
+~DUEIN60:       0,  "ZZZ,ZZZ,ZZZ.ZZ",   "prd1",         "prd1=@n_prd1()"  ,H
+~DUEIN30:       0,  "ZZZ,ZZZ,ZZZ.ZZ",   "prd2",         "prd2=@n_prd2()"  ,I
+~OVRDUE1:       0,  "ZZZ,ZZZ,ZZZ.ZZ",   "prd3",         "prd3=@n_prd3()"  ,J
+~OVRDUE2:       0,  "ZZZ,ZZZ,ZZZ.ZZ",   "prd4",         "prd4=@n_prd4()"  ,K
+~OVRDUE3:       0,  "ZZZ,ZZZ,ZZZ.ZZ",   "prd5",         "prd5=@n_prd5()"  ,L
+~OVRDUE4:       0,  "ZZZ,ZZZ,ZZZ.ZZ",   "prd6",         "prd6=@n_prd6()"  ,M
+~OVRDUE:        0,  "ZZZ,ZZZ",          "ovrdue",       "ovrdue=@n_ovrdue(); ovrdue=IIF(ovrdue<0,0,ovrdue)"  ,N
+~S_DUEOVR60:    0,  "999,999,999.99",   "cus0",         "cus0=@n_cus0()"  ,G
+~S_DUEIN60:     0,  "999,999,999.99",   "cus1",         "cus1=@n_cus1()"  ,H
+~S_DUEIN30:     0,  "999,999,999.99",   "cus2",         "cus2=@n_cus2()"  ,I
+~S_OVRDUE1:     0,  "999,999,999.99",   "cus3",         "cus3=@n_cus3()"  ,J
+~S_OVRDUE2:     0,  "999,999,999.99",   "cus4",         "cus4=@n_cus4()"  ,K
+~S_OVRDUE3:     0,  "999,999,999.99",   "cus5",         "cus5=@n_cus5()"  ,L
+~S_OVRDUE4:     0,  "999,999,999.99",   "cus6",         "cus6=@n_cus6()"  ,M
+~SUMTOT:        0,  "9999,999,999.99",  "sum_tot",      "sum_tot=@n_sum_tot()"  ,N
+~TOT0:          0,  "999,999,999.99",   "tot0",         "tot0=@n_tot0(); gtot0=gtot0+tot0"  ,G
+~TOT1:          0,  "999,999,999.99",   "tot1",         "tot1=@n_tot1(); gtot1=gtot1+tot1"  ,H
+~TOT2:          0,  "999,999,999.99",   "tot2",         "tot2=@n_tot2(); gtot2=gtot2+tot2"  ,I
+~TOT3:          0,  "999,999,999.99",   "tot3",         "tot3=@n_tot3(); gtot3=gtot3+tot3"  ,J
+~TOT4:          0,  "999,999,999.99",   "tot4",         "tot4=@n_tot4(); gtot4=gtot4+tot4"  ,K
+~TOT5:          0,  "999,999,999.99",   "tot5",         "tot5=@n_tot5(); gtot5=gtot5+tot5"  ,L
+~TOT6:          0,  "999,999,999.99",   "tot6",         "tot6=@n_tot6(); gtot6=gtot6+tot6"  ,M
+~TOTAL:         0,  "9999,999,999.99",  "tot",          "tot=@n_total(); gtot=gtot+tot"     ,N
+
+~GTOT0:         0,  "999,999,999.99",   "gtot0",        ""  ,G
+~GTOT1:         0,  "999,999,999.99",   "gtot1",        ""  ,H
+~GTOT2:         0,  "999,999,999.99",   "gtot2",        ""  ,I
+~GTOT3:         0,  "999,999,999.99",   "gtot3",        ""  ,J
+~GTOT4:         0,  "999,999,999.99",   "gtot4",        ""  ,K
+~GTOT5:         0,  "999,999,999.99",   "gtot5",        ""  ,L
+~GTOT6:         0,  "999,999,999.99",   "gtot6",        ""  ,M
+~GTOTAL:        0,  "9999,999,999.99",  "gtot",         ""  ,N
+
+
+

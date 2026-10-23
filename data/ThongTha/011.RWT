@@ -1,0 +1,96 @@
+* BKRCQDAT.RWT - Posted Date Cheque by Cheque Date
+*
+[report frame]
+Ti::~INIT
+He:\NAME                                                    `หน้า   : \PAGE
+He:$Eรายงานเช็ครับ เรียงตามวันที่เช็ค$E
+He:วันที่เช็คจาก  ~FROMDATE      ถึง  ~TODATE               `วันที่ : \DATE
+H1:สถานะเช็คจาก   ~FQ            ถึง  ~TQ          เลือกแผนก  ~DEP
+He:\LINE
+He:  วันที่  เลขที่เช็ค  ธ.    สาขา            รับจาก          จำนวนเงิน เข้าบัญชี   สถานะเช็ค       วันที่ผ่านหรือ หมายเหตุ                             ใบเสร็จ#
+He:~D                                                                                               วันที่เช็คคืน    รายละเอียด (หมายเหตุของใบเสร็จ)
+He:\LINE
+**:DD/MM/YY xxxxxxxxx1xx xxxx  xxxxxxxxx1xxxxx xxxxxxxxxx999,999,999.99  xxxxxxxxxx  xxxxxxxxxxxxxxx DD/MM/YY  xxxxxxxxx1xxxxxxxxx2xxxxxxxxx3xxxxxxxxx4x xxxxxxxxxx
+Bo:~CHQDAT  ~CHQNUM      ~BANK ~BRANCH         ~CUSCOD   ~AMOUNT         ~BNKACC     ~CHQSTAT        ~PASSDAT  ~REMARK                                   {1}
+Ih::                    ;1 ARRCPCQ->CHQNUM A->CHQNUM
+Ib:{1}                                                                                                                                                  ~REFNUM ;1
+Ih::                    ;2 artrnrm->docnum+'@' arrcpcq->rcpnum+'@'
+Ib:                                                                                                              ~REMARK_R  ;2
+Su:                                                      --------------
+Su:                      รวมทั้งสิ้น ~CNT    ใบ          $B~TOTAL        $B
+Su:                                                      ==============
+Su:
+Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Left=0
+Right=161
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=BKRCQDAT.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, 8_Inch, Default
+8_Inch=\027\033\005
+15_Inch=\027\033\001
+Query=DTOS(CHQDAT)>='Date1()'.AND.DTOS(CHQDAT)<='Date2()'
+Query=.AND.CHQSTAT>='ChqStat1()'.AND.CHQSTAT<='ChqStat2()'
+Query=.AND.BKTRNTYP='QR'
+
+[master file]
+File=BKTRN
+Alias=A
+Tag=BKTRN1
+System=DATA_PATH
+
+[relate file]
+File=BKMAS
+Alias=B
+Tag=BKMAS1
+System=DATA_PATH
+Master file=BKTRN
+Master-Related Field=BNKACC
+
+[item file]
+File=ARRCPCQ
+Alias=C
+Tag=ARRCPCQ2
+System=DATA_PATH
+
+File=ARTRNRM
+Alias=X
+Tag=ARTRNRM1
+System=DATA_PATH
+
+[data spec]
+*               len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:          len,"pict",             "data",                 "exp"
+~INIT:          0,  "",                 "",                     "p_det=@n_prn_detail();prn_detail=IIF(p_det=0,':',' '); grand=0;cnt=0"
+~FROMDATE:      0,  "d ดดด ปปปป",       "@date1()",             ""
+~TODATE:        0,  "d ดดด ปปปป",       "@date2()",             ""
+~FQ:            0,  "",                 "ChqStat1()",           ""
+~TQ:            0,  "",                 "ChqStat2()",           ""
+~DEP:           0,  "",                 "Dep1()",               ""
+~CHQDAT:        0,  "",                 "A->CHQDAT",            "",A
+~BANK:          0,  "",                 "p_istab( A->BNKCOD, 01, 0, 6)",    "",C
+~BRANCH:       15,  "",                 "A->BRANCH",            "",D
+~CHQNUM:        0,  "",                 "A->CHQNUM",            "cnt=cnt+1",B
+~CUSCOD:        0,  "",                 "A->CUSCOD",            "",E
+~AMOUNT:        0,  "999,999,999.99",   "A->AMOUNT",            "grand=grand+A->AMOUNT",F
+*~REMAMT:       0,  "999,999,999.99",   "A->REMAMT",            ""
+~BNKACC:        0,  "",                 "BKMAS->SHORTNAM",      "",G
+~CHQSTAT:       0,  "",                 "p_istab( A->CHQSTAT, 02, 1, 15 )",         "",H
+~PASSDAT:       0,  "",                 "pass_dat",             "pass_dat=IIF(A->CHQSTAT='1'.OR.A->CHQSTAT='20',A->TRNDAT,STOD('        '))",I
+~REMARK:       45,  "",                 "re_mark",              "re_mark = A->NAME-' '-A->REMARK",J
+*~REMARK:       0,  "",                 "rem",                  "rem = SUBSTR(A->NAME,1,39)+' '+A->VOUCHER"
+
+~REFNUM:        0,  "",                 "ARRCPCQ->RCPNUM",      "",K
+~RCVAMT:        0,  "99,999,999.99",    "ARRCPCQ->RCVAMT",      ""
+~TOTAL:         0,  "999,999,999.99",   "grand",                ""
+~D:             0,  "",                 "prn_detail",           ""
+~REMARK_R:      0,  "",                 "ARTRNRM->REMARK",      ""
+~CNT:           0,  "999,999",          "cnt",                  ""
+
+

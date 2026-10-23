@@ -1,0 +1,204 @@
+* ARRCPCMP.RWT - Official Receipt by Salesman, Completed Date
+*
+[report frame]
+Ti::~INIT ~C_SUB1
+He:\NAME                                                    `หน้า   : \PAGE
+He:$Eรายงานการรับชำระหนี้ แยกตามพนักงายขาย(วันที่เช็คผ่าน)$E
+He:พนักงานขายจาก   ~FROMSLM       ถึง  ~TOSLM               `วันที่ : \DATE
+H1:วันที่เช็คผ่าน  ~FROMDATE      ถึง  ~TODATE
+He:\LINE
+He:   ใบเสร็จ#       วันที่ วันที่เช็คผ่าน ชื่อลูกค้า                   หักเงินมัดจำ ยอดตามใบกำกับ   ชำระเป็น ง/ส         เช็ครับ   ด/บ รับ     ส่วนลด       ภาษี หมายเหตุ  รับชำระโดย  ลงวันที่  ธนาคาร    จำนวนเงิน  สถานะเช็ค  คอมมิชชั่น
+He:                         เลขที่เอกสาร   วันที่    ยอดชำระ        วันครบกำหนด      เลยกำหนด(วัน)   เครดิตทั้งสิ้น
+*He:                                             รายละเอียด                                                    จำนวน          ราคาต่อหน่วย   ส่วนลด     จำนวนเงิน
+He:\LINE
+**:   xxxxxxxxx1xx DD/MM/YY DD/MM/YY xxxxxxxxx1xxxxxxxxx2xxxxxxxxx3 999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 999,999.99 xxxxxxxxx1 999,999.99  ***      xxxxxxxxx1xx DD/MM/YY  xxxxxx 99,999,999.99 xxxxxxxxxx
+Gh:$B~SALESMAN                                                      $B ; 1 SLMCOD
+Bo: ~F~DOCNUM      ~RCPDAT  ~CMPLDAT ~CUSNAM                        ~ADVAMT        ~IVCAMT        ~CSHRCV        ~CHQRCV        ~INTRCV    ~DISC      ~TAX        ~CHKERR  {1}
+Ih::                    ;1 ARRCPCQ->RCPNUM A->DOCNUM
+Ib:{1}                                                                                                                                                                     ~CHQNUM      ~CHQDAT   ~BANK  ~CHQAMT       ~CHQSTAT ;1
+Ih::                    ;2 ARRCPIT->RCPNUM A->DOCNUM
+Ib:                         ~IT_IVCNUM   ~IT_IVCDAT  ~IT_RCVAMT     ~IT_DUEDAT         ~IT_DIFDUE    ~IT_DIFDAT                                                                                                                 ............    ;2
+*Ih::                   ;3 STCRD->DOCNUM ARRCPIT->DOCNUM
+*Ib:                                             ~ARTICLE                                ~QTY      ~TQUCOD   ~UNITPR      ~DISC_I   ~NETAMT_I   ;3
+*If:                        ;3
+*Ih::                   ;4 artrnrm->docnum+artrnrm->seqnum stcrd->docnum+stcrd->seqnum
+*Ib:                                                ~REMARK     ;4
+Ih:                     หมายเหตุ:       ;5 artrnrm->docnum+'@' artrn->docnum+'@'
+Ib:                        ~REMARK      ;5
+If:                                     ;5
+Gf:                                                                 -------------- -------------- -------------- -------------- ---------- ---------- ----------                                                                ------------ ;1
+Gf:               รวม ~SLMNAME                                      $B~SUB1ADV       ~SUB1IVC       ~SUB1CSH       ~SUB1CHQ       ~SUB1INT  ~SUB1DIS   ~SUB1TAX                                                                                $B ~C_SUB1 ;1
+Gf:                                                                 ============== ============== ============== ============== ========== ========== ==========                                                                ============ ;1
+Su:               รวมทั้งสิ้น                                       $B~TOTADV        ~TOTIVC        ~TOTCSH        ~TOTCHQ        ~TOTINT   ~TOTDIS    ~TOTTAX                                                                                 $B
+Su:                                                                 ============== ============== ============== ============== ========== ========== ==========                                                                ============
+Su:หมายเหตุ:
+Su: ใบเสร็จที่มีเครื่องหมาย '*'   หน้าเลขที่เอกสาร  หมายถึงใบเสร็จถูกยกเลิก
+Su: ใบเสร็จที่มีเครื่องหมาย '***' ในช่องหมายเหตุ  หมายถึงทำรายการรับชำระหนี้ไม่เรียบร้อย
+Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=0
+Right=232
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=ARRCPCMP.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=15_Inch, Default
+15_Inch=\027\033\004
+Query=DTOS(CMPLDAT)>='Date1()'.AND.DTOS(CMPLDAT)<='Date2()'
+Query=.AND.SLMCOD>='Slm1()'.AND. SLMCOD<='Slm2()'
+Query=.AND.CUSCOD>='Cus1()'.AND. CUSCOD<='Cus2()'.AND.RECTYP='9'
+Sort=SLMCOD+DTOS(CMPLDAT)+DOCNUM
+
+[master file]
+File=ARTRN
+Alias=A
+Tag=ARTRN1
+System=DATA_PATH
+
+[item file]
+File=ARRCPCQ
+Alias=B
+Tag=ARRCPCQ1
+System=DATA_PATH
+
+File=ARRCPIT
+Alias=C
+Tag=ARRCPIT1
+System=DATA_PATH
+
+File=STCRD
+Alias=D
+Tag=STCRD5
+System=DATA_PATH
+
+File=artrnrm
+Alias=Y
+Tag=artrnrm1
+System=DATA_PATH
+
+[relate file]
+File=ARMAS
+Alias=E
+Tag=ARMAS1
+System=DATA_PATH
+Master file=ARTRN
+Master-Related Field=CUSCOD
+
+File=BKTRN
+Alias=F
+Tag=BKTRN3
+System=DATA_PATH
+Master file=ARRCPCQ
+Master-Related Field=CHQNUM
+
+File=OESLM
+Alias=G
+Tag=OESLM1
+System=DATA_PATH
+Master file=ARTRN
+Master-Related Field=SLMCOD
+
+File=STMAS
+Alias=H
+Tag=STMAS1
+System=DATA_PATH
+Master file=STCRD
+Master-Related Field=STKCOD
+
+File=ARTRNX
+Clone From=ARTRN
+Alias=W
+Tag=ARTRN1
+System=DATA_PATH
+Master file=ARRCPIT
+Master-Related Field=DOCNUM
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len "pict",             "data",             "exp"
+~INIT:      0,  "",                 "",                 "p_det=@n_prn_detail(); prn_detail=IIF(p_det=0,':',' '); totadv=0;totivc=0;totcsh=0;totchq=0;totint=0;totdis=0;tottax=0;totcom=0"
+~FROMSLM:   0,  "",                 "Slm1()",           ""
+~TOSLM:     0,  "",                 "Slm2()",           ""
+~FROMDATE:  0,  "d ดดด ปปปป",       "@date1()",         ""
+~TODATE:    0,  "d ดดด ปปปป",       "@date2()",         ""
+
+~SALESMAN:  0,  "",                 "slm_nam",          "slm_nam = OESLM->SLMNAM - ' /' - A->SLMCOD"
+~SLMNAME:  45,  "",                 "slm_nam",          ""
+
+~RCPDAT:    0,  "",                 "A->DUEDAT",        "",B
+~F:         0,  "",                 "flag",             "flag=IIF(A->DOCSTAT='C',' *','  ' )"
+~DOCNUM:    0,  "",                 "A->DOCNUM",        "",A
+~CMPLDAT:   0,  "",                 "A->CMPLDAT",       "",C
+~RCVDAT:    0,  "",                 "A->DOCDAT",        "",B
+~CUSCOD:    0,  "",                 "A->CUSCOD",        ""
+~CUSNAM:   30,  "",                 "ARMAS->CUSNAM",    "",D
+~SLMCOD:    0,  "",                 "A->SLMCOD",        ""
+~SLMNAM:    0,  "",                 "OESLM->SLMNAM",    ""
+~ADVAMT:    0,  "ZZZ,ZZZ,ZZZ.ZZ",   "A->ADVAMT",        "sub1adv=sub1adv+A->ADVAMT",F
+~IVCAMT:    0,  "999,999,999.99",   "A->IVCAMT",        "sub1ivc=sub1ivc+A->IVCAMT",G
+~CSHRCV:    0,  "ZZZ,ZZZ,ZZZ.ZZ",   "A->CSHRCV",        "sub1csh=sub1csh+A->CSHRCV",H
+~CHQRCV:    0,  "ZZZ,ZZZ,ZZZ.ZZ",   "A->CHQRCV",        "sub1chq=sub1chq+A->CHQRCV",I
+~INTRCV:    0,  "ZZZ,ZZZ.ZZ",       "A->INTRCV",        "sub1int=sub1int+A->INTRCV",J
+~DISC:      0,  "",                 "A->DISC",          "sub1dis=sub1dis+A->DISCAMT",K
+~TAX:       0,  "ZZZ,ZZZ.ZZ",       "A->TAX",           "sub1tax=sub1tax+A->TAX",L
+~CHKERR:    0,  "",                 "chkerr",           "chkerr=IIF(STR(A->IVCAMT,15,2) # STR(A->NETAMT,15,2),'***', '   ')",M
+
+~CHQNUM:    0,  "",                 "ARRCPCQ->CHQNUM",      "",N
+~CHQDAT:    0,  "",                 "BKTRN->CHQDAT",        "",O
+~BANK:      0,  "",                 "p_istab( BKTRN->BNKCOD, 01, 0, 6 )",           "",P
+~CHQAMT:    0,  "99,999,999.99",    "amt",                  "amt=IIF(BKTRN->CHQNUM#'  ', BKTRN->AMOUNT, ARRCPCQ->RCVAMT)",Q
+*~REMAMT:   0,  "99,999,999.99",    "BKTRN->REMAMT",        ""
+*~RCVAMT:   0,  "99,999,999.99",    "ARRCPCQ->RCVAMT",      ""
+~CHQSTAT:   0,  "",                 "p_istab( BKTRN->CHQSTAT, 02, 1, 18 )",         "",R
+
+~IT_IVCNUM: 0,  "",                 "ARRCPIT->DOCNUM",  "",C
+~IT_IVCDAT: 0,  "",                 "ARTRNX->DOCDAT",   "",D
+~IT_DUEDAT: 0,  "",                 "ARTRNX->DUEDAT",   "",F
+~IT_DIFDUE: 0,  "99,999",           "dif",              "dif = ARTRN->CMPLDAT - ARTRNX->DUEDAT",G
+~IT_DIFDAT: 0,  "99,999",           "cr",               "cr = ARTRN->CMPLDAT - ARTRNX->DOCDAT",H
+~IT_SONUM:  0,  "",                 "ARTRNX->SONUM",    ""
+~IT_YOUREF: 0,  "",                 "ARTRNX->YOUREF",   ""
+~IT_VATAMT: 0,  "",                 "ARTRNX->VATAMT",   ""
+~IT_NETAMT: 0,  "",                 "ARTRNX->NETAMT",   ""
+~IT_RCVAMT: 0,  "99,999,999.99",    "rcv",              "rcv = IIF(ARRCPIT->RECTYP='0'.or.ARRCPIT->RECTYP='5',ARRCPIT->RCVAMT*-1,ARRCPIT->RCVAMT)",E
+~IT_COM:    0,  "99,999,999.99",    "com",              "com = rcv * .10; sub1com=sub1com+com"
+
+~ARTICLE:  39,  "",                 "article",          "article=STCRD->STKCOD-'/'-STCRD->STKDES"
+~STKCOD:    0,  "",                 "STCRD->STKCOD",    ""
+~STKDES:    0,  "",                 "STCRD->STKDES",    ""
+~L:         0,  "",                 "STCRD->LOCCOD",    ""
+~QTY:       0,  "ZZ,ZZZ.ZZZ",       "STCRD->TRNQTY",    ""
+~TQUCOD:    0,  "",                 "p_istab( STCRD->TQUCOD, 20, 1, 0 )",       "",
+~UNITPR:    0,  "ZZZZZ,ZZZ.ZZ",     "STCRD->UNITPR",    ""
+~DISC_I:    0,  "",                 "STCRD->DISC",      ""
+~NETAMT_I:  0,  "ZZZ,ZZZ,ZZZ.ZZ",   "STCRD->TRNVAL",    ""
+
+~SUB1ADV:   0,  "999,999,999.99",   "sub1adv",          "totadv=totadv+sub1adv"
+~SUB1IVC:   0,  "999,999,999.99",   "sub1ivc",          "totivc=totivc+sub1ivc"
+~SUB1CSH:   0,  "999,999,999.99",   "sub1csh",          "totcsh=totcsh+sub1csh"
+~SUB1CHQ:   0,  "999,999,999.99",   "sub1chq",          "totchq=totchq+sub1chq"
+~SUB1INT:   0,  "999,999.99",       "sub1int",          "totint=totint+sub1int"
+~SUB1DIS:   0,  "9999,999.99",      "sub1dis",          "totdis=totdis+sub1dis"
+~SUB1TAX:   0,  "9999,999.99",      "sub1tax",          "tottax=tottax+sub1tax"
+~SUB1COM:   0,  "99,999,999.99",    "sub1com",          "totcom=totcom+sub1com"
+~C_SUB1:    0,  "",                 "",                 "sub1adv=0;sub1ivc=0;sub1csh=0;sub1chq=0;sub1int=0;sub1dis=0;sub1tax=0;sub1com=0"
+
+~TOTADV:    0,  "999,999,999.99",   "totadv",           ""
+~TOTIVC:    0,  "999,999,999.99",   "totivc",           ""
+~TOTCSH:    0,  "999,999,999.99",   "totcsh",           ""
+~TOTCHQ:    0,  "999,999,999.99",   "totchq",           ""
+~TOTINT:    0,  "999,999.99",       "totint",           ""
+~TOTDIS:    0,  "9999,999.99",      "totdis",           ""
+~TOTTAX:    0,  "9999,999.99",      "tottax",           ""
+~TOTCOM:    0,  "99,999,999.99",    "totcom",           ""
+
+~D:         0,  "",                 "prn_detail",       ""
+~REMARK:    0,  "",                 "ARTRNRM->REMARK",  ""
+
+
+
+

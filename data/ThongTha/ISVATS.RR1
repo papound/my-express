@@ -1,0 +1,126 @@
+* ISVATS.RL - Sales's V.A.T. Report by Date
+*
+[report frame]
+Ti::~INIT ~PAGE_CLR ~LATE_CLR ~PAGE0 ~LATE
+He:เดือน/ปีภาษี ~PRD             (วันที่จาก  ~FROMDATE ถึง ~TODATE ) `วันที่ : \DATE
+*He:
+He:                     ^$B$Eรายงานภาษีขาย ~LATE           $E$B^
+He:ชื่อผู้ประกอบการ            \NAME                        `หน้า   : ~PAGE
+He:ชื่อสถานประกอบการ           ~ADDRESS                                                                           
+He:เลขประจำตัวผู้เสียภาษีอากร  ~TAXID           ~P_ORGTXT       ~P_ORGSTR
+*He:สาขา                        ~P_ISDEP        ( ) สาขาที่ ~FROMDEP
+He:\LINE
+He:      <----ใบกำกับภาษี----->          ชื่อผู้ซื้อสินค้า/ผู้รับบริการ          เลขประจำตัว  สถานประกอบการ       มูลค่าสินค้า   จำนวนเงิน     หมายเหตุ
+He:ลำดับ วัน/เดือน/ปี เลขที่                                                      ผู้เสียภาษี สนญ.   สาขาที่      หรือบริการ   ภาษีมูลค่าเพิ่ม
+**:9,999 DD/MM/YY  xxxxxxxxxx xxxxxxxxx1xxxxxxxxx2xxxxxxxx3xxxxxxxx4xxxxxxxxx5 123456789012315 X     12345 (999,999,999.99)(99,999,999.99)
+He:\LINE
+*Gh::~CHK_LATE_CLR ~CHK_PAGE0   ;1 VATPRD 0 6
+Gh::~CHK_LATE_CLR ~CHK_PAGE0    ;1 VATDAT 0 6
+Gh::~NOTPRN_FO
+Bo:~SEQ  ~VATDAT ~F~REFNUM    ~DESCRP                                          ~TAXIDX         ~HO   ~BR   ~AMT01          ~VAT01           ~REMARK
+Bo::~SUMAMT01  ~SUMVAT01  ~SUMAMT0
+Gf::~PRN_FO    ;1
+Gf:~L \FEED ;1
+Fo:~P                                                                                                      --------------- --------------
+Fo:~P    รวมแต่ละหน้า                                                                                      $B~SUMAMT1P       ~SUMVAT1P      $B ~PAGE_CLR
+Fo:~P                                                                                                      =============== ==============
+Fo:~L                                                                                                      --------------- --------------
+Fo:~L    รวม ~LATE_SUM                                                                                     $B~SUMAMT1        ~SUMVAT1       $B
+Fo:~L                                                                                                      =============== ==============
+Su:~L \FEED
+Su:                                                                                                        --------------- --------------
+Su:รวมทั้งสิ้น ~LATE_SUM                                                                                   $B~TOTAMT1        ~TOTVAT1       $B
+Su:                                                                                                        =============== ==============
+Su:หมายเหตุ:  เลขที่ออกใหม่ที่มีเครื่องหมาย '*' นำหน้า คือ เอกสารที่ถูกยกเลิก
+*Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=2
+Left=5
+***Right=136
+Right=164
+Lines=-50
+* ถ้าจะกำหนดจำนวนบรรทัดต่อหน้าตายตัวไปเลย ให้กำหนดเป็นเลขติดลบ เช่น Lines=-35
+Output=Select, Printer, Screen, File,
+File Name=ISVATS.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+Select Paper=8_Inch, Default
+8_Inch=\027\033\004
+Prompt=ให้เลือกพิมพ์ลงกระดาษ 8 นิ้ว  แล้วเลือกเครื่องพิมพ์ Laser/InkJet (ใช้กระดาษ A4)
+*Printer=V
+Print Mode=1
+
+[master file]
+File=ISVAT
+Alias=A
+Tag=ISVAT2
+System=DATA_PATH
+*Filter=STR(VAT01*100/AMT01,5,2)='10'
+*Filter=STR(VAT01*100/AMT01,5,2)=' 7'
+*Filter=VAT01 = 0
+
+[data spec]
+*               len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:          len,    "pict",                 "data",                 "exp"
+~INIT:          0,      "",                     "",                     "totamt1=0;totvat1=0;totamtz=0;totvat2=0; opage=1; amt_01=0;vat_01=0;amt_z=0"
+~LATE:          0,      "",                     "latemsg",              "islate=@n_islate(); latemsg=IIF(islate>0,'(ยื่นเพิ่มเติม)', '               ')"
+~NOTPRN_FO:     0,      "",                     "",                     "isprn=':'; endgroup=0"
+~PRN_FO:        0,      "",                     "",                     "isprn=IIF(islate>0,' ',':'); endgroup=1; opage=page"
+~L:             0,      "",                     "isprn",                ""
+~P:             0,      "",                     "prnsumpage",           "prnsumpage=IIF(opage=1.and.endgroup=1,':',' ')"
+~LATE_SUM:      0,      "",                     "late_sum",             "fd=@Date1n(); td=@Date2n(); late_sum=latemsg+IIF(latemsg#'   ', ' งวด '+fd+' ถึง '+td, '                          ')"
+~ADDRESS:       0,      "",                     "p_addr()",             ""
+~TAXID:         0,      "",                     "p_taxid()",            ""
+~FROMDATE:      0,      "",                     "Date1n()",             ""
+~TODATE:        0,      "",                     "Date2n()",             ""
+~FROMDEP:       0,      "",                     "Dep1()",               ""
+
+~SEQ:           0,      "9999",                 "seq",                  "seq=seq+1"
+~DOCDAT:        0,      "",                     "A->DOCDAT",            ""
+~VATDAT:        0,      "",                     "A->VATDAT",            ""
+~F:             0,      "",                     "flag",                 "flag=IIF(A->DOCSTAT='C',' *','  ' )"
+~DOCNUM:        0,      "",                     "A->DOCNUM",            ""
+~REFNUM:        0,      "",                     "A->REFNUM",            ""
+~DESCRP:       48,      "",                     "xname",                "xname=IIF(A->PRENAM#'   ', A->PRENAM-'•'-A->DESCRP, A->DESCRP+ '                ')"
+~AMT01:         0,      "(999,999,999.99)",     "amt_01",               "amt_01 = IIF(A->RECTYP='5',A->AMT01*-1,A->AMT01)"
+~VAT01:         0,      "(99,999,999.99)",      "vat_01",               "vat_01 = IIF(A->RECTYP='5',A->VAT01*-1,A->VAT01)"
+~SUMAMT01:      0,      "(999,999,999.99)",     "",                     "sumamt1=sumamt1+amt_01; totamt1=totamt1+amt_01; sumamtp1=sumamtp1+amt_01"
+~SUMVAT01:      0,      "(99,999,999.99)",      "",                     "sumvat1=sumvat1+vat_01; totvat1=totvat1+vat_01; sumvatp1=sumvatp1+vat_01"
+~AMTZ:          0,      "(999,999,999.99)",     "amt_z",                "amt_z = IIF(A->RECTYP='5',A->AMTRAT0*-1,A->AMTRAT0)"
+~SUMAMT0:       0,      "(999,999,999.99)",     "",                     "sumamtz=sumamtz+amt_z; totamtz=totamtz+amt_z; sumamtp2=sumamtp2+amt_z"
+
+~REMARK:       27,      "",                     "A->REMARK",            ""
+
+~SUMAMT1:       0,      "(999,999,999.99)",     "sumamt1",              ""
+~SUMVAT1:       0,      "(99,999,999.99)",      "sumvat1",              ""
+~SUMAMTZ:       0,      "(999,999,999.99)",     "sumamtz",              ""
+
+~SUMAMT1P:      0,      "(999,999,999.99)",     "sumamtp1",             ""
+~SUMVAT1P:      0,      "(99,999,999.99)",      "sumvatp1",             ""
+~SUMAMTZP:      0,      "(999,999,999.99)",     "sumamtp2",             ""
+
+~PRD:           0,      "ดดดด ปปปป",            "@d_fromprd()",         ""
+~LATE_CLR:      0,      "",                     "",                     "sumamt1=0;sumvat1=0; sumamtz=0;sumvat2=0"
+~CHK_LATE_CLR:  0,      "",                     "",                     "sumamt1=IIF(islate>0,0,sumamt1); sumvat1=IIF(islate>0,0,sumvat1); sumamtz=IIF(islate>0,0,sumamtz); sumvat2=IIF(islate>0,0,sumvat2)"
+~PAGE_CLR:      0,      "",                     "",                     "sumamtp1=0;sumvatp1=0; sumamtp2=0;sumvatp2=0"
+~PAGE:          0,      "9999",                 "page",                 "page=page+1"
+~PAGE0:         0,      "",                     "",                     "page=0; seq=0"
+~CHK_PAGE0:     0,      "",                     "",                     "page=IIF(islate>0,0,page); seq=IIF(islate>0,0,seq)"
+
+~TOTAMT1:       0,      "(999,999,999.99)",     "totamt1",              ""
+~TOTVAT1:       0,      "(99,999,999.99)",      "totvat1",              ""
+~TOTAMTZ:       0,      "(999,999,999.99)",     "totamtz",              ""
+
+~DEP:           0,      "",                     "A->DEPCOD",            ""
+~P_ISDEP:		0,		"",						"dd_str",				"dd=@Dep1(); dd_str=@p_isdep( dd )"
+
+~P_ORGTXT:      0,      "",                     "p_orgtxt()",           ""
+~P_ORG:         0,      "",                     "p_orgnum()",           ""
+~P_ORGSTR:      0,      "",                     "p_orgstr()",           ""
+~TAXIDX:        0,      "",                     "tax_id",               "tax_id=IIF(A->TAXID='0000000000000', '                ', A->TAXID)"
+~HO:            0,      "",                     "ho",                   "br=@p_orgnum_00009( A->ORGNUM ); ho=IIF(tax_id='     ', '     ',IIF(br='00000','X',' '))" 
+~BR:            0,      "",                     "br",                   "br=IIF(tax_id='     '.OR.ho='X'.OR.A->ORGNUM<0, '     ',br)" 
+

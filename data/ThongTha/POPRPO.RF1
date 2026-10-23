@@ -1,0 +1,172 @@
+* POPR.RL - ãºÊÑè§«×éÍ (PURCHAE ORDER)
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+Ti:: ~INIT
+He:$E\NAME                                             $E
+He:~ADDR
+He:~TEL                                                                $EãºÊÑè§«×éÍ$E
+He:                       àÅ¢»ÃÐ¨ÓµÑÇ¼ÙéàÊÕÂÀÒÉÕ ~TAXID
+He:  ¼Ùé¨ÓË¹èÒÂ ~SUPCOD                               àÅ¢·ÕèãºÊÑè§«×éÍ  ~PONUM
+He:  $_~SUPNAM                                         $_ ÇÑ¹·Õè            ~PODAT
+He:  $_~ADDR01                                         $_
+He:  $_~ADDR02                                         $_ ÇÑ¹·ÕèÃÑº¢Í§      ~RCVDAT
+He:  $_â·Ã. ~TELNUM                                    $_ à¤Ã´Ôµ            ~CR  ÇÑ¹
+He:  ËÁÒÂàËµØ  ~YOUREF                                ¢¹Êè§â´Â          ~DLVBY
+He:
+*He:  Ê¶Ò¹·ÕèÊè§¢Í§ :-
+*He:  ~S_ADDR01
+*He:  ~S_ADDR02
+*He:  â·Ã. ~S_TELNUM
+*He:  µÔ´µèÍ ~S_CONTACT
+He:€…………‰…………………………………………………………………………………………………………………‰…………………………………………‰……………………………‰……………………………………
+He:„ No.„           ÃËÑÊÊÔ¹¤éÒ/ÃÒÂÅÐàÍÕÂ´           „     ¨Ó¹Ç¹      „   Ë¹èÇÂÅÐ „ ~TXT0        „
+He:†…………Š…………………………………………………………………………………………………………………Š…………………………………………Š……………………………Š……………………………………‡
+Bo::
+Ih::                    ;1 poprit->ponum popr->ponum
+Ib: ~N    ~ARTICLE                                   ~QTY    ~TQUCOD  ~UNITPR     ~TRNVAL        ;1
+Ih::                    ;2 artrnrm->docnum+artrnrm->seqnum poprit->ponum+poprit->seqnum
+Ib:       ~REMARK       ;2
+Bt:„    „                                           „                „           „              „
+Fo:†…………ˆ…………………………………………………………………………………………………………………ˆ…………………………………………ˆ……………………………Š……………………………………‡
+Su:„ËÁÒÂàËµØ                                         ÃÇÁà»ç¹à§Ô¹                 „~AMOUNT       „
+Su:„ ~HREM1                                          $_ËÑ¡$_ÊèÇ¹Å´        ~DISC      „~DISCAMT      „
+Su:„ ~HREM2                                          ~TXT1                       „~TOTAL        „
+Su:„ ~HREM3                                          ¨Ó¹Ç¹ÀÒÉÕÁÙÅ¤èÒà¾ÔèÁ ~VAT % „~VATAMT       „
+Su:„~BAHT                                                   ~TXT2                „~CHKAMT       „
+*Su:„  ~HREM3                                                                     „……………………………………„
+*Su:„  ~HREM4                                         ÊÔ¹¤éÒÂ¡àÇé¹ÀÒÉÕÁÙÅ¤èÒà¾ÔèÁ „~AMTRATZ      „
+*Su:„  ~HREM5                                         ÁÙÅ¤èÒÊÔ¹¤éÒÍÑµÃÒ  ~VAT  %  „~AMTRATX      „
+*Su:„                                                 ¨Ó¹Ç¹à§Ô¹ÀÒÉÕÁÙÅ¤èÒà¾ÔèÁ    „~VATAMT       „
+*Su:„~BAHT                                                   ¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹ „~NETAMT       „
+Su:†……………………………………………………………………………………………………………………………………………………………………………………………………………ˆ……………………………………‡
+Su:„                                                                ã¹¹ÒÁ ºÃÔÉÑ· ¸§¸Ñ­ ¨Ó¡Ñ´    „
+Su:„                                                                                            „
+Su:„    ___________________            ___________________           _________________          „
+Su:„         ¼ÙéÊÑè§ÊÔ¹¤éÒ                   ¼ÙéµÃÇ¨ÊÍº                    ¼ÙéÍ¹ØÁÑµÔ           „
+Su:‚……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ƒ
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+Top=0
+Left=0
+Tabs=4
+Right=94
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=POPR.TXT
+Print Control=\027\033\001
+Fix Summary Line=ON
+Select Scope=OFF
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=popr
+Alias=A
+Tag=popr1
+System=DATA_PATH
+
+[item file]
+File=poprit
+Alias=B
+Tag=poprit1
+System=DATA_PATH
+
+File=artrnrm
+Alias=C
+Tag=artrnrm1
+System=DATA_PATH
+
+[relate file]
+File=apmas
+Alias=R
+Tag=apmas1
+System=DATA_PATH
+Master file=popr
+Master-Related Field=SUPCOD
+
+File=stmas
+Alias=C
+Tag=stmas1
+System=DATA_PATH
+Master file=poprit
+Master-Related Field=STKCOD
+
+File=stloc
+Alias=L
+Tag=stloc1
+System=DATA_PATH
+Master file=poprit
+Master-Related Field=STKCOD+LOCCOD
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",             "exp"
+~ADDR:      0,      "",                 "p_addr()",         ""
+~TAXID:     0,      "",                 "p_taxid()",        ""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:      0,      "",                 "",                 "seq=0"
+~TXT0:      0,      "",                 "txt0",             "txt0 = IIF( POPR->FLGVAT <> '1', '  ¨Ó¹Ç¹à§Ô¹', 'ÃÒ¤ÒÃÇÁÀÒÉÕ')",
+~TXT1:      0,      "",                 "txt1",             "txt1 = IIF( POPR->FLGVAT <> '1', '¨Ó¹Ç¹à§Ô¹ËÅÑ§ËÑ¡ÊèÇ¹Å´', '¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹  ')",
+~TXT2:      0,      "",                 "txt2",             "txt2 = IIF( POPR->FLGVAT <> '1', '¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹', 'ÃÒ¤ÒÊÔ¹¤éÒ          ')",
+~PONUM:     0,      "",                 "POPR->PONUM",      ""
+~PODAT:     0,      "",                 "POPR->PODAT",      ""
+~SUPCOD:    0,      "",                 "POPR->SUPCOD",     ""
+~SUPNAM:   50,      "",                 "sup_nam",          "sup_nam = APMAS->PRENAM - ' ' - APMAS->SUPNAM"
+~ADDR01:    0,      "",                 "APMAS->ADDR01",    ""
+~ADDR02:    0,      "",                 "addr_02",          "addr_02 = APMAS->ADDR02 - ' ' - APMAS->ZIPCOD"
+~TELNUM:    0,      "",                 "APMAS->TELNUM",    ""
+~YOUREF:    0,      "",                 "POPR->YOUREF",     ""
+~DLVBY:     0,      "",                 "p_istab( POPR->DLVBY, 41, 1, 40 )",            ""
+~RCVDAT:    0,      "",                 "POPR->RCVDAT",     ""
+~CR:        0,      "",                 "POPR->PAYTRM",     ""
+~FLGVAT:    0,      "Y",                "POPR->FLGVAT",     ""
+~AMOUNT:    0,      "99,999,999.99",    "POPR->AMOUNT",     ""
+~DISC:      0,      "",                 "POPR->DISC",       ""
+~DISCAMT:   0,      "99,999,999.99",    "POPR->DISCAMT",    ""
+~TOTAL:     0,      "99,999,999.99",    "POPR->TOTAL",      ""
+~VAT:       0,      "99.99",            "POPR->VATRAT",     ""
+~VATAMT:    0,      "99,999,999.99",    "POPR->VATAMT",     ""
+~CHKAMT:    0,      "99,999,999.99",    "netamt",           "netamt = IIF( POPR->FLGVAT <> '1', POPR->NETAMT, POPR->TOTAL - POPR->VATAMT)"
+~BAHT:      0,      "",                 "t_baht(POPR->NETAMT)"                          ""
+
+~N:         0,      "999",              "seq",              "seq=seq+1"
+~ARTICLE:  43,      "",                 "article",          "article = POPRIT->STKCOD - ' ' - POPRIT->STKDES"
+~STKCOD:   15,      "",                 "POPRIT->STKCOD",   ""
+~STKDES:   28,      "",                 "POPRIT->STKDES",    ""
+~L:         0,      "",                 "POPRIT->LOCCOD",   ""
+~QTY:       0,      "qtyZ(9)",          "POPRIT->ORDQTY",   ""
+~TQUCOD:    0,      "",                 "p_istab( POPRIT->TQUCOD,  20, 1, 0 )",     ""
+~UNITPR:    0,      "priZ(10)",         "POPRIT->UNITPR",   ""
+~DISC_I:    0,      "",                 "POPRIT->DISC",     ""
+~TRNVAL:    0,      "ZZ,ZZZ,ZZZ.ZZ",    "POPRIT->TRNVAL",   ""
+~RCVDAT_I:  0,      "",                 "POPRIT->RCVDAT",   ""
+~REMARK:    0,      "",                 "ARTRNRM->REMARK",  ""
+
+~HREM1:     0,      "",                 "p_hrem(A->PONUM,1)",       ""
+~HREM2:     0,      "",                 "p_hrem(A->PONUM,2)",       ""
+~HREM3:     0,      "",                 "p_hrem(A->PONUM,3)",       ""
+~HREM4:     0,      "",                 "p_hrem(A->PONUM,4)",       ""
+~HREM5:     0,      "",                 "p_hrem(A->PONUM,5)",       ""
+
+~DEP:       0,      "",                 "A->DEPCOD",                ""
+~P_ISDEP:   0,      "",                 "p_isdep( A->DEPCOD )",     ""
+~LOCAREA:   0,      "",                 "STLOC->AREA",              ""
+
+~NETAMT:    0,      "99,999,999.99",    "POPR->NETAMT",     ""
+~AMTRATZ:   0,      "99,999,999.99",    "AMTRATZ",          "AMTRATZ = POPR->AMTRAT0 - (POPR->AMTRAT0 * POPR->DISCAMT / POPR->AMOUNT)"
+~AMTRATX:   0,      "99,999,999.99",    "AMTRATX",          "AMTRATX = IIF(POPR->FLGVAT='1',POPR->TOTAL - AMTRATZ - POPR->VATAMT, POPR->TOTAL - AMTRATZ)"
+*~V:        0,      "",                 "VAT_SYM",          "VAT_SYM = IIF(POPRIT->VATCOD='0', ' ', 'V')"
+~V:         0,      "",                 "POPRIT->VATCOD",   ""
+~SHIPTO:    0,      "",                 "POPR->SHIPTO",     ""
+~S_ADDR01:  0,      "",                 "ARSHIP->ADDR01",   ""
+~S_ADDR02:  0,      "",                 "addr_02",          "addr_02 = ARSHIP->ADDR02 - ' ' - ARSHIP->ADDR03 - ' ' - ARSHIP->ZIPCOD"
+~S_TELNUM:  0,      "",                 "ARSHIP->TELNUM",   ""
+~S_CONTACT: 0,      "",                 "ARSHIP->CONTACT",  ""
+

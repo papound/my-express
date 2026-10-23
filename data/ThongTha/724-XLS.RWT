@@ -1,0 +1,205 @@
+* ARSA_ACS.RWT - Summary of Cash/Credit sales or C/N Report by Area,Customer
+*
+[report frame]
+Ti::~INIT ~INIT1
+He:\NAME                                                    ","","","","","","","","หน้า   : \PAGE
+He:$Eวิเคราะห์ยอดขาย แยกตามเขตการขาย,ลูกค้า (แบบสรุป)$E
+He:วันที่จาก   ~FROMDATE   ถึง  ~TODATE                     ","","","","","","","","วันที่ : \DATE
+H1:เขตการขาย   ~FROMAREA   ถึง  ~TOAREA
+H1:รหัสลูกค้า  ~FROMCUS    ถึง  ~TOCUS
+H1:พนักงานขาย  ~FROMSLM    ถึง  ~TOSLM          เลือกแผนก  ~FROMDEP
+H1:                                             พิมพ์รายการ    ขายเงินสด (~HS), ขายเงินเชื่อ (~IV), เพิ่มหนี้ (~DR), ลดหนี้รับคืน (~SR)
+He:\LINE
+He: ลูกค้า","เงินมัดจำ","มูลค่าสินค้า","VAT.","รวมทั้งสิ้น","ยอดขาย*","ต้นทุน","กำไรขั้นต้น","%กำไร:ยอดขาย
+He:\LINE
+**:                                             999,999,999.99999,999,999.9999,999,999.99 999,999,999.99     999,999,999.99
+Gh:$Bเขตการขาย : ~AREA                                              $B~KEPTAREA ; 1 AREACOD
+Gh::~CUSTOMER                   ; 2 CUSCOD
+Gh::~WHATREC                    ; 3 RECTYP
+Bo::~ADVAMT        ~VALAMT       ~VATAMT      ~NETAMT
+Ih::~II                 ;1 stcrd->docnum artrn->docnum
+Ib::~COST_I             ;1
+If::~ADVVAT ~SALES        ~COST_TOT      ~PROFIT        ;1 
+Gf::~R~RECTYP                                   ~SUB3ADV       ~SUB3VAL      ~SUB3VAT      ~SUB3NET          ~SUB3SAL      ~SUB3COS      ~SUB3PRO          ~SUB3PER     ~C_SUB3 ~C_SUB33   ;3
+Gf: ~CUSNAME                                    ~SUB2ADV       ~SUB2VAL      ~SUB2VAT      ~SUB2NET          ~SUB2SAL      ~SUB2COS      ~SUB2PRO          ~SUB2PER     ~C_SUB2 ~C_SUB22   ;2
+Gf:                                            ","--------------","--------------","------------","--------------","--------------","-------------","-------------             ;1
+Gf:            รวมเขต ~AREANAME                 $B~SUB1ADV       ~SUB1VAL      ~SUB1VAT      ~SUB1NET          ~SUB1SAL      ~SUB1COS      ~SUB1PRO          ~SUB1PER    $B ~C_SUB1    ;1
+Gf:                                             ","==============","==============","============","==============","==============","=============","=============             ;1
+Su:            รวมทั้งสิ้น                      $B~TOTADV        ~TOTVAL       ~TOTVAT       ~TOTNET           ~TOTSAL       ~TOTCOS       ~TOTPRO           ~TOTPER     $B
+Su:                                             ","==============","==============","============","==============","==============","=============","=============
+Su:หมายเหตุ:  เอกสารที่มีเครื่องหมาย '*' นำหน้า คือ เอกสารที่ถูกยกเลิก
+Su:           ยอดขาย* คือ ยอดมูลค่าสินค้าที่ดึง VAT ออกแล้ว
+Su:>>>> จบรายงาน <<<<
+[end frame]
+
+[print options]
+Top=0
+Right=167
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=ARSA_ASD.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+*Select Paper=15_Inch, 8_Inch, Default
+*8_Inch=\027\033\004
+Select Paper=15_Inch, Default
+15_Inch=\027\033\004
+Query=DTOS(DOCDAT)>='Date1()'.AND.DTOS(DOCDAT)<='Date2()'
+Query=.AND.SLMCOD>='Slm1()'.AND.SLMCOD<='Slm2()'
+Query=.AND.CUSCOD>='Cus1()'.AND.CUSCOD<='Cus2()'
+Query=.AND.AREACOD>='Area1()'.AND. AREACOD<='Area2()'
+Sort=AREACOD+CUSCOD+RECTYP+DTOS(DOCDAT)+DOCNUM
+DATE FORMAT=DD/MM/YY
+
+[master file]
+File=ARTRN
+Alias=A
+Tag=ARTRN1
+System=DATA_PATH
+
+[item file]
+File=STCRD
+Alias=B
+Tag=STCRD5
+System=DATA_PATH
+
+[relate file]
+File=OESLM
+Alias=C
+Tag=OESLM1
+System=DATA_PATH
+Master file=ARTRN
+Master-Related Field=SLMCOD
+
+File=ARMAS
+Alias=D
+Tag=ARMAS1
+System=DATA_PATH
+Master file=ARTRN
+Master-Related Field=CUSCOD
+
+File=stmas
+Alias=E
+Tag=stmas1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD
+
+File=ARTRNX
+Clone From=ARTRN
+Alias=X
+Tag=ARTRN1
+System=DATA_PATH
+Master file=ARTRN
+Master-Related Field=ADVNUM
+
+[data spec]
+*           len (0)default,(>0)cut,(<0)cut to new line
+*~dat:      len,"pict",             "data",         "exp"
+~INIT:      0,  "",                 "",             "sub1val=0;sub1adv=0;sub1vat=0;sub1net=0;sub1sal=0;sub1cos=0;sub1pro=0; sub2val=0;sub2adv=0;sub2vat=0;sub2net=0;sub2sal=0;sub2cos=0;sub2pro=0; sub3val=0;sub3adv=0;sub3vat=0;sub3net=0;sub3sal=0;sub3cos=0;sub3pro=0"
+~INIT1:     0,  "",                 "",             "tot_val=0;totadv=0;totvat=0;totnet=0;totsal=0;totcos=0;totpro=0"
+~FROMAREA:  0,  "",                 "Area1()",      ""
+~TOAREA:    0,  "",                 "Area2()",      ""
+~FROMDATE:  0,  "d ดดด yyyy",       "@date1()",     ""
+~TODATE:    0,  "d ดดด yyyy",       "@date2()",     ""
+~FROMCUS:   0,  "",                 "Cus1()",       ""
+~TOCUS:     0,  "",                 "Cus2()",       ""
+~FROMSLM:   0,  "",                 "Slm1()",       ""
+~TOSLM:     0,  "",                 "Slm2()",       ""
+~FROMDEP:   0,  "",                 "Dep1()",       ""
+~TODEP:     0,  "",                 "Dep2()",       ""
+~HS:        0,  "",                 "hs",           "hs=@prnHS(); hs=' '+hs"
+~IV:        0,  "",                 "iv",           "iv=@prnIV(); iv=' '+iv"
+~DR:        0,  "",                 "dr",           "dr=@prnDR(); dr=' '+dr"
+~SR:        0,  "",                 "sr",           "sr=@prnSR(); sr=' '+sr"
+
+~AREA:      0,  "",                 "p_istab( A->AREACOD,40,1,40)",     ""
+~KEPTAREA:  0,  "",                 "",             "area = ISTAB->TYPDES"
+~AREANAME:  0,  "",                 "area",         ""
+~CUSTOMER:  0,  "",                 "cus_nam",      "cus_nam = ARMAS->CUSNAM - ' /' - A->CUSCOD"
+~CUSNAME:   50, "",                 "cus_nam",      ""
+~SALESMAN:  0,  "",                 "slm_nam",      "slm_nam = OESLM->SLMNAM - ' /' - A->SLMCOD"
+~SLMNAME:   0,  "",                 "slm_nam",      ""
+~WHATREC:   0,  "",                 "",             "rec_typ=IIF(A->RECTYP='3','ใบกำกับ     ',IIF(A->RECTYP='4','ใบเพิ่มหนี้ ',IIF(A->RECTYP='5','ใบลดหนี้    ',IIF(A->RECTYP='1','บิลเงินสด   ',IIF(A->RECTYP='7','รายได้อื่น ๆ','            ')))))"
+~RECTYP:    0,  "",                 "rec_typ",      ""
+
+~F:         0,  "",                 "cancel",       "cancel=IIF(A->DOCSTAT='C',' *','  ' )"
+~DOCNUM:    0,  "",                 "A->DOCNUM",    ""
+~DOCDAT:    0,  "",                 "A->DOCDAT",    ""
+~SLMCOD:    0,  "",                 "A->SLMCOD",    ""
+~CUSCOD:    0,  "",                 "A->CUSCOD",    ""
+~CUSNAM:    0,  "",                 "ARMAS->CUSNAM",""
+~V:         0,  "",                 "A->FLGVAT",    ""
+~AMOUNT:    0,  "99,999,999.99",    "A->AMOUNT",    ""
+~DISC:      0,  "",                 "A->DISC",      ""
+~ADVNUM:    0,  "",                 "A->ADVNUM",    ""
+~VATAMT:    0,  "99,999,999.99",    "A->VATAMT",    "sub3vat=sub3vat+A->VATAMT"
+~ADVAMT:    0,  "999,999,999.99",   "A->ADVAMT",    "sub3adv=sub3adv+A->ADVAMT"
+~VALAMT:    0,  "999,999,999.99",   "A->NETVAL",    "sub3val=sub3val+A->NETVAL"
+~NETAMT:    0,  "999,999,999.99",   "A->NETAMT",    "sub3net=sub3net+A->NETAMT"
+~ADVVAT:    0,  "",                 "",             "adv_vat = IIF( A->ADVNUM=ARTRNX->DOCNUM .and. SUBSTR(A->ADVNUM,3,3)#'...', ARTRNX->VATRAT, A->VATRAT )"
+~SALES:     0,  "999,999,999.99",   "sales",        "sales=A->NETVAL+IIF(A->FLGVAT='1',A->ADVAMT*100/(100+adv_vat),A->ADVAMT); sub3sal=sub3sal+sales"
+~DUEDAT:    0,  "",                 "A->DUEDAT",    ""
+~SONUM:     0,  "",                 "A->SONUM",     ""
+~Y:         0,  "",                 "A->CMPLAPP",   ""
+
+~SUB3VAT:   0,  "99,999,999.99",    "sub3vat",      ""
+~SUB3ADV:   0,  "999,999,999.99",   "sub3adv",      ""
+~SUB3VAL:   0,  "999,999,999.99",   "sub3val",      ""
+~SUB3NET:   0,  "999,999,999.99",   "sub3net",      ""
+~SUB3SAL:   0,  "999,999,999.99",   "sub3sal",      ""
+~SUB3COS:   0,  "999,999,999.99",   "sub3cos",      ""
+~SUB3PRO:   0,  "999,999,999.99",   "sub3pro",      ""
+~R:         0,  "",                 "",             "x=IIF( rec_typ = 'ใบลดหนี้    ',-1,1); sub3val=sub3val*x; sub3vat=sub3vat*x; sub3net=sub3net*x; sub3sal=sub3sal*x; sub3cos=sub3cos*x; sub3pro=sub3pro*x"
+~C_SUB3:    0,  "",                 "",             "sub2adv=sub2adv+sub3adv; sub3adv=0; sub2val=sub2val+sub3val; sub3val=0; sub2vat=sub2vat+sub3vat; sub3vat=0; sub2net=sub2net+sub3net; sub3net=0; sub2sal=sub2sal+sub3sal; sub3sal=0"
+~C_SUB33:   0,  "",                 "",             "sub2cos=sub2cos+sub3cos; sub3cos=0; sub2pro=sub2pro+sub3pro; sub3pro=0"
+
+~SUB2VAT:   0,  "99,999,999.99",    "sub2vat",      "",D
+~SUB2ADV:   0,  "999,999,999.99",   "sub2adv",      "",B
+~SUB2VAL:   0,  "999,999,999.99",   "sub2val",      "",C
+~SUB2NET:   0,  "999,999,999.99",   "sub2net",      "",E
+~SUB2SAL:   0,  "999,999,999.99",   "sub2sal",      "",F
+~SUB2COS:   0,  "999,999,999.99",   "sub2cos",      "",G
+~SUB2PRO:   0,  "999,999,999.99",   "sub2pro",      "",H
+~C_SUB2:    0,  "",                 "",             "sub1adv=sub1adv+sub2adv; sub2adv=0; sub1val=sub1val+sub2val; sub2val=0; sub1adv=sub1adv+sub2adv; sub2adv=0; sub1vat=sub1vat+sub2vat; sub2vat=0; sub1net=sub1net+sub2net; sub2net=0; sub1sal=sub1sal+sub2sal; sub2sal=0"
+~C_SUB22:   0,  "",                 "",             "sub1cos=sub1cos+sub2cos; sub2cos=0; sub1pro=sub1pro+sub2pro; sub2pro=0"
+
+~SUB1VAT:   0,  "99,999,999.99",    "sub1vat",      "",D
+~SUB1ADV:   0,  "999,999,999.99",   "sub1adv",      "",B
+~SUB1VAL:   0,  "999,999,999.99",   "sub1val",      "",C
+~SUB1NET:   0,  "999,999,999.99",   "sub1net",      "",E
+~SUB1SAL:   0,  "999,999,999.99",   "sub1sal",      "",F
+~SUB1COS:   0,  "999,999,999.99",   "sub1cos",      "",G
+~SUB1PRO:   0,  "999,999,999.99",   "sub1pro",      "",H
+~C_SUB1:    0,  "",                 "",             "totadv=totadv+sub1adv; sub1adv=0; tot_val=tot_val+sub1val; sub1val=0; totvat=totvat+sub1vat; sub1vat=0; totnet=totnet+sub1net; sub1net=0; totsal=totsal+sub1sal; sub1sal=0; totcos=totcos+sub1cos; sub1cos=0; totpro=totpro+sub1pro; sub1pro=0"
+
+~TOTVAT:    0,  "99,999,999.99",    "totvat",       "",D
+~TOTVAL:    0,  "999,999,999.99",   "tot_val",      "",C
+~TOTADV:    0,  "999,999,999.99",   "totadv",       "",B
+~TOTNET:    0,  "999,999,999.99",   "totnet",       "",E
+~TOTSAL:    0,  "999,999,999.99",   "totsal",       "",F
+~TOTCOS:    0,  "999,999,999.99",   "totcos",       "",G
+~TOTPRO:    0,  "999,999,999.99",   "totpro",       "",H
+
+~II:        0,  "",                 "",                 "seq=0; cost=0"
+~N:         0,  "99",               "seq",              "seq=seq+1"
+~ARTICLE:  38,  "",                 "article",          "article=IIF(A->RECTYP='5'.or.A->RECTYP='7',STCRD->STKDES - IIF(STCRD->STKCOD=' ', '                  ', ' [' - STCRD->STKCOD - ']'),STCRD->STKCOD-'   '-STMAS->STKDES)"
+~STKCOD:    0,  "",                 "STCRD->STKCOD",    ""
+~STKDES:   22,  "",                 "STCRD->STKDES",    ""
+~L:         0,  "",                 "STCRD->LOCCOD",    ""
+~QTY:       0,  "qtyZ(10)",         "STCRD->TRNQTY",    ""
+~TQUCOD:    0,  "",                 "p_istab( STCRD->TQUCOD, 20, 1, 0 )",       "",
+~UNITPR:    0,  "priZ(11)",         "STCRD->UNITPR",    ""
+~DISC_I:    0,  "",                 "STCRD->DISC",      ""
+~NETAMT_I:  0,  "ZZ,ZZZ,ZZZ.ZZ",    "STCRD->TRNVAL",    ""
+~COST_I:    0,  "99,999,999.99",    "STCRD->XTRNVAL",   "cost=cost+STCRD->XTRNVAL"
+~COST_TOT:  0,  "999,999,999.99",   "cost",             "sub3cos=sub3cos+cost"
+
+~PROFIT:    0,  "99,999,999.99",    "profit",           "profit=sales-cost; sub3pro=sub3pro+profit"
+~PERCENT:   0,  "999,999.99",       "percent",          "percent=profit*100/sales"
+~SUB3PER:   0,  "999,999.99",       "sub3per",          "sub3per=(sub3sal-sub3cos)*100/sub3sal"
+~SUB2PER:   0,  "999,999.99",       "sub2per",          "sub2per=(sub2sal-sub2cos)*100/sub2sal",I
+~SUB1PER:   0,  "999,999.99",       "sub1per",          "sub1per=(sub1sal-sub1cos)*100/sub1sal",I
+~TOTPER:    0,  "999,999.99",       "totper",           "totper=(totsal-totcos)*100/totsal",I
+

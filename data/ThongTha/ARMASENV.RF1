@@ -1,0 +1,80 @@
+* ¾ÔÁ¾ìª×èÍ·ÕèÍÂÙèÅÙ¡¤éÒ à¾×èÍ¨èÒË¹éÒ«Í§¨´ËÁÒÂ
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+TI::~INIT
+He:$E$B\NAME                        $E$B
+He:$E293 «.à¾ªÃà¡ÉÁ73/1 ¶.à¾ªÃà¡ÉÁ    $E
+He:$Eá¢Ç§Ë¹Í§¤éÒ§¾ÅÙ à¢µË¹Í§á¢Á       $E
+He:$E02-809-8932         $E
+Bo:
+Bo:              $E ¡ÃØ³ÒÊè§            $E
+Bo:                       $E~CONTACT             $E
+Bo:                       $E~CUSNAM              $E
+Bo:                       $E~ADDR01              $E
+Bo:                       $E~ADDR_02             $E
+Bo:                       $E~TELNUM              $E
+Bo:
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+Top=0
+Left=0
+Right=96
+Lines=12
+Output=Select, Printer, Screen, File,
+File Name=ARMASENV.TXT
+Print Control=\027\033\001
+Fix Summary Line=OFF
+Select Page=OFF
+Select Scope=OFF
+*Iteration=ON
+*Condition=SLMCOD='1234567890'.and.AREACOD='12'
+*Feed After Print=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=ARMAS
+Alias=A
+Tag=ARMAS1
+System=DATA_PATH
+
+[data spec]
+*~dat:      len,    "pict",             "data",             "exp"
+~CONTACT:   0,      "",                 "ARMAS->CONTACT",   ""
+~CUSNAM:    0,      "",                 "name",             "name = ARMAS->PRENAM - ' ' - ARMAS->CUSNAM"
+~ADDR01:    0,      "",                 "ARMAS->ADDR01",    ""
+~ADDR02:    0,      "",                 "ARMAS->ADDR02",    ""
+~ADDR03:    0,      "",                 "ARMAS->ADDR03",    ""
+~ADDR_02:   0,      "",                 "addr_02",          "addr_02 = IIF(A->ADDR03='     ', A->ADDR02 - '   ' - A->ZIPCOD, A->ADDR02+'        ')"
+~ADDR_03:   0,      "",                 "addr_03",          "addr_03 = IIF(A->ADDR03#'     ', A->ADDR03 - '   ' - A->ZIPCOD, A->ADDR03+'        ')"
+~ZIP:       0,      "",                 "ARMAS->ZIPCOD",    ""
+~CUSCOD:    0,      "",                 "ARMAS->CUSCOD",    ""
+
+~TELNUM:    0,      "",                 "ARMAS->TELNUM",    ""
+~PAYCOND:   0,      "",                 "ARMAS->PAYCOND",   ""
+~SLMCOD:    0,      "",                 "ARMAS->SLMCOD",    ""
+~AREA:      0,      "",                 "ARMAS->AREACOD",   ""
+~TRM:       0,      "",                 "ARMAS->PAYTRM",    ""
+~PRI:       0,      "",                 "ARMAS->TABPR",     ""
+~DISC:      0,      "",                 "ARMAS->DISC",      ""
+~CRLINE:    0,      "99,999,999.99",    "ARMAS->CRLINE",    ""
+~ACCNUM:    0,      "",                 "ARMAS->ACCNUM",    ""
+~DLVBY:     0,      "",                 "ARMAS->DLVBY",     ""
+~REMARK:    0,      "",                 "ARMAS->REMARK",    ""
+
+~HREM1:     0,      "",                 "x1",               "x1=@p_hrem( A->CUSCOD,1 )"
+~HREM2:     0,      "",                 "x2",               "x2=@p_hrem( A->CUSCOD,2 )"
+~HREM3:     0,      "",                 "x3",               "x3=@p_hrem( A->CUSCOD,3 )"
+~HREM4:     0,      "",                 "x4",               "x4=@p_hrem( A->CUSCOD,4 )"
+~HREM5:     0,      "",                 "x5",               "x5=@p_hrem( A->CUSCOD,5 )"
+
+
+
+
+
+

@@ -1,0 +1,215 @@
+* ARIVC.RL - ãº¡Ó¡ÑºÊÔ¹¤éÒ (INVOICE)
+*
+[report frame]
+*** ¼ÙéãªéÊÒÁÒÃ¶à»ÅÕèÂ¹á»Å§á¡éä¢ ä´éµÒÁµéÍ§¡ÒÃ ****************************************
+Ti:: ~INIT
+He:$E\NAME                                             $E
+He:~ADDR
+He:~TEL                                                              $EãºÊè§ÊÔ¹¤éÒ$E
+He:                   àÅ¢»ÃÐ¨ÓµÑÇ¼ÙéàÊÕÂÀÒÉÕ ~TAXID
+He:  ÅÙ¡¤éÒ ~CUSCOD                                   àÅ¢·ÕèàÍ¡ÊÒÃ     ~DOCNUM
+He:  ~CUSNAM
+He:  ~ADDR01                                          ÇÑ¹·Õè            ~DOCDAT
+He:  ~ADDR02
+He:  ~ADDR03                                          à¤Ã´Ôµ ~CR ÇÑ¹    ¤Ãº¡ÓË¹´ ~DUEDAT
+He:  â·Ã. ~TELNUM                                     àÅ¢·ÕèãºÊÑè§¢ÒÂ   ~SONUM      ÅÇ·.~SODAT
+He:  ÍéÒ§ÍÔ§   ~YOUREF                                ¾¹Ñ¡§Ò¹¢ÒÂ        ~SLMCOD
+He:  ¢¹Êè§â´Â  ~DLVBY                                 à¢µ¡ÒÃ¢ÒÂ         ~AREA
+He:€…………‰…………………………………………………………………………………………………………………‰…………………………………………‰……………………………‰……………………………………
+He:„ No.„            ÃËÑÊÊÔ¹¤éÒ/ÃÒÂÅÐàÍÕÂ´          „     ¨Ó¹Ç¹      „   Ë¹èÇÂÅÐ „ ~TXT0        „
+He:†…………Š…………………………………………………………………………………………………………………Š…………………………………………Š……………………………Š……………………………………‡
+Bo::
+Ih::                  ;1 stcrd->docnum artrn->docnum
+Ib: ~N    ~ARTICLE                                   ~QTY    ~TQUCOD  ~UNITPR     ~NETAMT_I         ;1
+Ih::                  ;2 artrnrm->docnum+artrnrm->seqnum stcrd->rdocnum
+Ib:       ~REMARK     ;2
+Ih::                  ;3 artrnrm->docnum+artrnrm->seqnum stcrd->docnum+stcrd->seqnum
+Ib:       ~REMARK     ;3
+Bt:„    „                                           „                „           „              „
+Fo:†…………ˆ…………………………………………………………………………………………………………………ˆ…………………………………………ˆ……………………………Š……………………………………‡
+Su:„ËÁÒÂàËµØ                                         ÃÇÁà»ç¹à§Ô¹                 „~AMOUNT       „
+Su:„ ~HREM1                                          $_ËÑ¡$_ÊèÇ¹Å´        ~DISC      „~DISCAMT      „
+Su:„ ~HREM2                                          ÂÍ´ËÅÑ§ËÑ¡ÊèÇ¹Å´            „~AFTDISC      „
+Su:„ ~HREM3                                          $_ËÑ¡$_à§Ô¹ÁÑ´¨Ó   #~ADVNUM     „~ADVAMT       „
+Su:„ ~HREM4                                          ~TXT1                       „~TOTAL        „
+Su:„ ~HREM5                                          ¨Ó¹Ç¹ÀÒÉÕÁÙÅ¤èÒà¾ÔèÁ ~VAT % „~VATAMT       „
+Su:„~BAHT                                                   ~TXT2                „~CHKAMT       „
+*Su:„ ~HREM3                                                                      „……………………………………„
+*Su:„ ~HREM4                                          ÊÔ¹¤éÒÂ¡àÇé¹ÀÒÉÕÁÙÅ¤èÒà¾ÔèÁ „~AMTRATZ      „
+*Su:„ ~HREM5                                          ÁÙÅ¤èÒÊÔ¹¤éÒÍÑµÃÒ  ~VAT  %  „~AMTRATX      „
+*Su:„                                                 ¨Ó¹Ç¹à§Ô¹ÀÒÉÕÁÙÅ¤èÒà¾ÔèÁ    „~VATAMT       „
+*Su:„~BAHT                                                   ¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹ „~NETAMT       „
+Su:†……………………………………………………………………………………………………………………………………………………………………………………………………………ˆ……………………………………‡
+Su:„ ä´éÃÑºÊÔ¹¤éÒµÒÁÃÒÂ¡ÒÃ¢éÒ§º¹¹ÕéäÇé¶Ù¡µéÍ§                                                   „
+Su:„ áÅÐÍÂÙèã¹ÊÀÒ¾àÃÕÂºÃéÍÂ·Ø¡»ÃÐ¡ÒÃ              ã¹¹ÒÁ \NAME                                   „
+Su:„                                                                                            „
+Su:„ ¼ÙéÃÑºÊÔ¹¤éÒ ________________ ÇÑ¹·Õè ___/___/___   ¼ÙéÃÑºÁÍºÍÓ¹Ò¨  __________________      „
+*Su:„ ¾ÔÁ¾ìâ´Â  ~PRNBY         ÇÑ¹·Õè  ~PRNDAT   ~PRNTIM ¾ÔÁ¾ì¤ÃÑé§·Õè~PRNCNT ºÑ¹·Ö¡â´Â ~RECBY   „
+Su:‚……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………ƒ
+[end frame]
+
+*** ¤ÓÊÑè§µèÍ¨Ò¡¹Õé ¼ÙéãªéäÁè¤ÇÃá¡éä¢ ****************************************
+
+[print options]
+Top=0
+Left=0
+Tabs=4
+Right=94
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=ARIVC.TXT
+Print Control=\027\033\001
+Fix Summary Line=ON
+Select Scope=OFF
+*Form=ON
+Select Page=OFF
+Condition=OFF
+
+[range of report]
+From=CUR
+
+[master file]
+File=artrn
+Alias=A
+Tag=artrn1
+System=DATA_PATH
+
+[item file]
+File=stcrd
+Alias=B
+Tag=stcrd5
+System=DATA_PATH
+
+File=artrnrm
+Alias=C
+Tag=artrnrm1
+System=DATA_PATH
+
+[relate file]
+File=armas
+Alias=R
+Tag=armas1
+System=DATA_PATH
+Master file=artrn
+Master-Related Field=CUSCOD
+
+File=stmas
+Alias=C
+Tag=stmas1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD
+
+File=oeso
+Alias=Y
+Tag=oeso1
+System=DATA_PATH
+Master file=artrn
+Master-Related Field=SONUM
+
+File=stloc
+Alias=L
+Tag=stloc1
+System=DATA_PATH
+Master file=stcrd
+Master-Related Field=STKCOD+LOCCOD
+
+[data spec]
+*           len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:      len,    "pict",             "data",             "exp"
+~ADDR:      0,      "",                 "p_addr()",         ""
+~TAXID:     0,      "",                 "p_taxid()",        ""
+~TEL:       0,      "",                 "p_telnum()",       ""
+~INIT:      0,      "",                 "",                 "seq=0; sumamt0=0; sumamt1=0"
+~TXT0:      0,      "",                 "txt0",             "txt0 = IIF( ARTRN->FLGVAT <> '1', '  ¨Ó¹Ç¹à§Ô¹', 'ÃÒ¤ÒÃÇÁÀÒÉÕ')",
+*~TXT1:     0,      "",                 "txt1",             "txt1 = IIF( ARTRN->FLGVAT <> '1', '¨Ó¹Ç¹à§Ô¹ËÅÑ§ËÑ¡ÊèÇ¹Å´', '¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹  ')",
+~TXT1:      0,      "",                 "txt1",             "txt1 = IIF( ARTRN->FLGVAT <> '1', '¨Ó¹Ç¹à§Ô¹ËÅÑ§ËÑ¡ÁÑ´¨Ó ', '¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹  ')",
+~TXT2:      0,      "",                 "txt2",             "txt2 = IIF( ARTRN->FLGVAT <> '1', '¨Ó¹Ç¹à§Ô¹ÃÇÁ·Ñé§ÊÔé¹', 'ÃÒ¤ÒÊÔ¹¤éÒ          ')",
+*~DOCNUM:   0,      "",                 "doc_num",          "doc_num=SUBSTR(ARTRN->DOCNUM, 3, 8)"
+~DOCNUM:    0,      "",                 "ARTRN->DOCNUM",    ""
+*~DOCDAT:   0,      "",                 "p_date( ARTRN->DOCDAT)",   ""
+~DOCDAT:    0,      "",                 "ARTRN->DOCDAT",    ""
+~CUSCOD:    0,      "",                 "ARTRN->CUSCOD",    ""
+~CUSNAM:    0,      "",                 "cus_nam",          "cus_nam = ARMAS->PRENAM - ' ' - ARMAS->CUSNAM"
+~ADDR01:    0,      "",                 "ARMAS->ADDR01",    ""
+~ADDR02:    0,      "",                 "ARMAS->ADDR02",    ""
+~ADDR03:    0,      "",                 "addr_03",          "addr_03 = ARMAS->ADDR03 - ' ' - ARMAS->ZIPCOD"
+~TELNUM:    0,      "",                 "ARMAS->TELNUM",    ""
+~YOUREF:    0,      "",                 "ARTRN->YOUREF",    ""
+~SLMCOD:   27,      "",                 "slm",              "slm = ARTRN->SLMCOD-'-'-OESLM->SLMNAM"
+~CR:        0,      "ZZZ",              "ARTRN->PAYTRM",    ""
+*~DUEDAT:   0,      "",                 "p_date( ARTRN->DUEDAT )",  ""
+~DUEDAT:    0,      "",                 "ARTRN->DUEDAT",    ""
+~DLVBY:     0,      "",                 "p_istab( ARTRN->DLVBY, 41, 1, 40 )",           ""
+~AREA:     27,      "",                 "p_istab( ARTRN->AREACOD, 40, 1, 40 )",         ""
+~SONUM:     0,      "",                 "ARTRN->SONUM",     ""
+~SODAT:     0,      "",                 "OESO->SODAT",      ""
+~FLGVAT:    0,      "Y",                "ARTRN->FLGVAT",    ""
+~AMOUNT:    0,      "99,999,999.99",    "ARTRN->AMOUNT",    ""
+~DISC:      0,      "",                 "ARTRN->DISC",      ""
+~DISCAMT:   0,      "99,999,999.99",    "ARTRN->DISCAMT",   ""
+~AFTDISC:   0,      "99,999,999.99",    "ARTRN->AFTDISC",   ""
+~ADVNUM:    0,      "",                 "ARTRN->ADVNUM",    ""
+~ADVAMT:    0,      "99,999,999.99",    "ARTRN->ADVAMT",    ""
+~TOTAL:     0,      "99,999,999.99",    "ARTRN->TOTAL",     ""
+~VAT:       0,      "99.99",            "ARTRN->VATRAT",    ""
+~VATAMT:    0,      "99,999,999.99",    "ARTRN->VATAMT",    ""
+~CHKAMT:    0,      "99,999,999.99",    "netamt",           "netamt = IIF( ARTRN->FLGVAT <> '1', ARTRN->NETAMT, ARTRN->TOTAL - ARTRN->VATAMT)"
+~BAHT:      0,      "",                 "t_baht(ARTRN->NETAMT)"                         ""
+
+~N:         0,      "999",              "seq",              "seq=seq+1"
+~ARTICLE:  42,      "",                 "article",          "article = STCRD->STKCOD - ' ' - STCRD->STKDES"
+~STKCOD:   15,      "",                 "STCRD->STKCOD",    ""
+~STKDES:   28,      "",                 "STCRD->STKDES",    ""
+~L:         0,      "",                 "STCRD->LOCCOD",    ""
+~QTY:       0,      "qtyZ(7)",          "STCRD->TRNQTY",    ""
+~TQUCOD:    9,      "",                 "p_istab( STCRD->TQUCOD,  20, 1, 0 )",      ""
+~UNITPR:    0,      "priZ(10)",         "STCRD->UNITPR",    ""
+~DISC_I:    0,      "",                 "STCRD->DISC",      ""
+~NETAMT_I:  0,      "ZZ,ZZZ,ZZZ.ZZ",    "STCRD->TRNVAL",    ""
+~SONUM_I:   0,      "",                 "STCRD->RDOCNUM",   ""
+~REMARK:    0,      "",                 "ARTRNRM->REMARK",  ""
+~MQTY:      0,      "ZZ,ZZZ",           "mqty",             "mqty = STCRD->TRNQTY * STCRD->TFACTOR"
+~MQUCOD:    0,      "",                 "p_istab( STMAS->QUCOD,  20, 1, 0 )",       "",
+
+~NETAMT0:   0,      "ZZ,ZZZ,ZZZ.ZZ",    "amt0",             "amt0=IIF(STCRD->VATCOD='0', STCRD->TRNVAL, 0); sumamt0 =sumamt0+amt0"
+~NETAMT1:   0,      "ZZ,ZZZ,ZZZ.ZZ",    "amt1",             "amt1=IIF(STCRD->VATCOD#'0', STCRD->TRNVAL, 0); sumamt1 =sumamt1+amt1"
+~SUMAMT0:   0,      "99,999,999.99",    "sumamt0",          ""
+~SUMAMT1:   0,      "99,999,999.99",    "sumamt1",          ""
+
+*~HREM1:        0,      "",                 "x1",               "x1=@p_hrem( A->DOCNUM,1,A->SONUM ); x1=IIF(x1='     ',SUBSTR(ARMAS->PRENAM-' '-ARMAS->CUSNAM,1,50),x1)"
+*~HREM2:        0,      "",                 "x2",               "x2=@p_hrem( A->DOCNUM,2,A->SONUM ); x2=IIF(x2='     ',ARMAS->ADDR01,x2)"
+*~HREM3:        0,      "",                 "x3",               "x3=@p_hrem( A->DOCNUM,3,A->SONUM ); x3=IIF(x3='     ',ARMAS->ADDR02,x3)"
+*~HREM4:        0,      "",                 "x4",               "x4=@p_hrem( A->DOCNUM,4,A->SONUM ); x4=IIF(x4='     ',ARMAS->TELNUM,x4)"
+*~HREM5:        0,      "",                 "x5",               "x5=@p_hrem( A->DOCNUM,5,A->SONUM ); x5=IIF(x5='     ',ARMAS->REMARK,x5)"
+
+~HREM1:     0,      "",                 "p_hrem( A->DOCNUM,1,A->SONUM )",   ""
+~HREM2:     0,      "",                 "p_hrem( A->DOCNUM,2,A->SONUM )",   ""
+~HREM3:     0,      "",                 "p_hrem( A->DOCNUM,3,A->SONUM )",   ""
+~HREM4:     0,      "",                 "p_hrem( A->DOCNUM,4,A->SONUM )",   ""
+~HREM5:     0,      "",                 "p_hrem( A->DOCNUM,5,A->SONUM )",   ""
+
+~DEP:       0,      "",                 "A->DEPCOD",                ""
+~P_ISDEP:   0,      "",                 "p_isdep( A->DEPCOD )",     ""
+~LOCAREA:   0,      "",                 "STLOC->AREA",              ""
+~RDOCNUM:   0,      "",                 "so",                       "so = SUBSTR( STCRD->RDOCNUM,1,12)"
+
+~NETAMT:    0,      "99,999,999.99",    "ARTRN->NETAMT",    ""
+~AMTRATZ:   0,      "99,999,999.99",    "AMTRATZ",          "AMTRATZ = ARTRN->AMTRAT0 - (ARTRN->AMTRAT0 * ARTRN->DISCAMT / ARTRN->AMOUNT)"
+~AMTRATX:   0,      "99,999,999.99",    "AMTRATX",          "AMTRATX = IIF(ARTRN->FLGVAT='1',ARTRN->TOTAL - AMTRATZ - ARTRN->VATAMT, ARTRN->TOTAL - AMTRATZ)"
+*~V:        0,      "",                 "VAT_SYM",          "VAT_SYM = IIF(STCRD->VATCOD='0', ' ', 'V')"
+~V:         0,      "",                 "STCRD->VATCOD",    ""
+~SHIPTO:    0,      "",                 "ARTRN->SHIPTO",    ""
+~S_ADDR01:  0,      "",                 "ARSHIP->ADDR01",   ""
+~S_ADDR02:  0,      "",                 "ARSHIP->ADDR02",   ""
+~S_ADDR03:  0,      "",                 "addr_03",          "addr_03 = ARSHIP->ADDR03 - ' ' - ARSHIP->ZIPCOD"
+~S_TELNUM:  0,      "",                 "ARSHIP->TELNUM",   ""
+
+~PRNBY:     0,      "",                 "p_userid()",       ""
+~PRNDAT:    0,      "",                 "@d_prndat()",      ""
+~PRNTIM:    0,      "",                 "s_prntim()",       ""
+~PRNCNT:    0,      "999",              "@n_prncnt()",      ""
+~RECBY:     0,      "",                 "A->USERID",        ""
+
+
+

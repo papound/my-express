@@ -1,0 +1,258 @@
+* ARMASCRE.RL -- พิมพ์ใบตรวจสอบวงเงินสินเชื่อ
+*
+[report frame]
+Ti::~T_IV1 ~T_IV2  ~T_DR1 ~T_DR2  ~T_SR1 ~T_SR2  ~T_RE1 ~T_RE2
+Ti:~RESET_PAGE          ^$Bใบตรวจสอบวงเงินสินเชื่อ                   $B^
+He:                                                                   หน้า             ~PAGE
+He:รหัสลูกค้า ~CUSCOD     ประเภทลูกค้า ~CUSTYP                        วันที่      \DATE
+He:ชื่อลูกค้า ~CUSNAM
+Bo:ที่อยู่    ~ADDR01                                                 พนักงานขาย  ~SLMNAM
+Bo:           ~ADDR_02                                                เขตการขาย   ~AREA
+Bo:           ~ADDR_03                                                ยอดยกมา     ~BEGBAL
+Bo:โทร.       ~TELNUM                                                 ยอดขายรวม  ~TOTSAL
+Bo:เครดิต     ~TRM วัน เงื่อนไขการชำระเงิน ~PAYCOND                   ยอดชำระรวม ~TOTRCV
+Bo:หมายเหตุ   ~REMARK                                                 ยอดคงค้าง   ~BALANCE
+Bo:
+Bo:$Eสถานะหนี้สิน$E ~CLRSUM
+*
+Ih:   ***ใบกำกับคงค้าง***                                       ;1 ARTRN->CUSCOD  ARMAS->CUSCOD
+Ih:   เลขที่          วันที่     วันครบกำหนด        จำนวนเงิน
+Ih:   ----------      --------   ----------    -------------
+Ib: ~F~IVCNUM         ~IVCDAT    ~IVCDUE       ~IVCAMT          ;1
+If:                                            -------------    ;1
+If:   รวม                                      ~SUMIVC
+If:                                            =============
+If:
+*
+Ih:   ***ใบรับมัดจำ***                                       ;2 ARTRNX->CUSCOD  ARMAS->CUSCOD
+Ih:   เลขที่          วันที่     วันครบกำหนด        จำนวนเงิน
+Ih:   ----------      --------   ----------    -------------
+Ib:   ~IVCNUMX        ~IVCDATX   ~IVCDUEX      ~IVCAMTX         ;2
+If:                                            -------------    ;2
+If:   รวม                                      ~SUMIVCX             หลังหักมัดจำ ~BALANCEX
+If:                                            =============
+If:
+*
+Ih:   ***ใบสั่งขายค้างส่ง***                                    ;3 OESOIT->CUSCOD  ARMAS->CUSCOD
+Ih:   เลขที่          วันที่     วันที่จะส่ง        จำนวนเงิน  สินค้า
+Ih:   ----------      --------   ----------    -------------   ---------------------------------------------
+Ib:   ~SONUM     ~N   ~SODAT     ~SODLV        ~SOAMT          ~SOSTKDES ;3
+If:                                            -------------    ;3
+If:   รวม                                      ~SUMSO
+If:                                            =============
+If:   $Bหมายเหตุ:$B  เอกสารที่มีเครื่องหมาย '>' นำหน้า คือ เอกสารที่รออนุมัติให้เกินวงเงิน
+If:
+*
+Ih:   ***เช็คที่ยังไม่ผ่านบัญชี***                              ;4 BKTRN->CUSCOD+BKTRN->CHQSTAT  ARMAS->CUSCOD+'0'
+Ih:   วันที่เช็ค      เลขที่เช็ค    ธนาคาร          จำนวนเงิน     อ้างถึงใบกำกับ  จำนวนเงิน
+Ih:   --------        ----------    ------     -------------
+Ib:   ~CHQDAT         ~CHQNUM       ~BANK      ~CHQAMT          ;4
+Ih::                                                            ;5 ARRCPCQ->CHQNUM  BKTRN->CHQNUM
+Ib:                                                               ~REFIVC    ~REFAMT    ;5
+If:                                            -------------    ;4
+If:   รวม                                      ~SUMCHQ
+If:                                            =============
+If:
+*
+Ih:   ***รายการประวัติเช็คคืน***                                ;6 BKTRN->CUSCOD+BKTRN->CHQSTAT  ARMAS->CUSCOD+'2'
+Ih:   วันที่เช็ค      เลขที่เช็ค    ธนาคาร          จำนวนเงิน  เหตุผลเช็คคืน
+Ih:   --------        ----------    ------     -------------   ---------------------------------------------
+Ib:   ~CHQDAT         ~CHQNUM       ~BANK      ~RETAMT         ~CHQREM      ;6
+*Ih::                                                           ;7 ARRCPCQ->CHQNUM  BKTRN->CHQNUM
+*Ib:                                                               ~REFIVC    ~REFAMT   ;7
+If:                                            -------------    ;7
+If:   รวม                                      ~SUMRET
+If:                                            =============
+Su:
+Su:$Eสรุป$E
+Su:   วงเงินอนุมัติ                            ~CRLINE           บาท
+Su:     ใบกำกับคงค้าง       ~SUMIVC             ~SUMIVC_OK
+Su:     เช็ครับในมือ        ~SUMCHQ             ~SUMCHQ_OK
+Su:        รวม              ~TOTDEB
+Su:     หัก ใบรับมัดจำ      ~SUMIVCX
+Su:   เกินวงเงิน                               ~OVRLINE
+Su:   บวก ใบสั่งขายค้างส่ง                     ~SUMSO
+Su:                                            -------------
+Su:   เกินวงเงินสินเชื่อทั้งสิ้น               ~TOTOVR
+Su:                                            =============
+Su:
+Su:
+Su:       จัดทำโดย                             ตรวจสอบโดย                          อนุมัติโดย
+Su:
+Su:    ______________                        ______________                     ______________
+[end frame]
+
+[print options]
+Top=0
+Right=105
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=ARMAST.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+*Form=ON
+Select Page=OFF
+Select Paper=15_Inch, 8_Inch, Default
+*8_Inch=\027\033\004
+8_Inch=\027\033\000\027\103
+15_Inch=\027\033\001
+*Fix Summary Line=ON
+*Condition=SLMCOD='1234567890'.and.AREACOD='12'
+
+[range of report]
+From=CUR
+
+[master file]
+File=ARMAS
+Alias=A
+Tag=ARMAS1
+System=DATA_PATH
+Filter=CRLINE > 0
+
+[item file]
+File=ARTRN
+Alias=B
+Tag=ARTRN9
+System=DATA_PATH
+
+File=ARTRNX
+Clone From=ARTRN
+Alias=BB
+Tag=ARTRN9
+Filter=RECTYP='0'
+System=DATA_PATH
+
+File=OESOIT
+Alias=C
+Tag=OESOIT5
+System=DATA_PATH
+Filter=REMQTY > 0 .and. SORECTYP = '0'
+
+File=BKTRN
+Alias=D
+Tag=BKTRN8
+System=DATA_PATH
+
+File=ARRCPCQ
+Alias=E
+Tag=ARRCPCQ2
+System=DATA_PATH
+
+[relate file]
+File=OESLM
+Alias=R
+Tag=OESLM1
+System=DATA_PATH
+Master file=ARMAS
+Master-Related Field=SLMCOD
+
+File=OESO
+Alias=S
+Tag=OESO1
+System=DATA_PATH
+Master file=OESOIT
+Master-Related Field=SONUM
+
+File=ARBAL
+Alias=T
+Tag=ARBAL1
+System=DATA_PATH
+Master file=ARMAS
+Master-Related Field=CUSCOD
+
+[data spec]
+*               len  (0)default, (>0)cut, (<0)cut to new line
+*~dat:          len,    "pict",             "data",                     "exp"
+~T_IV1:         0,      "",                 "",                         "t_iv = ARBAL->IV1+ARBAL->IV2+ARBAL->IV3+ARBAL->IV4+ARBAL->IV5+ARBAL->IV6+ARBAL->IV7+ARBAL->IV8+ARBAL->IV9+ARBAL->IV10+ARBAL->IV11+ARBAL->IV12"
+~T_IV2:         0,      "",                 "",                         "t_iv = t_iv +ARBAL->IV1NY+ARBAL->IV2NY+ARBAL->IV3NY+ARBAL->IV4NY+ARBAL->IV5NY+ARBAL->IV6NY+ARBAL->IV7NY+ARBAL->IV8NY+ARBAL->IV9NY+ARBAL->IV10NY+ARBAL->IV11NY+ARBAL->IV12NY"
+~T_DR1:         0,      "",                 "",                         "t_dr = ARBAL->DR1+ARBAL->DR2+ARBAL->DR3+ARBAL->DR4+ARBAL->DR5+ARBAL->DR6+ARBAL->DR7+ARBAL->DR8+ARBAL->DR9+ARBAL->DR10+ARBAL->DR11+ARBAL->DR12"
+~T_DR2:         0,      "",                 "",                         "t_dr = t_dr +ARBAL->DR1NY+ARBAL->DR2NY+ARBAL->DR3NY+ARBAL->DR4NY+ARBAL->DR5NY+ARBAL->DR6NY+ARBAL->DR7NY+ARBAL->DR8NY+ARBAL->DR9NY+ARBAL->DR10NY+ARBAL->DR11NY+ARBAL->DR12NY"
+~T_SR1:         0,      "",                 "",                         "t_sr = ARBAL->SR1+ARBAL->SR2+ARBAL->SR3+ARBAL->SR4+ARBAL->SR5+ARBAL->SR6+ARBAL->SR7+ARBAL->SR8+ARBAL->SR9+ARBAL->SR10+ARBAL->SR11+ARBAL->SR12"
+~T_SR2:         0,      "",                 "",                         "t_sr = t_sr +ARBAL->SR1NY+ARBAL->SR2NY+ARBAL->SR3NY+ARBAL->SR4NY+ARBAL->SR5NY+ARBAL->SR6NY+ARBAL->SR7NY+ARBAL->SR8NY+ARBAL->SR9NY+ARBAL->SR10NY+ARBAL->SR11NY+ARBAL->SR12NY"
+~T_RE1:         0,      "",                 "",                         "t_re = ARBAL->RE1+ARBAL->RE2+ARBAL->RE3+ARBAL->RE4+ARBAL->RE5+ARBAL->RE6+ARBAL->RE7+ARBAL->RE8+ARBAL->RE9+ARBAL->RE10+ARBAL->RE11+ARBAL->RE12"
+~T_RE2:         0,      "",                 "",                         "t_re = t_re +ARBAL->RE1NY+ARBAL->RE2NY+ARBAL->RE3NY+ARBAL->RE4NY+ARBAL->RE5NY+ARBAL->RE6NY+ARBAL->RE7NY+ARBAL->RE8NY+ARBAL->RE9NY+ARBAL->RE10NY+ARBAL->RE11NY+ARBAL->RE12NY"
+
+~RESET_PAGE:    0,      "",                 "",                         "page=0"
+~PAGE:          0,      "999",              "page",                     "page=page+1"
+
+~CUSCOD:        0,      "",                 "A->CUSCOD",                ""
+~CUSTYP:        0,      "",                 "p_istab( A->CUSTYP,45,1,31)",      ""
+~CUSNAM:        0,      "",                 "name",                     "name = A->PRENAM - ' ' - A->CUSNAM"
+~ADDR01:        0,      "",                 "A->ADDR01",                ""
+~ADDR02:        0,      "",                 "A->ADDR02",                ""
+~ADDR03:        0,      "",                 "A->ADDR03",                ""
+~ADDR_02:       0,      "",                 "addr_02",                  "addr_02 = IIF(A->ADDR03='     ', A->ADDR02 - '   ' - A->ZIPCOD, A->ADDR02+'        ')"
+~ADDR_03:       0,      "",                 "addr_03",                  "addr_03 = IIF(A->ADDR03#'     ', A->ADDR03 - '   ' - A->ZIPCOD, A->ADDR03+'        ')"
+~ADDR:          0,      "",                 "addr",                     "addr = A->ADDR01 - ' ' - A->ADDR02 - ' ' - A->ADDR03 - ' ' - A->ZIPCOD"
+~ZIP:           0,      "",                 "ARMAS->ZIPCOD",            ""
+~TELNUM:        0,      "",                 "A->TELNUM",                ""
+~CONTRACT:      0,      "",                 "A->CONTRACT",              ""
+~TRM:           0,      "",                 "A->PAYTRM",                ""
+~PAYCOND:       0,      "",                 "A->PAYCOND",               ""
+~REM_NB:        0,      "",                 "has_remark",               "has_remark=IIF(A->REMARK='          ',':       ','หมายเหตุ')"
+~REMARK:        0,      "",                 "A->REMARK",                ""
+~CRLINE:        0,      "99,999,999.99",    "A->CRLINE",                ""
+
+~SLMCOD:        0,      "",                 "A->SLMCOD",                ""
+~SLMNAM:        0,      "",                 "OESLM->SLMNAM",            ""
+~AREA:          0,      "",                 "p_istab( A->AREACOD, 40, 1, 30 )",     ""
+~BEGBAL:        0,      "99,999,999.99",    "ARBAL->BEGBAL",            ""
+~TOTSAL:        0,      "999,999,999.99",   "totsal",                   "totsal=t_iv+t_dr"
+~TOTRCV:        0,      "999,999,999.99",   "totrcv",                   "totrcv=t_sr+t_re"
+~BALANCE:       0,      "99,999,999.99",    "A->BALANCE",               ""
+
+~CLRSUM:        0,      "",                 "",                         "sumivc=0; sumivcx=0; sumso=0; sumchq=0; sumret=0"
+
+~F:             0,      "",                 "ovrline",                  "ovrline=IIF(ARTRN->DOCSTAT='O',' >','  ' )"
+~IVCNUM:        0,      "",                 "ARTRN->DOCNUM",            ""
+~IVCDAT:        0,      "",                 "dat",                      "dat=IIF(ARTRN->RECTYP='9',ARTRN->DUEDAT,ARTRN->DOCDAT)"
+~IVCDUE:        0,      "",                 "dat",                      "dat=IIF(ARTRN->RECTYP='9',ARTRN->DOCDAT,ARTRN->DUEDAT)"
+~IVCAMT:        0,      "99,999,999.99",    "ivcamt",                   "ivcamt=IIF(ARTRN->RECTYP='5',ARTRN->REMAMT*-1,ARTRN->REMAMT); sumivc=sumivc+ivcamt"
+~IVCTRM:        0,      "",                 "ARTRN->PAYTRM",            ""
+~IVCSLM:        0,      "",                 "ARTRN->SLMCOD",            ""
+~SUMIVC:        0,      "99,999,999.99",    "sumivc",                   ""
+~SUMIVC_OK:     0,      "",                 "sumivc_ok",                "sumivc_ok = IIF(STR(sumivc,15,2)=STR(ARMAS->BALANCE,15,2), '               ', '<-ยอดไม่ถูกต้อง')"
+
+~IVCNUMX:       0,      "",                 "ARTRNX->DOCNUM",           ""
+~IVCDATX:       0,      "",                 "ARTRNX->DOCDAT",           ""
+~IVCDUEX:       0,      "",                 "ARTRNX->DUEDAT",           ""
+~IVCAMTX:       0,      "99,999,999.99",    "ARTRNX->REMAMT",           "sumivcx=sumivcx+ARTRNX->REMAMT"
+~IVCTRMX:       0,      "",                 "ARTRN->PAYTRM",            ""
+~IVCSLMX:       0,      "",                 "ARTRN->SLMCOD",            ""
+~SUMIVCX:       0,      "99,999,999.99",    "sumivcx",                  ""
+~BALANCEX:      0,      "99,999,999.99",    "bal",                      "bal=A->BALANCE-sumivcx"
+
+~SONUM:         0,      "",                 "OESOIT->SONUM",            ""
+~N:             0,      "",                 "OESOIT->SEQNUM",           ""
+~SODAT:         0,      "",                 "OESO->SODAT",              ""
+~SODLV:         0,      "",                 "OESOIT->DLVDAT",           ""
+~SOAMT:         0,      "99,999,999.99",    "remain",                   "remain=( OESOIT->TRNVAL / OESOIT->ORDQTY) * OESOIT->REMQTY; sumso=sumso+remain"
+~SUMSO:         0,      "99,999,999.99",    "sumso",                    ""
+~SOSTKDES:      0,      "",                 "OESOIT->STKDES",           ""
+
+~CHQDAT:        0,      "",                 "BKTRN->CHQDAT",            ""
+~CHQNUM:        0,      "",                 "BKTRN->CHQNUM",            ""
+~BANK:          0,      "",                 "p_istab( BKTRN->BNKCOD, 01, 0, 6 )",           ""
+~CHQAMT:        0,      "99,999,999.99",    "BKTRN->NETAMT",            "sumchq=sumchq+BKTRN->NETAMT"
+~CHQREM:        0,      "",                 "BKTRN->REMARK",            ""
+~SUMCHQ:        0,      "99,999,999.99",    "sumchq",                   ""
+~SUMCHQ_OK:     0,      "",                 "sumchq_ok",                "sumchq_ok = IIF(STR(sumchq,15,2)=STR(ARMAS->CHQRCV,15,2), '               ', '<-ยอดไม่ถูกต้อง')"
+
+~REFIVC:        0,      "",                 "ARRCPCQ->RCPNUM",          ""
+~REFAMT:        0,      "99,999,999.99",    "ARRCPCQ->RCVAMT",          ""
+
+~RETAMT:        0,      "99,999,999.99",    "BKTRN->NETAMT",            "sumret=sumret+BKTRN->NETAMT"
+~SUMRET:        0,      "99,999,999.99",    "sumret",                   ""
+
+~TOTDEB:        0,      "99,999,999.99",    "totdeb",                   "totdeb=sumivc+sumchq"
+~OVRLINE:       0,      "99,999,999.99",    "overline",                 "overline = ARMAS->BALANCE + ARMAS->CHQRCV - ARMAS->CRLINE - sumivcx; overline=IIF(overline<=0, 0, overline)"
+~TOTOVR:        0,      "**,***,**9.99",    "over",                     "over = IIF(overline > 0, overline+sumso, 0)"
+
+~HREM1:         0,      "",                 "x1",                       "x1=@p_hrem( A->CUSCOD,1 )"
+~HREM2:         0,      "",                 "x2",                       "x2=@p_hrem( A->CUSCOD,2 )"
+~HREM3:         0,      "",                 "x3",                       "x3=@p_hrem( A->CUSCOD,3 )"
+~HREM4:         0,      "",                 "x4",                       "x4=@p_hrem( A->CUSCOD,4 )"
+~HREM5:         0,      "",                 "x5",                       "x5=@p_hrem( A->CUSCOD,5 )"
+
+
+

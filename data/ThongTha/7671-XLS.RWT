@@ -1,0 +1,84 @@
+* STTOPARC.RWT - Top Sales by Customer Report
+*
+[report frame]
+Ti::~INIT_VAR
+He:\NAME                         ","","","","","","","","","หน้า",": \PAGE
+He:$Eจัดลำดับยอดขายของลูกค้า จากบิลลูกค้า$E  ตั้งแต่วันที่ ~FROMDATE   ถึงวันที่ ~TODATE      (~TOP ลำดับแรก)
+He:รหัสลูกค้า จาก   ~CUSCOD1        ถึง  ~CUSCOD2 ","","","","","","","","","วันที",": \DATE           
+H1:ประเภทลูกค้าจาก  ~FROMCUSTYP     ถึง  ~TOCUSTYP
+H1:พนักงานขาย       ~FROMSLM        ถึง  ~TOSLM             เลือกแผนก  ~FROMDEP
+He:\LINE
+He:ลำดับ","รหัสลูกค้า","ชื่อลูกค้า","ขายสด","ขายเชื่อ","เพิ่มหนี้","ลดหนี้","ยอดขายสุทธิ","ต้นทุนขาย","กำไรขั้นต้น","(%)
+He:\LINE
+*  xxxx  xxxxxxxxxx  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 999,999,999.99 99,999.99
+Bo:~NN   ~CUSCOD     ~CUSNAM                                      ~CSHSAL        ~CRESAL        ~DNVAL         ~RETSAL        ~SALVAL        ~TRNVAL        ~PROFIT        ~PFRAT
+Su:                                                               -------------- -------------- -------------- -------------- -------------- -------------- -------------- 
+Su:                      รวมทั้งสิ้น                              ~TCSHSAL       ~TCRESAL       ~TDNVAL        ~TRETSAL       ~TSALVAL       ~TTRNVAL       ~TPROFIT       ~TPF
+Su:                                                               ============== ============== ============== ============== ============== ============== ============== 
+Su:>>>>  จบรายงาน  <<<<
+[end frame]
+
+[print options]
+Top=0
+Left=0
+Right=180
+Lines=41
+Output=Select, Printer, Screen, File,
+File Name=STTOPARC.TXT
+Fix Foot Line=OFF
+Select Scope=OFF
+Select Page=OFF
+*Select Paper=15_Inch, 8_Inch, Default
+Select Paper=15_Inch, Default
+8_Inch=\027\033\005
+*15_Inch=\027\033\001
+15_Inch=\027\033\000\027\103
+Date Format=DD/MM/YYYY
+
+[master file]
+File=A
+Alias=A
+Key=SALVAL
+Descending=Y
+*Filter=STKGRP='00'
+*** the field STKGRP in this specially case is mean to CUSTYP
+System=DATA_PATH
+
+[data spec]
+*~dat:      len,"pict",             "data",         "exp"
+~INIT_VAR:  0,  "",                 "",             "TCSHSAL=0;TCRESAL=0;TDNVAL=0;TRETSAL=0;TSALVAL=0;TRCPVAL=0;TTRNVAL=0;TPROFIT=0"
+~TOP:       0,  "9999",             "prntop()",     ""
+~NN:        4,  "",                 "prncount()",   ""
+~CUSCOD1:   0,  "",                 "Cus1()",       ""
+~CUSCOD2:   0,  "",                 "Cus2()",       ""
+~FROMCUSTYP: 0, "",                 "CusTyp1()",    ""
+~TOCUSTYP:  0,  "",                 "CusTyp2()",    ""
+~FROMSLM:   0,  "",                 "Slm1()",       ""
+~TOSLM:     0,  "",                 "Slm2()",       ""
+~FROMDEP:   0,  "",                 "Dep1()",       ""
+~FROMDATE:  0,  "d ดดด yyyy",       "@date1()",     ""
+~TODATE:    0,  "d ดดด yyyy",       "@date2()",     ""
+~CUSCOD:    0,  "",                 "A->PEOPLE",    "",B
+~CUSNAM:    0,  "",                 "A->STKDES",    "",C
+
+~CSHSAL:    0,  "999,999,999.99",   "A->VAL1",      "TCSHSAL=TCSHSAL+A->VAL1",D
+~TCSHSAL:   0,  "999,999,999.99",   "TCSHSAL",      "",D
+~CRESAL:    0,  "999,999,999.99",   "A->VAL2",      "TCRESAL=TCRESAL+A->VAL2",E
+~TCRESAL:   0,  "999,999,999.99",   "TCRESAL",      "",E
+~DNVAL:     0,  "999,999,999.99",   "A->VAL3",      "TDNVAL=TDNVAL+A->VAL3",F
+~TDNVAL:    0,  "999,999,999.99",   "TDNVAL",       "",F
+~RETSAL:    0,  "999,999,999.99",   "A->VAL4",      "TRETSAL=TRETSAL+A->VAL4",G
+~TRETSAL:   0,  "999,999,999.99",   "TRETSAL",      "",G
+~RCPVAL:    0,  "999,999,999.99",   "A->VAL5",      "TRCPVAL=TRCPVAL+A->VAL5"
+~TRCPVAL:   0,  "999,999,999.99",   "TRCPVAL",      ""
+~SALVAL:    0,  "999,999,999.99",   "A->SALVAL",    "TSALVAL=TSALVAL+A->SALVAL",H
+~TSALVAL:   0,  "999,999,999.99",   "TSALVAL",      "",H
+~TRNVAL:    0,  "999,999,999.99",   "A->TRNVAL",    "TTRNVAL=TTRNVAL+A->TRNVAL; PROFIT=A->SALVAL - A->TRNVAL; PFRAT= PROFIT*100/A->SALVAL",I
+~PROFIT:    0,  "999,999,999.99",   "PROFIT",       "TPROFIT=TPROFIT+PROFIT",J
+~PFRAT:     0,  "99,999.99",        "PFRAT",        "",K
+~TTRNVAL:   0,  "999,999,999.99",   "TTRNVAL",      "",I
+~TPROFIT:   0,  "999,999,999.99",   "TPROFIT",      "TPF=TPROFIT*100/TSALVAL",J
+~TPF:       0,  "99,999.99",        "TPF",          "",K
+
+
+
