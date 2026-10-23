@@ -13,6 +13,11 @@ import {
   SalesReturnSheet,
   type SalesReturnData,
 } from "@/components/sales-returns/SalesReturnSheet";
+import {
+  AdvanceInvoiceSheet,
+  ADVANCE_INVOICE_PAGES_CONFIG,
+  type AdvanceInvoiceData,
+} from "@/components/advance-invoices/AdvanceInvoiceSheet";
 
 export default function InvoiceDetailPage({
   params,
@@ -78,6 +83,8 @@ export default function InvoiceDetailPage({
 
   const isSalesReturn =
     data.invoice.RECTYP === "5" || docnum.toUpperCase().startsWith("SR");
+  const isAdvanceInvoice =
+    data.invoice.RECTYP === "0" || docnum.toUpperCase().startsWith("AI");
 
   return (
     <AppShell>
@@ -100,6 +107,8 @@ export default function InvoiceDetailPage({
               <Printer size={16} />{" "}
               {isSalesReturn
                 ? "พิมพ์ / ดาวน์โหลด PDF (ใบลดหนี้/รับคืนสินค้า)"
+                : isAdvanceInvoice
+                ? "พิมพ์ / ดาวน์โหลด PDF (ใบรับเงินมัดจำ ครบ 3 ชุด)"
                 : "พิมพ์ / ดาวน์โหลด PDF (ครบ 4 สี)"}
             </a>
           </div>
@@ -108,6 +117,82 @@ export default function InvoiceDetailPage({
         {isSalesReturn ? (
           /* Sales Return (ใบลดหนี้/รับคืนสินค้า) View */
           <SalesReturnSheet data={data as SalesReturnData} />
+        ) : isAdvanceInvoice ? (
+          /* Advance Invoice (ใบรับเงินมัดจำ - 3 Copies: ฟ้า, ส้ม, เหลือง) */
+          <>
+            {/* Copy Selector Tabs */}
+            <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-1.5 overflow-x-auto">
+              <button
+                type="button"
+                onClick={() => setActiveTab("all")}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap ${
+                  activeTab === "all"
+                    ? "bg-slate-900 text-white shadow-md shadow-slate-900/10"
+                    : "text-slate-600 hover:bg-slate-100"
+                }`}
+              >
+                <Layers size={14} />
+                ดูทั้งหมด (ครบ 3 ชุด)
+              </button>
+
+              {ADVANCE_INVOICE_PAGES_CONFIG.map((cfg) => {
+                const isActive = activeTab === cfg.page;
+                return (
+                  <button
+                    key={cfg.page}
+                    type="button"
+                    onClick={() => setActiveTab(cfg.page)}
+                    className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap border ${
+                      isActive
+                        ? cfg.badgeActiveBg
+                        : "border-transparent text-slate-600 hover:bg-slate-100"
+                    }`}
+                  >
+                    <span
+                      className="w-3 h-3 rounded-full border border-black/20 shrink-0"
+                      style={{ backgroundColor: cfg.headerBg }}
+                    />
+                    <span>{cfg.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Voucher Views */}
+            {activeTab === "all" ? (
+              <div className="space-y-8">
+                {ADVANCE_INVOICE_PAGES_CONFIG.map((cfg) => (
+                  <div key={cfg.page} className="space-y-2">
+                    <div className="flex items-center gap-2 px-2">
+                      <span
+                        className="w-3 h-3 rounded-full border border-black/20"
+                        style={{ backgroundColor: cfg.headerBg }}
+                      />
+                      <span className="text-xs font-bold text-slate-700">
+                        {cfg.name} : {cfg.title} - {cfg.subtitle}
+                      </span>
+                    </div>
+                    <AdvanceInvoiceSheet
+                      data={data as AdvanceInvoiceData}
+                      config={cfg}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div>
+                {ADVANCE_INVOICE_PAGES_CONFIG.filter(
+                  (c) => c.page === activeTab
+                ).map((cfg) => (
+                  <AdvanceInvoiceSheet
+                    key={cfg.page}
+                    data={data as AdvanceInvoiceData}
+                    config={cfg}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           /* Regular Invoice (4 Continuous Form Copies) */
           <>

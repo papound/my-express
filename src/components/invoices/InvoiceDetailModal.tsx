@@ -11,6 +11,11 @@ import {
   SalesReturnSheet,
   type SalesReturnData,
 } from "@/components/sales-returns/SalesReturnSheet";
+import {
+  AdvanceInvoiceSheet,
+  ADVANCE_INVOICE_PAGES_CONFIG,
+  type AdvanceInvoiceData,
+} from "@/components/advance-invoices/AdvanceInvoiceSheet";
 
 export function InvoiceDetailModal({
   docnum,
@@ -65,6 +70,8 @@ export function InvoiceDetailModal({
 
   const isSalesReturn =
     data?.invoice?.RECTYP === "5" || docnum.toUpperCase().startsWith("SR");
+  const isAdvanceInvoice =
+    data?.invoice?.RECTYP === "0" || docnum.toUpperCase().startsWith("AI");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 md:p-6 overflow-y-auto">
@@ -80,7 +87,11 @@ export function InvoiceDetailModal({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 border-b border-slate-200 bg-slate-50 gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <span className="font-bold text-slate-800 text-xs sm:text-sm shrink-0">
-              {isSalesReturn ? "ใบลดหนี้ / รับคืนสินค้า:" : "รายละเอียด:"}
+              {isSalesReturn
+                ? "ใบลดหนี้ / รับคืนสินค้า:"
+                : isAdvanceInvoice
+                ? "ใบรับเงินมัดจำ:"
+                : "รายละเอียด:"}
             </span>
             <span className="font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200/60 text-xs truncate">
               {docnum}
@@ -109,8 +120,8 @@ export function InvoiceDetailModal({
           </div>
         </div>
 
-        {/* Modal Copy Switcher Tabs (Only for regular continuous invoice) */}
-        {data && !isSalesReturn && (
+        {/* Modal Copy Switcher Tabs */}
+        {data && !isSalesReturn && !isAdvanceInvoice && (
           <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto">
             <button
               type="button"
@@ -149,6 +160,45 @@ export function InvoiceDetailModal({
           </div>
         )}
 
+        {data && isAdvanceInvoice && (
+          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto">
+            <button
+              type="button"
+              onClick={() => setActiveTab("all")}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${
+                activeTab === "all"
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              <Layers size={13} />
+              <span>ดูทั้งหมด (ครบ 3 ชุด)</span>
+            </button>
+
+            {ADVANCE_INVOICE_PAGES_CONFIG.map((cfg) => {
+              const isActive = activeTab === cfg.page;
+              return (
+                <button
+                  key={cfg.page}
+                  type="button"
+                  onClick={() => setActiveTab(cfg.page)}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap border ${
+                    isActive
+                      ? cfg.badgeActiveBg
+                      : "border-transparent text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  <span
+                    className="w-2.5 h-2.5 rounded-full border border-black/20 shrink-0"
+                    style={{ backgroundColor: cfg.headerBg }}
+                  />
+                  <span>{cfg.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* Modal Body */}
         <div className="p-3 sm:p-5 md:p-6 overflow-y-auto relative space-y-4">
           {loading ? (
@@ -162,6 +212,40 @@ export function InvoiceDetailModal({
             </div>
           ) : isSalesReturn ? (
             <SalesReturnSheet data={data as SalesReturnData} />
+          ) : isAdvanceInvoice ? (
+            activeTab === "all" ? (
+              <div className="space-y-6">
+                {ADVANCE_INVOICE_PAGES_CONFIG.map((cfg) => (
+                  <div key={cfg.page} className="space-y-1.5">
+                    <div className="text-[11px] font-bold text-slate-600 flex items-center gap-1.5 px-1">
+                      <span
+                        className="w-2.5 h-2.5 rounded-full border border-black/20"
+                        style={{ backgroundColor: cfg.headerBg }}
+                      />
+                      <span>
+                        {cfg.name} : {cfg.title} - {cfg.subtitle}
+                      </span>
+                    </div>
+                    <AdvanceInvoiceSheet
+                      data={data as AdvanceInvoiceData}
+                      config={cfg}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div>
+                {ADVANCE_INVOICE_PAGES_CONFIG.filter(
+                  (c) => c.page === activeTab
+                ).map((cfg) => (
+                  <AdvanceInvoiceSheet
+                    key={cfg.page}
+                    data={data as AdvanceInvoiceData}
+                    config={cfg}
+                  />
+                ))}
+              </div>
+            )
           ) : activeTab === "all" ? (
             <div className="space-y-6">
               {INVOICE_PAGES_CONFIG.map((cfg) => (

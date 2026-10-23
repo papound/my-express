@@ -1,6 +1,10 @@
 import { readAll, cleanStr, cleanNum, cleanDate } from "@/lib/dbf/reader";
 import { renderHtmlToPdf } from "@/lib/pdf/renderer";
-import { generateInvoiceHtml, generateSalesReturnHtml } from "@/lib/pdf/templates";
+import {
+  generateInvoiceHtml,
+  generateSalesReturnHtml,
+  generateAdvanceInvoiceHtml,
+} from "@/lib/pdf/templates";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -96,6 +100,9 @@ export async function GET(
       VATAMT: cleanNum(header.VATAMT),
       NETAMT: cleanNum(header.NETAMT),
       IVCAMT: cleanNum(header.IVCAMT),
+      CSHRCV: cleanNum(header.CSHRCV),
+      CHQRCV: cleanNum(header.CHQRCV),
+      TAX: cleanNum(header.TAX),
       VATRAT: cleanNum(header.VATRAT),
     };
 
@@ -115,8 +122,18 @@ export async function GET(
 
     const isSalesReturn =
       invoice.RECTYP === "5" || docNum.toUpperCase().startsWith("SR");
+    const isAdvanceInvoice =
+      invoice.RECTYP === "0" || docNum.toUpperCase().startsWith("AI");
 
-    const html = isSalesReturn
+    const html = isAdvanceInvoice
+      ? generateAdvanceInvoiceHtml({
+          invoice,
+          customer: customerData,
+          items,
+          remarks,
+          company,
+        })
+      : isSalesReturn
       ? generateSalesReturnHtml({
           invoice,
           customer: customerData,
