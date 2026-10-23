@@ -11,10 +11,11 @@ export async function GET(
     const { bilnum } = await params;
     const bilNum = decodeURIComponent(bilnum).trim();
 
-    const [rawBil, rawMas, rawTrn, rawInfo] = await Promise.all([
+    const [rawBil, rawMas, rawTrn, rawRm, rawInfo] = await Promise.all([
       readAll<Record<string, unknown>>("ARBIL"),
       readAll<Record<string, unknown>>("ARMAS"),
       readAll<Record<string, unknown>>("ARTRN"),
+      readAll<Record<string, unknown>>("ARTRNRM"),
       readAll<Record<string, unknown>>("ISINFO"),
     ]);
 
@@ -32,12 +33,24 @@ export async function GET(
       .map((inv) => ({
         DOCNUM: cleanStr(inv.DOCNUM),
         DOCDAT: cleanDate(inv.DOCDAT),
+        DUEDAT: cleanDate(inv.DUEDAT),
+        RECTYP: cleanStr(inv.RECTYP),
         AMOUNT: cleanNum(inv.AMOUNT),
         VATAMT: cleanNum(inv.VATAMT),
         NETAMT: cleanNum(inv.NETAMT),
+        RCVAMT: cleanNum(inv.RCVAMT),
         REMAMT: cleanNum(inv.REMAMT),
       }))
       .sort((a, b) => (a.DOCDAT?.getTime() ?? 0) - (b.DOCDAT?.getTime() ?? 0));
+
+    // Remarks from ARTRNRM (where DOCNUM === bilNum)
+    const remarks = rawRm
+      .filter((r) => cleanStr(r.DOCNUM) === bilNum)
+      .map((r) => ({
+        SEQNUM: cleanStr(r.SEQNUM),
+        REMARK: cleanStr(r.REMARK),
+      }))
+      .sort((a, b) => a.SEQNUM.localeCompare(b.SEQNUM));
 
     const companyRaw = rawInfo[0];
     const company = companyRaw
@@ -54,6 +67,7 @@ export async function GET(
       BILNUM: cleanStr(header.BILNUM),
       BILDAT: cleanDate(header.BILDAT),
       CUSCOD: cuscod,
+      BILOUT: cleanDate(header.BILOUT),
       APPDAT: cleanDate(header.APPDAT),
       PAYCOND: cleanStr(header.PAYCOND),
       REMARK: cleanStr(header.REMARK),
@@ -63,11 +77,14 @@ export async function GET(
     const customerData = customer
       ? {
           CUSNAM: cleanStr(customer.CUSNAM),
+          PRENAM: cleanStr(customer.PRENAM),
           ADDR01: cleanStr(customer.ADDR01),
           ADDR02: cleanStr(customer.ADDR02),
           ADDR03: cleanStr(customer.ADDR03),
           ZIPCOD: cleanStr(customer.ZIPCOD),
           TELNUM: cleanStr(customer.TELNUM),
+          TAXID: cleanStr(customer.TAXID),
+          ORGNUM: cleanNum(customer.ORGNUM),
         }
       : null;
 
@@ -75,6 +92,7 @@ export async function GET(
       billing,
       customer: customerData,
       invoices,
+      remarks,
       company,
     });
 

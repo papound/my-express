@@ -848,131 +848,311 @@ export function generateBillingHtml(data: {
   billing: any;
   customer?: any;
   invoices: any[];
+  remarks?: any[];
   company?: any;
 }): string {
-  const { billing, customer, invoices, company } = data;
+  const { billing, customer, invoices, remarks, company } = data;
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
+
+  const fmtThaiDateShort = (d: Date | string | null): string => {
+    if (!d) return "-";
+    const dateObj = typeof d === "string" ? new Date(d) : d;
+    if (isNaN(dateObj.getTime())) return "-";
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const buddhistYear = dateObj.getFullYear() + 543;
+    const yearShort = String(buddhistYear % 100).padStart(2, "0");
+    return `${day}/${month}/${yearShort}`;
+  };
+
+  const BILLING_PAGES = [
+    {
+      page: 1,
+      title: "ใบวางบิล",
+      subtitle: "ต้นฉบับ (สำหรับลูกค้า)",
+    },
+    {
+      page: 2,
+      title: "ใบวางบิล",
+      subtitle: "สำเนา (สำหรับฝ่ายการเงิน)",
+    },
+  ];
 
   return `
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <style>${baseStyles}</style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
+    @page {
+      size: A4;
+      margin: 8mm 10mm;
+    }
+    * {
+      box-sizing: border-box;
+      font-family: 'Sarabun', 'Noto Sans Thai', Tahoma, sans-serif;
+    }
+    body {
+      font-size: 11.5px;
+      line-height: 1.35;
+      color: #111;
+      margin: 0;
+      padding: 0;
+    }
+    .billing-page {
+      page-break-after: always;
+      position: relative;
+      min-height: 275mm;
+      max-height: 282mm;
+      box-sizing: border-box;
+      padding-bottom: 4mm;
+    }
+    .billing-page:last-child {
+      page-break-after: avoid;
+    }
+    .watermark-layer {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 410px;
+      opacity: 0.13;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .content-layer {
+      position: relative;
+      z-index: 1;
+    }
+    .company-logo {
+      height: 56px;
+      width: 56px;
+      object-fit: contain;
+      margin-right: 12px;
+    }
+    .box-bordered {
+      border: 1px solid #444;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .items-table th {
+      border-bottom: 1px solid #444;
+      border-right: 1px solid #444;
+      padding: 4px 6px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .items-table th:last-child {
+      border-right: none;
+    }
+    .items-table td {
+      border-right: 1px solid #444;
+      border-bottom: 1px solid #eee;
+      padding: 3.5px 6px;
+      vertical-align: top;
+    }
+    .items-table td:last-child {
+      border-right: none;
+    }
+    .font-mono { font-family: monospace; }
+  </style>
 </head>
 <body>
-  ${watermarkBase64 ? `<img src="${watermarkBase64}" class="watermark" alt="Watermark" />` : ""}
+  ${BILLING_PAGES.map(
+    (p) => `
+  <div class="billing-page">
+    ${watermarkBase64 ? `<img src="${watermarkBase64}" class="watermark-layer" alt="Watermark" />` : ""}
 
-  <div class="content-layer">
-    <!-- Header with LOGO.bmp -->
-    <table style="width: 100%; margin-bottom: 15px;">
-      <tr>
-        <td style="width: 65%; vertical-align: middle;">
-          <div style="display: flex; align-items: center;">
-            ${logoBase64 ? `<img src="${logoBase64}" class="company-logo" alt="Logo" />` : ""}
-            <div>
-              <div style="font-size: 16px; font-weight: 700;">${company?.THINAM || "บริษัท ธงธัญ จำกัด"}</div>
-              <div style="font-size: 12px; color: #444; margin-top: 3px;">
-                ${company?.ADDR01 || ""} ${company?.ADDR02 || ""}<br>
-                โทรศัพท์: ${company?.TELNUM || "-"} | เลขประจำตัวผู้เสียภาษี: ${company?.TAXID || "-"}
+    <div class="content-layer">
+      <!-- Header -->
+      <table style="width: 100%; margin-bottom: 6px; border-collapse: collapse;">
+        <tr>
+          <!-- Company details on Left -->
+          <td style="vertical-align: top; width: 62%;">
+            <div style="display: flex; align-items: flex-start;">
+              ${logoBase64 ? `<img src="${logoBase64}" class="company-logo" alt="Logo" />` : ""}
+              <div>
+                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+                <div style="font-size: 11px; color: #333; margin-top: 1px;">
+                  ${company?.ADDR01 || ""} ${company?.ADDR02 || ""}<br>
+                  ${company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                </div>
               </div>
             </div>
-          </div>
-        </td>
-        <td style="width: 35%; vertical-align: top; text-align: right;">
-          <div class="doc-title">ใบวางบิล / ใบแจ้งหนี้</div>
-          <div class="doc-num" style="margin-top: 4px;">เลขที่: <span class="font-mono">${billing.BILNUM}</span></div>
-          <div style="font-size: 12px; color: #555; margin-top: 2px;">วันที่: ${fmtDate(billing.BILDAT)}</div>
-        </td>
-      </tr>
-    </table>
+          </td>
 
-    <!-- Customer & Details -->
-    <table style="width: 100%; margin-bottom: 15px;" class="border-box">
-      <tr>
-        <td style="width: 60%; vertical-align: top; padding-right: 15px;">
-          <div><strong>ลูกค้า:</strong> [${billing.CUSCOD}] ${customer?.CUSNAM || ""}</div>
-          <div style="font-size: 12px; color: #444; margin-top: 2px;">
-            ที่อยู่: ${customer?.ADDR01 || ""} ${customer?.ADDR02 || ""} ${customer?.ADDR03 || ""} ${customer?.ZIPCOD || ""}
-          </div>
-          <div style="font-size: 12px; color: #444;">โทร: ${customer?.TELNUM || "-"}</div>
-        </td>
-        <td style="width: 40%; vertical-align: top; font-size: 12px; border-left: 1px solid #ddd; padding-left: 15px;">
-          <div><strong>วันที่นัดรับเงิน:</strong> ${fmtDate(billing.APPDAT)}</div>
-          <div><strong>เงื่อนไขชำระ:</strong> ${billing.PAYCOND || "-"}</div>
-          <div><strong>หมายเหตุ:</strong> ${billing.REMARK || "-"}</div>
-        </td>
-      </tr>
-    </table>
-
-    <!-- Invoices Table -->
-    <table class="items-table" style="margin-bottom: 15px;">
-      <thead>
-        <tr>
-          <th class="text-center" style="width: 8%;">ลำดับ</th>
-          <th class="text-left" style="width: 25%;">เลขที่เอกสาร</th>
-          <th class="text-center" style="width: 20%;">วันที่เอกสาร</th>
-          <th class="text-right" style="width: 22%;">ภาษีมูลค่าเพิ่ม</th>
-          <th class="text-right" style="width: 25%;">จำนวนเงินสุทธิ</th>
+          <!-- Right: Pill Badge + Subtitle -->
+          <td style="vertical-align: top; width: 38%; text-align: right; padding-top: 4px;">
+            <div style="display: inline-flex; align-items: center; gap: 8px;">
+              <div style="background-color: #a6caf0; border-radius: 8px; padding: 4px 16px; font-size: 15px; font-weight: 700; color: #000; border: 1px solid rgba(0,0,0,0.2);">
+                ${p.title}
+              </div>
+              <div style="font-size: 13px; font-weight: 700; color: #000;">
+                ${p.subtitle}
+              </div>
+            </div>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        ${invoices
-          .map(
-            (inv, idx) => `
-          <tr>
-            <td class="text-center font-mono">${idx + 1}</td>
-            <td class="font-mono font-bold">${inv.DOCNUM}</td>
-            <td class="text-center">${fmtDate(inv.DOCDAT)}</td>
-            <td class="text-right font-mono">${fmtMoney(inv.VATAMT || 0)}</td>
-            <td class="text-right font-mono font-bold">${fmtMoney(inv.NETAMT || inv.RCVAMT || 0)}</td>
-          </tr>
-        `
-          )
-          .join("")}
-      </tbody>
-    </table>
+      </table>
 
-    <!-- Total Summary -->
-    <table style="width: 100%;">
-      <tr>
-        <td style="width: 55%; vertical-align: top; padding-right: 20px;">
-          <div style="margin-top: 10px; background-color: rgba(249, 250, 251, 0.85); padding: 6px 10px; border-radius: 4px; font-weight: 600;">
-            ( ${bahtText(billing.NETAMT)} )
-          </div>
-        </td>
-        <td style="width: 45%; vertical-align: top;">
-          <table class="summary-table">
-            <tr style="border-top: 1px solid #333; border-bottom: 2px solid #333; font-weight: 700; font-size: 14px;">
-              <td class="text-right" style="padding: 6px 4px;">ยอดรวมทั้งสิ้น:</td>
-              <td class="text-right font-mono" style="padding: 6px 4px; width: 120px;">${fmtMoney(billing.NETAMT)}</td>
+      <!-- Customer & Billing Details Box -->
+      <table class="box-bordered" style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 6px;">
+        <tr>
+          <!-- Left: Customer Info -->
+          <td style="width: 55%; vertical-align: top; padding: 8px 12px; border-right: 1px solid #444;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="width: 65px; font-weight: 600; vertical-align: top;">ลูกค้า</td>
+                <td style="vertical-align: top; font-weight: 600;">${billing.CUSCOD}</td>
+              </tr>
+              <tr>
+                <td colspan="2" style="font-weight: 600; font-size: 11.5px; padding-top: 2px;">
+                  ${customer?.PRENAM ? customer.PRENAM + " " : ""}${customer?.CUSNAM || ""}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="color: #333; line-height: 1.35; padding-top: 2px;">
+                  ${customer?.ADDR01 || ""}<br>
+                  ${customer?.ADDR02 || ""}<br>
+                  ${customer?.ADDR03 || ""} ${customer?.ZIPCOD || ""}
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 4px; vertical-align: top;">หมายเหตุ</td>
+                <td style="padding-top: 4px; color: #333;">${billing.REMARK || ""}</td>
+              </tr>
+            </table>
+          </td>
+
+          <!-- Right: Billing Details -->
+          <td style="width: 45%; vertical-align: top; padding: 8px 12px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+              <tr>
+                <td style="font-weight: 600; width: 120px;">เลขที่ใบวางบิล</td>
+                <td style="font-family: monospace; font-weight: 700; font-size: 12.5px;">${billing.BILNUM}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 8px;">วันที่</td>
+                <td style="padding-top: 8px; font-weight: 600;">${fmtThaiDateShort(billing.BILDAT)}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 8px;">เงื่อนไขการชำระเงิน</td>
+                <td style="padding-top: 8px; font-weight: 600;">${billing.PAYCOND || "-"}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Invoices Table Box -->
+      <div class="box-bordered" style="margin-bottom: 0; border-bottom: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
+        <table class="items-table">
+          <thead>
+            <tr style="background-color: transparent;">
+              <th style="width: 6%;">No.</th>
+              <th style="width: 22%; text-align: left;">เลขที่ใบกำกับ</th>
+              <th style="width: 14%;">วันที่</th>
+              <th style="width: 14%;">ครบกำหนด</th>
+              <th style="width: 15%; text-align: right;">จำนวนเงิน</th>
+              <th style="width: 14%; text-align: right;">ชำระแล้ว</th>
+              <th style="width: 15%; text-align: right;">เงินคงค้าง</th>
             </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
+          </thead>
+          <tbody>
+            ${invoices
+              .map(
+                (inv, idx) => `
+              <tr>
+                <td style="text-align: center; font-family: monospace;">${idx + 1}</td>
+                <td style="text-align: left; font-family: monospace; font-weight: 600;">${inv.DOCNUM}</td>
+                <td style="text-align: center;">${fmtThaiDateShort(inv.DOCDAT)}</td>
+                <td style="text-align: center;">${fmtThaiDateShort(inv.DUEDAT)}</td>
+                <td style="text-align: right; font-family: monospace;">${fmtMoney(inv.NETAMT || inv.AMOUNT)}</td>
+                <td style="text-align: right; font-family: monospace;">${inv.RCVAMT > 0 ? fmtMoney(inv.RCVAMT) : ""}</td>
+                <td style="text-align: right; font-family: monospace; font-weight: 600;">${fmtMoney(inv.REMAMT !== undefined ? inv.REMAMT : inv.NETAMT)}</td>
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
 
-    <!-- Signatures -->
-    <div class="signatures">
-      <div class="sig-col">
-        <div class="sig-line"></div>
-        <div>ผู้วางบิล</div>
-        <div style="font-size: 11px; color: #666; margin-top: 2px;">วันที่ ...../...../.....</div>
+      <!-- Summary Total Bar -->
+      <table class="box-bordered" style="width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0;">
+        <tr>
+          <td style="width: 65%; padding: 7px 12px; font-weight: 600; border-right: 1px solid #444;">
+            (${bahtText(billing.NETAMT)}).
+          </td>
+          <td style="width: 35%; padding: 7px 12px;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="font-weight: 600;">รวมเงินทั้งสิ้น</td>
+                <td style="text-align: right; font-family: monospace; font-weight: 700; font-size: 12.5px;">${fmtMoney(billing.NETAMT)}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Remarks Section (Banks / Notes) -->
+      <div style="margin-top: 14px; margin-bottom: 24px; font-size: 11px; line-height: 1.6; padding-left: 8px;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="width: 70px; vertical-align: top; font-weight: 600;">หมายเหตุ</td>
+            <td style="vertical-align: top;">
+              ${
+                remarks && remarks.length > 0
+                  ? remarks.map((r: any) => `<div>${r.REMARK}</div>`).join("")
+                  : billing.REMARK
+                  ? `<div>${billing.REMARK}</div>`
+                  : ""
+              }
+            </td>
+          </tr>
+        </table>
       </div>
-      <div class="sig-col">
-        <div class="sig-line"></div>
-        <div>ผู้รับวางบิล (ลูกค้า)</div>
-        <div style="font-size: 11px; color: #666; margin-top: 2px;">วันที่ ...../...../.....</div>
-      </div>
-      <div class="sig-col">
-        <div class="sig-line"></div>
-        <div>ผู้มีอำนาจลงนาม</div>
-        <div style="font-size: 11px; color: #666; margin-top: 2px;">วันที่ ...../...../.....</div>
-      </div>
+
+      <!-- Bottom Signatures Box -->
+      <table class="box-bordered" style="width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px;">
+        <tr>
+          <!-- Left: Receiver Signatures -->
+          <td style="width: 50%; vertical-align: top; padding: 12px 16px; border-right: 1px solid #444;">
+            <div style="margin-bottom: 10px;">
+              ชื่อผู้รับวางบิล &nbsp; ____________________
+            </div>
+            <div style="margin-bottom: 10px;">
+              วันที่รับ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ___/___/___
+            </div>
+            <div>
+              วันที่นัดรับเช็ค &nbsp; ___/___/___
+            </div>
+          </td>
+
+          <!-- Right: Issuer Signatures -->
+          <td style="width: 50%; vertical-align: top; padding: 12px 16px;">
+            <div style="margin-bottom: 18px;">
+              ในนาม &nbsp; <strong>${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</strong>
+            </div>
+            <div>
+              ชื่อผู้วางบิล &nbsp; ____________________
+            </div>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
+  `
+  ).join("")}
 </body>
 </html>
 `;
