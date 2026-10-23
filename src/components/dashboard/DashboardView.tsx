@@ -290,7 +290,11 @@ export function DashboardView() {
                             ? "bg-blue-50 text-blue-700 border border-blue-200/50"
                             : inv.RECTYP === "5"
                             ? "bg-rose-50 text-rose-700 border border-rose-200/50"
-                            : "bg-purple-50 text-purple-700 border border-purple-200/50"
+                            : inv.RECTYP === "0"
+                            ? "bg-purple-50 text-purple-700 border border-purple-200/50"
+                            : inv.RECTYP === "9"
+                            ? "bg-teal-50 text-teal-700 border border-teal-200/50"
+                            : "bg-slate-100 text-slate-700 border border-slate-200/50"
                         }`}
                       >
                         {inv.RECTYP === "1"
@@ -299,7 +303,11 @@ export function DashboardView() {
                           ? "ขายเชื่อ"
                           : inv.RECTYP === "5"
                           ? "รับคืน"
-                          : "เงินมัดจำ"}
+                          : inv.RECTYP === "0"
+                          ? "เงินมัดจำ"
+                          : inv.RECTYP === "9"
+                          ? "รับชำระหนี้"
+                          : "อื่นๆ"}
                       </span>
                     </td>
                     <td className="py-3 px-2">

@@ -52,6 +52,10 @@ const TYPE_CONFIG: Record<string, { label: string; badgeClass: string }> = {
     label: "เพิ่มหนี้",
     badgeClass: "bg-amber-50 text-amber-700 border-amber-200/80",
   },
+  "9": {
+    label: "รับชำระหนี้",
+    badgeClass: "bg-teal-50 text-teal-700 border-teal-200/80",
+  },
 };
 
 const STATUS_CONFIG: Record<string, { label: string; dotClass: string }> = {
@@ -155,6 +159,7 @@ export default function InvoicesPage() {
                 { id: "1", label: "ขายเงินสด (HS)" },
                 { id: "5", label: "รับคืน (SR)" },
                 { id: "0", label: "เงินมัดจำ (AI)" },
+                { id: "9", label: "รับชำระหนี้ (RE)" },
               ].map((tab) => (
                 <button
                   key={tab.id}
