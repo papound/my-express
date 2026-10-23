@@ -1,21 +1,15 @@
-import fs from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
-
-const DATA_PATH = process.env.DBF_DATA_PATH || "./data/ThongTha";
+import { getCompanyLogoBuffer } from "@/lib/logo";
 
 export async function GET() {
   try {
-    const dir = path.resolve(DATA_PATH);
-    const files = fs.readdirSync(dir);
-    const logoFile = files.find((f) => f.toLowerCase() === "logo.bmp");
+    const buffer = getCompanyLogoBuffer();
 
-    if (!logoFile) {
+    if (!buffer) {
       return new NextResponse("Logo not found", { status: 404 });
     }
 
-    const buffer = fs.readFileSync(path.join(dir, logoFile));
-    return new NextResponse(buffer, {
+    return new NextResponse(new Uint8Array(buffer), {
       headers: {
         "Content-Type": "image/bmp",
         "Cache-Control": "public, max-age=86400",
@@ -25,4 +19,3 @@ export async function GET() {
     return new NextResponse("Failed to read logo", { status: 500 });
   }
 }
-

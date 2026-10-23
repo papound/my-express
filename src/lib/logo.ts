@@ -1,19 +1,73 @@
 import fs from "fs";
 import path from "path";
 
-const DATA_PATH = process.env.DBF_DATA_PATH || "./data/ThongTha";
+const LOGO_DIRS = [
+  process.env.LOGO_PATH || "./data/logo",
+  process.env.DBF_DATA_PATH || "./data/ThongTha",
+  "./data",
+];
+
+function findLogoBuffer(isWatermark: boolean): Buffer | null {
+  for (const dirPath of LOGO_DIRS) {
+    const dir = path.resolve(dirPath);
+    if (!fs.existsSync(dir)) continue;
+
+    try {
+      const files = fs.readdirSync(dir);
+      let match: string | undefined;
+
+      if (!isWatermark) {
+        match = files.find((f) => f.toLowerCase() === "logo.bmp");
+      } else {
+        match = files.find(
+          (f) =>
+            f.toUpperCase().includes("LOGO") &&
+            f.toLowerCase().endsWith(".bmp") &&
+            f.toLowerCase() !== "logo.bmp"
+        );
+      }
+
+      if (match) {
+        return fs.readFileSync(path.join(dir, match));
+      }
+    } catch {
+      // Continue to next directory
+    }
+  }
+  return null;
+}
+
+/**
+ * ดึง Buffer ของ LOGO.bmp
+ */
+export function getCompanyLogoBuffer(): Buffer | null {
+  try {
+    return findLogoBuffer(false);
+  } catch (err) {
+    console.warn("Could not read company logo buffer:", err);
+    return null;
+  }
+}
+
+/**
+ * ดึง Buffer ของ LOGOอ่อน2.bmp
+ */
+export function getWatermarkLogoBuffer(): Buffer | null {
+  try {
+    return findLogoBuffer(true);
+  } catch (err) {
+    console.warn("Could not read watermark logo buffer:", err);
+    return null;
+  }
+}
 
 /**
  * ดึง base64 data URL ของ LOGO.bmp
  */
 export function getCompanyLogoBase64(): string {
   try {
-    const dir = path.resolve(DATA_PATH);
-    const files = fs.readdirSync(dir);
-    const logoFile = files.find((f) => f.toLowerCase() === "logo.bmp");
-    if (!logoFile) return "";
-
-    const buffer = fs.readFileSync(path.join(dir, logoFile));
+    const buffer = getCompanyLogoBuffer();
+    if (!buffer) return "";
     return `data:image/bmp;base64,${buffer.toString("base64")}`;
   } catch (err) {
     console.warn("Could not load LOGO.bmp:", err);
@@ -26,22 +80,11 @@ export function getCompanyLogoBase64(): string {
  */
 export function getWatermarkLogoBase64(): string {
   try {
-    const dir = path.resolve(DATA_PATH);
-    const files = fs.readdirSync(dir);
-    // Find file containing 'LOGO' and '2.bmp' or 'อ่อน'
-    const wmFile = files.find(
-      (f) =>
-        f.toUpperCase().includes("LOGO") &&
-        f.toLowerCase().endsWith(".bmp") &&
-        f.toLowerCase() !== "logo.bmp"
-    );
-    if (!wmFile) return "";
-
-    const buffer = fs.readFileSync(path.join(dir, wmFile));
+    const buffer = getWatermarkLogoBuffer();
+    if (!buffer) return "";
     return `data:image/bmp;base64,${buffer.toString("base64")}`;
   } catch (err) {
     console.warn("Could not load watermark logo:", err);
     return "";
   }
 }
-

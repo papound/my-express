@@ -1,26 +1,15 @@
-import fs from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
-
-const DATA_PATH = process.env.DBF_DATA_PATH || "./data/ThongTha";
+import { getWatermarkLogoBuffer } from "@/lib/logo";
 
 export async function GET() {
   try {
-    const dir = path.resolve(DATA_PATH);
-    const files = fs.readdirSync(dir);
-    const wmFile = files.find(
-      (f) =>
-        f.toUpperCase().includes("LOGO") &&
-        f.toLowerCase().endsWith(".bmp") &&
-        f.toLowerCase() !== "logo.bmp"
-    );
+    const buffer = getWatermarkLogoBuffer();
 
-    if (!wmFile) {
+    if (!buffer) {
       return new NextResponse("Watermark logo not found", { status: 404 });
     }
 
-    const buffer = fs.readFileSync(path.join(dir, wmFile));
-    return new NextResponse(buffer, {
+    return new NextResponse(new Uint8Array(buffer), {
       headers: {
         "Content-Type": "image/bmp",
         "Cache-Control": "public, max-age=86400",
@@ -30,4 +19,3 @@ export async function GET() {
     return new NextResponse("Failed to read watermark logo", { status: 500 });
   }
 }
-
