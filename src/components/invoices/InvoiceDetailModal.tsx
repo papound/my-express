@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, Printer, RefreshCw, Layers } from "lucide-react";
+import { X, Printer, RefreshCw, Layers, ArrowLeft } from "lucide-react";
 import {
   InvoiceSheet,
   INVOICE_PAGES_CONFIG,
@@ -34,13 +34,28 @@ export function InvoiceDetailModal({
   docnum: string | null;
   onClose: () => void;
 }) {
+  const [docStack, setDocStack] = useState<string[]>([]);
   const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | number>(1);
 
+  // Reset drill-down stack when the root docnum changes
   useEffect(() => {
-    if (!docnum) {
+    setDocStack([]);
+  }, [docnum]);
+
+  const currentDocnum =
+    docStack.length > 0 ? docStack[docStack.length - 1] : docnum;
+  const previousDocnum =
+    docStack.length > 1
+      ? docStack[docStack.length - 2]
+      : docStack.length === 1
+      ? docnum
+      : null;
+
+  useEffect(() => {
+    if (!currentDocnum) {
       setData(null);
       setError("");
       return;
@@ -50,7 +65,7 @@ export function InvoiceDetailModal({
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(`/api/invoices/${encodeURIComponent(docnum)}`);
+        const res = await fetch(`/api/invoices/${encodeURIComponent(currentDocnum)}`);
         if (!res.ok) {
           const errJson = await res.json();
           throw new Error(errJson.error || "ไม่สามารถโหลดข้อมูลเอกสารได้");
@@ -65,27 +80,38 @@ export function InvoiceDetailModal({
     };
 
     fetchData();
-  }, [docnum]);
+  }, [currentDocnum]);
+
+  // Reset active tab to 1 whenever document changes
+  useEffect(() => {
+    setActiveTab(1);
+  }, [currentDocnum]);
 
   // Handle Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        if (docStack.length > 0) {
+          setDocStack((prev) => prev.slice(0, -1));
+        } else {
+          onClose();
+        }
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+  }, [onClose, docStack.length]);
 
-  if (!docnum) return null;
+  if (!docnum || !currentDocnum) return null;
 
   const isSalesReturn =
-    data?.invoice?.RECTYP === "5" || docnum.toUpperCase().startsWith("SR");
+    data?.invoice?.RECTYP === "5" || currentDocnum.toUpperCase().startsWith("SR");
   const isAdvanceInvoice =
-    data?.invoice?.RECTYP === "0" || docnum.toUpperCase().startsWith("AI");
+    data?.invoice?.RECTYP === "0" || currentDocnum.toUpperCase().startsWith("AI");
   const isCashSale =
-    data?.invoice?.RECTYP === "1" || docnum.toUpperCase().startsWith("HS");
+    data?.invoice?.RECTYP === "1" || currentDocnum.toUpperCase().startsWith("HS");
   const isReceipt =
-    data?.invoice?.RECTYP === "9" || docnum.toUpperCase().startsWith("RE");
+    data?.invoice?.RECTYP === "9" || currentDocnum.toUpperCase().startsWith("RE");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 md:p-6 overflow-y-auto">
@@ -100,6 +126,17 @@ export function InvoiceDetailModal({
         {/* Modal Top Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 border-b border-slate-200 bg-slate-50 gap-2">
           <div className="flex items-center gap-2 min-w-0">
+            {docStack.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setDocStack((prev) => prev.slice(0, -1))}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-700 hover:text-blue-700 hover:bg-blue-50 hover:border-blue-300 transition shadow-sm mr-1 shrink-0"
+                title={`ย้อนกลับไปที่ ${previousDocnum}`}
+              >
+                <ArrowLeft size={13} />
+                <span>กลับ</span>
+              </button>
+            )}
             <span className="font-bold text-slate-800 text-xs sm:text-sm shrink-0">
               {isSalesReturn
                 ? "ใบลดหนี้ / รับคืนสินค้า:"
@@ -109,16 +146,21 @@ export function InvoiceDetailModal({
                 ? "ขายสด:"
                 : isReceipt
                 ? "รับชำระหนี้:"
-                : "รายละเอียด:"}
+                : "ใบกำกับภาษี / ขายเชื่อ:"}
             </span>
             <span className="font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200/60 text-xs truncate">
-              {docnum}
+              {currentDocnum}
             </span>
+            {docStack.length > 0 && previousDocnum && (
+              <span className="text-[10px] text-slate-400 font-mono hidden sm:inline truncate">
+                (จาก {previousDocnum})
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
             <a
-              href={`/api/pdf/invoice/${encodeURIComponent(docnum)}`}
+              href={`/api/pdf/invoice/${encodeURIComponent(currentDocnum)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 hover:text-blue-700 hover:bg-blue-50 hover:border-blue-200 transition shadow-sm"
@@ -325,6 +367,9 @@ export function InvoiceDetailModal({
                     <ReceiptSheet
                       data={data as ReceiptData}
                       config={cfg}
+                      onViewInvoice={(ivDocnum) =>
+                        setDocStack((prev) => [...prev, ivDocnum])
+                      }
                     />
                   </div>
                 ))}
@@ -338,6 +383,9 @@ export function InvoiceDetailModal({
                     key={cfg.page}
                     data={data as ReceiptData}
                     config={cfg}
+                    onViewInvoice={(ivDocnum) =>
+                      setDocStack((prev) => [...prev, ivDocnum])
+                    }
                   />
                 ))}
               </div>

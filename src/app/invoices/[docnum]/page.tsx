@@ -28,6 +28,7 @@ import {
   RECEIPT_PAGES_CONFIG,
   type ReceiptData,
 } from "@/components/receipts/ReceiptSheet";
+import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
 
 export default function InvoiceDetailPage({
   params,
@@ -39,6 +40,7 @@ export default function InvoiceDetailPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | number>("all");
+  const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -193,6 +195,7 @@ export default function InvoiceDetailPage({
                     <ReceiptSheet
                       data={data as ReceiptData}
                       config={cfg}
+                      onViewInvoice={(ivDocnum) => setPopupDocnum(ivDocnum)}
                     />
                   </div>
                 ))}
@@ -206,6 +209,7 @@ export default function InvoiceDetailPage({
                     key={cfg.page}
                     data={data as ReceiptData}
                     config={cfg}
+                    onViewInvoice={(ivDocnum) => setPopupDocnum(ivDocnum)}
                   />
                 ))}
               </div>
@@ -431,6 +435,11 @@ export default function InvoiceDetailPage({
             )}
           </>
         )}
+        {/* Popup Modal for IV Invoice Details */}
+        <InvoiceDetailModal
+          docnum={popupDocnum}
+          onClose={() => setPopupDocnum(null)}
+        />
       </div>
     </AppShell>
   );

@@ -363,3 +363,4 @@ export function generateReceiptHtml(data: {
 </html>
 `;
 }
+

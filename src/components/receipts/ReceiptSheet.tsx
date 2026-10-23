@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Eye } from "lucide-react";
 import { bahtText } from "@/lib/baht-text";
 
 export interface ReceiptPageConfig {
@@ -125,9 +126,11 @@ function fmtThaiDateShort(d: Date | string | null | undefined): string {
 export function ReceiptSheet({
   data,
   config,
+  onViewInvoice,
 }: {
   data: ReceiptData;
   config: ReceiptPageConfig;
+  onViewInvoice?: (docnum: string) => void;
 }) {
   const { invoice, customer, items, receiptItems, company } = data;
 
@@ -312,7 +315,22 @@ export function ReceiptSheet({
                     {item.SEQNUM ? parseInt(item.SEQNUM, 10) : idx + 1}
                   </td>
                   <td className="py-2.5 px-3 text-left border-r border-slate-700 font-mono font-bold text-slate-900">
-                    {item.DOCNUM}
+                    {onViewInvoice ? (
+                      <button
+                        type="button"
+                        onClick={() => onViewInvoice(item.DOCNUM)}
+                        className="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-900 hover:underline group/iv font-mono font-bold"
+                        title={`กดเพื่อดูใบกำกับ ${item.DOCNUM}`}
+                      >
+                        <span>{item.DOCNUM}</span>
+                        <Eye
+                          size={12}
+                          className="text-blue-500 opacity-60 group-hover/iv:opacity-100 transition print:hidden"
+                        />
+                      </button>
+                    ) : (
+                      item.DOCNUM
+                    )}
                   </td>
                   <td className="py-2.5 px-3 text-center border-r border-slate-700 text-slate-700">
                     {fmtThaiDateShort(item.DOCDAT)}
@@ -475,3 +493,4 @@ export function ReceiptSheet({
     </div>
   );
 }
+
