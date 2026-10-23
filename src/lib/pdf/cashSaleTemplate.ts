@@ -1,5 +1,9 @@
 import { bahtText } from "@/lib/baht-text";
-import { getCompanyLogoBase64, getWatermarkLogoBase64 } from "@/lib/logo";
+import {
+  getCompanyLogoBase64,
+  getWatermarkLogoBase64,
+  getAuthorizedSignatureBase64,
+} from "@/lib/logo";
 
 function fmtMoney(n: number | null | undefined): string {
   if (n === null || n === undefined) return "0.00";
@@ -20,6 +24,7 @@ export function generateCashSaleHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
+  const signatureBase64 = getAuthorizedSignatureBase64();
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";
@@ -409,6 +414,13 @@ export function generateCashSaleHtml(data: {
           <div style="font-weight: 700; font-size: 11px; margin-bottom: 14px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
 
           <div style="margin-bottom: 12px;">
+            ${signatureBase64 ? `
+              <div style="margin-bottom: -6px;">
+                <img src="${signatureBase64}" style="height: 38px; width: auto; display: inline-block; vertical-align: bottom;" />
+              </div>
+            ` : `
+              <div style="height: 24px;"></div>
+            `}
             <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
             <div style="font-size: 9px; margin-top: 2px;">ผู้รับมอบอำนาจ/ Authorized Signature</div>
           </div>

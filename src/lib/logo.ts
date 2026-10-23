@@ -88,3 +88,55 @@ export function getWatermarkLogoBase64(): string {
     return "";
   }
 }
+
+function findSignatureBuffer(): Buffer | null {
+  for (const dirPath of LOGO_DIRS) {
+    const dir = path.resolve(dirPath);
+    if (!fs.existsSync(dir)) continue;
+
+    try {
+      const files = fs.readdirSync(dir);
+      const match = files.find(
+        (f) =>
+          f.toLowerCase() === "my-express-authorized-signature.bmp" ||
+          f.toLowerCase().includes("authorized-signature") ||
+          f.toLowerCase().includes("signature")
+      );
+
+      if (match) {
+        return fs.readFileSync(path.join(dir, match));
+      }
+    } catch {
+      // Continue to next directory
+    }
+  }
+  return null;
+}
+
+/**
+ * ดึง Buffer ของ ลายเซ็นผู้รับมอบอำนาจ (my-express-authorized-signature.bmp)
+ */
+export function getAuthorizedSignatureBuffer(): Buffer | null {
+  try {
+    return findSignatureBuffer();
+  } catch (err) {
+    console.warn("Could not read authorized signature buffer:", err);
+    return null;
+  }
+}
+
+/**
+ * ดึง base64 data URL ของ ลายเซ็นผู้รับมอบอำนาจ
+ */
+export function getAuthorizedSignatureBase64(): string {
+  try {
+    const buffer = getAuthorizedSignatureBuffer();
+    if (!buffer) return "";
+    const isPng = buffer.length > 8 && buffer[0] === 0x89 && buffer[1] === 0x50;
+    const mime = isPng ? "image/png" : "image/bmp";
+    return `data:${mime};base64,${buffer.toString("base64")}`;
+  } catch (err) {
+    console.warn("Could not load authorized signature:", err);
+    return "";
+  }
+}

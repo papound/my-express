@@ -556,9 +556,17 @@ export function InvoiceSheet({
               </div>
             </div>
 
-            <div className="space-y-3 pt-2">
-              <div>
-                <div className="border-b border-slate-700 w-4/5 mx-auto h-5"></div>
+            <div className="space-y-3 pt-1">
+              <div className="relative flex flex-col items-center">
+                <div className="h-10 sm:h-12 flex items-end justify-center mb-[-8px] pointer-events-none">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/api/logo/signature"
+                    alt="Authorized Signature"
+                    className="h-10 sm:h-12 w-auto object-contain"
+                  />
+                </div>
+                <div className="border-b border-slate-700 w-4/5 mx-auto"></div>
                 <div className="text-[9px] text-slate-600 mt-1">
                   ผู้รับมอบอำนาจ/ Authorized Signature
                 </div>

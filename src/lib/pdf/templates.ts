@@ -1,5 +1,9 @@
 import { bahtText } from "@/lib/baht-text";
-import { getCompanyLogoBase64, getWatermarkLogoBase64 } from "@/lib/logo";
+import {
+  getCompanyLogoBase64,
+  getWatermarkLogoBase64,
+  getAuthorizedSignatureBase64,
+} from "@/lib/logo";
 export { generateCashSaleHtml } from "./cashSaleTemplate";
 export { generateReceiptHtml } from "./receiptTemplate";
 
@@ -129,6 +133,7 @@ export function generateInvoiceHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
+  const signatureBase64 = getAuthorizedSignatureBase64();
 
   const fmtThaiDateShort = (d: Date | string | null): string => {
     if (!d) return "-";
@@ -528,6 +533,13 @@ export function generateInvoiceHtml(data: {
             <div style="font-weight: 700; font-size: 11px; margin-bottom: 18px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
             
             <div style="margin-bottom: 12px;">
+              ${signatureBase64 ? `
+                <div style="margin-bottom: -6px;">
+                  <img src="${signatureBase64}" style="height: 38px; width: auto; display: inline-block; vertical-align: bottom;" />
+                </div>
+              ` : `
+                <div style="height: 24px;"></div>
+              `}
               <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
               <div style="font-size: 9.5px; margin-top: 2px;">ผู้รับมอบอำนาจ/ Authorized Signature</div>
             </div>
@@ -559,6 +571,7 @@ export function generateAdvanceInvoiceHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
+  const signatureBase64 = getAuthorizedSignatureBase64();
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";
@@ -923,6 +936,13 @@ export function generateAdvanceInvoiceHtml(data: {
             <div style="font-weight: 700; font-size: 11px; margin-bottom: 18px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
 
             <div style="margin-bottom: 12px;">
+              ${signatureBase64 ? `
+                <div style="margin-bottom: -6px;">
+                  <img src="${signatureBase64}" style="height: 38px; width: auto; display: inline-block; vertical-align: bottom;" />
+                </div>
+              ` : `
+                <div style="height: 24px;"></div>
+              `}
               <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
               <div style="font-size: 9.5px; margin-top: 2px;">ผู้รับมอบอำนาจ/ Authorized Signature</div>
             </div>
@@ -955,6 +975,7 @@ export function generateSalesReturnHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
+  const signatureBase64 = getAuthorizedSignatureBase64();
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";
@@ -1307,9 +1328,17 @@ export function generateSalesReturnHtml(data: {
           <!-- Right: Authorized -->
           <td style="width: 40%; vertical-align: top; padding: 8px 12px; text-align: center;">
             <div style="font-size: 9.5px; color: #333;">ในนาม</div>
-            <div style="font-weight: 700; font-size: 11px; margin-bottom: 25px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+            <div style="font-weight: 700; font-size: 11px; margin-bottom: 14px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
             <div>
-              ผู้รับมอบอำนาจ __________________
+              ${signatureBase64 ? `
+                <div style="margin-bottom: -6px;">
+                  <img src="${signatureBase64}" style="height: 38px; width: auto; display: inline-block; vertical-align: bottom;" />
+                </div>
+              ` : `
+                <div style="height: 24px;"></div>
+              `}
+              <div style="border-bottom: 1px solid #444; width: 75%; margin: 0 auto;"></div>
+              <div style="font-size: 9.5px; margin-top: 2px;">ผู้รับมอบอำนาจ</div>
             </div>
           </td>
         </tr>
