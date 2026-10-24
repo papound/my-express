@@ -213,7 +213,9 @@ export function generateInvoiceHtml(data: {
       min-height: 278mm;
       max-height: 282mm;
       box-sizing: border-box;
-      padding-bottom: 2mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .invoice-page:last-child {
       page-break-after: avoid;
@@ -231,6 +233,11 @@ export function generateInvoiceHtml(data: {
     .content-layer {
       position: relative;
       z-index: 1;
+      height: 100%;
+      min-height: 276mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .company-logo {
       height: 56px;
@@ -402,7 +409,7 @@ export function generateInvoiceHtml(data: {
             ${items
               .map(
                 (it, idx) => `
-              <tr>
+              <tr style="height: 28px;">
                 <td style="text-align: center; font-family: monospace;">${it.SEQNUM ? parseInt(it.SEQNUM, 10) : idx + 1}</td>
                 <td style="text-align: left;">
                   ${it.STKCOD ? `<span style="font-family: monospace; font-weight: 600;">${it.STKCOD}/ </span>` : ""}
@@ -411,6 +418,19 @@ export function generateInvoiceHtml(data: {
                 <td style="text-align: right; font-family: monospace;">${it.TRNQTY.toFixed(2)} ${it.TQUCOD || ""}</td>
                 <td style="text-align: right; font-family: monospace;">${fmtMoney(it.UNITPR)}</td>
                 <td style="text-align: right; font-family: monospace; font-weight: 600;">${fmtMoney(it.TRNVAL)}</td>
+              </tr>
+            `
+              )
+              .join("")}
+            ${Array.from({ length: Math.max(0, 8 - items.length) })
+              .map(
+                () => `
+              <tr style="height: 28px;">
+                <td style="color: transparent;">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
               </tr>
             `
               )
@@ -647,7 +667,9 @@ export function generateAdvanceInvoiceHtml(data: {
       min-height: 278mm;
       max-height: 284mm;
       box-sizing: border-box;
-      padding-bottom: 2mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .advance-page:last-child {
       page-break-after: avoid;
@@ -665,6 +687,11 @@ export function generateAdvanceInvoiceHtml(data: {
     .content-layer {
       position: relative;
       z-index: 1;
+      height: 100%;
+      min-height: 276mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .company-logo {
       height: 56px;
@@ -822,12 +849,23 @@ export function generateAdvanceInvoiceHtml(data: {
             ${items
               .map(
                 (it, idx) => `
-              <tr>
+              <tr style="height: 28px;">
                 <td style="text-align: center; font-family: monospace;">${it.SEQNUM ? parseInt(it.SEQNUM, 10) : idx + 1}</td>
                 <td style="text-align: left; padding-left: 14px; font-weight: 500;">
                   ${it.STKDES || it.STKCOD || "ค่ามัดจำ"}
                 </td>
                 <td style="text-align: right; padding-right: 14px; font-family: monospace; font-weight: 600;">${fmtMoney(it.TRNVAL || grossAmount)}</td>
+              </tr>
+            `
+              )
+              .join("")}
+            ${Array.from({ length: Math.max(0, 6 - items.length) })
+              .map(
+                () => `
+              <tr style="height: 28px;">
+                <td style="color: transparent;">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
               </tr>
             `
               )
@@ -1036,7 +1074,9 @@ export function generateSalesReturnHtml(data: {
       min-height: 278mm;
       max-height: 284mm;
       box-sizing: border-box;
-      padding-bottom: 2mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .sr-page:last-child {
       page-break-after: avoid;
@@ -1054,6 +1094,11 @@ export function generateSalesReturnHtml(data: {
     .content-layer {
       position: relative;
       z-index: 1;
+      height: 100%;
+      min-height: 276mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .company-logo {
       height: 56px;
@@ -1215,7 +1260,7 @@ export function generateSalesReturnHtml(data: {
             ${chunkItems
               .map(
                 (it, idx) => `
-              <tr>
+              <tr style="height: 28px;">
                 <td style="text-align: center; font-family: monospace;">${it.SEQNUM ? parseInt(it.SEQNUM, 10) : pIdx * ITEMS_PER_PAGE + idx + 1}</td>
                 <td style="text-align: left;">
                   <span style="font-family: monospace; font-weight: 600;">${it.STKCOD}</span>
@@ -1227,6 +1272,22 @@ export function generateSalesReturnHtml(data: {
                 <td style="text-align: right; font-family: monospace;">${it.UNITPR.toFixed(4)}</td>
                 <td style="text-align: right; font-family: monospace;">${it.DISC || ""}</td>
                 <td style="text-align: right; font-family: monospace; font-weight: 600;">${fmtMoney(it.TRNVAL)}</td>
+              </tr>
+            `
+              )
+              .join("")}
+            ${Array.from({ length: Math.max(0, 7 - chunkItems.length) })
+              .map(
+                () => `
+              <tr style="height: 28px;">
+                <td style="color: transparent;">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
               </tr>
             `
               )
@@ -1410,6 +1471,12 @@ export function generateQuotationHtml(data: {
       margin: 0;
       padding: 0;
       position: relative;
+      min-height: 278mm;
+      max-height: 284mm;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .watermark {
       position: fixed;
@@ -1424,6 +1491,11 @@ export function generateQuotationHtml(data: {
     .content-layer {
       position: relative;
       z-index: 1;
+      height: 100%;
+      min-height: 276mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .company-logo {
       height: 58px;
@@ -1576,7 +1648,7 @@ export function generateQuotationHtml(data: {
           ${items
             .map(
               (it, idx) => `
-            <tr>
+            <tr style="height: 28px;">
               <td style="text-align: center; font-family: monospace;">${it.SEQNUM ? parseInt(it.SEQNUM, 10) : idx + 1}</td>
               <td style="text-align: left;">
                 ${
@@ -1589,6 +1661,20 @@ export function generateQuotationHtml(data: {
               <td style="text-align: right; font-family: monospace;">${fmtMoney(it.UNITPR)}</td>
               <td style="text-align: right; font-family: monospace;">${it.DISC || (it.DISCAMT > 0 ? fmtMoney(it.DISCAMT) : "")}</td>
               <td style="text-align: right; font-family: monospace; font-weight: 600;">${fmtMoney(it.TRNVAL)}</td>
+            </tr>
+          `
+            )
+            .join("")}
+          ${Array.from({ length: Math.max(0, 8 - items.length) })
+            .map(
+              () => `
+            <tr style="height: 28px;">
+              <td style="color: transparent;">&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
             </tr>
           `
             )
@@ -1734,7 +1820,9 @@ export function generateBillingHtml(data: {
       min-height: 275mm;
       max-height: 282mm;
       box-sizing: border-box;
-      padding-bottom: 4mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .billing-page:last-child {
       page-break-after: avoid;
@@ -1752,6 +1840,11 @@ export function generateBillingHtml(data: {
     .content-layer {
       position: relative;
       z-index: 1;
+      height: 100%;
+      min-height: 275mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .company-logo {
       height: 56px;
@@ -1897,7 +1990,7 @@ export function generateBillingHtml(data: {
             ${invoices
               .map(
                 (inv, idx) => `
-              <tr>
+              <tr style="height: 26px;">
                 <td style="text-align: center; font-family: monospace;">${idx + 1}</td>
                 <td style="text-align: left; font-family: monospace; font-weight: 600;">${inv.DOCNUM}</td>
                 <td style="text-align: center;">${fmtThaiDateShort(inv.DOCDAT)}</td>
@@ -1905,6 +1998,21 @@ export function generateBillingHtml(data: {
                 <td style="text-align: right; font-family: monospace;">${fmtMoney(inv.NETAMT || inv.AMOUNT)}</td>
                 <td style="text-align: right; font-family: monospace;">${inv.RCVAMT > 0 ? fmtMoney(inv.RCVAMT) : ""}</td>
                 <td style="text-align: right; font-family: monospace; font-weight: 600;">${fmtMoney(inv.REMAMT !== undefined ? inv.REMAMT : inv.NETAMT)}</td>
+              </tr>
+            `
+              )
+              .join("")}
+            ${Array.from({ length: Math.max(0, 9 - invoices.length) })
+              .map(
+                () => `
+              <tr style="height: 26px;">
+                <td style="color: transparent;">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
               </tr>
             `
               )

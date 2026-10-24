@@ -105,7 +105,9 @@ export function generateReceiptHtml(data: {
       min-height: 278mm;
       max-height: 284mm;
       box-sizing: border-box;
-      padding-bottom: 2mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .receipt-page:last-child {
       page-break-after: avoid;
@@ -123,6 +125,11 @@ export function generateReceiptHtml(data: {
     .content-layer {
       position: relative;
       z-index: 1;
+      height: 100%;
+      min-height: 276mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .company-logo {
       height: 54px;
@@ -265,7 +272,7 @@ export function generateReceiptHtml(data: {
               ${appliedItems
                 .map(
                   (it: any, idx: number) => `
-                <tr>
+                <tr style="height: 27px;">
                   <td style="text-align: center; font-family: monospace;">${it.SEQNUM ? parseInt(it.SEQNUM, 10) : idx + 1}</td>
                   <td style="text-align: left; padding-left: 8px; font-family: monospace; font-weight: 700;">${it.DOCNUM}</td>
                   <td style="text-align: center;">${fmtThaiDateShort(it.DOCDAT)}</td>
@@ -273,6 +280,21 @@ export function generateReceiptHtml(data: {
                   <td style="text-align: right; font-family: monospace;">${fmtMoney(it.AMOUNT || it.RCVAMT)}</td>
                   <td style="text-align: right; font-family: monospace;">${it.REMAMT !== undefined && it.REMAMT > 0 ? fmtMoney(it.REMAMT) : ""}</td>
                   <td style="text-align: right; padding-right: 8px; font-family: monospace; font-weight: 700;">${fmtMoney(it.RCVAMT)}</td>
+                </tr>
+              `
+                )
+                .join("")}
+              ${Array.from({ length: Math.max(0, 7 - appliedItems.length) })
+                .map(
+                  () => `
+                <tr style="height: 27px;">
+                  <td style="color: transparent;">&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
                 </tr>
               `
                 )

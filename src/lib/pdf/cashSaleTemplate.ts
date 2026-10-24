@@ -241,7 +241,7 @@ export function generateCashSaleHtml(data: {
           ${itemsToRender.length > 0 ? itemsToRender
             .map(
               (it, idx) => `
-            <tr>
+            <tr style="height: 27px;">
               <td style="text-align: center; font-family: monospace;">${it.SEQNUM ? parseInt(it.SEQNUM, 10) : idx + 1}</td>
               <td style="text-align: left;">
                 ${it.STKCOD ? `<span style="font-family: monospace; font-weight: 600;">${it.STKCOD}/ </span>` : ""}
@@ -254,16 +254,21 @@ export function generateCashSaleHtml(data: {
             </tr>
           `
             )
-            .join("") : `
-            <tr>
-              <td style="text-align: center; height: 180px;">&nbsp;</td>
+            .join("") : ""}
+          ${Array.from({ length: Math.max(0, 7 - itemsToRender.length) })
+            .map(
+              () => `
+            <tr style="height: 27px;">
+              <td style="color: transparent;">&nbsp;</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
             </tr>
-          `}
+          `
+            )
+            .join("")}
         </tbody>
       </table>
     </div>
@@ -462,7 +467,9 @@ export function generateCashSaleHtml(data: {
       min-height: 278mm;
       max-height: 284mm;
       box-sizing: border-box;
-      padding-bottom: 2mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .cash-sale-page:last-child {
       page-break-after: avoid;
@@ -480,6 +487,11 @@ export function generateCashSaleHtml(data: {
     .content-layer {
       position: relative;
       z-index: 1;
+      height: 100%;
+      min-height: 276mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .company-logo {
       height: 54px;

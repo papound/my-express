@@ -37,11 +37,12 @@ export async function renderHtmlToPdf(
       format: "A4",
       landscape: options?.landscape ?? false,
       printBackground: true,
+      preferCSSPageSize: true,
       margin: {
-        top: "10mm",
-        right: "10mm",
-        bottom: "10mm",
-        left: "10mm",
+        top: "6mm",
+        right: "8mm",
+        bottom: "6mm",
+        left: "8mm",
       },
     });
 
