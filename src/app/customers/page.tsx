@@ -1,9 +1,26 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Search, RefreshCw, Users, Phone, MapPin, Building, CreditCard, Calendar, ArrowUpDown } from "lucide-react";
+import {
+  Search,
+  RefreshCw,
+  Users,
+  Phone,
+  MapPin,
+  Building,
+  CreditCard,
+  Calendar,
+  ArrowUpDown,
+  FileText,
+  Eye,
+} from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
+import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
+import {
+  CustomerDetailModal,
+  type CustomerDetail,
+} from "@/components/customers/CustomerDetailModal";
 
 interface Customer {
   CUSCOD: string;
@@ -52,6 +69,8 @@ export default function CustomersPage() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("A");
   const [sort, setSort] = useState("code");
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerDetail | null>(null);
+  const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -180,20 +199,21 @@ export default function CustomersPage() {
                   </div>
                 </th>
                 <th className="py-3.5 px-4 text-right w-32">ยอดค้างชำระ</th>
-                <th className="py-3.5 px-4 text-center w-20">สถานะ</th>
+                <th className="py-3.5 px-4 text-center w-28">สถานะ</th>
+                <th className="py-3.5 px-4 text-center w-24">ข้อมูล</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="py-16 text-center text-slate-400">
+                  <td colSpan={9} className="py-16 text-center text-slate-400">
                     <RefreshCw className="animate-spin inline-block mr-2" size={16} />
                     กำลังโหลดรายชื่อลูกค้า...
                   </td>
                 </tr>
               ) : customers.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-16 text-center text-slate-400">
+                  <td colSpan={9} className="py-16 text-center text-slate-400">
                     ไม่พบข้อมูลลูกค้า
                   </td>
                 </tr>
@@ -201,17 +221,34 @@ export default function CustomersPage() {
                 customers.map((c) => (
                   <tr key={c.CUSCOD} className="hover:bg-blue-50/30 transition-colors group">
                     <td className="py-3.5 px-4 font-mono font-bold text-slate-900">
-                      {c.CUSCOD}
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCustomer(c)}
+                        className="font-mono font-bold text-blue-700 hover:text-blue-900 hover:underline cursor-pointer text-left"
+                        title="คลิกเพื่อดูข้อมูลลูกค้าแบบ Popup"
+                      >
+                        {c.CUSCOD}
+                      </button>
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200/50">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedCustomer(c)}
+                          className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200/50 hover:bg-blue-100 transition cursor-pointer"
+                          title="ดูข้อมูลลูกค้า"
+                        >
                           {c.CUSNAM?.[0] || "C"}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-slate-900">
+                        </button>
+                        <div className="text-left">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedCustomer(c)}
+                            className="font-semibold text-slate-900 hover:text-blue-700 transition text-left cursor-pointer"
+                            title="คลิกเพื่อดูข้อมูลลูกค้าแบบ Popup"
+                          >
                             {c.PRENAM} {c.CUSNAM}
-                          </div>
+                          </button>
                           {c.ADDR01 && (
                             <div className="text-[11px] text-slate-400 truncate max-w-sm flex items-center gap-1 mt-0.5">
                               <MapPin size={11} className="shrink-0 text-slate-300" />
@@ -251,13 +288,15 @@ export default function CustomersPage() {
                           </div>
                           {c.lastInvoiceDocnum && (
                             <div>
-                              <Link
-                                href={`/invoices/${encodeURIComponent(c.lastInvoiceDocnum)}`}
-                                className="inline-flex items-center font-mono text-[10.5px] font-bold text-blue-700 hover:text-blue-900 hover:underline bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/60 transition"
-                                title="คลิกเพื่อดูใบกำกับภาษีนี้"
+                              <button
+                                type="button"
+                                onClick={() => setPopupDocnum(c.lastInvoiceDocnum!)}
+                                className="inline-flex items-center gap-1 font-mono text-[10.5px] font-bold text-blue-700 hover:text-blue-900 hover:bg-blue-100/80 bg-blue-50 px-2 py-0.5 rounded border border-blue-200/70 transition cursor-pointer shadow-2xs"
+                                title="คลิกเพื่อดูเอกสารบิลนี้แบบ Popup"
                               >
-                                {c.lastInvoiceDocnum}
-                              </Link>
+                                <FileText size={11} className="text-blue-500" />
+                                <span>{c.lastInvoiceDocnum}</span>
+                              </button>
                             </div>
                           )}
                         </div>
@@ -295,6 +334,17 @@ export default function CustomersPage() {
                         </span>
                       )}
                     </td>
+                    <td className="py-3.5 px-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCustomer(c)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:text-blue-700 bg-slate-100/80 hover:bg-blue-50 border border-slate-200/80 hover:border-blue-200 rounded-lg transition cursor-pointer"
+                        title="ดูข้อมูลลูกค้าแบบ Popup"
+                      >
+                        <Eye size={12} />
+                        <span>ดูข้อมูล</span>
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
@@ -302,6 +352,19 @@ export default function CustomersPage() {
           </table>
         </div>
       </div>
+
+      {/* Customer Detail Popup Modal */}
+      <CustomerDetailModal
+        customer={selectedCustomer}
+        onClose={() => setSelectedCustomer(null)}
+        onViewInvoice={(docnum) => setPopupDocnum(docnum)}
+      />
+
+      {/* Invoice Detail Popup Modal */}
+      <InvoiceDetailModal
+        docnum={popupDocnum}
+        onClose={() => setPopupDocnum(null)}
+      />
     </div>
   </AppShell>
 );
