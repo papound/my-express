@@ -41,24 +41,24 @@
 
 ```mermaid
 flowchart LR
-    subgraph WindowsServer ["🖥️ Windows Server (Host)"]
+    subgraph WindowsServer ["🖥️ Windows Server"]
         ExpDB[("ExpressI\nThongTha\n(ARTRN, ARMAS, ISINFO...)")]
-        TS_Win["Tailscale\n100.105.105.121"]
+        TS_Win["Tailscale VPN\n(win-server)"]
     end
 
-    subgraph ProxmoxVE ["🏢 Proxmox VE (192.168.1.100)"]
-        subgraph CT117 ["CT 117: my-express (192.168.1.66)"]
-            TS_CT["Tailscale\n100.87.184.13"]
+    subgraph ProxmoxVE ["🏢 Proxmox VE Server"]
+        subgraph CT117 ["LXC: Production App (my-express)"]
+            TS_CT["Tailscale VPN\n(my-express)"]
             CIFS["CIFS Mount (ro)\n/mnt/express/ThongTha"]
             AppCont["Docker Container\nmy-express-app:3000"]
         end
 
-        subgraph CT114 ["CT 114: ci-runner (192.168.1.118)"]
+        subgraph CT114 ["LXC: CI/CD Runner (ci-runner)"]
             GHRunner["GitHub Actions Runner\n(ci-runner-my-express)"]
         end
 
         subgraph Registry ["Private Docker Registry"]
-            PReg["192.168.1.117:5000"]
+            PReg["Registry Service\n(:5000)"]
         end
     end
 
@@ -81,13 +81,13 @@ flowchart LR
 
 เมื่อมีการ `git push` โค้ดขึ้นมายัง Branch `main` ระบบจะรัน Pipeline อัตโนมัติผ่าน Self-Hosted Runner บน Proxmox:
 
-- **Runner**: ติดตั้งที่ Proxmox CT 114 (`ci-runner-my-express`)
+- **Runner**: ติดตั้งที่ Proxmox LXC Runner (`ci-runner-my-express`)
 - **Workflow File**: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
   - **Job 1: Build & Push**:
     - สร้าง Docker Image พร้อมแคช layer
-    - Push Image ไปยัง Private Registry: `192.168.1.117:5000/my-express/app:latest`
+    - Push Image ไปยัง Private Registry: `<REGISTRY_HOST>:5000/my-express/app:latest`
   - **Job 2: Deploy to Production**:
-    - สั่งการผ่าน SSH ไปยัง CT 117 (`192.168.1.66`)
+    - สั่งการผ่าน SSH ไปยัง Production Container
     - ซิงค์โค้ด Git และสงวนไฟล์คอนฟิก `.env`
     - ดึง Image ล่าสุดจาก Registry (`docker compose pull app`)
     - Restart Container อัตโนมัติ (`docker compose up -d --no-build app`)
@@ -141,7 +141,7 @@ my-express/
 |---|---|---|
 | `DBF_DATA_PATH` | Path ไดเรกทอรีที่เก็บไฟล์ DBF ภายใน Container | `/data/ThongTha` |
 | `NEXTAUTH_SECRET` | คีย์เข้ารหัส JWT สำหรับ Session | สุ่ม 32-64 ตัวอักษร |
-| `NEXTAUTH_URL` | URL ฐานสำหรับเข้าใช้งานของระบบ | `http://192.168.1.66:3000` |
+| `NEXTAUTH_URL` | URL ฐานสำหรับเข้าใช้งานของระบบ | `http://<SERVER_IP>:3000` |
 | `AUTH_TRUST_HOST` | อนุญาตให้ระบบเชื่อถือ Host IP ภายในวงแลน | `true` |
 | `APP_USERS` | รายชื่อบัญชีผู้ใช้งานในรูปแบบ JSON Array | `[{"username":"admin","password":"...","name":"...","role":"admin"}]` |
 
@@ -175,7 +175,7 @@ my-express/
 
 ## 🔑 ข้อมูลการเข้าใช้งานระบบเริ่มต้น
 
-- **URL Production**: `http://192.168.1.66:3000`
+- **URL Production**: `http://<SERVER_IP>:3000` หรือผ่าน Tailscale IP ของเซิร์ฟเวอร์
 - **บัญชีผู้ใช้งานเริ่มต้น**:
   - **ผู้ดูแลระบบ (Admin)**: `admin` / `admin1234`
   - **ผู้ใช้งานทั่วไป (User)**: `user1` / `user1234`
