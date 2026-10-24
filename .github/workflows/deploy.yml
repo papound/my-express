@@ -82,8 +82,14 @@ jobs:
             cd /opt/my-express
             git config --global --add safe.directory /opt/my-express || true
             git reset --hard
-            git clean -fd
+            git clean -fd -e .env -e .env.*
             git pull origin main
+
+            if [ ! -f .env ]; then
+              echo \"==> .env missing, copying from .env.production.example...\"
+              cp .env.production.example .env
+              chmod 600 .env
+            fi
 
             echo \"==> Pulling latest image from registry...\"
             docker compose pull app
