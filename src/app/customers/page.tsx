@@ -126,41 +126,42 @@ export default function CustomersPage() {
         </div>
 
         {/* Filter and Search */}
-        <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200/80 shadow-sm flex flex-col md:flex-row gap-3 sm:gap-4 justify-between items-stretch md:items-center">
-          <div className="relative flex-1 md:max-w-md">
-            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder="ค้นหา รหัสลูกค้า / ชื่อบริษัท / เลขผู้เสียภาษี / เบอร์โทร / เลขที่บิล..."
-              value={search}
-              onChange={(e) => {
-                const val = e.target.value.replace(
-                  /^[\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+/,
-                  ""
-                );
-                setSearch(val);
-                setPage(1);
-              }}
-              className="w-full pl-10 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
-            />
-            {search && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearch("");
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200/80 shadow-sm space-y-3.5">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between items-stretch sm:items-center">
+            {/* Search Input Box */}
+            <div className="relative flex-1 min-w-[240px] max-w-xl">
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="ค้นหา รหัสลูกค้า / ชื่อบริษัท / เลขผู้เสียภาษี / เบอร์โทร / เลขที่บิล..."
+                value={search}
+                onChange={(e) => {
+                  const val = e.target.value.replace(
+                    /^[\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+/,
+                    ""
+                  );
+                  setSearch(val);
                   setPage(1);
                 }}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-200/60 transition cursor-pointer"
-                title="ล้างคำค้นหา"
-              >
-                <X size={14} />
-              </button>
-            )}
-          </div>
+                className="w-full pl-10 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch("");
+                    setPage(1);
+                  }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-200/60 transition cursor-pointer"
+                  title="ล้างคำค้นหา"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
 
-          <div className="flex flex-wrap items-center gap-3">
             {/* Sort Selector */}
-            <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-xl">
+            <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl shrink-0 self-start sm:self-auto">
               <ArrowUpDown size={13} className="text-slate-400" />
               <span className="text-[11px] font-medium text-slate-500 whitespace-nowrap">เรียง:</span>
               <select
@@ -177,43 +178,43 @@ export default function CustomersPage() {
                 <option value="name">ชื่อลูกค้า (ก-ฮ)</option>
               </select>
             </div>
+          </div>
 
-            {/* Status Tabs */}
-            <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60 overflow-x-auto max-w-full">
-              {[
-                { id: "A", label: "สถานะใช้งาน (Active)", count: counts.active },
-                { id: "UNSPECIFIED", label: "ไม่ได้ระบุ (Active)", count: counts.unspecified },
-                { id: "EXPLICIT_A", label: "Active", count: counts.explicitActive },
-                { id: "I", label: "ยกเลิก (Inactive)", count: counts.inactive },
-                { id: "all", label: "ทั้งหมด", count: counts.all },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => {
-                    setStatus(tab.id);
-                    setPage(1);
-                  }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition flex items-center gap-1.5 ${
-                    status === tab.id
-                      ? "bg-white text-blue-700 font-semibold shadow-sm"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  <span>{tab.label}</span>
-                  {tab.count !== undefined && (
-                    <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                        status === tab.id
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-slate-200/70 text-slate-600"
-                      }`}
-                    >
-                      {tab.count}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
+          {/* Status Tabs Row */}
+          <div className="pt-3 border-t border-slate-100 flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60 overflow-x-auto max-w-full">
+            {[
+              { id: "A", label: "สถานะใช้งาน (Active)", count: counts.active },
+              { id: "UNSPECIFIED", label: "ไม่ได้ระบุ (Active)", count: counts.unspecified },
+              { id: "EXPLICIT_A", label: "Active", count: counts.explicitActive },
+              { id: "I", label: "ยกเลิก (Inactive)", count: counts.inactive },
+              { id: "all", label: "ทั้งหมด", count: counts.all },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setStatus(tab.id);
+                  setPage(1);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                  status === tab.id
+                    ? "bg-white text-blue-700 font-semibold shadow-sm"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                <span>{tab.label}</span>
+                {tab.count !== undefined && (
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                      status === tab.id
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-slate-200/70 text-slate-600"
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
         </div>
 
