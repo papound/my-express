@@ -102,12 +102,13 @@ export function generateReceiptHtml(data: {
     .receipt-page {
       page-break-after: always;
       position: relative;
-      min-height: 278mm;
-      max-height: 284mm;
+      height: 280mm;
+      max-height: 280mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
     }
     .receipt-page:last-child {
       page-break-after: avoid;
@@ -126,7 +127,6 @@ export function generateReceiptHtml(data: {
       position: relative;
       z-index: 1;
       height: 100%;
-      min-height: 276mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;

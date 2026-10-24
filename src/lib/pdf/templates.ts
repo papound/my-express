@@ -7,8 +7,9 @@ import {
 export { generateCashSaleHtml } from "./cashSaleTemplate";
 export { generateReceiptHtml } from "./receiptTemplate";
 
-function fmtMoney(n: number): string {
-  return n.toLocaleString("th-TH", {
+function fmtMoney(n: number | null | undefined): string {
+  const val = typeof n === "number" ? n : (Number(n) || 0);
+  return val.toLocaleString("th-TH", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -210,12 +211,13 @@ export function generateInvoiceHtml(data: {
     .invoice-page {
       page-break-after: always;
       position: relative;
-      min-height: 278mm;
-      max-height: 282mm;
+      height: 280mm;
+      max-height: 280mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
     }
     .invoice-page:last-child {
       page-break-after: avoid;
@@ -234,7 +236,6 @@ export function generateInvoiceHtml(data: {
       position: relative;
       z-index: 1;
       height: 100%;
-      min-height: 276mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -582,6 +583,7 @@ export function generateInvoiceHtml(data: {
       </table>
     </div>
   </div>
+</div>
   `
   ).join("")}
 </body>
@@ -673,12 +675,13 @@ export function generateAdvanceInvoiceHtml(data: {
     .advance-page {
       page-break-after: always;
       position: relative;
-      min-height: 278mm;
-      max-height: 284mm;
+      height: 280mm;
+      max-height: 280mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
     }
     .advance-page:last-child {
       page-break-after: avoid;
@@ -697,7 +700,6 @@ export function generateAdvanceInvoiceHtml(data: {
       position: relative;
       z-index: 1;
       height: 100%;
-      min-height: 276mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -1090,12 +1092,13 @@ export function generateSalesReturnHtml(data: {
     .sr-page {
       page-break-after: always;
       position: relative;
-      min-height: 278mm;
-      max-height: 284mm;
+      height: 280mm;
+      max-height: 280mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
     }
     .sr-page:last-child {
       page-break-after: avoid;
@@ -1114,7 +1117,6 @@ export function generateSalesReturnHtml(data: {
       position: relative;
       z-index: 1;
       height: 100%;
-      min-height: 276mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -1505,12 +1507,13 @@ export function generateQuotationHtml(data: {
       margin: 0;
       padding: 0;
       position: relative;
-      min-height: 278mm;
-      max-height: 284mm;
+      height: 280mm;
+      max-height: 280mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
     }
     .watermark {
       position: fixed;
@@ -1526,7 +1529,6 @@ export function generateQuotationHtml(data: {
       position: relative;
       z-index: 1;
       height: 100%;
-      min-height: 276mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -1688,7 +1690,7 @@ export function generateQuotationHtml(data: {
                     : `${it.STKDES || it.STKCOD}`
                 }
               </td>
-              <td style="text-align: right; font-family: monospace;">${it.ORDQTY.toFixed(2)} ${it.TQUCOD || ""}</td>
+              <td style="text-align: right; font-family: monospace;">${(it.ORDQTY ?? it.TRNQTY ?? 0).toFixed(2)} ${it.TQUCOD || ""}</td>
               <td style="text-align: right; font-family: monospace;">${fmtMoney(it.UNITPR)}</td>
               <td style="text-align: right; font-family: monospace;">${it.DISC || (it.DISCAMT > 0 ? fmtMoney(it.DISCAMT) : "")}</td>
               <td style="text-align: right; font-family: monospace; font-weight: 600;">${fmtMoney(it.TRNVAL)}</td>
@@ -1850,12 +1852,13 @@ export function generateBillingHtml(data: {
     .billing-page {
       page-break-after: always;
       position: relative;
-      min-height: 275mm;
-      max-height: 282mm;
+      height: 280mm;
+      max-height: 280mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
     }
     .billing-page:last-child {
       page-break-after: avoid;
@@ -1874,7 +1877,6 @@ export function generateBillingHtml(data: {
       position: relative;
       z-index: 1;
       height: 100%;
-      min-height: 275mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;

@@ -116,7 +116,23 @@ export function generateCashSaleHtml(data: {
     },
   ];
 
-  const isMultiPage = items.length > 8;
+  const pageChunks: { items: any[]; isLastPage: boolean }[] = [];
+  if (items.length <= 10) {
+    pageChunks.push({ items, isLastPage: true });
+  } else {
+    let i = 0;
+    while (i < items.length) {
+      const remainingCount = items.length - i;
+      if (remainingCount <= 10) {
+        pageChunks.push({ items: items.slice(i), isLastPage: true });
+        break;
+      } else {
+        const take = remainingCount <= 14 ? Math.ceil(remainingCount / 2) : 14;
+        pageChunks.push({ items: items.slice(i, i + take), isLastPage: false });
+        i += take;
+      }
+    }
+  }
 
   const renderHeader = (p: typeof CASH_SALE_PAGES[0]) => `
     <table style="width: 100%; margin-bottom: 4px; border-collapse: collapse;">
@@ -257,7 +273,7 @@ export function generateCashSaleHtml(data: {
           `
             )
             .join("") : ""}
-          ${Array.from({ length: Math.max(0, (isFullTable ? 7 : 14) - itemsToRender.length) })
+          ${Array.from({ length: Math.max(0, (isFullTable ? 10 : 14) - itemsToRender.length) })
             .map(
               () => `
             <tr style="height: 27px;">
@@ -474,12 +490,13 @@ export function generateCashSaleHtml(data: {
     .cash-sale-page {
       page-break-after: always;
       position: relative;
-      min-height: 278mm;
-      max-height: 284mm;
+      height: 280mm;
+      max-height: 280mm;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
     }
     .cash-sale-page:last-child {
       page-break-after: avoid;
@@ -498,7 +515,6 @@ export function generateCashSaleHtml(data: {
       position: relative;
       z-index: 1;
       height: 100%;
-      min-height: 276mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -550,39 +566,25 @@ export function generateCashSaleHtml(data: {
 </head>
 <body>
   ${CASH_SALE_PAGES.map((p) => {
-    if (!isMultiPage) {
-      return `
+    return pageChunks
+      .map(
+        (chunk) => `
         <div class="cash-sale-page">
           ${watermarkBase64 ? `<img src="${watermarkBase64}" class="watermark-layer" alt="Watermark" />` : ""}
           <div class="content-layer">
             ${renderHeader(p)}
             ${renderCustomerDocBox()}
-            ${renderItemsTable(items, p, true)}
-            ${renderBottomSignatures(p)}
+            ${renderItemsTable(chunk.items, p, chunk.isLastPage)}
+            ${chunk.isLastPage ? renderBottomSignatures(p) : `
+              <div style="margin-top: auto; padding: 10px 0; text-align: right; font-size: 11px; color: #555;">
+                (ต่อหน้าถัดไป)
+              </div>
+            `}
           </div>
         </div>
-      `;
-    } else {
-      return `
-        <div class="cash-sale-page">
-          ${watermarkBase64 ? `<img src="${watermarkBase64}" class="watermark-layer" alt="Watermark" />` : ""}
-          <div class="content-layer">
-            ${renderHeader(p)}
-            ${renderCustomerDocBox()}
-            ${renderItemsTable(items, p, false)}
-          </div>
-        </div>
-        <div class="cash-sale-page">
-          ${watermarkBase64 ? `<img src="${watermarkBase64}" class="watermark-layer" alt="Watermark" />` : ""}
-          <div class="content-layer">
-            ${renderHeader(p)}
-            ${renderCustomerDocBox()}
-            ${renderItemsTable([], p, true)}
-            ${renderBottomSignatures(p)}
-          </div>
-        </div>
-      `;
-    }
+      `
+      )
+      .join("");
   }).join("")}
 </body>
 </html>
