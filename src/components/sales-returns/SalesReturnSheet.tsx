@@ -101,7 +101,7 @@ export function SalesReturnSheet({ data }: { data: SalesReturnData }) {
       <img
         src="/api/logo/watermark"
         alt="Watermark"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] sm:w-[460px] opacity-[0.11] pointer-events-none select-none z-0"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] sm:w-[460px] opacity-[0.22] pointer-events-none select-none z-0"
       />
 
       <div className="relative z-10 space-y-3 sm:space-y-4">

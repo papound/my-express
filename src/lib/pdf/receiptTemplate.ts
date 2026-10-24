@@ -116,7 +116,7 @@ export function generateReceiptHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.13;
+      opacity: 0.24;
       pointer-events: none;
       z-index: 0;
     }

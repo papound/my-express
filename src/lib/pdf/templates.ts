@@ -47,7 +47,7 @@ const baseStyles = `
     left: 50%;
     transform: translate(-50%, -50%);
     width: 480px;
-    opacity: 0.15;
+    opacity: 0.24;
     pointer-events: none;
     z-index: 0;
   }
@@ -224,7 +224,7 @@ export function generateInvoiceHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.13;
+      opacity: 0.24;
       pointer-events: none;
       z-index: 0;
     }
@@ -658,7 +658,7 @@ export function generateAdvanceInvoiceHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.13;
+      opacity: 0.24;
       pointer-events: none;
       z-index: 0;
     }
@@ -1047,7 +1047,7 @@ export function generateSalesReturnHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.12;
+      opacity: 0.24;
       pointer-events: none;
       z-index: 0;
     }
@@ -1416,7 +1416,7 @@ export function generateQuotationHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 440px;
-      opacity: 0.12;
+      opacity: 0.24;
       pointer-events: none;
       z-index: 0;
     }
@@ -1743,7 +1743,7 @@ export function generateBillingHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.13;
+      opacity: 0.24;
       pointer-events: none;
       z-index: 0;
     }

@@ -353,7 +353,7 @@ export default function QuotationDetailPage({
             <img
               src="/api/logo/watermark"
               alt="Watermark"
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] opacity-[0.14] pointer-events-none select-none z-0"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] opacity-[0.24] pointer-events-none select-none z-0"
             />
 
             <div className="overflow-x-auto relative z-10">
