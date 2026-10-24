@@ -228,9 +228,9 @@ export function generateInvoiceHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.24;
+      opacity: 0.18;
       pointer-events: none;
-      z-index: 0;
+      z-index: 20;
     }
     .content-layer {
       position: relative;
@@ -251,7 +251,7 @@ export function generateInvoiceHtml(data: {
       border-radius: 6px;
       overflow: hidden;
       margin-bottom: 8px;
-      background-color: #fff;
+      background-color: transparent;
     }
     .items-table {
       width: 100%;
@@ -693,9 +693,9 @@ export function generateAdvanceInvoiceHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.24;
+      opacity: 0.18;
       pointer-events: none;
-      z-index: 0;
+      z-index: 20;
     }
     .content-layer {
       position: relative;
@@ -716,7 +716,7 @@ export function generateAdvanceInvoiceHtml(data: {
       border-radius: 6px;
       overflow: hidden;
       margin-bottom: 6px;
-      background-color: #fff;
+      background-color: transparent;
     }
     .items-table {
       width: 100%;
@@ -1111,9 +1111,9 @@ export function generateSalesReturnHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.24;
+      opacity: 0.18;
       pointer-events: none;
-      z-index: 0;
+      z-index: 20;
     }
     .content-layer {
       position: relative;
@@ -1134,7 +1134,7 @@ export function generateSalesReturnHtml(data: {
       border-radius: 6px;
       overflow: hidden;
       margin-bottom: 6px;
-      background-color: #fff;
+      background-color: transparent;
     }
     .items-table {
       width: 100%;
@@ -1523,9 +1523,9 @@ export function generateQuotationHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 440px;
-      opacity: 0.24;
+      opacity: 0.18;
       pointer-events: none;
-      z-index: 0;
+      z-index: 20;
     }
     .content-layer {
       position: relative;
@@ -1874,9 +1874,9 @@ export function generateBillingHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.24;
+      opacity: 0.18;
       pointer-events: none;
-      z-index: 0;
+      z-index: 20;
     }
     .content-layer {
       position: relative;
@@ -1897,7 +1897,7 @@ export function generateBillingHtml(data: {
       border-radius: 6px;
       overflow: hidden;
       margin-bottom: 8px;
-      background-color: #fff;
+      background-color: transparent;
     }
     .items-table {
       width: 100%;

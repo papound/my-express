@@ -119,9 +119,9 @@ export function generateReceiptHtml(data: {
       left: 50%;
       transform: translate(-50%, -50%);
       width: 410px;
-      opacity: 0.24;
+      opacity: 0.18;
       pointer-events: none;
-      z-index: 0;
+      z-index: 20;
     }
     .content-layer {
       position: relative;
@@ -142,7 +142,7 @@ export function generateReceiptHtml(data: {
       border-radius: 6px;
       overflow: hidden;
       margin-bottom: 6px;
-      background-color: #fff;
+      background-color: transparent;
     }
     .items-table {
       width: 100%;
