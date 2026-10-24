@@ -131,13 +131,13 @@ export function BillingSheet({
             />
             <div>
               <div className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
-                {company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}
+                {company?.THINAM || ""}
               </div>
               <div className="text-[11px] text-slate-600 leading-tight mt-0.5">
                 {company?.ADDR01} {company?.ADDR02}
               </div>
               <div className="text-[11px] text-slate-600 leading-tight">
-                {company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                {company?.TELNUM || ""}
               </div>
             </div>
           </div>
@@ -353,7 +353,7 @@ export function BillingSheet({
             <div>
               ในนาม &nbsp;{" "}
               <strong className="text-slate-900 font-bold">
-                {company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}
+                {company?.THINAM || ""}
               </strong>
             </div>
             <div className="pt-2 text-center">

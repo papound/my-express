@@ -141,13 +141,13 @@ export function generateCashSaleHtml(data: {
           <div style="display: flex; align-items: flex-start;">
             ${logoBase64 ? `<img src="${logoBase64}" class="company-logo" alt="Logo" />` : ""}
             <div>
-              <div style="font-size: 14.5px; font-weight: 700; color: #000;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+              <div style="font-size: 14.5px; font-weight: 700; color: #000;">${company?.THINAM || ""}</div>
               <div style="font-size: 10.5px; color: #333; margin-top: 1px;">
                 ${company?.ADDR01 || ""} ${company?.ADDR02 || ""}<br>
-                ${company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                ${company?.TELNUM || ""}
               </div>
               <div style="font-size: 10.5px; color: #333; margin-top: 2px;">
-                <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี/ Tax ID</span> &nbsp; <span class="font-mono font-bold">${company?.TAXID || "0105558016255"}</span> &nbsp;&nbsp;&nbsp; สำนักงานใหญ่
+                <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี/ Tax ID</span> &nbsp; <span class="font-mono font-bold">${company?.TAXID || ""}</span> &nbsp;&nbsp;&nbsp; สำนักงานใหญ่
               </div>
             </div>
           </div>
@@ -447,7 +447,7 @@ export function generateCashSaleHtml(data: {
           <!-- Right: Authorized Signatures -->
           <td style="width: 30%; vertical-align: top; padding: 6px 8px; text-align: center;">
             <div style="font-size: 9px; color: #333;">ในนาม</div>
-            <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+            <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || ""}</div>
 
             <div style="margin-bottom: 8px;">
               ${signatureBase64 ? `

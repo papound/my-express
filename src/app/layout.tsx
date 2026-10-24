@@ -1,10 +1,28 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { readAll, cleanStr } from "@/lib/dbf/reader";
 
-export const metadata: Metadata = {
-  title: "ระบบบัญชี - ธงธัญ",
-  description: "ระบบบัญชีออนไลน์สำหรับบริษัทธงธัญ",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  let companyName = "";
+  try {
+    const raw = await readAll<Record<string, unknown>>("ISINFO");
+    if (raw && raw[0]?.THINAM) {
+      companyName = cleanStr(raw[0].THINAM);
+    }
+  } catch {
+    // fallback
+  }
+
+  const title = companyName ? `ระบบบัญชี - ${companyName}` : "ระบบบัญชี Express";
+  const description = companyName
+    ? `ระบบบัญชีออนไลน์สำหรับ ${companyName}`
+    : "ระบบบัญชีออนไลน์ Express Web Platform";
+
+  return {
+    title,
+    description,
+  };
+}
 
 export default function RootLayout({
   children,

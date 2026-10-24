@@ -13,8 +13,8 @@ export async function GET() {
 
     const companyRaw = rawInfo[0];
     const company = {
-      name: cleanStr(companyRaw?.THINAM) || "บริษัท ธงธัญ99 จำกัด",
-      engName: cleanStr(companyRaw?.ENGNAM) || "THONGTHAN99 Co.,LTD.",
+      name: cleanStr(companyRaw?.THINAM) || "",
+      engName: cleanStr(companyRaw?.ENGNAM) || "",
       taxId: cleanStr(companyRaw?.TAXID) || "",
       address: [cleanStr(companyRaw?.ADDR01), cleanStr(companyRaw?.ADDR02)]
         .filter(Boolean)

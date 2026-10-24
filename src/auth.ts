@@ -41,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret:
     process.env.AUTH_SECRET ||
     process.env.NEXTAUTH_SECRET ||
-    "default-secret-dev-key-express-thongthan-32-chars",
+    "default-secret-dev-key-my-express-jwt-32-chars",
   trustHost: true,
   providers: [
     Credentials({
@@ -82,7 +82,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           process.env.NEXTAUTH_SECRET,
           "9f8c6e2b4a1d5e7f3c0b8a6d4e2f1a9c8b7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f",
           "change-me-in-production-use-openssl-rand-base64-32",
-          "default-secret-dev-key-express-thongthan-32-chars",
+          "default-secret-dev-key-my-express-jwt-32-chars",
         ].filter(Boolean) as string[];
 
         for (const secret of fallbacks) {

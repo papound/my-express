@@ -261,7 +261,7 @@ export function DashboardView() {
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-medium text-white shadow-sm">
               <Building2 size={13} className="text-blue-200" />
-              <span>{data?.company?.name || "บริษัท ธงธัญ99 จำกัด"}</span>
+              <span>{data?.company?.name || "ระบบบัญชี Express"}</span>
             </div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/40 backdrop-blur-md border border-white/10 text-xs text-blue-100">
               <Calendar size={13} className="text-blue-300" />
@@ -283,7 +283,7 @@ export function DashboardView() {
           </div>
 
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
-            ยินดีต้อนรับสู่ระบบบัญชี {data?.company?.name || "ธงธัญ"}
+            ยินดีต้อนรับสู่ระบบบัญชี {data?.company?.name || "Express"}
           </h2>
           <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-blue-100/90 leading-relaxed max-w-2xl">
             ระบบบริหารจัดการบัญชีและการเงินแบบเรียลไทม์ เชื่อมโยงฐานข้อมูล Express อัตโนมัติ
@@ -1143,7 +1143,7 @@ export function DashboardView() {
               สรุปข้อมูลมาสเตอร์ (Express Tables)
             </h4>
             <p className="text-xs text-slate-400 mb-4">
-              สถานะข้อมูลประจำบริษัทธงธัญ
+              สถานะข้อมูลประจำ{data?.company?.name ? `${data.company.name}` : "ระบบบัญชี"}
             </p>
 
             <div className="grid grid-cols-2 gap-3 text-xs">

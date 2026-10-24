@@ -106,7 +106,7 @@ export function Sidebar({
             <div
               className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20 shrink-0 cursor-pointer"
               onClick={isCollapsed ? onToggleCollapse : undefined}
-              title={company?.name || "บริษัท ธงธัญ99 จำกัด"}
+              title={company?.name || "ระบบบัญชี Express"}
             >
               <Building2 size={19} className="stroke-[2.2]" />
             </div>
@@ -115,9 +115,9 @@ export function Sidebar({
               <div className="min-w-0 transition-opacity duration-200">
                 <div
                   className="font-bold text-xs sm:text-sm tracking-wide text-white truncate max-w-[140px]"
-                  title={company?.name || "บริษัท ธงธัญ99 จำกัด"}
+                  title={company?.name || "ระบบบัญชี Express"}
                 >
-                  {company?.name || "บริษัท ธงธัญ99 จำกัด"}
+                  {company?.name || "ระบบบัญชี Express"}
                 </div>
                 <p
                   className="text-[10px] sm:text-[11px] text-slate-400 font-medium truncate max-w-[140px]"
@@ -175,7 +175,7 @@ export function Sidebar({
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <Database size={13} className="text-emerald-400 shrink-0" />
-              <span className="truncate">ThongTha (DBF Live)</span>
+              <span className="truncate">{company?.name ? `${company.name} (DBF Live)` : "Express (DBF Live)"}</span>
             </div>
           </div>
         ) : (
@@ -183,7 +183,7 @@ export function Sidebar({
           <div className="px-2 pt-3 flex flex-col items-center gap-2">
             <div
               className="w-10 h-10 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-emerald-400 relative cursor-pointer"
-              title={`ThongTha (DBF Live) - วันที่ทำการ: ${new Date(
+              title={`${company?.name || "Express"} (DBF Live) - วันที่ทำการ: ${new Date(
                 company?.workingDate || Date.now()
               ).toLocaleDateString("th-TH", {
                 day: "numeric",
@@ -295,7 +295,7 @@ export function Sidebar({
                       {session?.user?.name || "Administrator"}
                     </div>
                     <div className="text-[10px] text-slate-400 truncate">
-                      {session?.user?.email || "admin@thongtha"}
+                      {session?.user?.email || "admin@express"}
                     </div>
                   </div>
                 </div>
@@ -324,7 +324,7 @@ export function Sidebar({
               </button>
               <div
                 className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-xs text-white uppercase ring-1 ring-white/10 shadow-sm cursor-pointer"
-                title={`${session?.user?.name || "Administrator"} (${session?.user?.email || "admin@thongtha"})`}
+                title={`${session?.user?.name || "Administrator"} (${session?.user?.email || "admin@express"})`}
               >
                 {session?.user?.name?.[0] || "A"}
               </div>

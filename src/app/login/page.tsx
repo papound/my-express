@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Building2, Lock, User, ShieldCheck, ArrowRight, RefreshCw } from "lucide-react";
 
@@ -10,7 +10,19 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [companyName, setCompanyName] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/company")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.name) {
+          setCompanyName(data.name);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,7 +55,7 @@ export default function LoginPage() {
             <Building2 size={28} className="stroke-[2.2]" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            ระบบบัญชีธงธัญ
+            {companyName ? `ระบบบัญชี ${companyName}` : "ระบบบัญชี Express"}
           </h1>
           <p className="text-xs text-slate-500 mt-1">
             Express Accounting Web Platform (Tailscale Connected)
@@ -120,7 +132,7 @@ export default function LoginPage() {
         {/* Footer info */}
         <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400">
           <ShieldCheck size={14} className="text-emerald-500" />
-          <span>ข้อมูลปลอดภัย เชื่อมต่อระบบเครือข่ายภายในธงธัญ</span>
+          <span>ข้อมูลปลอดภัย เชื่อมต่อระบบเครือข่ายภายใน{companyName ? ` ${companyName}` : ""}</span>
         </div>
       </div>
     </div>

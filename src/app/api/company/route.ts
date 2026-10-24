@@ -7,8 +7,8 @@ export async function GET() {
     const info = rawInfo[0];
 
     const company = {
-      name: cleanStr(info?.THINAM) || "บริษัท ธงธัญ99 จำกัด",
-      engName: cleanStr(info?.ENGNAM) || "THONGTHAN99 Co.,LTD.",
+      name: cleanStr(info?.THINAM) || "",
+      engName: cleanStr(info?.ENGNAM) || "",
       taxId: cleanStr(info?.TAXID) || "",
       address: [cleanStr(info?.ADDR01), cleanStr(info?.ADDR02)]
         .filter(Boolean)
@@ -22,8 +22,8 @@ export async function GET() {
     console.error("Company API error:", err);
     return NextResponse.json(
       {
-        name: "บริษัท ธงธัญ99 จำกัด",
-        engName: "THONGTHAN99 Co.,LTD.",
+        name: "",
+        engName: "",
         taxId: "",
         address: "",
         tel: "",

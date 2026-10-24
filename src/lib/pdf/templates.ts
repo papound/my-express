@@ -300,13 +300,13 @@ export function generateInvoiceHtml(data: {
             <div style="display: flex; align-items: flex-start;">
               ${logoBase64 ? `<img src="${logoBase64}" class="company-logo" alt="Logo" />` : ""}
               <div>
-                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || ""}</div>
                 <div style="font-size: 11px; color: #333; margin-top: 1px;">
                   ${company?.ADDR01 || ""} ${company?.ADDR02 || ""}<br>
-                  ${company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                  ${company?.TELNUM || ""}
                 </div>
                 <div style="font-size: 11px; color: #333; margin-top: 2px;">
-                  <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี/ Tax ID</span> &nbsp; <span class="font-mono font-bold">${company?.TAXID || "0105558016255"}</span> &nbsp;&nbsp;&nbsp; สำนักงานใหญ่
+                  <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี/ Tax ID</span> &nbsp; <span class="font-mono font-bold">${company?.TAXID || ""}</span> &nbsp;&nbsp;&nbsp; สำนักงานใหญ่
                 </div>
               </div>
             </div>
@@ -554,13 +554,13 @@ export function generateInvoiceHtml(data: {
             <div>o สินค้านี้ขายขาดไม่รับคืนหรือเปลี่ยน</div>
             <div>o บริษัทฯ จะนำใบแจ้งหนี้มาเรียกเก็บเงินในภายหลัง</div>
             <div>o บริษัทฯ จะคิดดอกเบี้ย 1.25% ต่อเดือน เมื่อชำระบิลเกินกำหนด</div>
-            <div>o กรุณาชำระเงินด้วยเช็ค ในนามบริษัท ธงธัญ 99 จำกัด ขีดผู้ถือและขีดคล่อมเท่านั้น</div>
+            <div>o กรุณาชำระเงินด้วยเช็ค ในนาม ${company?.THINAM || "บริษัทฯ"} ขีดผู้ถือและขีดคล่อมเท่านั้น</div>
           </td>
 
           <!-- Right: Authorized Signatures -->
           <td style="width: 33%; vertical-align: top; padding: 6px 8px; text-align: center;">
             <div style="font-size: 9.5px; color: #333;">ในนาม</div>
-            <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+            <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || ""}</div>
             
             <div style="margin-bottom: 8px;">
               ${signatureBase64 ? `
@@ -765,13 +765,13 @@ export function generateAdvanceInvoiceHtml(data: {
             <div style="display: flex; align-items: flex-start;">
               ${logoBase64 ? `<img src="${logoBase64}" class="company-logo" alt="Logo" />` : ""}
               <div>
-                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || ""}</div>
                 <div style="font-size: 11px; color: #333; margin-top: 1px;">
                   ${company?.ADDR01 || ""} ${company?.ADDR02 || ""}<br>
-                  ${company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                  ${company?.TELNUM || ""}
                 </div>
                 <div style="font-size: 11px; color: #333; margin-top: 2px;">
-                  <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี/ Tax ID</span> &nbsp; <span class="font-mono font-bold">${company?.TAXID || "0105558016255"}</span> &nbsp;&nbsp;&nbsp; สำนักงานใหญ่
+                  <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี/ Tax ID</span> &nbsp; <span class="font-mono font-bold">${company?.TAXID || ""}</span> &nbsp;&nbsp;&nbsp; สำนักงานใหญ่
                 </div>
               </div>
             </div>
@@ -992,7 +992,7 @@ export function generateAdvanceInvoiceHtml(data: {
             <!-- Right: Authorized Signatures -->
             <td style="width: 35%; vertical-align: top; padding: 6px 8px; text-align: center;">
               <div style="font-size: 9.5px; color: #333;">ในนาม</div>
-              <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+              <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || ""}</div>
 
               <div style="margin-bottom: 8px;">
                 ${signatureBase64 ? `
@@ -1184,13 +1184,13 @@ export function generateSalesReturnHtml(data: {
             <div style="display: flex; align-items: flex-start;">
               ${logoBase64 ? `<img src="${logoBase64}" class="company-logo" alt="Logo" />` : ""}
               <div>
-                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || ""}</div>
                 <div style="font-size: 11px; color: #333; margin-top: 1px;">
                   ${company?.ADDR01 || ""} ${company?.ADDR02 || ""}<br>
-                  ${company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                  ${company?.TELNUM || ""}
                 </div>
                 <div style="font-size: 11px; color: #333; margin-top: 2px;">
-                  <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี</span> &nbsp; <span class="font-mono font-bold">${company?.TAXID || "0105558016255"}</span>
+                  <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี</span> &nbsp; <span class="font-mono font-bold">${company?.TAXID || ""}</span>
                 </div>
               </div>
             </div>
@@ -1426,7 +1426,7 @@ export function generateSalesReturnHtml(data: {
             <!-- Right: Authorized -->
             <td style="width: 40%; vertical-align: top; padding: 8px 12px; text-align: center;">
               <div style="font-size: 9.5px; color: #333;">ในนาม</div>
-              <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+              <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || ""}</div>
               <div>
                 ${signatureBase64 ? `
                   <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
@@ -1597,10 +1597,10 @@ export function generateQuotationHtml(data: {
           <div style="display: flex; align-items: flex-start;">
             ${logoBase64 ? `<img src="${logoBase64}" class="company-logo" alt="Logo" />` : ""}
             <div>
-              <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+              <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || ""}</div>
               <div style="font-size: 11.5px; color: #333; margin-top: 1px;">
                 ${company?.ADDR01 || ""} ${company?.ADDR02 || ""}<br>
-                ${company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์. 02-896-8065"}
+                ${company?.TELNUM || ""}
               </div>
             </div>
           </div>
@@ -1946,10 +1946,10 @@ export function generateBillingHtml(data: {
             <div style="display: flex; align-items: flex-start;">
               ${logoBase64 ? `<img src="${logoBase64}" class="company-logo" alt="Logo" />` : ""}
               <div>
-                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+                <div style="font-size: 15px; font-weight: 700; color: #000;">${company?.THINAM || ""}</div>
                 <div style="font-size: 11px; color: #333; margin-top: 1px;">
                   ${company?.ADDR01 || ""} ${company?.ADDR02 || ""}<br>
-                  ${company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                  ${company?.TELNUM || ""}
                 </div>
               </div>
             </div>
@@ -2124,7 +2124,7 @@ export function generateBillingHtml(data: {
             <!-- Right: Issuer Signatures -->
             <td style="width: 50%; vertical-align: top; padding: 10px 16px;">
               <div style="margin-bottom: 6px;">
-                ในนาม &nbsp; <strong>${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</strong>
+                ในนาม &nbsp; <strong>${company?.THINAM || ""}</strong>
               </div>
               <div style="text-align: center; margin-top: 4px;">
                 ${signatureBase64 ? `

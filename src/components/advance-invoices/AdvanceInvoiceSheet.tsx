@@ -172,18 +172,18 @@ export function AdvanceInvoiceSheet({
             />
             <div>
               <div className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
-                {company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}
+                {company?.THINAM || ""}
               </div>
               <div className="text-[11px] text-slate-600 leading-tight mt-0.5">
                 {company?.ADDR01} {company?.ADDR02}
               </div>
               <div className="text-[11px] text-slate-600 leading-tight">
-                {company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                {company?.TELNUM || ""}
               </div>
               <div className="text-[11px] text-slate-700 font-medium mt-0.5">
                 เลขประจำตัวผู้เสียภาษี/ Tax ID{" "}
                 <span className="font-mono font-bold text-slate-900">
-                  {company?.TAXID || "0105558016255"}
+                  {company?.TAXID || ""}
                 </span>{" "}
                 &nbsp; สำนักงานใหญ่
               </div>
@@ -528,7 +528,7 @@ export function AdvanceInvoiceSheet({
               <div>
                 <div className="text-[9.5px] text-slate-500">ในนาม</div>
                 <div className="font-bold text-slate-900 text-xs">
-                  {company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}
+                  {company?.THINAM || ""}
                 </div>
               </div>
 

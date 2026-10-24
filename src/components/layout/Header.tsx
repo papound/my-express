@@ -37,7 +37,17 @@ export function Header({
 }) {
   const pathname = usePathname();
   const [currentDate, setCurrentDate] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    fetch("/api/company")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.name) setCompanyName(data.name);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const now = new Date();
@@ -68,7 +78,7 @@ export function Header({
           subtitle: "ตรวจสอบข้อมูลและสั่งพิมพ์เอกสาร PDF",
         }
       : {
-          title: "ระบบบัญชีธงธัญ",
+          title: companyName ? `ระบบบัญชี ${companyName}` : "ระบบบัญชี Express",
           subtitle: "Express Alternative Web Platform",
         });
 

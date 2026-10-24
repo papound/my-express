@@ -196,18 +196,18 @@ export function InvoiceSheet({
             />
             <div>
               <div className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
-                {company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}
+                {company?.THINAM || ""}
               </div>
               <div className="text-[11px] text-slate-600 leading-tight mt-0.5">
                 {company?.ADDR01} {company?.ADDR02}
               </div>
               <div className="text-[11px] text-slate-600 leading-tight">
-                {company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์.02-896-8065"}
+                {company?.TELNUM || ""}
               </div>
               <div className="text-[11px] text-slate-700 font-medium mt-0.5">
                 เลขประจำตัวผู้เสียภาษี/ Tax ID{" "}
                 <span className="font-mono font-bold text-slate-900">
-                  {company?.TAXID || "0105558016255"}
+                  {company?.TAXID || ""}
                 </span>{" "}
                 &nbsp; สำนักงานใหญ่
               </div>
@@ -564,7 +564,7 @@ export function InvoiceSheet({
             <div>o บริษัทฯ จะนำใบแจ้งหนี้มาเรียกเก็บเงินในภายหลัง</div>
             <div>o บริษัทฯ จะคิดดอกเบี้ย 1.25% ต่อเดือน เมื่อชำระบิลเกินกำหนด</div>
             <div>
-              o กรุณาชำระเงินด้วยเช็ค ในนามบริษัท ธงธัญ 99 จำกัด ขีดผู้ถือและขีดคล่อมเท่านั้น
+              o กรุณาชำระเงินด้วยเช็ค ในนาม{company?.THINAM || "บริษัทฯ"} ขีดผู้ถือและขีดคล่อมเท่านั้น
             </div>
           </div>
 
@@ -573,7 +573,7 @@ export function InvoiceSheet({
             <div>
               <div className="text-[9.5px] text-slate-500">ในนาม</div>
               <div className="font-bold text-slate-900 text-xs">
-                {company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}
+                {company?.THINAM || ""}
               </div>
             </div>
 

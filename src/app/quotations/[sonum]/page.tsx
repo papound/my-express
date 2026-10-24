@@ -267,13 +267,13 @@ export default function QuotationDetailPage({
               />
               <div className="space-y-0.5 text-xs text-slate-800">
                 <h1 className="text-base sm:text-lg font-bold text-slate-950">
-                  {company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}
+                  {company?.THINAM || ""}
                 </h1>
                 <p className="text-[11.5px] sm:text-xs text-slate-700 leading-tight">
                   {company?.ADDR01} {company?.ADDR02}
                 </p>
                 <p className="text-[11.5px] sm:text-xs text-slate-700">
-                  {company?.TELNUM || "โทรศัพท์. 02-896-8068-9 แฟกซ์. 02-896-8065"}
+                  {company?.TELNUM || ""}
                 </p>
               </div>
             </div>
