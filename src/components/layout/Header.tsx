@@ -27,7 +27,13 @@ const titleMap: Record<string, { title: string; subtitle: string }> = {
   },
 };
 
-export function Header({ onToggleMenu }: { onToggleMenu?: () => void }) {
+export function Header({
+  onToggleMenu,
+  isCollapsed = false,
+}: {
+  onToggleMenu?: () => void;
+  isCollapsed?: boolean;
+}) {
   const pathname = usePathname();
   const [currentDate, setCurrentDate] = useState("");
 
@@ -67,14 +73,15 @@ export function Header({ onToggleMenu }: { onToggleMenu?: () => void }) {
   return (
     <header className="h-16 sm:h-18 bg-white/85 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 transition-all">
       <div className="flex items-center gap-3">
-        {/* Hamburger Menu on Mobile */}
+        {/* Hamburger Menu Toggle Button (Both Mobile and Desktop) */}
         <button
           type="button"
           onClick={onToggleMenu}
-          className="p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl lg:hidden transition"
-          aria-label="เปิดเมนูหลัก"
+          className="p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition cursor-pointer flex items-center justify-center shrink-0"
+          title={isCollapsed ? "ขยายเมนูด้านข้าง (Sidebar)" : "หุบเมนูด้านข้าง (Sidebar)"}
+          aria-label="สลับแถบเมนูหลัก"
         >
-          <Menu size={22} />
+          <Menu size={20} />
         </button>
 
         <div className="min-w-0">
