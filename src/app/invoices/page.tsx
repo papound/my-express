@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
+import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
 
 interface Invoice {
   RECTYP: string;
@@ -93,6 +94,7 @@ export default function InvoicesPage() {
   const [rectyp, setRectyp] = useState("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -262,9 +264,14 @@ export default function InvoicesPage() {
                         className="hover:bg-blue-50/30 transition-colors group"
                       >
                         <td className="py-3.5 px-4 font-mono font-bold text-slate-900 group-hover:text-blue-700">
-                          <Link href={`/invoices/${encodeURIComponent(inv.DOCNUM)}`}>
+                          <button
+                            type="button"
+                            onClick={() => setPopupDocnum(inv.DOCNUM)}
+                            className="hover:underline text-left cursor-pointer transition text-blue-700 hover:text-blue-800"
+                            title="คลิกเพื่อเปิดดูรายละเอียดเอกสาร"
+                          >
                             {inv.DOCNUM}
-                          </Link>
+                          </button>
                         </td>
                         <td className="py-3.5 px-4 text-slate-600">
                           {fmtDate(inv.DOCDAT)}
@@ -303,13 +310,14 @@ export default function InvoicesPage() {
                         </td>
                         <td className="py-3.5 px-4 text-center">
                           <div className="flex items-center justify-center gap-1.5">
-                            <Link
-                              href={`/invoices/${encodeURIComponent(inv.DOCNUM)}`}
-                              className="p-1.5 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg border border-transparent hover:border-blue-200 transition"
-                              title="ดูรายละเอียดใบกำกับ"
+                            <button
+                              type="button"
+                              onClick={() => setPopupDocnum(inv.DOCNUM)}
+                              className="p-1.5 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg border border-transparent hover:border-blue-200 transition cursor-pointer"
+                              title="ดูรายละเอียดเอกสารแบบ Popup"
                             >
                               <Eye size={15} />
-                            </Link>
+                            </button>
                             <button
                               type="button"
                               onClick={() =>
@@ -347,6 +355,12 @@ export default function InvoicesPage() {
             </table>
           </div>
         </div>
+
+        {/* Invoice Detail Popup Modal */}
+        <InvoiceDetailModal
+          docnum={popupDocnum}
+          onClose={() => setPopupDocnum(null)}
+        />
       </div>
     </AppShell>
   );

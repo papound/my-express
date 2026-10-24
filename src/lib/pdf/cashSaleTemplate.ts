@@ -320,6 +320,12 @@ export function generateCashSaleHtml(data: {
                 <td style="font-weight: 600; padding-top: 2px;">ยอดหลังหักส่วนลด<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">After Discount</span></td>
                 <td style="text-align: right; font-family: monospace; padding-top: 2px;">${fmtMoney(afterDiscount)}</td>
               </tr>
+              ${(invoice.ADVAMT || 0) > 0 ? `
+              <tr>
+                <td style="font-weight: 600; padding-top: 2px;">หักเงินมัดจำ<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">Less Deposit</span></td>
+                <td style="text-align: right; font-family: monospace; padding-top: 2px;">${fmtMoney(invoice.ADVAMT)}</td>
+              </tr>
+              ` : ""}
               <tr>
                 <td style="font-weight: 600; padding-top: 2px;">
                   จำนวนภาษีมูลค่าเพิ่ม &nbsp; <span class="font-mono">${vatRate}.00</span> %<br>

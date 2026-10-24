@@ -430,7 +430,7 @@ export function CashSaleSheet({
                     <span className="text-slate-800 font-medium">{item.STKDES}</span>
                   </td>
                   <td className="py-2.5 px-3 text-right font-mono font-semibold text-slate-900 border-r border-slate-700 whitespace-nowrap">
-                    {item.TRNQTY.toFixed(2)} {item.TQUCOD || ""}
+                    {(item.TRNQTY ?? 0).toFixed(2)} {item.TQUCOD || ""}
                   </td>
                   <td className="py-2.5 px-3 text-right font-mono text-slate-800 border-r border-slate-700">
                     {fmtMoney(item.UNITPR)}
@@ -493,6 +493,20 @@ export function CashSaleSheet({
                 </span>
                 <span className="font-mono text-slate-800">{fmtMoney(afterDiscount)}</span>
               </div>
+
+              {(invoice.ADVAMT || 0) > 0 && (
+                <div className="flex justify-between">
+                  <span className="font-semibold text-slate-900">
+                    หักเงินมัดจำ{" "}
+                    <span className="text-[9.5px] font-normal text-slate-500">
+                      Less Deposit
+                    </span>
+                  </span>
+                  <span className="font-mono text-slate-800">
+                    {fmtMoney(invoice.ADVAMT)}
+                  </span>
+                </div>
+              )}
 
               <div className="flex justify-between pt-0.5 border-t border-dashed border-slate-200">
                 <span className="font-semibold text-slate-900">
