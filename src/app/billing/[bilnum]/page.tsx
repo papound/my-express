@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { ArrowLeft, Printer, RefreshCw, Layers } from "lucide-react";
+import { ArrowLeft, Printer, RefreshCw, Layers, Download } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
+import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import {
   BillingSheet,
   BILLING_PAGES_CONFIG,
@@ -41,6 +42,31 @@ export default function BillingDetailPage({
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | number>("all");
   const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handlePrint = async () => {
+    if (!data?.billing?.BILNUM) return;
+    setIsPrinting(true);
+    try {
+      await printPdf(`/api/pdf/billing/${encodeURIComponent(data.billing.BILNUM)}`);
+    } finally {
+      setIsPrinting(false);
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!data?.billing?.BILNUM) return;
+    setIsDownloading(true);
+    try {
+      await downloadPdf(
+        `/api/pdf/billing/${encodeURIComponent(data.billing.BILNUM)}`,
+        `${data.billing.BILNUM}.pdf`
+      );
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -117,15 +143,33 @@ export default function BillingDetailPage({
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <a
-              href={`/api/pdf/billing/${encodeURIComponent(data.billing.BILNUM)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/20 transition w-full sm:w-auto"
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={handlePrint}
+              disabled={isPrinting}
+              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/20 transition disabled:opacity-60 w-full sm:w-auto"
             >
-              <Printer size={16} /> พิมพ์ / ดาวน์โหลด PDF (ครบ 2 ชุด)
-            </a>
+              {isPrinting ? (
+                <RefreshCw size={15} className="animate-spin" />
+              ) : (
+                <Printer size={15} />
+              )}
+              <span>{isPrinting ? "กำลังเตรียมพิมพ์..." : "พิมพ์ใบวางบิล (2 ชุด)"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleDownload}
+              disabled={isDownloading}
+              className="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm transition disabled:opacity-60 w-full sm:w-auto"
+            >
+              {isDownloading ? (
+                <RefreshCw size={15} className="animate-spin text-blue-600" />
+              ) : (
+                <Download size={15} className="text-slate-600" />
+              )}
+              <span>{isDownloading ? "กำลังดาวน์โหลด..." : "ดาวน์โหลด PDF"}</span>
+            </button>
           </div>
         </div>
 

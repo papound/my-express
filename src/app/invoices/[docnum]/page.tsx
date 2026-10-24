@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { ArrowLeft, Printer, RefreshCw, Layers } from "lucide-react";
+import { ArrowLeft, Printer, RefreshCw, Layers, Download } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
+import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import {
   InvoiceSheet,
   INVOICE_PAGES_CONFIG,
@@ -41,6 +42,31 @@ export default function InvoiceDetailPage({
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | number>("all");
   const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handlePrint = async () => {
+    if (!data?.invoice?.DOCNUM) return;
+    setIsPrinting(true);
+    try {
+      await printPdf(`/api/pdf/invoice/${encodeURIComponent(data.invoice.DOCNUM)}`);
+    } finally {
+      setIsPrinting(false);
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!data?.invoice?.DOCNUM) return;
+    setIsDownloading(true);
+    try {
+      await downloadPdf(
+        `/api/pdf/invoice/${encodeURIComponent(data.invoice.DOCNUM)}`,
+        `${data.invoice.DOCNUM}.pdf`
+      );
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -113,24 +139,45 @@ export default function InvoiceDetailPage({
           >
             <ArrowLeft size={16} /> กลับหน้ารายการ
           </Link>
-          <div className="flex items-center gap-3">
-            <a
-              href={`/api/pdf/invoice/${encodeURIComponent(data.invoice.DOCNUM)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/20 transition w-full sm:w-auto"
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={handlePrint}
+              disabled={isPrinting}
+              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/20 transition disabled:opacity-60 w-full sm:w-auto"
             >
-              <Printer size={16} />{" "}
-              {isSalesReturn
-                ? "พิมพ์ / ดาวน์โหลด PDF (ใบลดหนี้/รับคืนสินค้า)"
-                : isAdvanceInvoice
-                ? "พิมพ์ / ดาวน์โหลด PDF (ใบรับเงินมัดจำ ครบ 3 ชุด)"
-                : isCashSale
-                ? "พิมพ์ / ดาวน์โหลด PDF (ขายสด ครบ 6 ชุด)"
-                : isReceipt
-                ? "พิมพ์ / ดาวน์โหลด PDF (ใบเสร็จรับเงิน ครบ 3 ชุด)"
-                : "พิมพ์ / ดาวน์โหลด PDF (ครบ 4 สี)"}
-            </a>
+              {isPrinting ? (
+                <RefreshCw size={15} className="animate-spin" />
+              ) : (
+                <Printer size={15} />
+              )}
+              <span>
+                {isPrinting
+                  ? "กำลังเตรียมพิมพ์..."
+                  : isSalesReturn
+                  ? "พิมพ์เอกสาร (ใบลดหนี้)"
+                  : isAdvanceInvoice
+                  ? "พิมพ์เอกสาร (ใบรับมัดจำ 3 ชุด)"
+                  : isCashSale
+                  ? "พิมพ์เอกสาร (ขายสด 6 ชุด)"
+                  : isReceipt
+                  ? "พิมพ์เอกสาร (ใบเสร็จ 3 ชุด)"
+                  : "พิมพ์เอกสาร (ครบ 4 สี)"}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={handleDownload}
+              disabled={isDownloading}
+              className="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm transition disabled:opacity-60 w-full sm:w-auto"
+            >
+              {isDownloading ? (
+                <RefreshCw size={15} className="animate-spin text-blue-600" />
+              ) : (
+                <Download size={15} className="text-slate-600" />
+              )}
+              <span>{isDownloading ? "กำลังดาวน์โหลด..." : "ดาวน์โหลด PDF"}</span>
+            </button>
           </div>
         </div>
 

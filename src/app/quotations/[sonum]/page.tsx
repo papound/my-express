@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { ArrowLeft, Printer, RefreshCw } from "lucide-react";
+import { ArrowLeft, Printer, RefreshCw, Download } from "lucide-react";
 import Link from "next/link";
 import { bahtText } from "@/lib/baht-text";
 import { AppShell } from "@/components/layout/AppShell";
+import { printPdf, downloadPdf } from "@/lib/pdf/client";
 
 interface Item {
   STKCOD: string;
@@ -105,6 +106,31 @@ export default function QuotationDetailPage({
   const [data, setData] = useState<QuotationDetailResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handlePrint = async () => {
+    if (!data?.quotation?.SONUM) return;
+    setIsPrinting(true);
+    try {
+      await printPdf(`/api/pdf/quotation/${encodeURIComponent(data.quotation.SONUM)}`);
+    } finally {
+      setIsPrinting(false);
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!data?.quotation?.SONUM) return;
+    setIsDownloading(true);
+    try {
+      await downloadPdf(
+        `/api/pdf/quotation/${encodeURIComponent(data.quotation.SONUM)}`,
+        `${data.quotation.SONUM}.pdf`
+      );
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -175,20 +201,38 @@ export default function QuotationDetailPage({
           >
             <ArrowLeft size={16} /> กลับหน้ารายการ
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <span
               className={`inline-block px-3 py-1 font-bold text-xs rounded-lg border ${statusCfg.badgeClass}`}
             >
               {statusCfg.label}
             </span>
-            <a
-              href={`/api/pdf/quotation/${encodeURIComponent(quotation.SONUM)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-md shadow-blue-500/20 transition w-full sm:w-auto"
+            <button
+              type="button"
+              onClick={handlePrint}
+              disabled={isPrinting}
+              className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-md shadow-blue-500/20 transition disabled:opacity-60 w-full sm:w-auto"
             >
-              <Printer size={16} /> พิมพ์ / ดาวน์โหลด PDF (Quotation)
-            </a>
+              {isPrinting ? (
+                <RefreshCw size={15} className="animate-spin" />
+              ) : (
+                <Printer size={15} />
+              )}
+              <span>{isPrinting ? "กำลังเตรียมพิมพ์..." : "พิมพ์ใบเสนอราคา"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleDownload}
+              disabled={isDownloading}
+              className="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition disabled:opacity-60 w-full sm:w-auto"
+            >
+              {isDownloading ? (
+                <RefreshCw size={15} className="animate-spin text-blue-600" />
+              ) : (
+                <Download size={15} className="text-slate-600" />
+              )}
+              <span>{isDownloading ? "กำลังดาวน์โหลด..." : "ดาวน์โหลด PDF"}</span>
+            </button>
           </div>
         </div>
 

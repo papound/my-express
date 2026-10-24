@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Search, RefreshCw, Printer, Calendar, ShoppingCart, Eye } from "lucide-react";
+import { Search, RefreshCw, Printer, Calendar, ShoppingCart, Eye, Download } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
+import { printPdf, downloadPdf } from "@/lib/pdf/client";
 
 interface Quotation {
   SONUM: string;
@@ -257,16 +258,33 @@ export default function QuotationsPage() {
                           >
                             <Eye size={15} />
                           </Link>
-                          <a
-                            href={`/api/pdf/quotation/${encodeURIComponent(r.SONUM)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-2.5 py-1 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg border border-slate-200/80 hover:border-emerald-200 transition text-[11px] font-medium"
-                            title="พิมพ์ PDF Quotation"
+                          <button
+                            type="button"
+                            onClick={() =>
+                              printPdf(
+                                `/api/pdf/quotation/${encodeURIComponent(r.SONUM)}`
+                              )
+                            }
+                            className="inline-flex items-center gap-1 px-2 py-1 text-slate-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg border border-slate-200/80 hover:border-blue-200 transition text-[11px] font-medium"
+                            title="สั่งพิมพ์เอกสาร"
                           >
-                            <Printer size={13} className="text-emerald-600" />
-                            <span>PDF</span>
-                          </a>
+                            <Printer size={13} className="text-blue-600" />
+                            <span>พิมพ์</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              downloadPdf(
+                                `/api/pdf/quotation/${encodeURIComponent(r.SONUM)}`,
+                                `${r.SONUM}.pdf`
+                              )
+                            }
+                            className="inline-flex items-center gap-1 px-2 py-1 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg border border-slate-200/80 hover:border-emerald-200 transition text-[11px] font-medium"
+                            title="ดาวน์โหลด PDF"
+                          >
+                            <Download size={13} className="text-emerald-600" />
+                            <span>โหลด</span>
+                          </button>
                         </div>
                       </td>
                     </tr>

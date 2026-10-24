@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, Printer, RefreshCw, Layers, ArrowLeft } from "lucide-react";
+import { X, Printer, RefreshCw, Layers, ArrowLeft, Download } from "lucide-react";
+import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import {
   InvoiceSheet,
   INVOICE_PAGES_CONFIG,
@@ -159,16 +160,34 @@ export function InvoiceDetailModal({
           </div>
 
           <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-            <a
-              href={`/api/pdf/invoice/${encodeURIComponent(currentDocnum)}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() =>
+                printPdf(
+                  `/api/pdf/invoice/${encodeURIComponent(currentDocnum)}`
+                )
+              }
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 hover:text-blue-700 hover:bg-blue-50 hover:border-blue-200 transition shadow-sm"
-              title="พิมพ์ PDF"
+              title="สั่งพิมพ์เอกสาร"
             >
               <Printer size={14} className="text-blue-600" />
-              <span>พิมพ์ PDF</span>
-            </a>
+              <span>พิมพ์</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                downloadPdf(
+                  `/api/pdf/invoice/${encodeURIComponent(currentDocnum)}`,
+                  `${currentDocnum}.pdf`
+                )
+              }
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 hover:border-emerald-200 transition shadow-sm"
+              title="ดาวน์โหลด PDF"
+            >
+              <Download size={14} className="text-emerald-600" />
+              <span>ดาวน์โหลด</span>
+            </button>
 
             <button
               onClick={onClose}

@@ -21,7 +21,9 @@ import {
   Building2,
   Calendar,
   MapPin,
+  Download,
 } from "lucide-react";
+import { printPdf, downloadPdf } from "@/lib/pdf/client";
 
 interface DashboardData {
   company?: {
@@ -364,15 +366,31 @@ export function DashboardView() {
                         >
                           <Eye size={14} />
                         </Link>
-                        <a
-                          href={`/api/pdf/invoice/${encodeURIComponent(inv.DOCNUM)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition"
-                          title="พิมพ์ PDF"
+                        <button
+                          type="button"
+                          onClick={() =>
+                            printPdf(
+                              `/api/pdf/invoice/${encodeURIComponent(inv.DOCNUM)}`
+                            )
+                          }
+                          className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                          title="สั่งพิมพ์เอกสาร"
                         >
                           <Printer size={14} />
-                        </a>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            downloadPdf(
+                              `/api/pdf/invoice/${encodeURIComponent(inv.DOCNUM)}`,
+                              `${inv.DOCNUM}.pdf`
+                            )
+                          }
+                          className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition"
+                          title="ดาวน์โหลด PDF"
+                        >
+                          <Download size={14} />
+                        </button>
                       </div>
                     </td>
                   </tr>
