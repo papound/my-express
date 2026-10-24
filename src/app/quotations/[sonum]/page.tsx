@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { ArrowLeft, Printer, RefreshCw, Download } from "lucide-react";
+import { ArrowLeft, Printer, RefreshCw, Download, Tag } from "lucide-react";
 import Link from "next/link";
 import { bahtText } from "@/lib/baht-text";
 import { AppShell } from "@/components/layout/AppShell";
@@ -108,13 +108,14 @@ export default function QuotationDetailPage({
   const [error, setError] = useState("");
   const [isPrinting, setIsPrinting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showItemCode, setShowItemCode] = useState(true);
 
   const handlePrint = async () => {
     if (!data?.quotation?.SONUM) return;
     setIsPrinting(true);
     try {
       await printPdf(
-        `/api/pdf/quotation/${encodeURIComponent(data.quotation.SONUM)}`,
+        `/api/pdf/quotation/${encodeURIComponent(data.quotation.SONUM)}?showItemCode=${showItemCode}`,
         `กำลังเตรียมพิมพ์ใบเสนอราคา (${data.quotation.SONUM})...`
       );
     } finally {
@@ -127,7 +128,7 @@ export default function QuotationDetailPage({
     setIsDownloading(true);
     try {
       await downloadPdf(
-        `/api/pdf/quotation/${encodeURIComponent(data.quotation.SONUM)}`,
+        `/api/pdf/quotation/${encodeURIComponent(data.quotation.SONUM)}?showItemCode=${showItemCode}`,
         `${data.quotation.SONUM}.pdf`,
         `กำลังดาวน์โหลดใบเสนอราคา (${data.quotation.SONUM}.pdf)...`
       );
@@ -206,6 +207,20 @@ export default function QuotationDetailPage({
             <ArrowLeft size={16} /> กลับหน้ารายการ
           </Link>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            {/* Toggle show item code */}
+            <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-700 shadow-sm cursor-pointer hover:bg-slate-50 transition select-none">
+              <input
+                type="checkbox"
+                checked={showItemCode}
+                onChange={(e) => setShowItemCode(e.target.checked)}
+                className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer"
+              />
+              <span className="flex items-center gap-1.5">
+                <Tag size={13} className="text-blue-600" />
+                <span>แสดงรหัสสินค้าคู่กับคำอธิบาย</span>
+              </span>
+            </label>
+
             <span
               className={`inline-block px-3 py-1 font-bold text-xs rounded-lg border ${statusCfg.badgeClass}`}
             >
@@ -368,7 +383,16 @@ export default function QuotationDetailPage({
                         {it.SEQNUM ? parseInt(it.SEQNUM, 10) : idx + 1}
                       </td>
                       <td className="py-1.5 px-3 border-r border-slate-400 text-slate-900 text-[11.5px]">
-                        {it.STKDES || it.STKCOD}
+                        {showItemCode && it.STKCOD && it.STKDES && it.STKCOD !== it.STKDES ? (
+                          <div className="flex items-baseline gap-1.5 flex-wrap">
+                            <span className="font-mono font-bold text-blue-800 bg-blue-50 px-1 py-0.5 rounded border border-blue-200/60 text-[11px] shrink-0">
+                              [{it.STKCOD}]
+                            </span>
+                            <span>{it.STKDES}</span>
+                          </div>
+                        ) : (
+                          <span>{it.STKDES || it.STKCOD}</span>
+                        )}
                       </td>
                       <td className="py-1.5 px-3 text-right border-r border-slate-400 font-mono text-[11.5px]">
                         {it.ORDQTY.toFixed(2)} {it.TQUCOD || ""}

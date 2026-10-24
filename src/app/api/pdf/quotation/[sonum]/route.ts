@@ -4,12 +4,14 @@ import { generateQuotationHtml } from "@/lib/pdf/templates";
 import { NextResponse } from "next/server";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ sonum: string }> }
 ) {
   try {
     const { sonum } = await params;
     const soNum = decodeURIComponent(sonum).trim();
+    const { searchParams } = new URL(request.url);
+    const showItemCode = searchParams.get("showItemCode") !== "false";
 
     const [rawSo, rawMas, rawSoIt, rawInfo, rawRm, rawTab] = await Promise.all([
       readAll<Record<string, unknown>>("OESO"),
@@ -107,6 +109,7 @@ export async function GET(
       items,
       remarks,
       company,
+      showItemCode,
     });
 
     const pdfBuffer = await renderHtmlToPdf(html);

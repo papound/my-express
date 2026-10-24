@@ -1369,8 +1369,9 @@ export function generateQuotationHtml(data: {
   items: any[];
   remarks?: any[];
   company?: any;
+  showItemCode?: boolean;
 }): string {
-  const { quotation, customer, items, remarks, company } = data;
+  const { quotation, customer, items, remarks, company, showItemCode = true } = data;
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
@@ -1576,7 +1577,13 @@ export function generateQuotationHtml(data: {
               (it, idx) => `
             <tr>
               <td style="text-align: center; font-family: monospace;">${it.SEQNUM ? parseInt(it.SEQNUM, 10) : idx + 1}</td>
-              <td style="text-align: left;">${it.STKDES || it.STKCOD}</td>
+              <td style="text-align: left;">
+                ${
+                  showItemCode && it.STKCOD && it.STKDES && it.STKCOD !== it.STKDES
+                    ? `<span style="font-family: monospace; font-weight: 600; color: #1e3a8a; margin-right: 5px;">[${it.STKCOD}]</span>${it.STKDES}`
+                    : `${it.STKDES || it.STKCOD}`
+                }
+              </td>
               <td style="text-align: right; font-family: monospace;">${it.ORDQTY.toFixed(2)} ${it.TQUCOD || ""}</td>
               <td style="text-align: right; font-family: monospace;">${fmtMoney(it.UNITPR)}</td>
               <td style="text-align: right; font-family: monospace;">${it.DISC || (it.DISCAMT > 0 ? fmtMoney(it.DISCAMT) : "")}</td>
