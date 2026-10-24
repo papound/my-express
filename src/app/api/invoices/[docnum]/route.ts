@@ -147,25 +147,30 @@ export async function GET(
         }
       : null;
 
+    const isReceipt =
+      cleanStr(header.RECTYP) === "9" || docNum.toUpperCase().startsWith("RE");
+
     // For Receipt (RE / RECTYP === "9"), load applied invoices from ARRCPIT
-    const receiptItems = rawRcpIt
-      .filter((r) => cleanStr(r.RCPNUM) === docNum)
-      .map((r, idx) => {
-        const invNum = cleanStr(r.DOCNUM);
-        const refInv = rawTrn.find((t) => cleanStr(t.DOCNUM) === invNum);
-        return {
-          SEQNUM: String(idx + 1),
-          DOCNUM: invNum,
-          DOCDAT: refInv ? cleanDate(refInv.DOCDAT) : null,
-          DUEDAT: refInv ? cleanDate(refInv.DUEDAT) : null,
-          AMOUNT: refInv
-            ? cleanNum(refInv.NETAMT) || cleanNum(refInv.AMOUNT)
-            : cleanNum(r.RCVAMT),
-          REMAMT: refInv ? cleanNum(refInv.REMAMT) : 0,
-          RCVAMT: cleanNum(r.RCVAMT),
-          VATAMT: cleanNum(r.VATAMT),
-        };
-      });
+    const receiptItems = isReceipt
+      ? rawRcpIt
+          .filter((r) => cleanStr(r.RCPNUM) === docNum)
+          .map((r, idx) => {
+            const invNum = cleanStr(r.DOCNUM);
+            const refInv = rawTrn.find((t) => cleanStr(t.DOCNUM) === invNum);
+            return {
+              SEQNUM: String(idx + 1),
+              DOCNUM: invNum,
+              DOCDAT: refInv ? cleanDate(refInv.DOCDAT) : null,
+              DUEDAT: refInv ? cleanDate(refInv.DUEDAT) : null,
+              AMOUNT: refInv
+                ? cleanNum(refInv.NETAMT) || cleanNum(refInv.AMOUNT)
+                : cleanNum(r.RCVAMT),
+              REMAMT: refInv ? cleanNum(refInv.REMAMT) : 0,
+              RCVAMT: cleanNum(r.RCVAMT),
+              VATAMT: cleanNum(r.VATAMT),
+            };
+          })
+      : [];
 
     // For Deposit (RECTYP === "0" or starts with AI), find which sales invoices deducted it
     const appliedInvoices = rawTrn
@@ -203,7 +208,7 @@ export async function GET(
     return NextResponse.json({
       invoice,
       customer: customerData,
-      items: receiptItems.length > 0 ? receiptItems : items,
+      items: isReceipt ? receiptItems : items,
       receiptItems,
       appliedInvoices,
       depositInfo,

@@ -389,7 +389,7 @@ export function InvoiceSheet({
                     <span className="text-slate-800 font-medium">{item.STKDES}</span>
                   </td>
                   <td className="py-2 px-3 text-right font-mono font-semibold text-slate-900 border-r border-slate-700">
-                    {item.TRNQTY.toFixed(2)} {item.TQUCOD || ""}
+                    {(item.TRNQTY ?? 0).toFixed(2)} {item.TQUCOD || ""}
                   </td>
                   <td className="py-2 px-3 text-right font-mono text-slate-800 border-r border-slate-700">
                     {fmtMoney(item.UNITPR)}

@@ -277,10 +277,10 @@ export function SalesReturnSheet({ data }: { data: SalesReturnData }) {
                     {item.RETSTK || "Y"}
                   </td>
                   <td className="py-2 px-3 text-right font-mono font-semibold text-slate-900 border-r border-slate-700">
-                    {item.TRNQTY.toFixed(2)} {item.TQUCOD || ""}
+                    {(item.TRNQTY ?? 0).toFixed(2)} {item.TQUCOD || ""}
                   </td>
                   <td className="py-2 px-3 text-right font-mono text-slate-800 border-r border-slate-700">
-                    {item.UNITPR.toFixed(4)}
+                    {(item.UNITPR ?? 0).toFixed(4)}
                   </td>
                   <td className="py-2 px-3 text-right font-mono text-slate-600 border-r border-slate-700">
                     {item.DISC || (item.DISCAMT ? fmtMoney(item.DISCAMT) : "-")}
