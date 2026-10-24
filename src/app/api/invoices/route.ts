@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     const dateFrom = searchParams.get("from"); // YYYY-MM-DD
     const dateTo = searchParams.get("to");
     const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
-    const limit = Math.min(200, parseInt(searchParams.get("limit") ?? "50"));
+    const limit = Math.min(200, parseInt(searchParams.get("limit") ?? "20"));
 
     // Load ARTRN + ARMAS in parallel
     const [rawTrn, rawMas] = await Promise.all([

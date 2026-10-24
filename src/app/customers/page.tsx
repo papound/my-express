@@ -17,6 +17,7 @@ import {
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
+import { Pagination } from "@/components/common/Pagination";
 import {
   CustomerDetailModal,
   type CustomerDetail,
@@ -69,13 +70,21 @@ export default function CustomersPage() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("A");
   const [sort, setSort] = useState("code");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerDetail | null>(null);
   const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ search, status, sort, limit: "200" });
+      const params = new URLSearchParams({
+        search,
+        status,
+        sort,
+        page: String(page),
+        limit: String(limit),
+      });
       const res = await fetch(`/api/customers?${params}`);
       const json = await res.json();
       setCustomers(json.data ?? []);
@@ -86,7 +95,7 @@ export default function CustomersPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, status, sort]);
+  }, [search, status, sort, page, limit]);
 
   useEffect(() => {
     const t = setTimeout(fetchData, 300);
@@ -123,7 +132,10 @@ export default function CustomersPage() {
               type="text"
               placeholder="ค้นหา รหัสลูกค้า / ชื่อบริษัท / เลขผู้เสียภาษี / เบอร์โทร / เลขที่บิล..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
             />
           </div>
@@ -135,7 +147,10 @@ export default function CustomersPage() {
               <span className="text-[11px] font-medium text-slate-500 whitespace-nowrap">เรียง:</span>
               <select
                 value={sort}
-                onChange={(e) => setSort(e.target.value)}
+                onChange={(e) => {
+                  setSort(e.target.value);
+                  setPage(1);
+                }}
                 className="bg-transparent text-xs text-slate-800 font-semibold focus:outline-none cursor-pointer"
               >
                 <option value="code">รหัสลูกค้า</option>
@@ -156,7 +171,10 @@ export default function CustomersPage() {
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setStatus(tab.id)}
+                  onClick={() => {
+                    setStatus(tab.id);
+                    setPage(1);
+                  }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition flex items-center gap-1.5 ${
                     status === tab.id
                       ? "bg-white text-blue-700 font-semibold shadow-sm"
@@ -352,6 +370,19 @@ export default function CustomersPage() {
           </table>
         </div>
       </div>
+
+      {/* Pagination Bar */}
+      <Pagination
+        page={page}
+        limit={limit}
+        total={total}
+        onPageChange={setPage}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
+        loading={loading}
+      />
 
       {/* Customer Detail Popup Modal */}
       <CustomerDetailModal

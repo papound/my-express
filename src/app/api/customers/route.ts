@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     const status = searchParams.get("status") ?? "A"; // A=active, I=inactive, all=ทั้งหมด
     const sort = searchParams.get("sort") ?? "code"; // code, lastInvoice, balance, name
     const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
-    const limit = Math.min(200, parseInt(searchParams.get("limit") ?? "50"));
+    const limit = Math.min(200, parseInt(searchParams.get("limit") ?? "20"));
 
     const [rawMas, rawTrn] = await Promise.all([
       readAll<Record<string, unknown>>("ARMAS"),

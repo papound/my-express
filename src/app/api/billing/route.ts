@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     const dateTo = searchParams.get("to");
     const status = searchParams.get("status") ?? "all";
     const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
-    const limit = Math.min(200, parseInt(searchParams.get("limit") ?? "50"));
+    const limit = Math.min(200, parseInt(searchParams.get("limit") ?? "20"));
 
     const [rawBil, rawMas, rawTrn] = await Promise.all([
       readAll<Record<string, unknown>>("ARBIL"),

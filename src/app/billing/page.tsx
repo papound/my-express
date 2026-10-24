@@ -5,6 +5,7 @@ import { Search, RefreshCw, Printer, Calendar, CreditCard, Eye, Download } from 
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
+import { Pagination } from "@/components/common/Pagination";
 
 interface Billing {
   BILNUM: string;
@@ -61,11 +62,18 @@ export default function BillingPage() {
   const [status, setStatus] = useState("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ search, status, limit: "200" });
+      const params = new URLSearchParams({
+        search,
+        status,
+        page: String(page),
+        limit: String(limit),
+      });
       if (dateFrom) params.set("from", dateFrom);
       if (dateTo) params.set("to", dateTo);
       const res = await fetch(`/api/billing?${params}`);
@@ -75,7 +83,7 @@ export default function BillingPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, status, dateFrom, dateTo]);
+  }, [search, status, dateFrom, dateTo, page, limit]);
 
   useEffect(() => {
     const t = setTimeout(fetchData, 300);
@@ -116,7 +124,10 @@ export default function BillingPage() {
                 type="text"
                 placeholder="ค้นหา เลขที่ใบวางบิล / รหัสลูกค้า / ชื่อ..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
                 className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
               />
             </div>
@@ -130,7 +141,10 @@ export default function BillingPage() {
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setStatus(tab.id)}
+                  onClick={() => {
+                    setStatus(tab.id);
+                    setPage(1);
+                  }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${
                     status === tab.id
                       ? "bg-white text-blue-700 font-semibold shadow-sm"
@@ -153,14 +167,20 @@ export default function BillingPage() {
               <input
                 type="date"
                 value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
+                onChange={(e) => {
+                  setDateFrom(e.target.value);
+                  setPage(1);
+                }}
                 className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
               />
               <span className="text-slate-400">ถึง</span>
               <input
                 type="date"
                 value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
+                onChange={(e) => {
+                  setDateTo(e.target.value);
+                  setPage(1);
+                }}
                 className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
               />
               {(dateFrom || dateTo) && (
@@ -168,6 +188,7 @@ export default function BillingPage() {
                   onClick={() => {
                     setDateFrom("");
                     setDateTo("");
+                    setPage(1);
                   }}
                   className="text-xs text-slate-500 hover:text-slate-800 underline ml-1"
                 >
@@ -305,6 +326,19 @@ export default function BillingPage() {
           </table>
         </div>
       </div>
+
+      {/* Pagination Bar */}
+      <Pagination
+        page={page}
+        limit={limit}
+        total={total}
+        onPageChange={setPage}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
+        loading={loading}
+      />
     </div>
   </AppShell>
 );
