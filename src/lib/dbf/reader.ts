@@ -162,3 +162,44 @@ export function getDocStatusName(status: string): {
   return statuses[status] ?? { label: status, color: "gray" };
 }
 
+/**
+ * ทำความสะอาด search query สำหรับภาษาไทยและภาษาอังกฤษ
+ * - ลบ zero-width characters (BOM, zero-width space)
+ * - ลบ Thai combining diacritics / tone marks ที่พิมพ์ลอยๆ หน้าคำ หรือติดกับตัวอักษรภาษาอังกฤษ
+ *   (เช่น เผลอกด Shift+H ในโหมดภาษาไทย กลายเป็น ็ (ไม้ไต่คู้) นำหน้า HS68)
+ * - คืนค่า query ที่ trim และ lowercase
+ */
+export function cleanSearchQuery(query: string | null | undefined): string {
+  if (!query) return "";
+  return query
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .trim()
+    .replace(/^[\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+/g, "")
+    .replace(/(?<=[A-Za-z0-9])[\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+/g, "")
+    .replace(/[\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+(?=[A-Za-z0-9])/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+/**
+ * ตรวจสอบว่า target string ตรงกับ search query หรือไม่
+ * รองรับการค้นหาแบบยืดหยุ่น เช่น ตัดเว้นวรรค/ขีดกลาง (HS-6807002, HS 6807002 ตรงกับ HS6807002)
+ */
+export function matchSearch(
+  target: string | null | undefined,
+  query: string
+): boolean {
+  if (!target || !query) return false;
+  const targetLower = target.toLowerCase();
+  if (targetLower.includes(query)) return true;
+
+  // เปรียบเทียบแบบตัดเว้นวรรคและขีดกลาง (เช่น HS-68 -> HS68)
+  const normQuery = query.replace(/[-\s]/g, "");
+  if (normQuery.length >= 2) {
+    const normTarget = targetLower.replace(/[-\s]/g, "");
+    if (normTarget.includes(normQuery)) return true;
+  }
+  return false;
+}
+
+

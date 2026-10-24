@@ -4,6 +4,8 @@ import {
   cleanNum,
   cleanDate,
   findOne,
+  cleanSearchQuery,
+  matchSearch,
 } from "@/lib/dbf/reader";
 import { NextResponse } from "next/server";
 
@@ -11,7 +13,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const rectyp = searchParams.get("rectyp") ?? "all"; // "1"=เงินสด, "2"=เครดิต, "all"
-    const search = searchParams.get("search")?.toLowerCase() ?? "";
+    const search = cleanSearchQuery(searchParams.get("search"));
     const dateFrom = searchParams.get("from"); // YYYY-MM-DD
     const dateTo = searchParams.get("to");
     const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
@@ -90,13 +92,19 @@ export async function GET(request: Request) {
       records = records.filter((r) => r.DOCDAT && r.DOCDAT <= to);
     }
 
-    // Filter by search (customer name / doc number)
+    // Filter by search (customer name / doc number / po number / so number)
     if (search) {
       records = records.filter(
         (r) =>
-          r.DOCNUM.toLowerCase().includes(search) ||
-          r.CUSCOD.toLowerCase().includes(search) ||
-          r.customer?.CUSNAM.toLowerCase().includes(search)
+          matchSearch(r.DOCNUM, search) ||
+          matchSearch(r.CUSCOD, search) ||
+          matchSearch(r.customer?.CUSNAM, search) ||
+          matchSearch(
+            r.customer ? `${r.customer.PRENAM}${r.customer.CUSNAM}` : "",
+            search
+          ) ||
+          matchSearch(r.YOUREF, search) ||
+          matchSearch(r.SONUM, search)
       );
     }
 

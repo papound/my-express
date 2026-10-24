@@ -13,6 +13,7 @@ import {
   ArrowUpDown,
   FileText,
   Eye,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
@@ -133,11 +134,28 @@ export default function CustomersPage() {
               placeholder="ค้นหา รหัสลูกค้า / ชื่อบริษัท / เลขผู้เสียภาษี / เบอร์โทร / เลขที่บิล..."
               value={search}
               onChange={(e) => {
-                setSearch(e.target.value);
+                const val = e.target.value.replace(
+                  /^[\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]+/,
+                  ""
+                );
+                setSearch(val);
                 setPage(1);
               }}
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              className="w-full pl-10 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-200/60 transition cursor-pointer"
+                title="ล้างคำค้นหา"
+              >
+                <X size={14} />
+              </button>
+            )}
           </div>
 
           <div className="flex flex-wrap items-center gap-3">

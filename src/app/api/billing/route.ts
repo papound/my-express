@@ -1,10 +1,17 @@
-import { readAll, cleanStr, cleanNum, cleanDate } from "@/lib/dbf/reader";
+import {
+  readAll,
+  cleanStr,
+  cleanNum,
+  cleanDate,
+  cleanSearchQuery,
+  matchSearch,
+} from "@/lib/dbf/reader";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get("search")?.toLowerCase() ?? "";
+    const search = cleanSearchQuery(searchParams.get("search"));
     const dateFrom = searchParams.get("from");
     const dateTo = searchParams.get("to");
     const status = searchParams.get("status") ?? "all";
@@ -67,9 +74,9 @@ export async function GET(request: Request) {
     if (search) {
       records = records.filter(
         (r) =>
-          r.BILNUM.toLowerCase().includes(search) ||
-          r.CUSCOD.toLowerCase().includes(search) ||
-          r.customer?.CUSNAM.toLowerCase().includes(search)
+          matchSearch(r.BILNUM, search) ||
+          matchSearch(r.CUSCOD, search) ||
+          matchSearch(r.customer?.CUSNAM, search)
       );
     }
 

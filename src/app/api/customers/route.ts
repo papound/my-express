@@ -1,11 +1,18 @@
-import { readAll, cleanStr, cleanNum, cleanDate } from "@/lib/dbf/reader";
+import {
+  readAll,
+  cleanStr,
+  cleanNum,
+  cleanDate,
+  cleanSearchQuery,
+  matchSearch,
+} from "@/lib/dbf/reader";
 import type { ArMas } from "@/lib/dbf/schema";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get("search")?.toLowerCase() ?? "";
+    const search = cleanSearchQuery(searchParams.get("search"));
     const status = searchParams.get("status") ?? "A"; // A=active, I=inactive, all=ทั้งหมด
     const sort = searchParams.get("sort") ?? "code"; // code, lastInvoice, balance, name
     const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
@@ -126,12 +133,12 @@ export async function GET(request: Request) {
     if (search) {
       records = records.filter(
         (r) =>
-          r.CUSNAM.toLowerCase().includes(search) ||
-          r.CUSCOD.toLowerCase().includes(search) ||
-          r.TAXID.includes(search) ||
-          r.TELNUM.includes(search) ||
-          (r.lastInvoiceDocnum &&
-            r.lastInvoiceDocnum.toLowerCase().includes(search))
+          matchSearch(r.CUSNAM, search) ||
+          matchSearch(`${r.PRENAM}${r.CUSNAM}`, search) ||
+          matchSearch(r.CUSCOD, search) ||
+          matchSearch(r.TAXID, search) ||
+          matchSearch(r.TELNUM, search) ||
+          matchSearch(r.lastInvoiceDocnum, search)
       );
     }
 
