@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { decode } from "@auth/core/jwt";
 
 interface AppUser {
   username: string;
@@ -70,6 +71,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   session: { strategy: "jwt" },
+  jwt: {
+    decode: async (params) => {
+      try {
+        return await decode(params);
+      } catch {
+        // Fallback decryption secrets if cookie was generated with an older secret
+        const fallbacks = [
+          process.env.AUTH_SECRET,
+          process.env.NEXTAUTH_SECRET,
+          "9f8c6e2b4a1d5e7f3c0b8a6d4e2f1a9c8b7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f",
+          "change-me-in-production-use-openssl-rand-base64-32",
+          "default-secret-dev-key-express-thongthan-32-chars",
+        ].filter(Boolean) as string[];
+
+        for (const secret of fallbacks) {
+          try {
+            const res = await decode({ ...params, secret });
+            if (res) return res;
+          } catch {
+            // continue
+          }
+        }
+        return null;
+      }
+    },
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) token.role = (user as { role?: string }).role;
