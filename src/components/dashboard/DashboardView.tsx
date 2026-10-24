@@ -24,6 +24,7 @@ import {
   Download,
 } from "lucide-react";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
+import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
 
 interface DashboardData {
   company?: {
@@ -85,6 +86,7 @@ function fmtDate(d: string | null) {
 export function DashboardView() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
 
   const fetchDashboard = async () => {
     setLoading(true);
@@ -315,7 +317,14 @@ export function DashboardView() {
                     className="hover:bg-slate-50/80 transition-colors group"
                   >
                     <td className="py-3 px-2 font-mono font-medium text-slate-900">
-                      {inv.DOCNUM}
+                      <button
+                        type="button"
+                        onClick={() => setPopupDocnum(inv.DOCNUM)}
+                        className="hover:underline text-left cursor-pointer transition text-blue-700 hover:text-blue-800"
+                        title="คลิกเพื่อเปิดดูรายละเอียดเอกสาร"
+                      >
+                        {inv.DOCNUM}
+                      </button>
                     </td>
                     <td className="py-3 px-2 text-slate-600">
                       {fmtDate(inv.DOCDAT)}
@@ -359,13 +368,14 @@ export function DashboardView() {
                     </td>
                     <td className="py-3 px-2 text-center">
                       <div className="flex items-center justify-center gap-1.5">
-                        <Link
-                          href={`/invoices/${encodeURIComponent(inv.DOCNUM)}`}
-                          className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                          title="ดูรายละเอียด"
+                        <button
+                          type="button"
+                          onClick={() => setPopupDocnum(inv.DOCNUM)}
+                          className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition cursor-pointer"
+                          title="ดูรายละเอียดเอกสาร"
                         >
                           <Eye size={14} />
-                        </Link>
+                        </button>
                         <button
                           type="button"
                           onClick={() =>
@@ -490,6 +500,12 @@ export function DashboardView() {
           </div>
         </div>
       </div>
+
+      {/* Invoice Detail Popup Modal */}
+      <InvoiceDetailModal
+        docnum={popupDocnum}
+        onClose={() => setPopupDocnum(null)}
+      />
     </div>
   );
 }
