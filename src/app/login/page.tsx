@@ -17,8 +17,8 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
     const res = await signIn("credentials", {
-      username,
-      password,
+      username: username.trim(),
+      password: password.trim(),
       redirect: false,
     });
     setLoading(false);

@@ -8,15 +8,40 @@ interface AppUser {
   role: string;
 }
 
+const DEFAULT_USERS: AppUser[] = [
+  {
+    username: "admin",
+    password: "admin1234",
+    name: "Administrator",
+    role: "admin",
+  },
+  {
+    username: "user1",
+    password: "user1234",
+    name: "ผู้ใช้งาน",
+    role: "user",
+  },
+];
+
 function getUsers(): AppUser[] {
   try {
-    return JSON.parse(process.env.APP_USERS || "[]");
+    const raw = process.env.APP_USERS;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
   } catch {
-    return [];
+    // fallback
   }
+  return DEFAULT_USERS;
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  secret:
+    process.env.AUTH_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    "default-secret-dev-key-express-thongthan-32-chars",
+  trustHost: true,
   providers: [
     Credentials({
       name: "credentials",

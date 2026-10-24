@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Search, RefreshCw, Users, Phone, MapPin, Building, CreditCard } from "lucide-react";
+import { Search, RefreshCw, Users, Phone, MapPin, Building, CreditCard, Calendar, ArrowUpDown } from "lucide-react";
+import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 
 interface Customer {
@@ -14,6 +15,9 @@ interface Customer {
   PAYTRM: number;
   BALANCE: number;
   STATUS: string;
+  lastInvoiceDate?: string | null;
+  lastInvoiceDocnum?: string | null;
+  lastInvoiceAmount?: number | null;
 }
 
 function fmtMoney(n: number) {
@@ -29,11 +33,12 @@ export default function CustomersPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("A");
+  const [sort, setSort] = useState("code");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ search, status, limit: "200" });
+      const params = new URLSearchParams({ search, status, sort, limit: "200" });
       const res = await fetch(`/api/customers?${params}`);
       const json = await res.json();
       setCustomers(json.data ?? []);
@@ -43,7 +48,7 @@ export default function CustomersPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, status]);
+  }, [search, status, sort]);
 
   useEffect(() => {
     const t = setTimeout(fetchData, 300);
@@ -78,31 +83,50 @@ export default function CustomersPage() {
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="ค้นหา รหัสลูกค้า / ชื่อบริษัท / เลขผู้เสียภาษี / เบอร์โทร..."
+              placeholder="ค้นหา รหัสลูกค้า / ชื่อบริษัท / เลขผู้เสียภาษี / เบอร์โทร / เลขที่บิล..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
             />
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60 overflow-x-auto max-w-full">
-            {[
-              { id: "A", label: "สถานะใช้งาน (Active)" },
-              { id: "I", label: "ยกเลิก (Inactive)" },
-              { id: "all", label: "ทั้งหมด" },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setStatus(tab.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${
-                  status === tab.id
-                    ? "bg-white text-blue-700 font-semibold shadow-sm"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Sort Selector */}
+            <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-xl">
+              <ArrowUpDown size={13} className="text-slate-400" />
+              <span className="text-[11px] font-medium text-slate-500 whitespace-nowrap">เรียง:</span>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="bg-transparent text-xs text-slate-800 font-semibold focus:outline-none cursor-pointer"
               >
-                {tab.label}
-              </button>
-            ))}
+                <option value="code">รหัสลูกค้า</option>
+                <option value="lastInvoice">บิลล่าสุด (ใหม่สุด)</option>
+                <option value="balance">ยอดหนี้ค้างชำระ</option>
+                <option value="name">ชื่อลูกค้า (ก-ฮ)</option>
+              </select>
+            </div>
+
+            {/* Status Tabs */}
+            <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60 overflow-x-auto max-w-full">
+              {[
+                { id: "A", label: "สถานะใช้งาน (Active)" },
+                { id: "I", label: "ยกเลิก (Inactive)" },
+                { id: "all", label: "ทั้งหมด" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setStatus(tab.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${
+                    status === tab.id
+                      ? "bg-white text-blue-700 font-semibold shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -114,24 +138,30 @@ export default function CustomersPage() {
               <tr className="bg-slate-50/80 border-b border-slate-200/80 text-slate-600 font-bold uppercase tracking-wider text-left">
                 <th className="py-3.5 px-4 w-28">รหัสลูกค้า</th>
                 <th className="py-3.5 px-4">ชื่อลูกค้า / บริษัท</th>
-                <th className="py-3.5 px-4 w-40">เลขประจำตัวผู้เสียภาษี</th>
-                <th className="py-3.5 px-4 w-36">เบอร์ติดต่อ</th>
-                <th className="py-3.5 px-4 text-center w-28">เครดิตเทอม</th>
-                <th className="py-3.5 px-4 text-right w-36">ยอดค้างชำระ</th>
-                <th className="py-3.5 px-4 text-center w-24">สถานะ</th>
+                <th className="py-3.5 px-4 w-36">เลขประจำตัวผู้เสียภาษี</th>
+                <th className="py-3.5 px-4 w-32">เบอร์ติดต่อ</th>
+                <th className="py-3.5 px-4 text-center w-24">เครดิต</th>
+                <th className="py-3.5 px-4 text-center w-36">
+                  <div className="flex items-center justify-center gap-1.5 text-blue-700">
+                    <Calendar size={13} />
+                    <span>บิลล่าสุด</span>
+                  </div>
+                </th>
+                <th className="py-3.5 px-4 text-right w-32">ยอดค้างชำระ</th>
+                <th className="py-3.5 px-4 text-center w-20">สถานะ</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="py-16 text-center text-slate-400">
+                  <td colSpan={8} className="py-16 text-center text-slate-400">
                     <RefreshCw className="animate-spin inline-block mr-2" size={16} />
                     กำลังโหลดรายชื่อลูกค้า...
                   </td>
                 </tr>
               ) : customers.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-16 text-center text-slate-400">
+                  <td colSpan={8} className="py-16 text-center text-slate-400">
                     ไม่พบข้อมูลลูกค้า
                   </td>
                 </tr>
@@ -176,6 +206,32 @@ export default function CustomersPage() {
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-700">
                         {c.PAYTRM > 0 ? `${c.PAYTRM} วัน` : "เงินสด"}
                       </span>
+                    </td>
+                    <td className="py-3.5 px-4 text-center">
+                      {c.lastInvoiceDate ? (
+                        <div className="space-y-0.5">
+                          <div className="font-semibold text-slate-900 text-[11.5px]">
+                            {new Date(c.lastInvoiceDate).toLocaleDateString("th-TH", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </div>
+                          {c.lastInvoiceDocnum && (
+                            <div>
+                              <Link
+                                href={`/invoices/${encodeURIComponent(c.lastInvoiceDocnum)}`}
+                                className="inline-flex items-center font-mono text-[10.5px] font-bold text-blue-700 hover:text-blue-900 hover:underline bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/60 transition"
+                                title="คลิกเพื่อดูใบกำกับภาษีนี้"
+                              >
+                                {c.lastInvoiceDocnum}
+                              </Link>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-slate-400 text-xs">-</span>
+                      )}
                     </td>
                     <td className="py-3.5 px-4 text-right font-mono font-bold">
                       {c.BALANCE > 0 ? (
