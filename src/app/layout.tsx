@@ -16,6 +16,20 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var t = localStorage.getItem('app_theme');
+                if (t === 'express') {
+                  document.documentElement.setAttribute('data-theme', 'express');
+                } else {
+                  document.documentElement.setAttribute('data-theme', 'modern');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
       </head>
       <body>{children}</body>
     </html>

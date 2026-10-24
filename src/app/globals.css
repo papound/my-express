@@ -31,3 +31,195 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* ==========================================================================
+   Express Classic Theme (ธีม Express ต้นฉบับ)
+   Sampled from authentic Express Windows / DOS:
+   - Form / Search Header Card: #fee2bc (Warm Express Peach / Apricot)
+   - Table Header: #e7ceb5 (Warm Express Tan / Sand)
+   - Borders: #dfc7a1 / #ceb596 / #ebdccb
+   - Desktop Canvas: #f6f0e4
+   - Sidebar: Deep Classic Walnut #261d15 -> #30241a
+   ========================================================================== */
+
+[data-theme="express"] {
+  --background: #f6f0e4;
+  --foreground: #261c14;
+}
+
+/* Body & App Canvas */
+[data-theme="express"] body,
+[data-theme="express"] .app-root-layout,
+[data-theme="express"] .bg-slate-50\/60,
+[data-theme="express"] .bg-slate-50 {
+  background-color: #f6f0e4 !important;
+  color: #261c14;
+}
+
+/* Custom Express scrollbar */
+[data-theme="express"] ::-webkit-scrollbar-thumb {
+  background: #d4b896;
+}
+[data-theme="express"] ::-webkit-scrollbar-thumb:hover {
+  background: #b89872;
+}
+
+/* Header Bar */
+[data-theme="express"] header {
+  background-color: rgba(253, 249, 243, 0.96) !important;
+  border-bottom-color: #dfceb8 !important;
+}
+[data-theme="express"] header h1 {
+  color: #2c2017 !important;
+}
+[data-theme="express"] header p {
+  color: #78624d !important;
+}
+
+/* Sidebar */
+[data-theme="express"] aside {
+  background: linear-gradient(180deg, #261d15 0%, #30241a 50%, #1e1610 100%) !important;
+  border-right-color: #433325 !important;
+}
+[data-theme="express"] aside .border-slate-800\/60,
+[data-theme="express"] aside .border-slate-800\/80 {
+  border-color: #4a3828 !important;
+}
+[data-theme="express"] aside nav a:hover {
+  background-color: rgba(254, 226, 188, 0.12) !important;
+  color: #fee2bc !important;
+}
+
+/* Dashboard Top Welcome Banner */
+[data-theme="express"] .bg-gradient-to-r.from-blue-700 {
+  background: linear-gradient(135deg, #7c481f 0%, #633614 50%, #432109 100%) !important;
+  border: 1px solid #945828 !important;
+  box-shadow: 0 10px 25px -5px rgba(99, 54, 20, 0.25) !important;
+}
+
+/* Form / Filter / Search Cards (The signature Express Peach #fee2bc) */
+[data-theme="express"] .bg-white.rounded-2xl.p-3\.5,
+[data-theme="express"] .bg-white.rounded-2xl.p-4 {
+  background-color: #fee2bc !important;
+  border-color: #dfc29d !important;
+  box-shadow: 0 1px 3px rgba(110, 75, 30, 0.08) !important;
+}
+
+/* Filter Tab Bar inside peach card */
+[data-theme="express"] .bg-slate-100\/80.rounded-xl {
+  background-color: #edd5ba !important;
+  border-color: #dfc3a0 !important;
+}
+[data-theme="express"] .bg-slate-100\/80.rounded-xl button {
+  color: #5c432d;
+}
+[data-theme="express"] .bg-slate-100\/80.rounded-xl button.bg-white {
+  background-color: #ffffff !important;
+  color: #7a4312 !important;
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(100, 60, 20, 0.15) !important;
+}
+
+/* Input Fields */
+[data-theme="express"] input[type="text"],
+[data-theme="express"] input[type="date"],
+[data-theme="express"] select {
+  background-color: #ffffff !important;
+  border-color: #d1b593 !important;
+  color: #201710 !important;
+}
+[data-theme="express"] input::placeholder {
+  color: #8c735d !important;
+}
+[data-theme="express"] input:focus,
+[data-theme="express"] select:focus {
+  border-color: #a86226 !important;
+  box-shadow: 0 0 0 2px rgba(168, 98, 38, 0.2) !important;
+}
+
+/* Table Card Container */
+[data-theme="express"] .overflow-hidden.border-slate-200\/80,
+[data-theme="express"] .overflow-x-auto table {
+  border-color: #dfc7a1 !important;
+}
+[data-theme="express"] table {
+  background-color: #ffffff !important;
+}
+
+/* Table Header (The authentic Express Tan #e7ceb5) */
+[data-theme="express"] table thead tr,
+[data-theme="express"] table thead tr th {
+  background-color: #e7ceb5 !important;
+  color: #3b2c1d !important;
+  font-weight: 700 !important;
+  border-color: #ceb596 !important;
+  border-bottom: 2px solid #ceb596 !important;
+}
+
+/* Table Rows & Cells */
+[data-theme="express"] table tbody tr {
+  background-color: #ffffff !important;
+  border-color: #ebdccb !important;
+}
+[data-theme="express"] table tbody tr:hover {
+  background-color: #fbf5eb !important;
+}
+[data-theme="express"] table tbody td {
+  border-color: #ebdccb !important;
+}
+
+/* Dashboard Metric Cards */
+[data-theme="express"] .grid.grid-cols-1 .bg-white.rounded-2xl {
+  background-color: #fffaf2 !important;
+  border-color: #e2cca6 !important;
+}
+[data-theme="express"] .grid.grid-cols-1 .bg-white.rounded-2xl:hover {
+  box-shadow: 0 4px 14px rgba(120, 70, 20, 0.1) !important;
+  border-color: #d4b88d !important;
+}
+
+/* Dashboard Recent Invoices & Top Debtors Cards */
+[data-theme="express"] .lg\:col-span-8.bg-white,
+[data-theme="express"] .lg\:col-span-4 .bg-white {
+  background-color: #fffdfa !important;
+  border-color: #e0cca9 !important;
+}
+
+/* Master Statistics Card (Express Dark Walnut) */
+[data-theme="express"] .bg-gradient-to-br.from-slate-900.to-slate-950 {
+  background: linear-gradient(135deg, #2b2015 0%, #1f170e 100%) !important;
+  border-color: #493726 !important;
+}
+[data-theme="express"] .bg-gradient-to-br.from-slate-900.to-slate-950 .bg-slate-800\/60 {
+  background-color: rgba(254, 226, 188, 0.08) !important;
+  border-color: rgba(254, 226, 188, 0.15) !important;
+}
+
+/* Pagination Bar */
+[data-theme="express"] .Pagination,
+[data-theme="express"] .flex.flex-col.sm\:flex-row.items-center.justify-between.gap-3.px-3.py-3.bg-white {
+  background-color: #fff9f0 !important;
+  border-color: #e5cfb3 !important;
+  color: #594432 !important;
+}
+[data-theme="express"] button.bg-blue-600 {
+  background-color: #ab6528 !important;
+  border-color: #92541e !important;
+  color: #ffffff !important;
+}
+
+/* Modals & Popups (InvoiceDetailModal, CustomerDetailModal, ReceiptSheet) */
+[data-theme="express"] .fixed.inset-0 .bg-white.rounded-2xl,
+[data-theme="express"] .fixed.inset-0 .bg-white.rounded-3xl {
+  background-color: #faf5ec !important;
+  border-color: #dfc29d !important;
+}
+[data-theme="express"] .fixed.inset-0 .bg-white.rounded-2xl > div:first-child,
+[data-theme="express"] .fixed.inset-0 .bg-white.rounded-3xl > div:first-child {
+  background-color: #fee2bc !important;
+  border-color: #dfc29d !important;
+}
+[data-theme="express"] .fixed.inset-0 .bg-white.rounded-2xl h3,
+[data-theme="express"] .fixed.inset-0 .bg-white.rounded-3xl h3 {
+  color: #3b2713 !important;
+}

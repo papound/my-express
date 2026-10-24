@@ -18,7 +18,9 @@ import {
   X,
   PanelLeftClose,
   PanelLeftOpen,
+  Palette,
 } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
 
 const navItems = [
   {
@@ -62,6 +64,7 @@ export function Sidebar({
 }) {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { theme, toggleTheme } = useTheme();
   const [company, setCompany] = useState<{
     name: string;
     engName?: string;
@@ -259,6 +262,29 @@ export function Sidebar({
         <div className="p-2.5 border-t border-slate-800/80 bg-slate-950/40">
           {!isCollapsed ? (
             <>
+              {/* Theme Toggle in Sidebar */}
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 border border-slate-800/80 mb-2 transition cursor-pointer"
+                title="คลิกเพื่อสลับธีมแสดงผล"
+              >
+                <div className="flex items-center gap-2">
+                  <Palette
+                    size={14}
+                    className={theme === "express" ? "text-amber-400" : "text-blue-400"}
+                  />
+                  <span>ธีมแสดงผล</span>
+                </div>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border ${
+                  theme === "express"
+                    ? "bg-[#fee2bc] text-[#7a4816] border-[#dfc39e]"
+                    : "bg-slate-800 text-slate-300 border-slate-700"
+                }`}>
+                  {theme === "express" ? "Express Classic" : "Modern"}
+                </span>
+              </button>
+
               <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900/60 border border-slate-800/60 mb-2">
                 <div className="flex items-center gap-2.5 overflow-hidden">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-xs text-white uppercase ring-1 ring-white/10 shrink-0">
@@ -285,6 +311,17 @@ export function Sidebar({
             </>
           ) : (
             <div className="flex flex-col items-center gap-2 py-1">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition cursor-pointer"
+                title={`ธีม: ${theme === "express" ? "Express Classic" : "Modern"} (คลิกเพื่อสลับ)`}
+              >
+                <Palette
+                  size={16}
+                  className={theme === "express" ? "text-amber-400" : "text-blue-400"}
+                />
+              </button>
               <div
                 className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-xs text-white uppercase ring-1 ring-white/10 shadow-sm cursor-pointer"
                 title={`${session?.user?.name || "Administrator"} (${session?.user?.email || "admin@thongtha"})`}

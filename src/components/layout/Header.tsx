@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Calendar, ShieldCheck, Menu } from "lucide-react";
+import { Calendar, ShieldCheck, Menu, Palette } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
 
 const titleMap: Record<string, { title: string; subtitle: string }> = {
   "/": {
@@ -36,6 +37,7 @@ export function Header({
 }) {
   const pathname = usePathname();
   const [currentDate, setCurrentDate] = useState("");
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const now = new Date();
@@ -95,6 +97,33 @@ export function Header({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {/* Theme Switcher Button */}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className={`flex items-center gap-1.5 px-2.5 py-1 sm:py-1.5 rounded-full text-xs font-semibold border transition cursor-pointer ${
+            theme === "express"
+              ? "bg-[#fee2bc] text-[#6e3e11] border-[#d8b88f] hover:bg-[#fcdab0] shadow-xs"
+              : "bg-slate-100/90 text-slate-700 border-slate-200 hover:bg-slate-200/80"
+          }`}
+          title={
+            theme === "express"
+              ? "กำลังใช้งานธีม: Express Classic (คลิกเพื่อสลับกลับเป็น Modern)"
+              : "กำลังใช้งานธีม: Modern (คลิกเพื่อสลับเป็นธีม Express Classic ต้นฉบับ)"
+          }
+        >
+          <Palette
+            size={13}
+            className={theme === "express" ? "text-[#9c5717]" : "text-blue-600"}
+          />
+          <span className="hidden sm:inline">
+            {theme === "express" ? "Express Classic" : "Modern"}
+          </span>
+          <span className="sm:hidden">
+            {theme === "express" ? "Express" : "Modern"}
+          </span>
+        </button>
+
         {/* Date Display */}
         <div className="hidden md:flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100/80 px-3 py-1.5 rounded-full border border-slate-200">
           <Calendar size={13} className="text-blue-600" />
