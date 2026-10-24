@@ -1,0 +1,125 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+env:
+  REGISTRY: 192.168.1.117:5000
+  IMAGE: 192.168.1.117:5000/my-express/app
+
+jobs:
+  # ──────────────────────────────────────────────────────────────────────────
+  # JOB 1: Build และ Push image ไปยัง Private Registry
+  # ──────────────────────────────────────────────────────────────────────────
+  build:
+    name: Build & Push Docker Image
+    runs-on: self-hosted
+    outputs:
+      image_tag: ${{ steps.meta.outputs.sha_tag }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate image tags/metadata
+        id: meta
+        run: |
+          SHA_TAG="${{ env.IMAGE }}:${{ github.sha }}"
+          LATEST_TAG="${{ env.IMAGE }}:latest"
+          echo "sha_tag=${SHA_TAG}" >> "$GITHUB_OUTPUT"
+          echo "latest_tag=${LATEST_TAG}" >> "$GITHUB_OUTPUT"
+          echo "Building: ${SHA_TAG}"
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -f docker/Dockerfile \
+            --tag "${{ steps.meta.outputs.sha_tag }}" \
+            --tag "${{ steps.meta.outputs.latest_tag }}" \
+            --build-arg GIT_REVISION="${{ github.sha }}" \
+            --label "org.opencontainers.image.revision=${{ github.sha }}" \
+            --label "org.opencontainers.image.created=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            .
+
+      - name: Push to private registry
+        run: |
+          docker push "${{ steps.meta.outputs.sha_tag }}"
+          docker push "${{ steps.meta.outputs.latest_tag }}"
+
+      - name: Clean up old local images (keep last 5)
+        run: |
+          docker images "${{ env.IMAGE }}" --format "{{.ID}}" | tail -n +6 | xargs -r docker rmi || true
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # JOB 2: Deploy — SSH เข้า Production (my-express 192.168.1.66)
+  # ──────────────────────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to Production
+    runs-on: self-hosted
+    needs: build
+
+    steps:
+      - name: Deploy via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no root@192.168.1.66 << 'EOF'
+            set -e
+
+            echo "==> Ensuring insecure registry is configured..."
+            DAEMON=/etc/docker/daemon.json
+            if ! grep -q "192.168.1.117:5000" "$DAEMON" 2>/dev/null; then
+              echo '{ "insecure-registries": ["192.168.1.117:5000"] }' > "$DAEMON"
+              systemctl restart docker
+              sleep 2
+            fi
+
+            mkdir -p /opt/my-express
+            cd /opt/my-express
+
+            if [ ! -d ".git" ]; then
+              echo "==> Cloning repository..."
+              git clone https://github.com/papound/my-express.git .
+            else
+              git config --global --add safe.directory /opt/my-express || true
+              echo "==> Resetting local workspace..."
+              git reset --hard
+              git clean -fd
+              echo "==> Pulling latest changes..."
+              git pull origin main
+            fi
+
+            # Check if .env exists, if not create default
+            if [ ! -f ".env" ]; then
+              echo "==> Creating initial .env file..."
+              AUTH_SECRET=$(openssl rand -base64 32)
+              cat > .env << ENV_EOF
+DBF_DATA_PATH=/data/ThongTha
+NEXTAUTH_SECRET=${AUTH_SECRET}
+NEXTAUTH_URL=http://192.168.1.66:3000
+AUTH_TRUST_HOST=true
+APP_USERS=[{"username":"admin","password":"password123","name":"ผู้ดูแลระบบ","role":"admin"}]
+ENV_EOF
+              chmod 600 .env
+            fi
+
+            echo "==> Pulling latest image from registry..."
+            docker compose pull app
+
+            echo "==> Starting / Restarting app container..."
+            docker compose up -d --no-build app
+
+            echo "==> Verifying container status..."
+            docker compose ps app
+
+            echo "✓ Deploy completed successfully at $(date)"
+          EOF
+
+      - name: Cleanup CI runner
+        if: always()
+        run: |
+          docker system prune -f || true

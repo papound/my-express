@@ -1,21 +1,20 @@
 services:
   app:
+    image: 192.168.1.117:5000/my-express/app:latest
     build:
       context: .
       dockerfile: docker/Dockerfile
-    container_name: express-accounting-webapp
+    container_name: my-express-app
     restart: unless-stopped
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
       - DBF_DATA_PATH=/data/ThongTha
-      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-replace-with-a-secure-random-secret-key-32-chars}
-      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
-      - APP_USERS=${APP_USERS:-[{"username":"admin","password":"password123","name":"ผู้ดูแลระบบ","role":"admin"}]}
+      - AUTH_TRUST_HOST=true
+      - PORT=3000
     volumes:
-      # สำหรับ Development: ใช้โฟลเดอร์ local ที่ shadow copy ไว้
-      - ./data/ThongTha:/data/ThongTha:ro
-      # สำหรับ Production / PVE ผ่าน Tailscale VPN: เปลี่ยน path ด้านซ้ายเป็น path แชร์จริง เช่น:
-      # - /mnt/express/ThongTha:/data/ThongTha:ro
-
+      # Production path mounted via CIFS over Tailscale
+      - ${HOST_DBF_PATH:-/mnt/express/ThongTha}:/data/ThongTha:ro
