@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+// @ts-ignore -- Next.js handles this global CSS import at build time.
 import "./globals.css";
 import { readAll, cleanStr } from "@/lib/dbf/reader";
 
