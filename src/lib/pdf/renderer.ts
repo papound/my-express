@@ -24,9 +24,8 @@ async function getBrowser(): Promise<Browser> {
         "--disable-dev-shm-usage",
         "--disable-gpu",
         "--disable-software-rasterizer",
-        "--no-zygote",
-        "--single-process",
         "--no-first-run",
+        "--no-default-browser-check",
         "--font-render-hinting=none",
       ],
     })
@@ -55,8 +54,9 @@ export async function renderHtmlToPdf(
   options?: { landscape?: boolean }
 ): Promise<Uint8Array> {
   const browser = await getBrowser();
-  const page = await browser.newPage();
+  let page;
   try {
+    page = await browser.newPage();
     await page.setContent(html, {
       waitUntil: "domcontentloaded",
       timeout: 15000,
@@ -78,8 +78,18 @@ export async function renderHtmlToPdf(
     });
 
     return pdfBuffer;
+  } catch (err) {
+    // หากเกิดข้อผิดพลาดในการเรนเดอร์ ให้เคลียร์ browser instance เพื่อเปิดใหม่ในรอบถัดไป
+    try {
+      await browserInstance?.close();
+    } catch {}
+    browserInstance = null;
+    browserPromise = null;
+    throw err;
   } finally {
-    await page.close().catch(() => {});
+    if (page) {
+      await page.close().catch(() => {});
+    }
   }
 }
 
