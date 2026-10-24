@@ -32,6 +32,7 @@ COPY . .
 
 # Build Next.js
 ENV NEXT_TELEMETRY_DISABLED=1
+RUN mkdir -p /app/public
 RUN npm run build
 
 # Runner Stage (Production)
