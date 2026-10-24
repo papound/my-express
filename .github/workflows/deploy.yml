@@ -67,57 +67,35 @@ jobs:
     steps:
       - name: Deploy via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no root@192.168.1.66 << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@192.168.1.66 "bash -c '
             set -e
 
-            echo "==> Ensuring insecure registry is configured..."
+            echo \"==> Ensuring insecure registry is configured...\"
             DAEMON=/etc/docker/daemon.json
-            if ! grep -q "192.168.1.117:5000" "$DAEMON" 2>/dev/null; then
-              echo '{ "insecure-registries": ["192.168.1.117:5000"] }' > "$DAEMON"
+            if ! grep -q \"192.168.1.117:5000\" \"\$DAEMON\" 2>/dev/null; then
+              echo \"{ \\\"insecure-registries\\\": [\\\"192.168.1.117:5000\\\"] }\" > \"\$DAEMON\"
               systemctl restart docker
               sleep 2
             fi
 
-            mkdir -p /opt/my-express
+            echo \"==> Updating workspace...\"
             cd /opt/my-express
+            git config --global --add safe.directory /opt/my-express || true
+            git reset --hard
+            git clean -fd
+            git pull origin main
 
-            if [ ! -d ".git" ]; then
-              echo "==> Cloning repository..."
-              git clone https://github.com/papound/my-express.git .
-            else
-              git config --global --add safe.directory /opt/my-express || true
-              echo "==> Resetting local workspace..."
-              git reset --hard
-              git clean -fd
-              echo "==> Pulling latest changes..."
-              git pull origin main
-            fi
-
-            # Check if .env exists, if not create default
-            if [ ! -f ".env" ]; then
-              echo "==> Creating initial .env file..."
-              AUTH_SECRET=$(openssl rand -base64 32)
-              cat > .env << ENV_EOF
-DBF_DATA_PATH=/data/ThongTha
-NEXTAUTH_SECRET=${AUTH_SECRET}
-NEXTAUTH_URL=http://192.168.1.66:3000
-AUTH_TRUST_HOST=true
-APP_USERS=[{"username":"admin","password":"password123","name":"ผู้ดูแลระบบ","role":"admin"}]
-ENV_EOF
-              chmod 600 .env
-            fi
-
-            echo "==> Pulling latest image from registry..."
+            echo \"==> Pulling latest image from registry...\"
             docker compose pull app
 
-            echo "==> Starting / Restarting app container..."
+            echo \"==> Starting / Restarting app container...\"
             docker compose up -d --no-build app
 
-            echo "==> Verifying container status..."
+            echo \"==> Verifying container status...\"
             docker compose ps app
 
-            echo "✓ Deploy completed successfully at $(date)"
-          EOF
+            echo \"✓ Deploy completed successfully at \$(date)\"
+          '"
 
       - name: Cleanup CI runner
         if: always()
