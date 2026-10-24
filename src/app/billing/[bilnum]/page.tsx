@@ -49,7 +49,10 @@ export default function BillingDetailPage({
     if (!data?.billing?.BILNUM) return;
     setIsPrinting(true);
     try {
-      await printPdf(`/api/pdf/billing/${encodeURIComponent(data.billing.BILNUM)}`);
+      await printPdf(
+        `/api/pdf/billing/${encodeURIComponent(data.billing.BILNUM)}`,
+        `กำลังเตรียมพิมพ์ใบวางบิล (${data.billing.BILNUM})...`
+      );
     } finally {
       setIsPrinting(false);
     }
@@ -61,7 +64,8 @@ export default function BillingDetailPage({
     try {
       await downloadPdf(
         `/api/pdf/billing/${encodeURIComponent(data.billing.BILNUM)}`,
-        `${data.billing.BILNUM}.pdf`
+        `${data.billing.BILNUM}.pdf`,
+        `กำลังดาวน์โหลดใบวางบิล (${data.billing.BILNUM}.pdf)...`
       );
     } finally {
       setIsDownloading(false);

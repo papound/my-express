@@ -49,7 +49,10 @@ export default function InvoiceDetailPage({
     if (!data?.invoice?.DOCNUM) return;
     setIsPrinting(true);
     try {
-      await printPdf(`/api/pdf/invoice/${encodeURIComponent(data.invoice.DOCNUM)}`);
+      await printPdf(
+        `/api/pdf/invoice/${encodeURIComponent(data.invoice.DOCNUM)}`,
+        `กำลังเตรียมพิมพ์เอกสาร (${data.invoice.DOCNUM})...`
+      );
     } finally {
       setIsPrinting(false);
     }
@@ -61,7 +64,8 @@ export default function InvoiceDetailPage({
     try {
       await downloadPdf(
         `/api/pdf/invoice/${encodeURIComponent(data.invoice.DOCNUM)}`,
-        `${data.invoice.DOCNUM}.pdf`
+        `${data.invoice.DOCNUM}.pdf`,
+        `กำลังดาวน์โหลดไฟล์ (${data.invoice.DOCNUM}.pdf)...`
       );
     } finally {
       setIsDownloading(false);

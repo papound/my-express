@@ -113,7 +113,10 @@ export default function QuotationDetailPage({
     if (!data?.quotation?.SONUM) return;
     setIsPrinting(true);
     try {
-      await printPdf(`/api/pdf/quotation/${encodeURIComponent(data.quotation.SONUM)}`);
+      await printPdf(
+        `/api/pdf/quotation/${encodeURIComponent(data.quotation.SONUM)}`,
+        `กำลังเตรียมพิมพ์ใบเสนอราคา (${data.quotation.SONUM})...`
+      );
     } finally {
       setIsPrinting(false);
     }
@@ -125,7 +128,8 @@ export default function QuotationDetailPage({
     try {
       await downloadPdf(
         `/api/pdf/quotation/${encodeURIComponent(data.quotation.SONUM)}`,
-        `${data.quotation.SONUM}.pdf`
+        `${data.quotation.SONUM}.pdf`,
+        `กำลังดาวน์โหลดใบเสนอราคา (${data.quotation.SONUM}.pdf)...`
       );
     } finally {
       setIsDownloading(false);
