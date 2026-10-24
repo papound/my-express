@@ -18,9 +18,20 @@ import {
   Sparkles,
   ChevronRight,
   RefreshCw,
+  Building2,
+  Calendar,
+  MapPin,
 } from "lucide-react";
 
 interface DashboardData {
+  company?: {
+    name: string;
+    engName?: string;
+    taxId?: string;
+    address?: string;
+    tel?: string;
+  };
+  workingDate?: string;
   stats: {
     totalSales: number;
     cashSales: number;
@@ -114,17 +125,43 @@ export function DashboardView() {
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-5 sm:space-y-8">
       {/* Top Welcome Banner */}
       <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 p-5 sm:p-8 text-white shadow-xl shadow-blue-900/10">
-        <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[11px] sm:text-xs font-medium text-blue-100 mb-3 sm:mb-4">
-            <Sparkles size={13} className="text-yellow-300 shrink-0" />
-            <span className="truncate">เชื่อมต่อ Express Data (Z:\ExpressI\ThongTha)</span>
+        <div className="relative z-10 max-w-3xl">
+          {/* Company Badge & Working Date */}
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-medium text-white shadow-sm">
+              <Building2 size={13} className="text-blue-200" />
+              <span>{data?.company?.name || "บริษัท ธงธัญ99 จำกัด"}</span>
+            </div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/40 backdrop-blur-md border border-white/10 text-xs text-blue-100">
+              <Calendar size={13} className="text-blue-300" />
+              <span>วันที่ทำการ:</span>
+              <strong className="text-white font-semibold">
+                {new Date(data?.workingDate || Date.now()).toLocaleDateString("th-TH", {
+                  weekday: "short",
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </strong>
+            </div>
+            {data?.company?.taxId && (
+              <span className="hidden sm:inline-flex text-[11px] text-blue-200/80 px-2 py-0.5 rounded bg-black/20">
+                เลขประจำตัวผู้เสียภาษี: {data.company.taxId}
+              </span>
+            )}
           </div>
+
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
-            ยินดีต้อนรับสู่ระบบบัญชี ธงธัญ
+            ยินดีต้อนรับสู่ระบบบัญชี {data?.company?.name || "ธงธัญ"}
           </h2>
-          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-blue-100/90 leading-relaxed">
-            ระบบบริหารจัดการบัญชีและการเงินแบบเรียลไทม์ ตรวจสอบประวัติการขาย
-            ออกใบกำกับภาษี และพิมพ์เอกสาร PDF ได้ทุกที่ผ่าน Docker และ VPN
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-blue-100/90 leading-relaxed max-w-2xl">
+            ระบบบริหารจัดการบัญชีและการเงินแบบเรียลไทม์ เชื่อมโยงฐานข้อมูล Express อัตโนมัติ
+            {data?.company?.address && (
+              <span className="block mt-1 text-[11px] sm:text-xs text-blue-200/80">
+                <MapPin size={12} className="inline mr-1 text-blue-300 -mt-0.5" />
+                {data.company.address} {data.company.tel ? `• ${data.company.tel}` : ""}
+              </span>
+            )}
           </p>
         </div>
 

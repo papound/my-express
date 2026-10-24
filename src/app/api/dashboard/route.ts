@@ -3,12 +3,27 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const [rawTrn, rawMas, rawSo, rawBil] = await Promise.all([
+    const [rawTrn, rawMas, rawSo, rawBil, rawInfo] = await Promise.all([
       readAll<Record<string, unknown>>("ARTRN"),
       readAll<Record<string, unknown>>("ARMAS"),
       readAll<Record<string, unknown>>("OESO"),
       readAll<Record<string, unknown>>("ARBIL"),
+      readAll<Record<string, unknown>>("ISINFO"),
     ]);
+
+    const companyRaw = rawInfo[0];
+    const company = {
+      name: cleanStr(companyRaw?.THINAM) || "บริษัท ธงธัญ99 จำกัด",
+      engName: cleanStr(companyRaw?.ENGNAM) || "THONGTHAN99 Co.,LTD.",
+      taxId: cleanStr(companyRaw?.TAXID) || "",
+      address: [cleanStr(companyRaw?.ADDR01), cleanStr(companyRaw?.ADDR02)]
+        .filter(Boolean)
+        .join(" "),
+      tel: cleanStr(companyRaw?.TELNUM) || "",
+    };
+
+    // วันที่ทำการ (Default: วันปัจจุบัน)
+    const workingDate = new Date().toISOString();
 
     const cusMap = new Map(
       rawMas.map((r) => [
@@ -70,6 +85,8 @@ export async function GET() {
       .slice(0, 5);
 
     return NextResponse.json({
+      company,
+      workingDate,
       stats: {
         totalSales,
         cashSales,
