@@ -148,87 +148,89 @@ export function generateCashSaleHtml(data: {
   `;
 
   const renderCustomerDocBox = () => `
-    <table class="box-bordered" style="width: 100%; border-collapse: collapse; font-size: 10.5px;">
-      <tr>
-        <td style="width: 55%; vertical-align: top; padding: 5px 8px; border-right: 1px solid #444;">
-          <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-              <td style="width: 65px; font-weight: 600; vertical-align: top;">ลูกค้า<br><span style="font-size: 9px; font-weight: 400; color: #555;">Customer</span></td>
-              <td style="vertical-align: top; font-weight: 600;">${invoice.CUSCOD}</td>
-            </tr>
-            <tr>
-              <td colspan="2" style="font-weight: 600; font-size: 11px; padding-top: 1px;">
-                ${customer?.PRENAM ? customer.PRENAM + " " : ""}${customer?.CUSNAM || ""}
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" style="color: #333; line-height: 1.3; padding-top: 1px;">
-                ${customer?.ADDR01 || ""} ${customer?.ADDR02 || ""}<br>
-                ${customer?.ADDR03 || ""} ${customer?.ZIPCOD || ""}
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" style="color: #333; padding-top: 1px;">
-                โทร. ${customer?.TELNUM || "-"}
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" style="color: #333; padding-top: 1px;">
-                <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี</span> &nbsp; <span class="font-mono">${customer?.TAXID || "-"}</span> &nbsp;&nbsp;&nbsp; <span>☑ ${customer?.ORGNUM ? `สาขาที่ ${customer.ORGNUM}` : "สำนักงานใหญ่"}</span>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; padding-top: 1px;">อ้างอิง<br><span style="font-size: 9px; font-weight: 400; color: #555;">Reference</span></td>
-              <td style="padding-top: 1px; font-weight: 600;">${invoice.YOUREF || "-"}</td>
-            </tr>
-          </table>
-        </td>
+    <div class="box-bordered" style="margin-bottom: 6px;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 10.5px;">
+        <tr>
+          <td style="width: 55%; vertical-align: top; padding: 5px 8px; border-right: 1.2px solid #334155;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="width: 65px; font-weight: 600; vertical-align: top;">ลูกค้า<br><span style="font-size: 9px; font-weight: 400; color: #555;">Customer</span></td>
+                <td style="vertical-align: top; font-weight: 600;">${invoice.CUSCOD}</td>
+              </tr>
+              <tr>
+                <td colspan="2" style="font-weight: 600; font-size: 11px; padding-top: 1px;">
+                  ${customer?.PRENAM ? customer.PRENAM + " " : ""}${customer?.CUSNAM || ""}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="color: #333; line-height: 1.3; padding-top: 1px;">
+                  ${customer?.ADDR01 || ""} ${customer?.ADDR02 || ""}<br>
+                  ${customer?.ADDR03 || ""} ${customer?.ZIPCOD || ""}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="color: #333; padding-top: 1px;">
+                  โทร. ${customer?.TELNUM || "-"}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="color: #333; padding-top: 1px;">
+                  <span style="font-weight: 600;">เลขประจำตัวผู้เสียภาษี</span> &nbsp; <span class="font-mono">${customer?.TAXID || "-"}</span> &nbsp;&nbsp;&nbsp; <span>☑ ${customer?.ORGNUM ? `สาขาที่ ${customer.ORGNUM}` : "สำนักงานใหญ่"}</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 1px;">อ้างอิง<br><span style="font-size: 9px; font-weight: 400; color: #555;">Reference</span></td>
+                <td style="padding-top: 1px; font-weight: 600;">${invoice.YOUREF || "-"}</td>
+              </tr>
+            </table>
+          </td>
 
-        <td style="width: 45%; vertical-align: top; padding: 5px 8px;">
-          <table style="width: 100%; border-collapse: collapse; font-size: 10.5px;">
-            <tr>
-              <td style="font-weight: 600; width: 95px;">เลขที่<br><span style="font-size: 9px; font-weight: 400; color: #555;">No.</span></td>
-              <td style="text-align: right; font-family: monospace; font-weight: 700; font-size: 12px;">${invoice.DOCNUM}</td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; padding-top: 2px;">วันที่<br><span style="font-size: 9px; font-weight: 400; color: #555;">Date</span></td>
-              <td style="text-align: right; padding-top: 2px; font-weight: 600;">${fmtThaiDateShort(invoice.DOCDAT)}</td>
-            </tr>
-            <tr>
-              <td colspan="2" style="padding-top: 2px;">
-                <table style="width: 100%; border-collapse: collapse;">
-                  <tr>
-                    <td style="font-weight: 600;">เครดิต<br><span style="font-size: 9px; font-weight: 400; color: #555;">Credit</span></td>
-                    <td style="text-align: right; font-weight: 600;">${invoice.PAYTRM || 0} &nbsp; วัน <span style="font-size: 8.5px; color: #555;">Days</span></td>
-                    <td style="text-align: right; font-weight: 600; padding-left: 8px;">ครบกำหนด<br><span style="font-size: 9px; font-weight: 400; color: #555;">Due Date</span></td>
-                    <td style="text-align: right; font-weight: 600;">${fmtThaiDateShort(invoice.DUEDAT)}</td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; padding-top: 2px;">เลขที่ใบสั่งขาย<br><span style="font-size: 9px; font-weight: 400; color: #555;">Sales Order No.</span></td>
-              <td style="text-align: right; padding-top: 2px; font-family: monospace;">${invoice.SONUM || "-"}</td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; padding-top: 2px;">พนักงานขาย<br><span style="font-size: 9px; font-weight: 400; color: #555;">Salesman</span></td>
-              <td style="text-align: right; padding-top: 2px;">${invoice.SLMCOD || "-"}</td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; padding-top: 2px;">เขตการขาย<br><span style="font-size: 9px; font-weight: 400; color: #555;">Territory</span></td>
-              <td style="text-align: right; padding-top: 2px;">${invoice.AREACOD || "-"}</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
+          <td style="width: 45%; vertical-align: top; padding: 5px 8px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 10.5px;">
+              <tr>
+                <td style="font-weight: 600; width: 95px;">เลขที่<br><span style="font-size: 9px; font-weight: 400; color: #555;">No.</span></td>
+                <td style="text-align: right; font-family: monospace; font-weight: 700; font-size: 12px;">${invoice.DOCNUM}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 2px;">วันที่<br><span style="font-size: 9px; font-weight: 400; color: #555;">Date</span></td>
+                <td style="text-align: right; padding-top: 2px; font-weight: 600;">${fmtThaiDateShort(invoice.DOCDAT)}</td>
+              </tr>
+              <tr>
+                <td colspan="2" style="padding-top: 2px;">
+                  <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                      <td style="font-weight: 600;">เครดิต<br><span style="font-size: 9px; font-weight: 400; color: #555;">Credit</span></td>
+                      <td style="text-align: right; font-weight: 600;">${invoice.PAYTRM || 0} &nbsp; วัน <span style="font-size: 8.5px; color: #555;">Days</span></td>
+                      <td style="text-align: right; font-weight: 600; padding-left: 8px;">ครบกำหนด<br><span style="font-size: 9px; font-weight: 400; color: #555;">Due Date</span></td>
+                      <td style="text-align: right; font-weight: 600;">${fmtThaiDateShort(invoice.DUEDAT)}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 2px;">เลขที่ใบสั่งขาย<br><span style="font-size: 9px; font-weight: 400; color: #555;">Sales Order No.</span></td>
+                <td style="text-align: right; padding-top: 2px; font-family: monospace;">${invoice.SONUM || "-"}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 2px;">พนักงานขาย<br><span style="font-size: 9px; font-weight: 400; color: #555;">Salesman</span></td>
+                <td style="text-align: right; padding-top: 2px;">${invoice.SLMCOD || "-"}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 2px;">เขตการขาย<br><span style="font-size: 9px; font-weight: 400; color: #555;">Territory</span></td>
+                <td style="text-align: right; padding-top: 2px;">${invoice.AREACOD || "-"}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
   `;
 
-  const renderItemsTable = (itemsToRender: any[], tableHeaderBg: string, isFullTable: boolean) => `
-    <div class="box-bordered" style="margin-bottom: 0; ${isFullTable ? "border-bottom: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0;" : ""}">
+  const renderItemsTable = (itemsToRender: any[], p: typeof CASH_SALE_PAGES[0], isFullTable: boolean) => `
+    <div class="box-bordered" style="margin-bottom: 6px;">
       <table class="items-table">
         <thead>
-          <tr style="background-color: ${tableHeaderBg};">
+          <tr style="background-color: ${p.tableHeaderBg};">
             <th style="width: 6%;">ลำดับ<br><span style="font-size: 8.5px; font-weight: 400;">No.</span></th>
             <th style="width: 44%; text-align: left;">รหัสสินค้า/รายละเอียด<br><span style="font-size: 8.5px; font-weight: 400;">Code/ Descriptions</span></th>
             <th style="width: 14%; text-align: right;">จำนวน<br><span style="font-size: 8.5px; font-weight: 400;">Quantity</span></th>
@@ -255,7 +257,7 @@ export function generateCashSaleHtml(data: {
           `
             )
             .join("") : ""}
-          ${Array.from({ length: Math.max(0, 7 - itemsToRender.length) })
+          ${Array.from({ length: Math.max(0, (isFullTable ? 7 : 14) - itemsToRender.length) })
             .map(
               () => `
             <tr style="height: 27px;">
@@ -271,123 +273,78 @@ export function generateCashSaleHtml(data: {
             .join("")}
         </tbody>
       </table>
+
+      ${
+        isFullTable
+          ? `
+      <!-- Calculations & Summary Table -->
+      <table style="width: 100%; border-collapse: collapse; font-size: 10.5px; border-top: 1.2px solid #334155;">
+        <tr>
+          <td style="width: 60%; vertical-align: bottom; padding: 6px 10px; border-right: 1.2px solid #334155;">
+            ${
+              p.showReceiptNote
+                ? `<div style="font-size: 9.5px; color: #333; line-height: 1.35; padding-bottom: 4px;">
+                    ใบเสร็จรับเงินฉบับนี้จะสมบูรณ์ต่อเมื่อมีลายเซ็นผู้รับมอบอำนาจและลายเซ็นผู้รับเงิน และได้เรียกเก็บเงินตามเช็คเรียบร้อยแล้ว
+                  </div>`
+                : ""
+            }
+          </td>
+
+          <td style="width: 40%; vertical-align: top; padding: 4px 8px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 10.5px;">
+              <tr>
+                <td style="font-weight: 600;">รวมเป็นเงิน<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">Gross Amount</span></td>
+                <td style="text-align: right; font-family: monospace; font-weight: 600;">${fmtMoney(grossAmount)}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 2px;">หักส่วนลด<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">Less Discount</span></td>
+                <td style="text-align: right; font-family: monospace; padding-top: 2px;">${fmtMoney(discountAmt)}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 2px;">ยอดหลังหักส่วนลด<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">After Discount</span></td>
+                <td style="text-align: right; font-family: monospace; padding-top: 2px;">${fmtMoney(afterDiscount)}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; padding-top: 2px;">
+                  จำนวนภาษีมูลค่าเพิ่ม &nbsp; <span class="font-mono">${vatRate}.00</span> %<br>
+                  <span style="font-size: 8.5px; font-weight: 400; color: #555;">VAT</span>
+                </td>
+                <td style="text-align: right; font-family: monospace; padding-top: 2px; font-weight: 600;">${fmtMoney(vatAmount)}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Full-width Colored Total Bar -->
+        <tr style="background-color: ${p.summaryBg}; border-top: 1.2px solid #334155;">
+          <td style="padding: 5px 10px; font-weight: 700; border-right: 1.2px solid #334155; font-size: 11px;">
+            (${bahtText(netAmount)})
+          </td>
+          <td style="padding: 5px 10px;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="font-weight: 700; font-size: 11px;">จำนวนเงินรวมทั้งสิ้น<br><span style="font-size: 8.5px; font-weight: 400;">Total Invoice</span></td>
+                <td style="text-align: right; font-family: monospace; font-weight: 700; font-size: 13px;">${fmtMoney(netAmount)}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      `
+          : ""
+      }
     </div>
   `;
 
-  const renderSummaryAndSignatures = (p: typeof CASH_SALE_PAGES[0]) => `
-    <!-- Calculations & Summary Box -->
-    <table class="box-bordered" style="width: 100%; border-collapse: collapse; font-size: 10.5px; margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0;">
-      <tr>
-        <td style="width: 60%; vertical-align: bottom; padding: 6px 10px; border-right: 1px solid #444;">
-          ${
-            p.showReceiptNote
-              ? `<div style="font-size: 9.5px; color: #333; line-height: 1.35; padding-bottom: 4px;">
-                  ใบเสร็จรับเงินฉบับนี้จะสมบูรณ์ต่อเมื่อมีลายเซ็นผู้รับมอบอำนาจและลายเซ็นผู้รับเงิน และได้เรียกเก็บเงินตามเช็คเรียบร้อยแล้ว
-                </div>`
-              : ""
-          }
-        </td>
-
-        <td style="width: 40%; vertical-align: top; padding: 4px 8px;">
-          <table style="width: 100%; border-collapse: collapse; font-size: 10.5px;">
-            <tr>
-              <td style="font-weight: 600;">รวมเป็นเงิน<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">Gross Amount</span></td>
-              <td style="text-align: right; font-family: monospace; font-weight: 600;">${fmtMoney(grossAmount)}</td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; padding-top: 2px;">หักส่วนลด<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">Less Discount</span></td>
-              <td style="text-align: right; font-family: monospace; padding-top: 2px;">${fmtMoney(discountAmt)}</td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; padding-top: 2px;">ยอดหลังหักส่วนลด<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">After Discount</span></td>
-              <td style="text-align: right; font-family: monospace; padding-top: 2px;">${fmtMoney(afterDiscount)}</td>
-            </tr>
-            <tr>
-              <td style="font-weight: 600; padding-top: 2px;">
-                จำนวนภาษีมูลค่าเพิ่ม &nbsp; <span class="font-mono">${vatRate}.00</span> %<br>
-                <span style="font-size: 8.5px; font-weight: 400; color: #555;">VAT</span>
-              </td>
-              <td style="text-align: right; font-family: monospace; padding-top: 2px; font-weight: 600;">${fmtMoney(vatAmount)}</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-
-      <!-- Full-width Colored Total Bar -->
-      <tr style="background-color: ${p.summaryBg}; border-top: 1px solid #444;">
-        <td style="padding: 5px 10px; font-weight: 700; border-right: 1px solid #444; font-size: 11px;">
-          (${bahtText(netAmount)})
-        </td>
-        <td style="padding: 5px 10px;">
-          <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-              <td style="font-weight: 700; font-size: 11px;">จำนวนเงินรวมทั้งสิ้น<br><span style="font-size: 8.5px; font-weight: 400;">Total Invoice</span></td>
-              <td style="text-align: right; font-family: monospace; font-weight: 700; font-size: 13px;">${fmtMoney(netAmount)}</td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-
+  const renderBottomSignatures = (p: typeof CASH_SALE_PAGES[0]) => `
     <!-- Bottom Box: Signatures & Payment / Conditions -->
-    <table class="box-bordered" style="width: 100%; border-collapse: collapse; font-size: 10px;">
-      <tr>
-        <!-- Left: Delivery & Receipt -->
-        <td style="width: 33%; vertical-align: top; padding: 6px 8px; border-right: 1px solid #444;">
-          <div style="font-weight: 700; text-align: center; margin-bottom: 8px;">ได้รับสินค้าตามรายการถูกต้องแล้ว</div>
-          <div style="margin-top: 14px;">
-            <table style="width: 95%; margin: 0 auto;">
-              <tr>
-                <td style="border-bottom: 1px solid #444; width: 65%;"></td>
-                <td style="width: 5%;"></td>
-                <td style="border-bottom: 1px solid #444; width: 30%;"></td>
-              </tr>
-              <tr>
-                <td style="font-size: 9px; padding-top: 2px;">ผู้รับสินค้า/ Goods Received by</td>
-                <td></td>
-                <td style="font-size: 9px; text-align: center; padding-top: 2px;">วันที่/ Date</td>
-              </tr>
-            </table>
-          </div>
-          <div style="margin-top: 14px;">
-            <table style="width: 95%; margin: 0 auto;">
-              <tr>
-                <td style="border-bottom: 1px solid #444; width: 65%;"></td>
-                <td style="width: 5%;"></td>
-                <td style="border-bottom: 1px solid #444; width: 30%;"></td>
-              </tr>
-              <tr>
-                <td style="font-size: 9px; padding-top: 2px;">ผู้ส่งสินค้า/ Delivery by</td>
-                <td></td>
-                <td style="font-size: 9px; text-align: center; padding-top: 2px;">วันที่/ Date</td>
-              </tr>
-            </table>
-          </div>
-        </td>
-
-        <!-- Middle: Payment (Copies 1 & 2) OR Terms (Copies 3-6) -->
-        <td style="width: 37%; vertical-align: top; padding: 6px 8px; border-right: 1px solid #444;">
-          ${
-            p.showPaymentBox
-              ? `
-            <div style="margin-bottom: 4px;">
-              <span style="font-weight: 600;">ชำระเงินโดย</span> &nbsp;&nbsp;
-              <span>${isCash ? "☑" : "☐"} เงินสด</span> &nbsp;&nbsp;&nbsp;&nbsp;
-              <span>${isCheque ? "☑" : "☐"} เช็ค</span>
-            </div>
-            <div style="margin-bottom: 3px; font-size: 9.5px;">
-              เช็คธนาคาร__________________ สาขา____________________
-            </div>
-            <div style="margin-bottom: 3px; font-size: 9.5px;">
-              เลขที่__________________________ วันที่ ____/_____/_______
-            </div>
-            <div style="margin-bottom: 3px; font-size: 9.5px;">
-              จำนวนเงิน_______________________________________
-            </div>
-            <div style="margin-bottom: 6px; font-size: 9.5px;">
-              ภาษีหัก ณ ที่จ่าย ${taxWithheld > 0 ? fmtMoney(taxWithheld) : "___________________________________"}
-            </div>
-            <div style="margin-top: 6px;">
+    <div class="box-bordered" style="margin-top: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
+        <tr>
+          <!-- Left: Delivery & Receipt -->
+          <td style="width: 33%; vertical-align: top; padding: 6px 8px; border-right: 1.2px solid #334155;">
+            <div style="font-weight: 700; text-align: center; margin-bottom: 8px;">ได้รับสินค้าตามรายการถูกต้องแล้ว</div>
+            <div style="margin-top: 14px;">
               <table style="width: 95%; margin: 0 auto;">
                 <tr>
                   <td style="border-bottom: 1px solid #444; width: 65%;"></td>
@@ -395,48 +352,101 @@ export function generateCashSaleHtml(data: {
                   <td style="border-bottom: 1px solid #444; width: 30%;"></td>
                 </tr>
                 <tr>
-                  <td style="font-size: 9px; padding-top: 2px;">ผู้รับเงิน/ Collector</td>
+                  <td style="font-size: 9px; padding-top: 2px;">ผู้รับสินค้า/ Goods Received by</td>
                   <td></td>
                   <td style="font-size: 9px; text-align: center; padding-top: 2px;">วันที่/ Date</td>
                 </tr>
               </table>
             </div>
-          `
-              : `
-            <div style="font-size: 9px; line-height: 1.45; color: #222;">
-              <div>o สินค้านี้ขายขาดไม่รับคืนหรือเปลี่ยน</div>
-              <div>o บริษัทฯ จะนำใบเสร็จรับเงินมาเรียกเก็บเงินในภายหลัง</div>
-              <div>o บริษัทฯ จะคิดดอกเบี้ย 1.25% ต่อเดือน เมื่อชำระบิลเกินกำหนด</div>
-              <div>o กรุณาชำระเงินด้วยเช็ค ในนามบริษัทฯ ขีดผู้ถือและขีดคล่อมเท่านั้น</div>
+            <div style="margin-top: 14px;">
+              <table style="width: 95%; margin: 0 auto;">
+                <tr>
+                  <td style="border-bottom: 1px solid #444; width: 65%;"></td>
+                  <td style="width: 5%;"></td>
+                  <td style="border-bottom: 1px solid #444; width: 30%;"></td>
+                </tr>
+                <tr>
+                  <td style="font-size: 9px; padding-top: 2px;">ผู้ส่งสินค้า/ Delivery by</td>
+                  <td></td>
+                  <td style="font-size: 9px; text-align: center; padding-top: 2px;">วันที่/ Date</td>
+                </tr>
+              </table>
             </div>
-          `
-          }
-        </td>
+          </td>
 
-        <!-- Right: Authorized Signatures -->
-        <td style="width: 30%; vertical-align: top; padding: 6px 8px; text-align: center;">
-          <div style="font-size: 9px; color: #333;">ในนาม</div>
-          <div style="font-weight: 700; font-size: 11px; margin-bottom: 14px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
-
-          <div style="margin-bottom: 12px;">
-            ${signatureBase64 ? `
-              <div style="margin-bottom: -10px;">
-                <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
+          <!-- Middle: Payment (Copies 1 & 2) OR Terms (Copies 3-6) -->
+          <td style="width: 37%; vertical-align: top; padding: 6px 8px; border-right: 1.2px solid #334155;">
+            ${
+              p.showPaymentBox
+                ? `
+              <div style="margin-bottom: 4px;">
+                <span style="font-weight: 600;">ชำระเงินโดย</span> &nbsp;&nbsp;
+                <span>${isCash ? "☑" : "☐"} เงินสด</span> &nbsp;&nbsp;&nbsp;&nbsp;
+                <span>${isCheque ? "☑" : "☐"} เช็ค</span>
               </div>
-            ` : `
-              <div style="height: 24px;"></div>
-            `}
-            <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
-            <div style="font-size: 9px; margin-top: 2px;">ผู้รับมอบอำนาจ/ Authorized Signature</div>
-          </div>
+              <div style="margin-bottom: 3px; font-size: 9.5px;">
+                เช็คธนาคาร__________________ สาขา____________________
+              </div>
+              <div style="margin-bottom: 3px; font-size: 9.5px;">
+                เลขที่__________________________ วันที่ ____/_____/_______
+              </div>
+              <div style="margin-bottom: 3px; font-size: 9.5px;">
+                จำนวนเงิน_______________________________________
+              </div>
+              <div style="margin-bottom: 6px; font-size: 9.5px;">
+                ภาษีหัก ณ ที่จ่าย ${taxWithheld > 0 ? fmtMoney(taxWithheld) : "___________________________________"}
+              </div>
+              <div style="margin-top: 6px;">
+                <table style="width: 95%; margin: 0 auto;">
+                  <tr>
+                    <td style="border-bottom: 1px solid #444; width: 65%;"></td>
+                    <td style="width: 5%;"></td>
+                    <td style="border-bottom: 1px solid #444; width: 30%;"></td>
+                  </tr>
+                  <tr>
+                    <td style="font-size: 9px; padding-top: 2px;">ผู้รับเงิน/ Collector</td>
+                    <td></td>
+                    <td style="font-size: 9px; text-align: center; padding-top: 2px;">วันที่/ Date</td>
+                  </tr>
+                </table>
+              </div>
+            `
+                : `
+              <div style="font-size: 9px; line-height: 1.45; color: #222;">
+                <div>o สินค้านี้ขายขาดไม่รับคืนหรือเปลี่ยน</div>
+                <div>o บริษัทฯ จะนำใบเสร็จรับเงินมาเรียกเก็บเงินในภายหลัง</div>
+                <div>o บริษัทฯ จะคิดดอกเบี้ย 1.25% ต่อเดือน เมื่อชำระบิลเกินกำหนด</div>
+                <div>o กรุณาชำระเงินด้วยเช็ค ในนามบริษัทฯ ขีดผู้ถือและขีดคล่อมเท่านั้น</div>
+              </div>
+            `
+            }
+          </td>
 
-          <div>
-            <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
-            <div style="font-size: 9px; margin-top: 2px;">ผู้ตรวจเช็คสินค้า/ Approved by</div>
-          </div>
-        </td>
-      </tr>
-    </table>
+          <!-- Right: Authorized Signatures -->
+          <td style="width: 30%; vertical-align: top; padding: 6px 8px; text-align: center;">
+            <div style="font-size: 9px; color: #333;">ในนาม</div>
+            <div style="font-weight: 700; font-size: 11px; margin-bottom: 14px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+
+            <div style="margin-bottom: 12px;">
+              ${signatureBase64 ? `
+                <div style="margin-bottom: -10px;">
+                  <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
+                </div>
+              ` : `
+                <div style="height: 24px;"></div>
+              `}
+              <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
+              <div style="font-size: 9px; margin-top: 2px;">ผู้รับมอบอำนาจ/ Authorized Signature</div>
+            </div>
+
+            <div>
+              <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
+              <div style="font-size: 9px; margin-top: 2px;">ผู้ตรวจเช็คสินค้า/ Approved by</div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
   `;
 
   return `
@@ -500,10 +510,11 @@ export function generateCashSaleHtml(data: {
       margin-right: 12px;
     }
     .box-bordered {
-      border: 1px solid #444;
-      border-radius: 8px;
+      border: 1.2px solid #334155;
+      border-radius: 6px;
       overflow: hidden;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
+      background-color: #fff;
     }
     .items-table {
       width: 100%;
@@ -511,23 +522,28 @@ export function generateCashSaleHtml(data: {
       font-size: 10px;
     }
     .items-table th {
-      border-bottom: 1px solid #444;
-      border-right: 1px solid #444;
-      padding: 4px 5px;
-      font-weight: 600;
+      border-bottom: 1.2px solid #334155;
+      border-right: 1.2px solid #334155;
+      padding: 5px 5px;
+      font-weight: 700;
       text-align: center;
+      background-color: #f1f5f9;
+      color: #0f172a;
     }
     .items-table th:last-child {
       border-right: none;
     }
     .items-table td {
-      border-right: 1px solid #444;
-      border-bottom: 1px solid #eee;
+      border-right: 1.2px solid #334155;
+      border-bottom: 1px solid #cbd5e1;
       padding: 3px 5px;
-      vertical-align: top;
+      vertical-align: middle;
     }
     .items-table td:last-child {
       border-right: none;
+    }
+    .items-table tbody tr:last-child td {
+      border-bottom: none;
     }
     .font-mono { font-family: monospace; }
   </style>
@@ -541,8 +557,8 @@ export function generateCashSaleHtml(data: {
           <div class="content-layer">
             ${renderHeader(p)}
             ${renderCustomerDocBox()}
-            ${renderItemsTable(items, p.tableHeaderBg, true)}
-            ${renderSummaryAndSignatures(p)}
+            ${renderItemsTable(items, p, true)}
+            ${renderBottomSignatures(p)}
           </div>
         </div>
       `;
@@ -553,7 +569,7 @@ export function generateCashSaleHtml(data: {
           <div class="content-layer">
             ${renderHeader(p)}
             ${renderCustomerDocBox()}
-            ${renderItemsTable(items, p.tableHeaderBg, false)}
+            ${renderItemsTable(items, p, false)}
           </div>
         </div>
         <div class="cash-sale-page">
@@ -561,8 +577,8 @@ export function generateCashSaleHtml(data: {
           <div class="content-layer">
             ${renderHeader(p)}
             ${renderCustomerDocBox()}
-            ${renderItemsTable([], p.tableHeaderBg, true)}
-            ${renderSummaryAndSignatures(p)}
+            ${renderItemsTable([], p, true)}
+            ${renderBottomSignatures(p)}
           </div>
         </div>
       `;
