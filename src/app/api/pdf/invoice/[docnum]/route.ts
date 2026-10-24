@@ -10,12 +10,14 @@ import {
 import { NextResponse } from "next/server";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ docnum: string }> }
 ) {
   try {
     const { docnum } = await params;
     const docNum = decodeURIComponent(docnum).trim();
+    const { searchParams } = new URL(request.url);
+    const isDownload = searchParams.get("download") === "1";
 
     const [rawTrn, rawMas, rawCrd, rawRm, rawInfo, rawTab, rawRcpIt] = await Promise.all([
       readAll<Record<string, unknown>>("ARTRN"),
@@ -195,11 +197,15 @@ export async function GET(
         });
 
     const pdfBuffer = await renderHtmlToPdf(html);
+    const disposition = isDownload ? "attachment" : "inline";
 
     return new NextResponse(Buffer.from(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `inline; filename="${docNum}.pdf"`,
+        "Content-Length": String(pdfBuffer.length),
+        "Content-Disposition": `${disposition}; filename="${docNum}.pdf"; filename*=UTF-8''${encodeURIComponent(docNum)}.pdf`,
+        "Accept-Ranges": "bytes",
+        "Cache-Control": "private, max-age=60",
       },
     });
   } catch (err) {

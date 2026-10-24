@@ -131,10 +131,24 @@ function showPdfBackdrop(
   };
 }
 
+function isMobileDevice(): boolean {
+  if (typeof window === "undefined" || typeof navigator === "undefined") return false;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+}
+
 export async function printPdf(
   url: string,
   title: string = "กำลังเตรียมพิมพ์เอกสาร..."
 ): Promise<void> {
+  // บน Android / Mobile browsers ไม่รองรับ window.print() ผ่าน hidden iframe
+  // ให้เปิดเอกสาร PDF ในแท็บใหม่เพื่อให้ Chrome Android แสดง PDF viewer ของระบบ ซึ่งสามารถสั่งพิมพ์หรือบันทึกได้ทันที
+  if (isMobileDevice()) {
+    window.open(url, "_blank");
+    return;
+  }
+
   const hideBackdrop = showPdfBackdrop(
     title,
     "ระบบกำลังสร้างและเรนเดอร์ PDF จาก Express Database...",
@@ -188,7 +202,8 @@ export async function printPdf(
   } catch (err) {
     hideBackdrop();
     console.error("Failed to print PDF:", err);
-    alert("เกิดข้อผิดพลาดในการสั่งพิมพ์ PDF กรุณาลองใหม่อีกครั้ง");
+    // Fallback: เปิดในแท็บใหม่
+    window.open(url, "_blank");
   }
 }
 
@@ -197,6 +212,16 @@ export async function downloadPdf(
   filename: string,
   title: string = "กำลังดาวน์โหลดไฟล์ PDF..."
 ): Promise<void> {
+  const safeFilename = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
+  const downloadUrl = `${url}${url.includes("?") ? "&" : "?"}download=1`;
+
+  // บน Android / Mobile browsers, Blob URL programmatic .click() มักถูกบล็อกโดย Chrome Android security policy
+  // การเรียก direct download URL พร้อม Content-Disposition: attachment จะส่งให้ Android Download Manager ดาวน์โหลดไฟล์ลงเครื่องทันที
+  if (isMobileDevice()) {
+    window.location.href = downloadUrl;
+    return;
+  }
+
   const hideBackdrop = showPdfBackdrop(
     title,
     "ระบบกำลังสร้างไฟล์ PDF และเตรียมดาวน์โหลดลงเครื่อง...",
@@ -204,7 +229,7 @@ export async function downloadPdf(
   );
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(downloadUrl);
     if (!res.ok) {
       throw new Error(`ไม่สามารถดาวน์โหลดไฟล์ได้ (${res.status})`);
     }
@@ -214,7 +239,7 @@ export async function downloadPdf(
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = blobUrl;
-    a.download = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
+    a.download = safeFilename;
 
     document.body.appendChild(a);
     a.click();
@@ -227,6 +252,7 @@ export async function downloadPdf(
   } catch (err) {
     hideBackdrop();
     console.error("Failed to download PDF:", err);
-    alert("เกิดข้อผิดพลาดในการดาวน์โหลด PDF กรุณาลองใหม่อีกครั้ง");
+    // Fallback direct download
+    window.location.href = downloadUrl;
   }
 }

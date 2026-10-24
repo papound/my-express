@@ -4,12 +4,14 @@ import { generateBillingHtml } from "@/lib/pdf/templates";
 import { NextResponse } from "next/server";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ bilnum: string }> }
 ) {
   try {
     const { bilnum } = await params;
     const bilNum = decodeURIComponent(bilnum).trim();
+    const { searchParams } = new URL(request.url);
+    const isDownload = searchParams.get("download") === "1";
 
     const [rawBil, rawMas, rawTrn, rawRm, rawInfo] = await Promise.all([
       readAll<Record<string, unknown>>("ARBIL"),
@@ -97,11 +99,15 @@ export async function GET(
     });
 
     const pdfBuffer = await renderHtmlToPdf(html);
+    const disposition = isDownload ? "attachment" : "inline";
 
     return new NextResponse(Buffer.from(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `inline; filename="billing_${bilNum}.pdf"`,
+        "Content-Length": String(pdfBuffer.length),
+        "Content-Disposition": `${disposition}; filename="billing_${bilNum}.pdf"; filename*=UTF-8''${encodeURIComponent(`billing_${bilNum}.pdf`)}`,
+        "Accept-Ranges": "bytes",
+        "Cache-Control": "private, max-age=60",
       },
     });
   } catch (err) {

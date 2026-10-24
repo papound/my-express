@@ -30,8 +30,11 @@ export async function renderHtmlToPdf(
   try {
     const page = await browser.newPage();
     await page.setContent(html, {
-      waitUntil: ["load", "networkidle0"],
+      waitUntil: "domcontentloaded",
+      timeout: 15000,
     });
+    // รอให้ fonts โหลดเสร็จโดยไม่บล็อกค้างกับการเชื่อมต่อ network idle
+    await page.evaluateHandle("document.fonts.ready").catch(() => {});
 
     const pdfBuffer = await page.pdf({
       format: "A4",

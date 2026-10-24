@@ -12,6 +12,7 @@ export async function GET(
     const soNum = decodeURIComponent(sonum).trim();
     const { searchParams } = new URL(request.url);
     const showItemCode = searchParams.get("showItemCode") !== "false";
+    const isDownload = searchParams.get("download") === "1";
 
     const [rawSo, rawMas, rawSoIt, rawInfo, rawRm, rawTab] = await Promise.all([
       readAll<Record<string, unknown>>("OESO"),
@@ -113,11 +114,15 @@ export async function GET(
     });
 
     const pdfBuffer = await renderHtmlToPdf(html);
+    const disposition = isDownload ? "attachment" : "inline";
 
     return new NextResponse(Buffer.from(pdfBuffer), {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `inline; filename="quotation_${soNum}.pdf"`,
+        "Content-Length": String(pdfBuffer.length),
+        "Content-Disposition": `${disposition}; filename="quotation_${soNum}.pdf"; filename*=UTF-8''${encodeURIComponent(`quotation_${soNum}.pdf`)}`,
+        "Accept-Ranges": "bytes",
+        "Cache-Control": "private, max-age=60",
       },
     });
   } catch (err) {
