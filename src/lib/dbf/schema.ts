@@ -55,6 +55,8 @@ export interface ArTrn {
   AMOUNT: number;   // ยอดก่อนส่วนลด
   DISCAMT: number;  // ส่วนลด
   AFTDISC: number;  // ยอดหลังส่วนลด
+  ADVNUM?: string;  // เลขที่ใบรับเงินมัดจำที่นำมาหัก
+  ADVAMT?: number;  // ยอดเงินมัดจำที่หัก
   VATAMT: number;   // ภาษีมูลค่าเพิ่ม
   NETAMT: number;   // ยอดสุทธิ
   TOTAL: number;    // รวมทั้งสิ้น

@@ -115,6 +115,7 @@ export async function GET(
       AMOUNT: cleanNum(header.AMOUNT),
       DISCAMT: cleanNum(header.DISCAMT),
       AFTDISC: cleanNum(header.AFTDISC),
+      ADVNUM: cleanStr(header.ADVNUM).length > 2 ? cleanStr(header.ADVNUM) : null,
       ADVAMT: cleanNum(header.ADVAMT),
       VATAMT: cleanNum(header.VATAMT),
       NETAMT: cleanNum(header.NETAMT),
@@ -166,11 +167,46 @@ export async function GET(
         };
       });
 
+    // For Deposit (RECTYP === "0" or starts with AI), find which sales invoices deducted it
+    const appliedInvoices = rawTrn
+      .filter((r) => cleanStr(r.ADVNUM) === docNum)
+      .map((r) => {
+        const cus = rawMas.find((m) => cleanStr(m.CUSCOD) === cleanStr(r.CUSCOD));
+        return {
+          DOCNUM: cleanStr(r.DOCNUM),
+          RECTYP: cleanStr(r.RECTYP),
+          DOCDAT: cleanDate(r.DOCDAT),
+          DUEDAT: cleanDate(r.DUEDAT),
+          AMOUNT: cleanNum(r.AMOUNT),
+          ADVAMT: cleanNum(r.ADVAMT),
+          NETAMT: cleanNum(r.NETAMT),
+          CUSCOD: cleanStr(r.CUSCOD),
+          CUSNAM: cus ? `${cleanStr(cus.PRENAM)} ${cleanStr(cus.CUSNAM)}`.trim() : "",
+        };
+      });
+
+    // For Sales invoice with ADVNUM, lookup deposit summary
+    const advDocnum = cleanStr(header.ADVNUM).length > 2 ? cleanStr(header.ADVNUM) : null;
+    const depositTrn = advDocnum
+      ? rawTrn.find((r) => cleanStr(r.DOCNUM) === advDocnum)
+      : null;
+    const depositInfo = depositTrn
+      ? {
+          DOCNUM: cleanStr(depositTrn.DOCNUM),
+          DOCDAT: cleanDate(depositTrn.DOCDAT),
+          AMOUNT: cleanNum(depositTrn.AMOUNT),
+          NETAMT: cleanNum(depositTrn.NETAMT),
+          REMAMT: cleanNum(depositTrn.REMAMT),
+        }
+      : null;
+
     return NextResponse.json({
       invoice,
       customer: customerData,
       items: receiptItems.length > 0 ? receiptItems : items,
       receiptItems,
+      appliedInvoices,
+      depositInfo,
       remarks,
       shipTo: shipTo
         ? {

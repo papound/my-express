@@ -101,6 +101,7 @@ export async function GET(
       AMOUNT: cleanNum(header.AMOUNT),
       DISCAMT: cleanNum(header.DISCAMT),
       AFTDISC: cleanNum(header.AFTDISC),
+      ADVNUM: cleanStr(header.ADVNUM).length > 2 ? cleanStr(header.ADVNUM) : null,
       ADVAMT: cleanNum(header.ADVAMT),
       VATAMT: cleanNum(header.VATAMT),
       NETAMT: cleanNum(header.NETAMT),

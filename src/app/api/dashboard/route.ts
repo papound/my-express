@@ -42,12 +42,44 @@ export async function GET() {
     let creditSales = 0;
     let totalOutstanding = 0;
 
+    // Build deposit usage map: ADVNUM -> list of sales invoices that deducted this deposit
+    const depositUsageMap = new Map<
+      string,
+      Array<{
+        DOCNUM: string;
+        RECTYP: string;
+        ADVAMT: number;
+        DOCDAT: Date | null;
+      }>
+    >();
+
+    for (const r of rawTrn) {
+      const advnum = cleanStr(r.ADVNUM);
+      const advamt = cleanNum(r.ADVAMT);
+      if (advnum && advnum.length > 2) {
+        if (!depositUsageMap.has(advnum)) {
+          depositUsageMap.set(advnum, []);
+        }
+        depositUsageMap.get(advnum)!.push({
+          DOCNUM: cleanStr(r.DOCNUM),
+          RECTYP: cleanStr(r.RECTYP),
+          ADVAMT: advamt,
+          DOCDAT: cleanDate(r.DOCDAT),
+        });
+      }
+    }
+
     const parsedTrn = rawTrn.map((r) => {
       const net = cleanNum(r.NETAMT);
       const rem = cleanNum(r.REMAMT);
       const rectyp = cleanStr(r.RECTYP);
       const cuscod = cleanStr(r.CUSCOD);
       const docdat = cleanDate(r.DOCDAT);
+      const docnum = cleanStr(r.DOCNUM);
+      const advnum = cleanStr(r.ADVNUM);
+      const advamt = cleanNum(r.ADVAMT);
+      const validAdvnum = advnum && advnum.length > 2 ? advnum : null;
+      const appliedInvoices = depositUsageMap.get(docnum) ?? [];
 
       totalSales += net;
       if (rectyp === "1") cashSales += net;
@@ -55,12 +87,15 @@ export async function GET() {
       totalOutstanding += rem;
 
       return {
-        DOCNUM: cleanStr(r.DOCNUM),
+        DOCNUM: docnum,
         DOCDAT: docdat,
         RECTYP: rectyp,
         CUSCOD: cuscod,
         NETAMT: net,
         REMAMT: rem,
+        ADVNUM: validAdvnum,
+        ADVAMT: advamt,
+        appliedInvoices,
         DOCSTAT: cleanStr(r.DOCSTAT),
         customer: cusMap.get(cuscod),
       };

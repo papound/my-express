@@ -322,7 +322,7 @@ export function generateCashSaleHtml(data: {
               </tr>
               ${(invoice.ADVAMT || 0) > 0 ? `
               <tr>
-                <td style="font-weight: 600; padding-top: 2px;">หักเงินมัดจำ<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">Less Deposit</span></td>
+                <td style="font-weight: 600; padding-top: 2px;">หักเงินมัดจำ${invoice.ADVNUM ? ` (${invoice.ADVNUM})` : ""}<br><span style="font-size: 8.5px; font-weight: 400; color: #555;">Less Deposit</span></td>
                 <td style="text-align: right; font-family: monospace; padding-top: 2px;">${fmtMoney(invoice.ADVAMT)}</td>
               </tr>
               ` : ""}

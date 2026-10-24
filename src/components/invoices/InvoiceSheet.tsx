@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Eye } from "lucide-react";
 import { bahtText } from "@/lib/baht-text";
 
 export interface InvoicePageConfig {
@@ -98,6 +99,7 @@ export interface InvoiceData {
     AMOUNT: number;
     DISCAMT: number;
     AFTDISC: number;
+    ADVNUM?: string | null;
     ADVAMT?: number;
     VATAMT: number;
     NETAMT: number;
@@ -156,9 +158,11 @@ function fmtThaiDateShort(d: Date | string | null): string {
 export function InvoiceSheet({
   data,
   config,
+  onViewDeposit,
 }: {
   data: InvoiceData;
   config: InvoicePageConfig;
+  onViewDeposit?: (docnum: string) => void;
 }) {
   const { invoice, customer, items, company } = data;
 
@@ -448,9 +452,26 @@ export function InvoiceSheet({
                 <span className="font-mono text-slate-800">{fmtMoney(afterDiscount)}</span>
               </div>
 
-              <div className="flex justify-between">
-                <span className="font-semibold text-slate-900">
-                  หักเงินมัดจำ{" "}
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-slate-900 flex items-center gap-1.5 flex-wrap">
+                  <span>หักเงินมัดจำ</span>
+                  {invoice.ADVNUM && (
+                    onViewDeposit ? (
+                      <button
+                        type="button"
+                        onClick={() => onViewDeposit(invoice.ADVNUM!)}
+                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200/80 font-mono text-[10.5px] font-bold transition cursor-pointer"
+                        title={`คลิกเพื่อเปิดดูใบรับเงินมัดจำ ${invoice.ADVNUM}`}
+                      >
+                        <Eye size={11} />
+                        <span>{invoice.ADVNUM}</span>
+                      </button>
+                    ) : (
+                      <span className="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200/80 font-mono text-[10.5px] font-bold">
+                        {invoice.ADVNUM}
+                      </span>
+                    )
+                  )}
                   <span className="text-[9.5px] font-normal text-slate-500">
                     Less Deposit
                   </span>

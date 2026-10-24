@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Eye, Link2, CheckCircle2, Clock } from "lucide-react";
 import { bahtText } from "@/lib/baht-text";
 
 export interface AdvanceInvoicePageConfig {
@@ -91,6 +92,17 @@ export interface AdvanceInvoiceData {
   };
   items: AdvanceInvoiceItem[];
   remarks?: { SEQNUM?: string; REMARK: string }[];
+  appliedInvoices?: Array<{
+    DOCNUM: string;
+    RECTYP: string;
+    DOCDAT: string | Date | null;
+    DUEDAT?: string | Date | null;
+    AMOUNT?: number;
+    ADVAMT: number;
+    NETAMT?: number;
+    CUSCOD?: string;
+    CUSNAM?: string;
+  }>;
   company?: {
     THINAM?: string;
     ADDR01?: string;
@@ -123,9 +135,11 @@ function fmtThaiDateShort(d: Date | string | null | undefined): string {
 export function AdvanceInvoiceSheet({
   data,
   config,
+  onViewInvoice,
 }: {
   data: AdvanceInvoiceData;
   config: AdvanceInvoicePageConfig;
+  onViewInvoice?: (docnum: string) => void;
 }) {
   const { invoice, customer, items, company } = data;
 
@@ -283,6 +297,51 @@ export function AdvanceInvoiceSheet({
             </div>
           </div>
         </div>
+
+        {/* Applied Sales Invoices Link Box */}
+        {data.appliedInvoices && data.appliedInvoices.length > 0 ? (
+          <div className="p-3 rounded-xl bg-emerald-50/90 border border-emerald-300 text-xs shadow-xs print:hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+                <span className="font-bold text-emerald-950">
+                  เงินมัดจำนี้ถูกนำไปหักในบิลขายแล้ว ({data.appliedInvoices.length} บิล):
+                </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {data.appliedInvoices.map((inv) => (
+                  <button
+                    key={inv.DOCNUM}
+                    type="button"
+                    onClick={() => onViewInvoice && onViewInvoice(inv.DOCNUM)}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-emerald-300 text-emerald-900 font-mono text-xs font-bold hover:bg-emerald-100 hover:border-emerald-400 transition cursor-pointer shadow-xs group"
+                    title={`คลิกเพื่อเปิดดูรายละเอียดบิลขาย ${inv.DOCNUM}`}
+                  >
+                    <Link2 size={12} className="text-emerald-600 group-hover:scale-110 transition" />
+                    <span>{inv.DOCNUM}</span>
+                    <span className="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-1 rounded">
+                      {inv.RECTYP === "1" ? "ขายสด" : "ขายเชื่อ"}
+                    </span>
+                    <span className="text-emerald-800 font-semibold">
+                      ฿{fmtMoney(inv.ADVAMT)}
+                    </span>
+                    <Eye size={12} className="text-emerald-600 ml-0.5" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="p-2.5 rounded-xl bg-amber-50/80 border border-amber-200 text-xs flex items-center justify-between print:hidden">
+            <div className="flex items-center gap-2 text-amber-900 font-medium">
+              <Clock size={15} className="text-amber-600 shrink-0" />
+              <span>สถานะเงินมัดจำ: ยังไม่ถูกนำไปหักในบิลขาย (ยอดเงินมัดจำคงเหลือพร้อมใช้งาน)</span>
+            </div>
+            <span className="text-[11px] font-mono font-bold text-amber-800 bg-amber-100/70 px-2 py-0.5 rounded-md border border-amber-300/50">
+              คงเหลือ ฿{fmtMoney(invoice.NETAMT)}
+            </span>
+          </div>
+        )}
 
         {/* Items Table Box (3 Columns as in scan) */}
         <div className="border border-slate-700 rounded-t-lg overflow-x-auto bg-white/70">

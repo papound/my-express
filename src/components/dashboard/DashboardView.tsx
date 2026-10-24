@@ -22,6 +22,8 @@ import {
   Calendar,
   MapPin,
   Download,
+  Bookmark,
+  Link2,
 } from "lucide-react";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
@@ -52,6 +54,14 @@ interface DashboardData {
     CUSCOD: string;
     NETAMT: number;
     REMAMT: number;
+    ADVNUM?: string | null;
+    ADVAMT?: number;
+    appliedInvoices?: Array<{
+      DOCNUM: string;
+      RECTYP: string;
+      ADVAMT: number;
+      DOCDAT: string | null;
+    }>;
     DOCSTAT: string;
     customer?: {
       CUSNAM: string;
@@ -325,6 +335,45 @@ export function DashboardView() {
                       >
                         {inv.DOCNUM}
                       </button>
+
+                      {/* If Sales bill with Deposit deducted */}
+                      {inv.ADVNUM && (
+                        <div className="mt-0.5">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPopupDocnum(inv.ADVNUM!);
+                            }}
+                            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-300 transition cursor-pointer"
+                            title={`คลิกเปิดดูใบรับเงินมัดจำ ${inv.ADVNUM}`}
+                          >
+                            <Bookmark size={9} className="text-amber-600 shrink-0" />
+                            <span>หักมัดจำ: {inv.ADVNUM}</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {/* If Deposit bill, show linked sales bills */}
+                      {inv.RECTYP === "0" && inv.appliedInvoices && inv.appliedInvoices.length > 0 && (
+                        <div className="mt-0.5 flex flex-wrap gap-1">
+                          {inv.appliedInvoices.map((applied) => (
+                            <button
+                              key={applied.DOCNUM}
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setPopupDocnum(applied.DOCNUM);
+                              }}
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-300 transition cursor-pointer"
+                              title={`คลิกเปิดดูบิลขาย ${applied.DOCNUM}`}
+                            >
+                              <Link2 size={9} className="text-emerald-600 shrink-0" />
+                              <span>รวมใน: {applied.DOCNUM}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </td>
                     <td className="py-3 px-2 text-slate-600">
                       {fmtDate(inv.DOCDAT)}

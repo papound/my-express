@@ -38,11 +38,44 @@ export async function GET(request: Request) {
       ])
     );
 
+    // Build deposit usage map: ADVNUM -> list of sales invoices that deducted this deposit
+    const depositUsageMap = new Map<
+      string,
+      Array<{
+        DOCNUM: string;
+        RECTYP: string;
+        ADVAMT: number;
+        DOCDAT: Date | null;
+      }>
+    >();
+
+    for (const r of rawTrn) {
+      const advnum = cleanStr(r.ADVNUM);
+      const advamt = cleanNum(r.ADVAMT);
+      if (advnum && advnum.length > 2) {
+        if (!depositUsageMap.has(advnum)) {
+          depositUsageMap.set(advnum, []);
+        }
+        depositUsageMap.get(advnum)!.push({
+          DOCNUM: cleanStr(r.DOCNUM),
+          RECTYP: cleanStr(r.RECTYP),
+          ADVAMT: advamt,
+          DOCDAT: cleanDate(r.DOCDAT),
+        });
+      }
+    }
+
     let records = rawTrn.map((r) => {
       const cuscod = cleanStr(r.CUSCOD);
+      const docnum = cleanStr(r.DOCNUM);
+      const advnum = cleanStr(r.ADVNUM);
+      const advamt = cleanNum(r.ADVAMT);
+      const validAdvnum = advnum && advnum.length > 2 ? advnum : null;
+      const appliedInvoices = depositUsageMap.get(docnum) ?? [];
+
       return {
         RECTYP: cleanStr(r.RECTYP),
-        DOCNUM: cleanStr(r.DOCNUM),
+        DOCNUM: docnum,
         DOCDAT: cleanDate(r.DOCDAT),
         CUSCOD: cuscod,
         SONUM: cleanStr(r.SONUM),
@@ -55,6 +88,8 @@ export async function GET(request: Request) {
         AMOUNT: cleanNum(r.AMOUNT),
         DISCAMT: cleanNum(r.DISCAMT),
         AFTDISC: cleanNum(r.AFTDISC),
+        ADVNUM: validAdvnum,
+        ADVAMT: advamt,
         VATAMT: cleanNum(r.VATAMT),
         NETAMT: cleanNum(r.NETAMT),
         TOTAL: cleanNum(r.TOTAL),
@@ -67,6 +102,7 @@ export async function GET(request: Request) {
         PRNCNT: cleanNum(r.PRNCNT),
         BILLTO: cleanStr(r.BILLTO),
         ORGNUM: cleanNum(r.ORGNUM),
+        appliedInvoices,
         // joined
         customer: cusMap.get(cuscod),
       };
@@ -104,7 +140,9 @@ export async function GET(request: Request) {
             search
           ) ||
           matchSearch(r.YOUREF, search) ||
-          matchSearch(r.SONUM, search)
+          matchSearch(r.SONUM, search) ||
+          matchSearch(r.ADVNUM, search) ||
+          r.appliedInvoices.some((a) => matchSearch(a.DOCNUM, search))
       );
     }
 

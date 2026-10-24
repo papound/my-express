@@ -9,6 +9,9 @@ import {
   Calendar,
   Download,
   X,
+  Bookmark,
+  Link2,
+  Clock,
 } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
@@ -29,6 +32,14 @@ interface Invoice {
   TOTAL: number;
   REMAMT: number;
   DOCSTAT: string;
+  ADVNUM?: string | null;
+  ADVAMT?: number;
+  appliedInvoices?: Array<{
+    DOCNUM: string;
+    RECTYP: string;
+    ADVAMT: number;
+    DOCDAT: string | null;
+  }>;
   customer?: { CUSNAM: string; PRENAM: string };
 }
 
@@ -311,6 +322,62 @@ export default function InvoicesPage() {
                           >
                             {inv.DOCNUM}
                           </button>
+
+                          {/* If Sales bill with Deposit deducted */}
+                          {inv.ADVNUM && (
+                            <div className="mt-1">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setPopupDocnum(inv.ADVNUM!);
+                                }}
+                                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-300 transition cursor-pointer shadow-2xs"
+                                title={`คลิกเปิดดูใบรับเงินมัดจำ ${inv.ADVNUM} (หัก ฿${fmtMoney(inv.ADVAMT || 0)})`}
+                              >
+                                <Bookmark size={10} className="text-amber-600 shrink-0" />
+                                <span>หักมัดจำ: {inv.ADVNUM}</span>
+                                {(inv.ADVAMT || 0) > 0 && (
+                                  <span className="text-[9.5px] text-amber-700 font-medium">
+                                    (฿{fmtMoney(inv.ADVAMT || 0)})
+                                  </span>
+                                )}
+                              </button>
+                            </div>
+                          )}
+
+                          {/* If Deposit bill, show linked sales bills */}
+                          {inv.RECTYP === "0" && (
+                            <div className="mt-1 flex flex-wrap gap-1">
+                              {inv.appliedInvoices && inv.appliedInvoices.length > 0 ? (
+                                inv.appliedInvoices.map((applied) => (
+                                  <button
+                                    key={applied.DOCNUM}
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setPopupDocnum(applied.DOCNUM);
+                                    }}
+                                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-300 transition cursor-pointer shadow-2xs"
+                                    title={`คลิกเปิดดูบิลขาย ${applied.DOCNUM} (${applied.RECTYP === "1" ? "ขายสด" : "ขายเชื่อ"} หัก ฿${fmtMoney(applied.ADVAMT)})`}
+                                  >
+                                    <Link2 size={10} className="text-emerald-600 shrink-0" />
+                                    <span>รวมใน: {applied.DOCNUM}</span>
+                                    {applied.ADVAMT > 0 && (
+                                      <span className="text-[9.5px] text-emerald-700 font-medium">
+                                        (฿{fmtMoney(applied.ADVAMT)})
+                                      </span>
+                                    )}
+                                  </button>
+                                ))
+                              ) : (
+                                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-sans font-medium bg-slate-100 text-slate-500 border border-slate-200">
+                                  <Clock size={10} className="shrink-0" />
+                                  <span>ยังไม่ได้หัก</span>
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </td>
                         <td className="py-3.5 px-4 text-slate-600">
                           {fmtDate(inv.DOCDAT)}

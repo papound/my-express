@@ -324,6 +324,7 @@ export default function InvoiceDetailPage({
                     <CashSaleSheet
                       data={data as CashSaleData}
                       config={cfg}
+                      onViewDeposit={(doc) => setPopupDocnum(doc)}
                     />
                   </div>
                 ))}
@@ -337,6 +338,7 @@ export default function InvoiceDetailPage({
                     key={cfg.page}
                     data={data as CashSaleData}
                     config={cfg}
+                    onViewDeposit={(doc) => setPopupDocnum(doc)}
                   />
                 ))}
               </div>
@@ -400,6 +402,7 @@ export default function InvoiceDetailPage({
                     <AdvanceInvoiceSheet
                       data={data as AdvanceInvoiceData}
                       config={cfg}
+                      onViewInvoice={(doc) => setPopupDocnum(doc)}
                     />
                   </div>
                 ))}
@@ -413,6 +416,7 @@ export default function InvoiceDetailPage({
                     key={cfg.page}
                     data={data as AdvanceInvoiceData}
                     config={cfg}
+                    onViewInvoice={(doc) => setPopupDocnum(doc)}
                   />
                 ))}
               </div>
@@ -473,14 +477,23 @@ export default function InvoiceDetailPage({
                         {cfg.name} : {cfg.title} - {cfg.subtitle}
                       </span>
                     </div>
-                    <InvoiceSheet data={data as InvoiceData} config={cfg} />
+                    <InvoiceSheet
+                      data={data as InvoiceData}
+                      config={cfg}
+                      onViewDeposit={(doc) => setPopupDocnum(doc)}
+                    />
                   </div>
                 ))}
               </div>
             ) : (
               <div>
                 {INVOICE_PAGES_CONFIG.filter((c) => c.page === activeTab).map((cfg) => (
-                  <InvoiceSheet key={cfg.page} data={data as InvoiceData} config={cfg} />
+                  <InvoiceSheet
+                    key={cfg.page}
+                    data={data as InvoiceData}
+                    config={cfg}
+                    onViewDeposit={(doc) => setPopupDocnum(doc)}
+                  />
                 ))}
               </div>
             )}

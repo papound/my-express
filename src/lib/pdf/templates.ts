@@ -477,7 +477,7 @@ export function generateInvoiceHtml(data: {
                   <td style="text-align: right; font-family: monospace; padding-top: 2px;">${fmtMoney(invoice.AFTDISC || invoice.AMOUNT - invoice.DISCAMT)}</td>
                 </tr>
                 <tr>
-                  <td style="font-weight: 600; padding-top: 2px;">หักเงินมัดจำ<br><span style="font-size: 9px; font-weight: 400; color: #555;">Less Deposit</span></td>
+                  <td style="font-weight: 600; padding-top: 2px;">หักเงินมัดจำ${invoice.ADVNUM ? ` (${invoice.ADVNUM})` : ""}<br><span style="font-size: 9px; font-weight: 400; color: #555;">Less Deposit</span></td>
                   <td style="text-align: right; font-family: monospace; padding-top: 2px;">${fmtMoney(invoice.ADVAMT || 0)}</td>
                 </tr>
                 <tr>

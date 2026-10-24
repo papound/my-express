@@ -426,6 +426,9 @@ export function InvoiceDetailModal({
                     <CashSaleSheet
                       data={data as CashSaleData}
                       config={cfg}
+                      onViewDeposit={(aiDocnum) =>
+                        setDocStack((prev) => [...prev, aiDocnum])
+                      }
                     />
                   </div>
                 ))}
@@ -439,6 +442,9 @@ export function InvoiceDetailModal({
                     key={cfg.page}
                     data={data as CashSaleData}
                     config={cfg}
+                    onViewDeposit={(aiDocnum) =>
+                      setDocStack((prev) => [...prev, aiDocnum])
+                    }
                   />
                 ))}
               </div>
@@ -460,6 +466,9 @@ export function InvoiceDetailModal({
                     <AdvanceInvoiceSheet
                       data={data as AdvanceInvoiceData}
                       config={cfg}
+                      onViewInvoice={(ivDocnum) =>
+                        setDocStack((prev) => [...prev, ivDocnum])
+                      }
                     />
                   </div>
                 ))}
@@ -473,6 +482,9 @@ export function InvoiceDetailModal({
                     key={cfg.page}
                     data={data as AdvanceInvoiceData}
                     config={cfg}
+                    onViewInvoice={(ivDocnum) =>
+                      setDocStack((prev) => [...prev, ivDocnum])
+                    }
                   />
                 ))}
               </div>
@@ -490,14 +502,27 @@ export function InvoiceDetailModal({
                       {cfg.name} : {cfg.title} - {cfg.subtitle}
                     </span>
                   </div>
-                  <InvoiceSheet data={data as InvoiceData} config={cfg} />
+                  <InvoiceSheet
+                    data={data as InvoiceData}
+                    config={cfg}
+                    onViewDeposit={(aiDocnum) =>
+                      setDocStack((prev) => [...prev, aiDocnum])
+                    }
+                  />
                 </div>
               ))}
             </div>
           ) : (
             <div>
               {INVOICE_PAGES_CONFIG.filter((c) => c.page === activeTab).map((cfg) => (
-                <InvoiceSheet key={cfg.page} data={data as InvoiceData} config={cfg} />
+                <InvoiceSheet
+                  key={cfg.page}
+                  data={data as InvoiceData}
+                  config={cfg}
+                  onViewDeposit={(aiDocnum) =>
+                    setDocStack((prev) => [...prev, aiDocnum])
+                  }
+                />
               ))}
             </div>
           )}
