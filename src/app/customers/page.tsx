@@ -15,9 +15,20 @@ interface Customer {
   PAYTRM: number;
   BALANCE: number;
   STATUS: string;
+  statusType?: "A" | "UNSPECIFIED" | "I";
+  isActive?: boolean;
+  statusLabel?: string;
   lastInvoiceDate?: string | null;
   lastInvoiceDocnum?: string | null;
   lastInvoiceAmount?: number | null;
+}
+
+interface CustomerCounts {
+  all: number;
+  active: number;
+  explicitActive: number;
+  unspecified: number;
+  inactive: number;
 }
 
 function fmtMoney(n: number) {
@@ -30,6 +41,13 @@ function fmtMoney(n: number) {
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [total, setTotal] = useState(0);
+  const [counts, setCounts] = useState<CustomerCounts>({
+    all: 0,
+    active: 0,
+    explicitActive: 0,
+    unspecified: 0,
+    inactive: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("A");
@@ -43,6 +61,7 @@ export default function CustomersPage() {
       const json = await res.json();
       setCustomers(json.data ?? []);
       setTotal(json.total ?? 0);
+      if (json.counts) setCounts(json.counts);
     } catch {
       setCustomers([]);
     } finally {
@@ -110,20 +129,33 @@ export default function CustomersPage() {
             {/* Status Tabs */}
             <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60 overflow-x-auto max-w-full">
               {[
-                { id: "A", label: "สถานะใช้งาน (Active)" },
-                { id: "I", label: "ยกเลิก (Inactive)" },
-                { id: "all", label: "ทั้งหมด" },
+                { id: "A", label: "สถานะใช้งาน (Active)", count: counts.active },
+                { id: "UNSPECIFIED", label: "ไม่ได้ระบุ (Active)", count: counts.unspecified },
+                { id: "EXPLICIT_A", label: "Active", count: counts.explicitActive },
+                { id: "I", label: "ยกเลิก (Inactive)", count: counts.inactive },
+                { id: "all", label: "ทั้งหมด", count: counts.all },
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setStatus(tab.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition flex items-center gap-1.5 ${
                     status === tab.id
                       ? "bg-white text-blue-700 font-semibold shadow-sm"
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
-                  {tab.label}
+                  <span>{tab.label}</span>
+                  {tab.count !== undefined && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                        status === tab.id
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-slate-200/70 text-slate-600"
+                      }`}
+                    >
+                      {tab.count}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
@@ -243,15 +275,25 @@ export default function CustomersPage() {
                       )}
                     </td>
                     <td className="py-3.5 px-4 text-center">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${
-                          c.STATUS === "A"
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60"
-                            : "bg-slate-100 text-slate-600 border border-slate-200"
-                        }`}
-                      >
-                        {c.STATUS === "A" ? "ใช้งาน" : "ยกเลิก"}
-                      </span>
+                      {c.statusType === "A" ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                          Active
+                        </span>
+                      ) : c.statusType === "UNSPECIFIED" ? (
+                        <span
+                          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold bg-blue-50 text-blue-700 border border-blue-200/60"
+                          title="ใน Express ไม่ได้ระบุสถานะ (ถือเป็นสถานะใช้งานปกติ Active)"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                          ไม่ได้ระบุ (Active)
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold bg-slate-100 text-slate-500 border border-slate-200">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                          ยกเลิก (Inactive)
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))

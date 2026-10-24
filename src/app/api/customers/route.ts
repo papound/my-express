@@ -97,12 +97,27 @@ export async function GET(request: Request) {
       };
     });
 
+    const totalAll = records.length;
+    const counts = {
+      all: totalAll,
+      active: records.filter((r) => r.isActive).length,
+      explicitActive: records.filter((r) => r.statusType === "A").length,
+      unspecified: records.filter((r) => r.statusType === "UNSPECIFIED").length,
+      inactive: records.filter((r) => !r.isActive).length,
+    };
+
     // Filter by status:
     // "A" หรือ "active" = ทั้ง Active ("A") และ ไม่ได้ระบุ (Active)
-    // "I" = Inactive
+    // "EXPLICIT_A" = เฉพาะที่ระบุ Active ("A")
+    // "UNSPECIFIED" = เฉพาะที่ไม่ได้ระบุ (ว่าง) ซึ่งถือเป็น Active
+    // "I" หรือ "inactive" = Inactive
     // "all" = ทั้งหมด
     if (status === "A" || status === "active") {
       records = records.filter((r) => r.isActive);
+    } else if (status === "EXPLICIT_A") {
+      records = records.filter((r) => r.statusType === "A");
+    } else if (status === "UNSPECIFIED" || status === "unspecified") {
+      records = records.filter((r) => r.statusType === "UNSPECIFIED");
     } else if (status === "I" || status === "inactive") {
       records = records.filter((r) => !r.isActive);
     }
@@ -142,7 +157,7 @@ export async function GET(request: Request) {
     const total = records.length;
     const paginated = records.slice((page - 1) * limit, page * limit);
 
-    return NextResponse.json({ data: paginated, total, page, limit });
+    return NextResponse.json({ data: paginated, total, page, limit, counts });
   } catch (err) {
     console.error("GET /api/customers error:", err);
     return NextResponse.json(
