@@ -349,15 +349,25 @@ export function BillingSheet({
           </div>
 
           {/* Right: Issuer (6 cols) */}
-          <div className="p-3 sm:p-4 md:col-span-6 space-y-4">
+          <div className="p-3 sm:p-4 md:col-span-6 flex flex-col justify-between">
             <div>
               ในนาม &nbsp;{" "}
               <strong className="text-slate-900 font-bold">
                 {company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}
               </strong>
             </div>
-            <div className="pt-2">
-              ชื่อผู้วางบิล &nbsp; ____________________
+            <div className="pt-2 text-center">
+              <div className="h-16 flex items-end justify-center -mb-2">
+                <img
+                  src="/api/logo/signature"
+                  alt="ลายเซ็นผู้วางบิล"
+                  className="h-14 w-auto object-contain"
+                />
+              </div>
+              <div className="w-56 border-b border-slate-700/80 mx-auto mb-1"></div>
+              <div className="text-[11px] text-slate-700">
+                ชื่อผู้วางบิล
+              </div>
             </div>
           </div>
         </div>

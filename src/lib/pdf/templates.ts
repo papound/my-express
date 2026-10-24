@@ -1375,6 +1375,7 @@ export function generateQuotationHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
+  const signatureBase64 = getAuthorizedSignatureBase64();
 
   const fmtThaiDateShort = (d: Date | string | null): string => {
     if (!d) return "-";
@@ -1679,6 +1680,7 @@ export function generateBillingHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
+  const signatureBase64 = getAuthorizedSignatureBase64();
 
   const fmtThaiDateShort = (d: Date | string | null): string => {
     if (!d) return "-";
@@ -1963,12 +1965,20 @@ export function generateBillingHtml(data: {
           </td>
 
           <!-- Right: Issuer Signatures -->
-          <td style="width: 50%; vertical-align: top; padding: 12px 16px;">
-            <div style="margin-bottom: 18px;">
+          <td style="width: 50%; vertical-align: top; padding: 10px 16px;">
+            <div style="margin-bottom: 8px;">
               ในนาม &nbsp; <strong>${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</strong>
             </div>
-            <div>
-              ชื่อผู้วางบิล &nbsp; ____________________
+            <div style="text-align: center; margin-top: 6px;">
+              ${signatureBase64 ? `
+                <div style="margin-bottom: -10px;">
+                  <img src="${signatureBase64}" style="height: 64px; width: auto; display: inline-block; vertical-align: bottom;" />
+                </div>
+              ` : `
+                <div style="height: 24px;"></div>
+              `}
+              <div style="border-bottom: 1px solid #444; width: 70%; margin: 0 auto;"></div>
+              <div style="font-size: 10px; margin-top: 4px;">ชื่อผู้วางบิล</div>
             </div>
           </td>
         </tr>
