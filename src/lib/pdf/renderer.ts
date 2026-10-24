@@ -1,22 +1,50 @@
 import puppeteer, { Browser } from "puppeteer";
 
 let browserInstance: Browser | null = null;
+let browserPromise: Promise<Browser> | null = null;
 
 async function getBrowser(): Promise<Browser> {
+  if (browserInstance && browserInstance.connected) {
+    return browserInstance;
+  }
+  if (browserPromise) {
+    return browserPromise;
+  }
+
   const executablePath =
     process.env.PUPPETEER_EXECUTABLE_PATH || undefined;
 
-  return await puppeteer.launch({
-    headless: true,
-    executablePath,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-      "--font-render-hinting=none",
-    ],
-  });
+  browserPromise = puppeteer
+    .launch({
+      headless: true,
+      executablePath,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-software-rasterizer",
+        "--no-zygote",
+        "--single-process",
+        "--no-first-run",
+        "--font-render-hinting=none",
+      ],
+    })
+    .then((b) => {
+      browserInstance = b;
+      browserPromise = null;
+      b.on("disconnected", () => {
+        browserInstance = null;
+        browserPromise = null;
+      });
+      return b;
+    })
+    .catch((err) => {
+      browserPromise = null;
+      throw err;
+    });
+
+  return browserPromise;
 }
 
 /**
@@ -27,8 +55,8 @@ export async function renderHtmlToPdf(
   options?: { landscape?: boolean }
 ): Promise<Uint8Array> {
   const browser = await getBrowser();
+  const page = await browser.newPage();
   try {
-    const page = await browser.newPage();
     await page.setContent(html, {
       waitUntil: "domcontentloaded",
       timeout: 15000,
@@ -51,7 +79,7 @@ export async function renderHtmlToPdf(
 
     return pdfBuffer;
   } finally {
-    await browser.close();
+    await page.close().catch(() => {});
   }
 }
 

@@ -6,6 +6,7 @@ services:
       dockerfile: docker/Dockerfile
     container_name: my-express-app
     restart: unless-stopped
+    shm_size: "512m"
     ports:
       - "3000:3000"
     env_file:
