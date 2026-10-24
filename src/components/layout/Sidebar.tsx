@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
@@ -12,6 +13,7 @@ import {
   LogOut,
   Building2,
   Database,
+  Calendar,
   ChevronRight,
   X,
 } from "lucide-react";
@@ -54,6 +56,18 @@ export function Sidebar({
 }) {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const [company, setCompany] = useState<{
+    name: string;
+    engName?: string;
+    workingDate?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/company")
+      .then((res) => res.json())
+      .then((data) => setCompany(data))
+      .catch((err) => console.error("Failed to load company info:", err));
+  }, []);
 
   return (
     <>
@@ -73,19 +87,22 @@ export function Sidebar({
       >
         {/* Brand Header */}
         <div className="p-4 sm:p-5 border-b border-slate-800/60 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20 shrink-0">
               <Building2 size={18} className="stroke-[2.2]" />
             </div>
-            <div>
-              <div className="font-bold text-sm sm:text-base tracking-wide text-white flex items-center gap-1.5">
-                ธงธัญ
-                <span className="text-[9px] sm:text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                  ERP
-                </span>
+            <div className="min-w-0">
+              <div
+                className="font-bold text-xs sm:text-sm tracking-wide text-white truncate max-w-[145px]"
+                title={company?.name || "บริษัท ธงธัญ99 จำกัด"}
+              >
+                {company?.name || "บริษัท ธงธัญ99 จำกัด"}
               </div>
-              <p className="text-[11px] sm:text-xs text-slate-400 font-medium">
-                Express Web Suite
+              <p
+                className="text-[10px] sm:text-[11px] text-slate-400 font-medium truncate max-w-[145px]"
+                title={company?.engName || "Express Web Suite"}
+              >
+                {company?.engName || "Express Web Suite"}
               </p>
             </div>
           </div>
@@ -93,21 +110,37 @@ export function Sidebar({
           {/* Close button on Mobile */}
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white rounded-lg lg:hidden"
+            className="p-1.5 text-slate-400 hover:text-white rounded-lg lg:hidden shrink-0"
             title="ปิดเมนู"
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* Database Status Pill */}
-        <div className="px-3 pt-3">
+        {/* Working Date & Database Status */}
+        <div className="px-3 pt-3 space-y-2">
+          {/* Working Date */}
+          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-blue-950/40 border border-blue-800/40 text-[11px] text-blue-200">
+            <Calendar size={13} className="text-blue-400 shrink-0" />
+            <div className="truncate">
+              <span className="text-slate-400 mr-1">วันที่ทำการ:</span>
+              <strong className="text-white">
+                {new Date(company?.workingDate || Date.now()).toLocaleDateString("th-TH", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </strong>
+            </div>
+          </div>
+
+          {/* Database Status Pill */}
           <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700/50 text-[11px] text-slate-300">
-            <span className="relative flex h-2 w-2">
+            <span className="relative flex h-2 w-2 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <Database size={13} className="text-emerald-400" />
+            <Database size={13} className="text-emerald-400 shrink-0" />
             <span className="truncate">ThongTha (DBF Live)</span>
           </div>
         </div>
