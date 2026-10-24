@@ -366,12 +366,12 @@ export function generateCashSaleHtml(data: {
           <!-- Left: Delivery & Receipt -->
           <td style="width: 33%; vertical-align: top; padding: 6px 8px; border-right: 1.2px solid #334155;">
             <div style="font-weight: 700; text-align: center; margin-bottom: 8px;">ได้รับสินค้าตามรายการถูกต้องแล้ว</div>
-            <div style="margin-top: 14px;">
+            <div style="margin-top: 10px;">
               <table style="width: 95%; margin: 0 auto;">
-                <tr>
-                  <td style="border-bottom: 1px solid #444; width: 65%;"></td>
+                <tr style="height: 26px;">
+                  <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;"></td>
                   <td style="width: 5%;"></td>
-                  <td style="border-bottom: 1px solid #444; width: 30%;"></td>
+                  <td style="border-bottom: 1px solid #444; width: 30%; vertical-align: bottom;"></td>
                 </tr>
                 <tr>
                   <td style="font-size: 9px; padding-top: 2px;">ผู้รับสินค้า/ Goods Received by</td>
@@ -380,12 +380,12 @@ export function generateCashSaleHtml(data: {
                 </tr>
               </table>
             </div>
-            <div style="margin-top: 14px;">
+            <div style="margin-top: 10px;">
               <table style="width: 95%; margin: 0 auto;">
-                <tr>
-                  <td style="border-bottom: 1px solid #444; width: 65%;"></td>
+                <tr style="height: 26px;">
+                  <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;"></td>
                   <td style="width: 5%;"></td>
-                  <td style="border-bottom: 1px solid #444; width: 30%;"></td>
+                  <td style="border-bottom: 1px solid #444; width: 30%; vertical-align: bottom;"></td>
                 </tr>
                 <tr>
                   <td style="font-size: 9px; padding-top: 2px;">ผู้ส่งสินค้า/ Delivery by</td>
@@ -415,15 +415,15 @@ export function generateCashSaleHtml(data: {
               <div style="margin-bottom: 3px; font-size: 9.5px;">
                 จำนวนเงิน_______________________________________
               </div>
-              <div style="margin-bottom: 6px; font-size: 9.5px;">
+              <div style="margin-bottom: 4px; font-size: 9.5px;">
                 ภาษีหัก ณ ที่จ่าย ${taxWithheld > 0 ? fmtMoney(taxWithheld) : "___________________________________"}
               </div>
-              <div style="margin-top: 6px;">
+              <div style="margin-top: 4px;">
                 <table style="width: 95%; margin: 0 auto;">
-                  <tr>
-                    <td style="border-bottom: 1px solid #444; width: 65%;"></td>
+                  <tr style="height: 24px;">
+                    <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;"></td>
                     <td style="width: 5%;"></td>
-                    <td style="border-bottom: 1px solid #444; width: 30%;"></td>
+                    <td style="border-bottom: 1px solid #444; width: 30%; vertical-align: bottom;"></td>
                   </tr>
                   <tr>
                     <td style="font-size: 9px; padding-top: 2px;">ผู้รับเงิน/ Collector</td>
@@ -447,21 +447,22 @@ export function generateCashSaleHtml(data: {
           <!-- Right: Authorized Signatures -->
           <td style="width: 30%; vertical-align: top; padding: 6px 8px; text-align: center;">
             <div style="font-size: 9px; color: #333;">ในนาม</div>
-            <div style="font-weight: 700; font-size: 11px; margin-bottom: 14px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+            <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
 
-            <div style="margin-bottom: 12px;">
+            <div style="margin-bottom: 8px;">
               ${signatureBase64 ? `
-                <div style="margin-bottom: -10px;">
-                  <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
+                <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                  <img src="${signatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
                 </div>
               ` : `
-                <div style="height: 24px;"></div>
+                <div style="height: 30px;"></div>
               `}
               <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
               <div style="font-size: 9px; margin-top: 2px;">ผู้รับมอบอำนาจ/ Authorized Signature</div>
             </div>
 
             <div>
+              <div style="height: 28px;"></div>
               <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
               <div style="font-size: 9px; margin-top: 2px;">ผู้ตรวจเช็คสินค้า/ Approved by</div>
             </div>

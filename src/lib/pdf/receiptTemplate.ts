@@ -360,10 +360,10 @@ export function generateReceiptHtml(data: {
 
                 <div style="margin-top: 10px;">
                   <table style="width: 65%;">
-                    <tr>
-                      <td style="border-bottom: 1px solid #444; width: 65%;"></td>
+                    <tr style="height: 24px;">
+                      <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;"></td>
                       <td style="width: 5%;"></td>
-                      <td style="border-bottom: 1px solid #444; width: 30%;"></td>
+                      <td style="border-bottom: 1px solid #444; width: 30%; vertical-align: bottom;"></td>
                     </tr>
                     <tr>
                       <td style="font-size: 9px; padding-top: 2px;">ผู้รับเงิน/ Collector</td>
@@ -377,21 +377,22 @@ export function generateReceiptHtml(data: {
               <!-- Right: Signatures -->
               <td style="width: 35%; vertical-align: top; padding: 6px 8px; text-align: center;">
                 <div style="font-size: 9px; color: #333;">ในนาม</div>
-                <div style="font-weight: 700; font-size: 11px; margin-bottom: 14px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+                <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
 
-                <div style="margin-bottom: 12px;">
+                <div style="margin-bottom: 8px;">
                   ${signatureBase64 ? `
-                    <div style="margin-bottom: -10px;">
-                      <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
+                    <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                      <img src="${signatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
                     </div>
                   ` : `
-                    <div style="height: 24px;"></div>
+                    <div style="height: 30px;"></div>
                   `}
                   <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
                   <div style="font-size: 9px; margin-top: 2px;">ผู้รับมอบอำนาจ/ Authorized Signature</div>
                 </div>
 
                 <div>
+                  <div style="height: 28px;"></div>
                   <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
                   <div style="font-size: 9px; margin-top: 2px;">ผู้เตรียมเอกสาร/ Prepared by</div>
                 </div>

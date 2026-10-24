@@ -357,11 +357,11 @@ export function BillingSheet({
               </strong>
             </div>
             <div className="pt-2 text-center">
-              <div className="h-16 flex items-end justify-center -mb-2">
+              <div className="h-12 sm:h-14 flex items-end justify-center -mb-0.5 pointer-events-none">
                 <img
                   src="/api/logo/signature"
                   alt="ลายเซ็นผู้วางบิล"
-                  className="h-14 w-auto object-contain"
+                  className="h-12 sm:h-14 w-auto object-contain object-bottom"
                 />
               </div>
               <div className="w-56 border-b border-slate-700/80 mx-auto mb-1"></div>

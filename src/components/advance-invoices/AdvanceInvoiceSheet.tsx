@@ -475,12 +475,12 @@ export function AdvanceInvoiceSheet({
 
               <div className="space-y-3 pt-1">
                 <div className="relative flex flex-col items-center">
-                  <div className="h-16 sm:h-20 flex items-end justify-center mb-[-10px] pointer-events-none">
+                  <div className="h-12 sm:h-14 flex items-end justify-center -mb-0.5 pointer-events-none">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="/api/logo/signature"
                       alt="Authorized Signature"
-                      className="h-16 sm:h-20 w-auto object-contain"
+                      className="h-12 sm:h-14 w-auto object-contain object-bottom"
                     />
                   </div>
                   <div className="border-b border-slate-700 w-4/5 mx-auto"></div>
@@ -490,7 +490,7 @@ export function AdvanceInvoiceSheet({
                 </div>
 
                 <div>
-                  <div className="border-b border-slate-700 w-4/5 mx-auto h-4"></div>
+                  <div className="border-b border-slate-700 w-4/5 mx-auto h-7 sm:h-8"></div>
                   <div className="text-[9.5px] text-slate-600 mt-1">
                     ผู้ตรวจสอบ/ Approved by
                   </div>

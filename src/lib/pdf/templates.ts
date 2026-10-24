@@ -519,12 +519,12 @@ export function generateInvoiceHtml(data: {
           <!-- Left: Received & Delivery -->
           <td style="width: 32%; vertical-align: top; padding: 6px 8px; border-right: 1.2px solid #334155;">
             <div style="font-weight: 700; text-align: center; margin-bottom: 14px;">ได้รับสินค้าตามรายการถูกต้องแล้ว</div>
-            <div style="margin-bottom: 12px;">
+            <div style="margin-bottom: 10px;">
               <table style="width: 100%;">
-                <tr>
-                  <td style="border-bottom: 1px solid #444; width: 65%;"></td>
+                <tr style="height: 26px;">
+                  <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;"></td>
                   <td style="width: 5%;"></td>
-                  <td style="border-bottom: 1px solid #444; width: 30%;"></td>
+                  <td style="border-bottom: 1px solid #444; width: 30%; vertical-align: bottom;"></td>
                 </tr>
                 <tr>
                   <td style="font-size: 9.5px; padding-top: 2px;">ผู้รับสินค้า/ Goods Received by</td>
@@ -535,10 +535,10 @@ export function generateInvoiceHtml(data: {
             </div>
             <div>
               <table style="width: 100%;">
-                <tr>
-                  <td style="border-bottom: 1px solid #444; width: 65%;"></td>
+                <tr style="height: 26px;">
+                  <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;"></td>
                   <td style="width: 5%;"></td>
-                  <td style="border-bottom: 1px solid #444; width: 30%;"></td>
+                  <td style="border-bottom: 1px solid #444; width: 30%; vertical-align: bottom;"></td>
                 </tr>
                 <tr>
                   <td style="font-size: 9.5px; padding-top: 2px;">ผู้ส่งสินค้า/ Delivery by</td>
@@ -560,21 +560,22 @@ export function generateInvoiceHtml(data: {
           <!-- Right: Authorized Signatures -->
           <td style="width: 33%; vertical-align: top; padding: 6px 8px; text-align: center;">
             <div style="font-size: 9.5px; color: #333;">ในนาม</div>
-            <div style="font-weight: 700; font-size: 11px; margin-bottom: 18px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+            <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
             
-            <div style="margin-bottom: 12px;">
+            <div style="margin-bottom: 8px;">
               ${signatureBase64 ? `
-                <div style="margin-bottom: -10px;">
-                  <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
+                <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                  <img src="${signatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
                 </div>
               ` : `
-                <div style="height: 24px;"></div>
+                <div style="height: 30px;"></div>
               `}
               <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
               <div style="font-size: 9.5px; margin-top: 2px;">ผู้รับมอบอำนาจ/ Authorized Signature</div>
             </div>
 
             <div>
+              <div style="height: 28px;"></div>
               <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
               <div style="font-size: 9.5px; margin-top: 2px;">ผู้ตรวจเช็คสินค้า/ Approved by</div>
             </div>
@@ -972,10 +973,10 @@ export function generateAdvanceInvoiceHtml(data: {
                   </td>
                   <td style="width: 55%;">
                     <table style="width: 90%; margin: 0 auto;">
-                      <tr>
-                        <td style="border-bottom: 1px solid #444; width: 65%;"></td>
+                      <tr style="height: 24px;">
+                        <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;"></td>
                         <td style="width: 5%;"></td>
-                        <td style="border-bottom: 1px solid #444; width: 30%;"></td>
+                        <td style="border-bottom: 1px solid #444; width: 30%; vertical-align: bottom;"></td>
                       </tr>
                       <tr>
                         <td style="font-size: 9.5px; padding-top: 2px;">ผู้รับเงิน/ Collector</td>
@@ -991,21 +992,22 @@ export function generateAdvanceInvoiceHtml(data: {
             <!-- Right: Authorized Signatures -->
             <td style="width: 35%; vertical-align: top; padding: 6px 8px; text-align: center;">
               <div style="font-size: 9.5px; color: #333;">ในนาม</div>
-              <div style="font-weight: 700; font-size: 11px; margin-bottom: 18px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+              <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
 
-              <div style="margin-bottom: 12px;">
+              <div style="margin-bottom: 8px;">
                 ${signatureBase64 ? `
-                  <div style="margin-bottom: -10px;">
-                    <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
+                  <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                    <img src="${signatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
                   </div>
                 ` : `
-                  <div style="height: 24px;"></div>
+                  <div style="height: 30px;"></div>
                 `}
                 <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
                 <div style="font-size: 9.5px; margin-top: 2px;">ผู้รับมอบอำนาจ/ Authorized Signature</div>
               </div>
 
               <div>
+                <div style="height: 28px;"></div>
                 <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
                 <div style="font-size: 9.5px; margin-top: 2px;">ผู้ตรวจสอบ/ Approved by</div>
               </div>
@@ -1424,14 +1426,14 @@ export function generateSalesReturnHtml(data: {
             <!-- Right: Authorized -->
             <td style="width: 40%; vertical-align: top; padding: 8px 12px; text-align: center;">
               <div style="font-size: 9.5px; color: #333;">ในนาม</div>
-              <div style="font-weight: 700; font-size: 11px; margin-bottom: 14px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
+              <div style="font-weight: 700; font-size: 11px; margin-bottom: 6px;">${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</div>
               <div>
                 ${signatureBase64 ? `
-                  <div style="margin-bottom: -10px;">
-                    <img src="${signatureBase64}" style="height: 72px; width: auto; display: inline-block; vertical-align: bottom;" />
+                  <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                    <img src="${signatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
                   </div>
                 ` : `
-                  <div style="height: 24px;"></div>
+                  <div style="height: 30px;"></div>
                 `}
                 <div style="border-bottom: 1px solid #444; width: 75%; margin: 0 auto;"></div>
                 <div style="font-size: 9.5px; margin-top: 2px;">ผู้รับมอบอำนาจ</div>
@@ -1763,18 +1765,21 @@ export function generateQuotationHtml(data: {
 
           <!-- Right: Signatures -->
           <td style="width: 52%; vertical-align: top; padding: 8px 12px;">
-            <div style="text-align: right; font-weight: 600; margin-bottom: 24px;">ขอแสดงความนับถือ</div>
+            <div style="text-align: right; font-weight: 600; margin-bottom: 8px;">ขอแสดงความนับถือ</div>
             <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 11px;">
               <tr>
                 <td style="width: 33.33%; padding: 0 4px;">
+                  <div style="height: 32px;"></div>
                   <div style="border-bottom: 1px solid #444; margin-bottom: 4px;"></div>
                   <div>ผู้ตรวจสอบ</div>
                 </td>
                 <td style="width: 33.33%; padding: 0 4px;">
+                  <div style="height: 32px;"></div>
                   <div style="border-bottom: 1px solid #444; margin-bottom: 4px;"></div>
                   <div>ผู้รับทราบ</div>
                 </td>
                 <td style="width: 33.33%; padding: 0 4px;">
+                  <div style="height: 32px;"></div>
                   <div style="border-bottom: 1px solid #444; margin-bottom: 4px;"></div>
                   <div>ผู้อนุมัติ</div>
                 </td>
@@ -2118,16 +2123,16 @@ export function generateBillingHtml(data: {
 
             <!-- Right: Issuer Signatures -->
             <td style="width: 50%; vertical-align: top; padding: 10px 16px;">
-              <div style="margin-bottom: 8px;">
+              <div style="margin-bottom: 6px;">
                 ในนาม &nbsp; <strong>${company?.THINAM || "บริษัท ธงธัญ99 จำกัด"}</strong>
               </div>
-              <div style="text-align: center; margin-top: 6px;">
+              <div style="text-align: center; margin-top: 4px;">
                 ${signatureBase64 ? `
-                  <div style="margin-bottom: -10px;">
-                    <img src="${signatureBase64}" style="height: 64px; width: auto; display: inline-block; vertical-align: bottom;" />
+                  <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                    <img src="${signatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
                   </div>
                 ` : `
-                  <div style="height: 24px;"></div>
+                  <div style="height: 32px;"></div>
                 `}
                 <div style="border-bottom: 1px solid #444; width: 70%; margin: 0 auto;"></div>
                 <div style="font-size: 10px; margin-top: 4px;">ชื่อผู้วางบิล</div>

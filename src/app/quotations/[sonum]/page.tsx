@@ -508,15 +508,15 @@ export default function QuotationDetailPage({
               </div>
               <div className="grid grid-cols-3 gap-2 text-center text-[11px] text-slate-800">
                 <div>
-                  <div className="border-b border-slate-400 mb-1 mx-2"></div>
+                  <div className="h-8 border-b border-slate-400 mb-1 mx-2"></div>
                   <div>ผู้ตรวจสอบ</div>
                 </div>
                 <div>
-                  <div className="border-b border-slate-400 mb-1 mx-2"></div>
+                  <div className="h-8 border-b border-slate-400 mb-1 mx-2"></div>
                   <div>ผู้รับทราบ</div>
                 </div>
                 <div>
-                  <div className="border-b border-slate-400 mb-1 mx-2"></div>
+                  <div className="h-8 border-b border-slate-400 mb-1 mx-2"></div>
                   <div>ผู้อนุมัติ</div>
                 </div>
               </div>
