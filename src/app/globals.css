@@ -223,3 +223,11 @@ body {
 [data-theme="express"] .fixed.inset-0 .bg-white.rounded-3xl h3 {
   color: #3b2713 !important;
 }
+[data-theme="express"] .fixed.inset-0 .border-b.border-slate-100 {
+  background-color: #faf3e8 !important;
+  border-bottom-color: #dfc29d !important;
+}
+[data-theme="express"] .fixed.inset-0 button.bg-slate-900 {
+  background-color: #382414 !important;
+  color: #fce5be !important;
+}

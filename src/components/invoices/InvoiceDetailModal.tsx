@@ -125,7 +125,7 @@ export function InvoiceDetailModal({
       {/* Modal Dialog Content */}
       <div className="relative w-full max-w-4xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 z-10 overflow-hidden my-3 sm:my-8 max-h-[92vh] flex flex-col">
         {/* Modal Top Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 border-b border-slate-200 bg-slate-50 gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 border-b border-slate-200 bg-slate-50 gap-2 shrink-0">
           <div className="flex items-center gap-2 min-w-0">
             {docStack.length > 0 && (
               <button
@@ -201,11 +201,11 @@ export function InvoiceDetailModal({
 
         {/* Modal Copy Switcher Tabs */}
         {data && !isSalesReturn && !isAdvanceInvoice && !isCashSale && !isReceipt && (
-          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto">
+          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto shrink-0">
             <button
               type="button"
               onClick={() => setActiveTab("all")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer ${
                 activeTab === "all"
                   ? "bg-slate-900 text-white"
                   : "text-slate-600 hover:bg-slate-100"
@@ -222,7 +222,7 @@ export function InvoiceDetailModal({
                   key={cfg.page}
                   type="button"
                   onClick={() => setActiveTab(cfg.page)}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap border ${
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer border ${
                     isActive
                       ? cfg.badgeActiveBg
                       : "border-transparent text-slate-600 hover:bg-slate-100"
@@ -240,11 +240,11 @@ export function InvoiceDetailModal({
         )}
 
         {data && isAdvanceInvoice && (
-          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto">
+          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto shrink-0">
             <button
               type="button"
               onClick={() => setActiveTab("all")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer ${
                 activeTab === "all"
                   ? "bg-slate-900 text-white"
                   : "text-slate-600 hover:bg-slate-100"
@@ -261,7 +261,7 @@ export function InvoiceDetailModal({
                   key={cfg.page}
                   type="button"
                   onClick={() => setActiveTab(cfg.page)}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap border ${
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer border ${
                     isActive
                       ? cfg.badgeActiveBg
                       : "border-transparent text-slate-600 hover:bg-slate-100"
@@ -279,11 +279,11 @@ export function InvoiceDetailModal({
         )}
 
         {data && isCashSale && (
-          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto">
+          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto shrink-0">
             <button
               type="button"
               onClick={() => setActiveTab("all")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer ${
                 activeTab === "all"
                   ? "bg-slate-900 text-white"
                   : "text-slate-600 hover:bg-slate-100"
@@ -300,7 +300,7 @@ export function InvoiceDetailModal({
                   key={cfg.page}
                   type="button"
                   onClick={() => setActiveTab(cfg.page)}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap border ${
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer border ${
                     isActive
                       ? cfg.badgeActiveBg
                       : "border-transparent text-slate-600 hover:bg-slate-100"
@@ -318,11 +318,11 @@ export function InvoiceDetailModal({
         )}
 
         {data && isReceipt && (
-          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto">
+          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto shrink-0">
             <button
               type="button"
               onClick={() => setActiveTab("all")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer ${
                 activeTab === "all"
                   ? "bg-slate-900 text-white"
                   : "text-slate-600 hover:bg-slate-100"
@@ -339,7 +339,7 @@ export function InvoiceDetailModal({
                   key={cfg.page}
                   type="button"
                   onClick={() => setActiveTab(cfg.page)}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap border ${
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 cursor-pointer border ${
                     isActive
                       ? cfg.badgeActiveBg
                       : "border-transparent text-slate-600 hover:bg-slate-100"
@@ -357,7 +357,7 @@ export function InvoiceDetailModal({
         )}
 
         {/* Modal Body */}
-        <div className="p-3 sm:p-5 md:p-6 overflow-y-auto relative space-y-4">
+        <div className="p-3 sm:p-5 md:p-6 overflow-y-auto relative space-y-4 flex-1 min-h-0">
           {loading ? (
             <div className="py-20 text-center text-slate-400">
               <RefreshCw className="animate-spin inline-block mr-2" size={24} />
