@@ -6,6 +6,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import { Pagination } from "@/components/common/Pagination";
+import { QuotationDetailModal } from "@/components/quotations/QuotationDetailModal";
 
 interface Quotation {
   SONUM: string;
@@ -64,6 +65,7 @@ export default function QuotationsPage() {
   const [dateTo, setDateTo] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const [selectedSonum, setSelectedSonum] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -259,9 +261,13 @@ export default function QuotationsPage() {
                       className="hover:bg-blue-50/30 transition-colors group"
                     >
                       <td className="py-3.5 px-4 font-mono font-bold text-slate-900 group-hover:text-blue-700">
-                        <Link href={`/quotations/${encodeURIComponent(r.SONUM)}`}>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedSonum(r.SONUM)}
+                          className="text-left font-mono font-bold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                        >
                           {r.SONUM}
-                        </Link>
+                        </button>
                       </td>
                       <td className="py-3.5 px-4 text-slate-600">
                         {fmtDate(r.SODAT)}
@@ -289,13 +295,14 @@ export default function QuotationsPage() {
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         <div className="flex items-center justify-center gap-1.5">
-                          <Link
-                            href={`/quotations/${encodeURIComponent(r.SONUM)}`}
-                            className="p-1.5 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg border border-transparent hover:border-blue-200 transition"
-                            title="ดูรายละเอียดใบเสนอราคา"
+                          <button
+                            type="button"
+                            onClick={() => setSelectedSonum(r.SONUM)}
+                            className="p-1.5 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg border border-transparent hover:border-blue-200 transition cursor-pointer"
+                            title="ดูรายละเอียดใบเสนอราคา (Popup)"
                           >
                             <Eye size={15} />
-                          </Link>
+                          </button>
                           <button
                             type="button"
                             onClick={() =>
@@ -345,6 +352,12 @@ export default function QuotationsPage() {
           setPage(1);
         }}
         loading={loading}
+      />
+
+      {/* Quotation Detail Popup Modal */}
+      <QuotationDetailModal
+        sonum={selectedSonum}
+        onClose={() => setSelectedSonum(null)}
       />
     </div>
   </AppShell>
