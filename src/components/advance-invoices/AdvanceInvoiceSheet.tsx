@@ -3,6 +3,7 @@
 import React from "react";
 import { Eye, Link2, CheckCircle2, Clock } from "lucide-react";
 import { bahtText } from "@/lib/baht-text";
+import { useSignatureVersion } from "@/hooks/useSignatureVersion";
 
 export interface AdvanceInvoicePageConfig {
   page: number;
@@ -141,6 +142,7 @@ export function AdvanceInvoiceSheet({
   config: AdvanceInvoicePageConfig;
   onViewInvoice?: (docnum: string) => void;
 }) {
+  const sigVersion = useSignatureVersion();
   const { invoice, customer, items, company } = data;
 
   const grossAmount = invoice.AMOUNT || 0;
@@ -512,7 +514,17 @@ export function AdvanceInvoiceSheet({
 
                 <div className="text-center">
                   <div className="flex items-end gap-2">
-                    <div className="border-b border-slate-700 flex-1 h-4"></div>
+                    <div className="flex-1 flex flex-col items-center">
+                      <div className="h-6 flex items-end justify-center -mb-0.5 pointer-events-none">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`/api/logo/signature?role=collector&v=${sigVersion}`}
+                          alt="Collector Signature"
+                          className="h-6 w-auto object-contain object-bottom"
+                        />
+                      </div>
+                      <div className="border-b border-slate-700 w-full"></div>
+                    </div>
                     <div className="border-b border-slate-700 w-20 h-4"></div>
                   </div>
                   <div className="flex justify-between text-[9px] text-slate-700 mt-1">
@@ -537,7 +549,7 @@ export function AdvanceInvoiceSheet({
                   <div className="h-12 sm:h-14 flex items-end justify-center -mb-0.5 pointer-events-none">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="/api/logo/signature"
+                      src={`/api/logo/signature?role=authorized&v=${sigVersion}`}
                       alt="Authorized Signature"
                       className="h-12 sm:h-14 w-auto object-contain object-bottom"
                     />
@@ -548,8 +560,16 @@ export function AdvanceInvoiceSheet({
                   </div>
                 </div>
 
-                <div>
-                  <div className="border-b border-slate-700 w-4/5 mx-auto h-7 sm:h-8"></div>
+                <div className="relative flex flex-col items-center">
+                  <div className="h-7 sm:h-8 flex items-end justify-center -mb-0.5 pointer-events-none">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/api/logo/signature?role=approved&v=${sigVersion}`}
+                      alt="Approved Signature"
+                      className="h-7 sm:h-8 w-auto object-contain object-bottom"
+                    />
+                  </div>
+                  <div className="border-b border-slate-700 w-4/5 mx-auto"></div>
                   <div className="text-[9.5px] text-slate-600 mt-1">
                     ผู้ตรวจสอบ/ Approved by
                   </div>

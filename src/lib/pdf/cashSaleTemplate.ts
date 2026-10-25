@@ -3,6 +3,7 @@ import {
   getCompanyLogoBase64,
   getWatermarkLogoBase64,
   getAuthorizedSignatureBase64,
+  getSignatureBase64,
 } from "@/lib/logo";
 
 function fmtMoney(n: number | null | undefined): string {
@@ -24,7 +25,9 @@ export function generateCashSaleHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getAuthorizedSignatureBase64();
+  const signatureBase64 = getSignatureBase64("authorized");
+  const approvedSignatureBase64 = getSignatureBase64("approved");
+  const collectorSignatureBase64 = getSignatureBase64("collector");
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";
@@ -421,7 +424,13 @@ export function generateCashSaleHtml(data: {
               <div style="margin-top: 4px;">
                 <table style="width: 95%; margin: 0 auto;">
                   <tr style="height: 24px;">
-                    <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;"></td>
+                    <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;">
+                      ${collectorSignatureBase64 ? `
+                        <div style="height: 36px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                          <img src="${collectorSignatureBase64}" style="height: 36px; width: auto; object-fit: contain; vertical-align: bottom;" />
+                        </div>
+                      ` : ""}
+                    </td>
                     <td style="width: 5%;"></td>
                     <td style="border-bottom: 1px solid #444; width: 30%; vertical-align: bottom;"></td>
                   </tr>
@@ -462,7 +471,13 @@ export function generateCashSaleHtml(data: {
             </div>
 
             <div>
-              <div style="height: 28px;"></div>
+              ${approvedSignatureBase64 ? `
+                <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                  <img src="${approvedSignatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
+                </div>
+              ` : `
+                <div style="height: 28px;"></div>
+              `}
               <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
               <div style="font-size: 9px; margin-top: 2px;">ผู้ตรวจเช็คสินค้า/ Approved by</div>
             </div>

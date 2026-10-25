@@ -122,7 +122,9 @@ export async function GET(
         "Content-Length": String(pdfBuffer.length),
         "Content-Disposition": `${disposition}; filename="quotation_${soNum}.pdf"; filename*=UTF-8''${encodeURIComponent(`quotation_${soNum}.pdf`)}`,
         "Accept-Ranges": "bytes",
-        "Cache-Control": "private, max-age=60",
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
       },
     });
   } catch (err) {

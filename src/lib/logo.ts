@@ -96,12 +96,21 @@ function findSignatureBuffer(): Buffer | null {
 
     try {
       const files = fs.readdirSync(dir);
-      const match = files.find(
-        (f) =>
-          f.toLowerCase() === "my-express-authorized-signature.bmp" ||
-          f.toLowerCase().includes("authorized-signature") ||
-          f.toLowerCase().includes("signature")
-      );
+      const match = files.find((f) => {
+        const full = path.join(dir, f);
+        try {
+          if (fs.statSync(full).isDirectory()) return false;
+        } catch {
+          return false;
+        }
+        const lower = f.toLowerCase();
+        return (
+          lower === "my-express-authorized-signature.bmp" ||
+          lower.includes("authorized-signature") ||
+          (lower.includes("signature") &&
+            (lower.endsWith(".bmp") || lower.endsWith(".png") || lower.endsWith(".jpg")))
+        );
+      });
 
       if (match) {
         return fs.readFileSync(path.join(dir, match));
@@ -126,7 +135,7 @@ export function getAuthorizedSignatureBuffer(): Buffer | null {
 }
 
 /**
- * ดึง base64 data URL ของ ลายเซ็นผู้รับมอบอำนาจ
+ * ดึง base64 data URL ของ ลายเซ็นผู้รับมอบอำนาจต้นฉบับ
  */
 export function getAuthorizedSignatureBase64(): string {
   try {
@@ -140,3 +149,78 @@ export function getAuthorizedSignatureBase64(): string {
     return "";
   }
 }
+
+export type SignatureType = "default" | "custom" | "blank";
+
+export interface SignatureRoleConfig {
+  type: SignatureType;
+  dataUrl?: string | null;
+  updatedAt?: string;
+}
+
+export type SignaturesMap = Record<string, SignatureRoleConfig>;
+
+const SIGNATURES_FILE = path.resolve("./data/signatures/signatures.json");
+
+/**
+ * ดึงการตั้งค่าลายเซ็นทั้งหมด
+ */
+export function getSignaturesConfig(): SignaturesMap {
+  try {
+    if (fs.existsSync(SIGNATURES_FILE)) {
+      const raw = fs.readFileSync(SIGNATURES_FILE, "utf-8");
+      return JSON.parse(raw);
+    }
+  } catch (err) {
+    console.warn("Could not read signatures.json:", err);
+  }
+  return {};
+}
+
+/**
+ * บันทึกการตั้งค่าลายเซ็นทั้งหมด
+ */
+export function saveSignaturesConfig(cfg: SignaturesMap): void {
+  try {
+    const dir = path.dirname(SIGNATURES_FILE);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(SIGNATURES_FILE, JSON.stringify(cfg, null, 2), "utf-8");
+  } catch (err) {
+    console.error("Could not write signatures.json:", err);
+  }
+}
+
+/**
+ * ดึง base64 data URL สำหรับบทบาทที่ระบุ
+ */
+export function getSignatureBase64(role: string = "authorized"): string {
+  try {
+    const config = getSignaturesConfig();
+    const roleCfg = config[role];
+
+    if (roleCfg) {
+      if (roleCfg.type === "blank") {
+        return "";
+      }
+      if (roleCfg.type === "custom" && roleCfg.dataUrl) {
+        return roleCfg.dataUrl;
+      }
+      if (roleCfg.type === "default") {
+        return getAuthorizedSignatureBase64();
+      }
+    }
+
+    // Default fallbacks for roles that originally had default signature
+    if (role === "authorized" || role === "billing") {
+      return getAuthorizedSignatureBase64();
+    }
+
+    return "";
+  } catch (err) {
+    console.warn(`Could not load signature for role ${role}:`, err);
+    return "";
+  }
+}
+

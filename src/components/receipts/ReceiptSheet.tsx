@@ -3,6 +3,7 @@
 import React from "react";
 import { Eye } from "lucide-react";
 import { bahtText } from "@/lib/baht-text";
+import { useSignatureVersion } from "@/hooks/useSignatureVersion";
 
 export interface ReceiptPageConfig {
   page: number;
@@ -132,6 +133,7 @@ export function ReceiptSheet({
   config: ReceiptPageConfig;
   onViewInvoice?: (docnum: string) => void;
 }) {
+  const sigVersion = useSignatureVersion();
   const { invoice, customer, items, receiptItems, company } = data;
 
   const appliedItems: ReceiptItem[] =
@@ -451,7 +453,17 @@ export function ReceiptSheet({
               <div className="pt-3 border-t border-dashed border-slate-200">
                 <div className="w-3/5">
                   <div className="flex items-end gap-2">
-                    <div className="border-b border-slate-700 flex-1 h-7"></div>
+                    <div className="flex-1 flex flex-col items-center">
+                      <div className="h-7 flex items-end justify-center -mb-0.5 pointer-events-none">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`/api/logo/signature?role=collector&v=${sigVersion}`}
+                          alt="Collector Signature"
+                          className="h-7 w-auto object-contain object-bottom"
+                        />
+                      </div>
+                      <div className="border-b border-slate-700 w-full"></div>
+                    </div>
                     <div className="border-b border-slate-700 w-24 h-7"></div>
                   </div>
                   <div className="flex justify-between text-[9px] text-slate-700 mt-1">
@@ -476,7 +488,7 @@ export function ReceiptSheet({
                   <div className="h-12 sm:h-14 flex items-end justify-center -mb-0.5 pointer-events-none">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="/api/logo/signature"
+                      src={`/api/logo/signature?role=authorized&v=${sigVersion}`}
                       alt="Authorized Signature"
                       className="h-12 sm:h-14 w-auto object-contain object-bottom"
                     />
@@ -487,8 +499,16 @@ export function ReceiptSheet({
                   </div>
                 </div>
 
-                <div>
-                  <div className="border-b border-slate-700 w-4/5 mx-auto h-7 sm:h-8"></div>
+                <div className="relative flex flex-col items-center">
+                  <div className="h-7 sm:h-8 flex items-end justify-center -mb-0.5 pointer-events-none">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/api/logo/signature?role=prepared&v=${sigVersion}`}
+                      alt="Prepared Signature"
+                      className="h-7 sm:h-8 w-auto object-contain object-bottom"
+                    />
+                  </div>
+                  <div className="border-b border-slate-700 w-4/5 mx-auto"></div>
                   <div className="text-[9px] text-slate-600 mt-1">
                     ผู้เตรียมเอกสาร/ Prepared by
                   </div>

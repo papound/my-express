@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { ArrowLeft, Printer, RefreshCw, Layers, Download } from "lucide-react";
+import { ArrowLeft, Printer, RefreshCw, Layers, Download, PenTool } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
+import { SignaturePadModal } from "@/components/signatures/SignaturePadModal";
 import {
   InvoiceSheet,
   INVOICE_PAGES_CONFIG,
@@ -44,6 +45,7 @@ export default function InvoiceDetailPage({
   const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
   const [isPrinting, setIsPrinting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
 
   const handlePrint = async () => {
     if (!data?.invoice?.DOCNUM) return;
@@ -181,6 +183,15 @@ export default function InvoiceDetailPage({
                 <Download size={15} className="text-slate-600" />
               )}
               <span>{isDownloading ? "กำลังดาวน์โหลด..." : "ดาวน์โหลด PDF"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowSignatureModal(true)}
+              className="inline-flex items-center justify-center gap-2 bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm transition w-full sm:w-auto cursor-pointer"
+              title="จัดการและวาดลายเซ็นสำหรับเอกสาร"
+            >
+              <PenTool size={15} className="text-indigo-600" />
+              <span>จัดการลายเซ็น</span>
             </button>
           </div>
         </div>
@@ -504,6 +515,14 @@ export default function InvoiceDetailPage({
           docnum={popupDocnum}
           onClose={() => setPopupDocnum(null)}
         />
+
+        {showSignatureModal && (
+          <SignaturePadModal
+            isOpen={showSignatureModal}
+            onClose={() => setShowSignatureModal(false)}
+            initialRole={isReceipt ? "collector" : "authorized"}
+          />
+        )}
       </div>
     </AppShell>
   );

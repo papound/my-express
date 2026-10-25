@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { ArrowLeft, Printer, RefreshCw, Download, Tag } from "lucide-react";
+import { ArrowLeft, Printer, RefreshCw, Download, Tag, PenTool } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
+import { SignaturePadModal } from "@/components/signatures/SignaturePadModal";
 import {
   QuotationSheet,
   type QuotationDetailResponse,
@@ -43,6 +44,7 @@ export default function QuotationDetailPage({
   const [isDownloading, setIsDownloading] = useState(false);
   const [showItemCode, setShowItemCode] = useState(true);
   const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
 
   const handlePrint = async () => {
     if (!data?.quotation?.SONUM) return;
@@ -186,6 +188,15 @@ export default function QuotationDetailPage({
               )}
               <span>{isDownloading ? "กำลังดาวน์โหลด..." : "ดาวน์โหลด PDF"}</span>
             </button>
+            <button
+              type="button"
+              onClick={() => setShowSignatureModal(true)}
+              className="inline-flex items-center justify-center gap-2 bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition w-full sm:w-auto cursor-pointer"
+              title="จัดการและวาดลายเซ็นสำหรับใบเสนอราคา"
+            >
+              <PenTool size={15} className="text-indigo-600" />
+              <span>จัดการลายเซ็น</span>
+            </button>
           </div>
         </div>
 
@@ -202,6 +213,14 @@ export default function QuotationDetailPage({
         docnum={popupDocnum}
         onClose={() => setPopupDocnum(null)}
       />
+
+      {showSignatureModal && (
+        <SignaturePadModal
+          isOpen={showSignatureModal}
+          onClose={() => setShowSignatureModal(false)}
+          initialRole="approved"
+        />
+      )}
     </AppShell>
   );
 }

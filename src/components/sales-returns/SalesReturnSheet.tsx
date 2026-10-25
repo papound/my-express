@@ -2,6 +2,7 @@
 
 import React from "react";
 import { bahtText } from "@/lib/baht-text";
+import { useSignatureVersion } from "@/hooks/useSignatureVersion";
 
 export interface SalesReturnItem {
   STKCOD: string;
@@ -83,6 +84,7 @@ function fmtThaiDateShort(d: Date | string | null | undefined): string {
 }
 
 export function SalesReturnSheet({ data }: { data: SalesReturnData }) {
+  const sigVersion = useSignatureVersion();
   const { invoice, customer, items, remarks, company } = data;
 
   const grossAmount = invoice.AMOUNT || 0;
@@ -431,7 +433,7 @@ export function SalesReturnSheet({ data }: { data: SalesReturnData }) {
                 <div className="h-12 sm:h-14 flex items-end justify-center -mb-0.5 pointer-events-none">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/api/logo/signature"
+                    src={`/api/logo/signature?role=authorized&v=${sigVersion}`}
                     alt="Authorized Signature"
                     className="h-12 sm:h-14 w-auto object-contain object-bottom"
                   />

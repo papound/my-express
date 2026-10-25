@@ -3,6 +3,7 @@
 import React from "react";
 import { Eye } from "lucide-react";
 import { bahtText } from "@/lib/baht-text";
+import { useSignatureVersion } from "@/hooks/useSignatureVersion";
 
 export interface InvoicePageConfig {
   page: number;
@@ -166,6 +167,7 @@ export function InvoiceSheet({
   onViewDeposit?: (docnum: string) => void;
   onViewBilling?: (bilnum: string) => void;
 }) {
+  const sigVersion = useSignatureVersion();
   const { invoice, customer, items, company } = data;
 
   const grossAmount = invoice.AMOUNT || 0;
@@ -613,7 +615,7 @@ export function InvoiceSheet({
                 <div className="h-12 sm:h-14 flex items-end justify-center -mb-0.5 pointer-events-none">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/api/logo/signature"
+                    src={`/api/logo/signature?role=authorized&v=${sigVersion}`}
                     alt="Authorized Signature"
                     className="h-12 sm:h-14 w-auto object-contain object-bottom"
                   />
@@ -624,8 +626,16 @@ export function InvoiceSheet({
                 </div>
               </div>
 
-              <div>
-                <div className="border-b border-slate-700 w-4/5 mx-auto h-7 sm:h-8"></div>
+              <div className="relative flex flex-col items-center">
+                <div className="h-7 sm:h-8 flex items-end justify-center -mb-0.5 pointer-events-none">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/api/logo/signature?role=approved&v=${sigVersion}`}
+                    alt="Approved Signature"
+                    className="h-7 sm:h-8 w-auto object-contain object-bottom"
+                  />
+                </div>
+                <div className="border-b border-slate-700 w-4/5 mx-auto"></div>
                 <div className="text-[9px] text-slate-600 mt-1">
                   ผู้ตรวจเช็คสินค้า/ Approved by
                 </div>

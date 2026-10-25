@@ -2,8 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Calendar, ShieldCheck, Menu, Palette } from "lucide-react";
+import { Calendar, ShieldCheck, Menu, Palette, PenTool } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
+import { SignaturePadModal } from "@/components/signatures/SignaturePadModal";
 
 const titleMap: Record<string, { title: string; subtitle: string }> = {
   "/": {
@@ -42,6 +43,7 @@ export function Header({
   const pathname = usePathname();
   const [currentDate, setCurrentDate] = useState("");
   const [companyName, setCompanyName] = useState("");
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -87,7 +89,8 @@ export function Header({
         });
 
   return (
-    <header className="h-16 sm:h-18 bg-white/85 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 transition-all">
+    <>
+      <header className="h-16 sm:h-18 bg-white/85 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 transition-all">
       <div className="flex items-center gap-3">
         {/* Hamburger Menu Toggle Button (Both Mobile and Desktop) */}
         <button
@@ -138,6 +141,17 @@ export function Header({
           </span>
         </button>
 
+        {/* Signature Settings Button */}
+        <button
+          type="button"
+          onClick={() => setShowSignatureModal(true)}
+          className="flex items-center gap-1.5 px-2.5 py-1 sm:py-1.5 rounded-full text-xs font-semibold border border-indigo-200 bg-indigo-50/70 text-indigo-700 hover:bg-indigo-100/80 transition cursor-pointer"
+          title="ตั้งค่าและวาดลายเซ็นสำหรับเอกสาร PDF ทั้งหมด"
+        >
+          <PenTool size={13} className="text-indigo-600" />
+          <span className="hidden sm:inline">ลายเซ็น</span>
+        </button>
+
         {/* Date Display */}
         <div className="hidden md:flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100/80 px-3 py-1.5 rounded-full border border-slate-200">
           <Calendar size={13} className="text-blue-600" />
@@ -152,6 +166,13 @@ export function Header({
         </div>
       </div>
     </header>
+
+      <SignaturePadModal
+        isOpen={showSignatureModal}
+        onClose={() => setShowSignatureModal(false)}
+        initialRole="authorized"
+      />
+    </>
   );
 }
 

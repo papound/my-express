@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, Printer, RefreshCw, Download, Tag } from "lucide-react";
+import { createPortal } from "react-dom";
+import { X, Printer, RefreshCw, Download, Tag, PenTool } from "lucide-react";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
+import { SignaturePadModal } from "@/components/signatures/SignaturePadModal";
 import {
   QuotationSheet,
   type QuotationDetailResponse,
@@ -42,6 +44,12 @@ export function QuotationDetailModal({
   const [isDownloading, setIsDownloading] = useState(false);
   const [showItemCode, setShowItemCode] = useState(true);
   const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!sonum) {
@@ -88,7 +96,7 @@ export function QuotationDetailModal({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose, popupDocnum]);
 
-  if (!sonum) return null;
+  if (!sonum || !mounted) return null;
 
   const handlePrint = async () => {
     if (!data?.quotation?.SONUM) return;
@@ -125,16 +133,17 @@ export function QuotationDetailModal({
           badgeClass: "bg-slate-100 text-slate-700 border-slate-200",
         };
 
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-2.5 sm:p-4 md:p-6 overflow-y-auto">
+  return createPortal(
+    <div className="fixed inset-0 z-[60] overflow-y-auto">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal Dialog Content */}
-      <div className="relative w-full max-w-5xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 z-10 overflow-hidden my-3 sm:my-8 max-h-[92vh] flex flex-col">
+      <div className="min-h-full flex items-start justify-center p-2.5 sm:p-4 md:p-6 pointer-events-none">
+        {/* Modal Dialog Content */}
+        <div className="relative w-full max-w-5xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 z-10 overflow-hidden my-auto max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)] flex flex-col pointer-events-auto">
         {/* Modal Top Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 border-b border-slate-200 bg-slate-50 gap-2 shrink-0">
           <div className="flex items-center gap-2 min-w-0 flex-wrap">
@@ -201,6 +210,16 @@ export function QuotationDetailModal({
 
             <button
               type="button"
+              onClick={() => setShowSignatureModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 hover:text-indigo-700 hover:bg-indigo-50 hover:border-indigo-200 transition shadow-sm cursor-pointer"
+              title="จัดการและวาดลายเซ็นสำหรับใบเสนอราคา"
+            >
+              <PenTool size={13} className="text-indigo-600" />
+              <span>ลายเซ็น</span>
+            </button>
+
+            <button
+              type="button"
               onClick={onClose}
               className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200/70 rounded-xl transition cursor-pointer"
               title="ปิดหน้าต่าง (Esc)"
@@ -236,7 +255,17 @@ export function QuotationDetailModal({
         docnum={popupDocnum}
         onClose={() => setPopupDocnum(null)}
       />
-    </div>
+
+      {showSignatureModal && (
+        <SignaturePadModal
+          isOpen={showSignatureModal}
+          onClose={() => setShowSignatureModal(false)}
+          initialRole="approved"
+        />
+      )}
+      </div>
+    </div>,
+    document.body
   );
 }
 

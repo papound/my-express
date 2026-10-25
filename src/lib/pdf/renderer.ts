@@ -64,6 +64,20 @@ export async function renderHtmlToPdf(
     // รอให้ fonts โหลดเสร็จโดยไม่บล็อกค้างกับการเชื่อมต่อ network idle
     await page.evaluateHandle("document.fonts.ready").catch(() => {});
 
+    // รอให้รูปภาพทั้งหมดในหน้า (รวมทั้ง Base64 signatures และโลโก้) decode เสร็จสมบูรณ์ก่อนพิมพ์
+    await page.evaluate(async () => {
+      const images = Array.from(document.images);
+      await Promise.all(
+        images.map((img) => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        })
+      );
+    }).catch(() => {});
+
     const pdfBuffer = await page.pdf({
       format: "A4",
       landscape: options?.landscape ?? false,

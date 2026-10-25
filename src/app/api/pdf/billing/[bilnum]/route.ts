@@ -12,6 +12,7 @@ export async function GET(
     const bilNum = decodeURIComponent(bilnum).trim();
     const { searchParams } = new URL(request.url);
     const isDownload = searchParams.get("download") === "1";
+    const pageParam = searchParams.get("page");
 
     const [rawBil, rawMas, rawTrn, rawRm, rawInfo] = await Promise.all([
       readAll<Record<string, unknown>>("ARBIL"),
@@ -96,6 +97,7 @@ export async function GET(
       invoices,
       remarks,
       company,
+      page: pageParam ? (pageParam === "all" ? "all" : parseInt(pageParam, 10)) : "all",
     });
 
     const pdfBuffer = await renderHtmlToPdf(html);
@@ -107,7 +109,9 @@ export async function GET(
         "Content-Length": String(pdfBuffer.length),
         "Content-Disposition": `${disposition}; filename="billing_${bilNum}.pdf"; filename*=UTF-8''${encodeURIComponent(`billing_${bilNum}.pdf`)}`,
         "Accept-Ranges": "bytes",
-        "Cache-Control": "private, max-age=60",
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
       },
     });
   } catch (err) {

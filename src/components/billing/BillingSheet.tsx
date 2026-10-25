@@ -3,6 +3,7 @@
 import React from "react";
 import { Eye } from "lucide-react";
 import { bahtText } from "@/lib/baht-text";
+import { useSignatureVersion } from "@/hooks/useSignatureVersion";
 
 export interface BillingPageConfig {
   page: number;
@@ -107,6 +108,7 @@ export function BillingSheet({
   config: BillingPageConfig;
   onViewInvoice?: (docnum: string) => void;
 }) {
+  const sigVersion = useSignatureVersion();
   const { billing, customer, invoices, remarks, company } = data;
   const totalAmount = billing.NETAMT || 0;
 
@@ -359,7 +361,7 @@ export function BillingSheet({
             <div className="pt-2 text-center">
               <div className="h-12 sm:h-14 flex items-end justify-center -mb-0.5 pointer-events-none">
                 <img
-                  src="/api/logo/signature"
+                  src={`/api/logo/signature?role=billing&v=${sigVersion}`}
                   alt="ลายเซ็นผู้วางบิล"
                   className="h-12 sm:h-14 w-auto object-contain object-bottom"
                 />

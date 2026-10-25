@@ -3,6 +3,7 @@
 import React from "react";
 import { FileText, Eye, CheckCircle2, AlertCircle } from "lucide-react";
 import { bahtText } from "@/lib/baht-text";
+import { useSignatureVersion } from "@/hooks/useSignatureVersion";
 
 export interface LinkedInvoice {
   DOCNUM: string;
@@ -94,6 +95,7 @@ export function QuotationSheet({
   showItemCode?: boolean;
   onViewInvoice?: (docnum: string) => void;
 }) {
+  const sigVersion = useSignatureVersion();
   const { quotation, customer, items, remarks, company, invoices } = data;
 
   return (
@@ -477,16 +479,40 @@ export function QuotationSheet({
             ขอแสดงความนับถือ
           </div>
           <div className="grid grid-cols-3 gap-2 text-center text-[11px] text-slate-800">
-            <div>
-              <div className="h-8 border-b border-slate-400 mb-1 mx-2"></div>
+            <div className="flex flex-col items-center">
+              <div className="h-8 flex items-end justify-center -mb-0.5 pointer-events-none">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/api/logo/signature?role=checked&v=${sigVersion}`}
+                  alt="Checked Signature"
+                  className="h-8 w-auto object-contain object-bottom"
+                />
+              </div>
+              <div className="border-b border-slate-400 mb-1 w-full mx-2"></div>
               <div>ผู้ตรวจสอบ</div>
             </div>
-            <div>
-              <div className="h-8 border-b border-slate-400 mb-1 mx-2"></div>
+            <div className="flex flex-col items-center">
+              <div className="h-8 flex items-end justify-center -mb-0.5 pointer-events-none">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/api/logo/signature?role=acknowledged&v=${sigVersion}`}
+                  alt="Acknowledged Signature"
+                  className="h-8 w-auto object-contain object-bottom"
+                />
+              </div>
+              <div className="border-b border-slate-400 mb-1 w-full mx-2"></div>
               <div>ผู้รับทราบ</div>
             </div>
-            <div>
-              <div className="h-8 border-b border-slate-400 mb-1 mx-2"></div>
+            <div className="flex flex-col items-center">
+              <div className="h-8 flex items-end justify-center -mb-0.5 pointer-events-none">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/api/logo/signature?role=approved&v=${sigVersion}`}
+                  alt="Approved Signature"
+                  className="h-8 w-auto object-contain object-bottom"
+                />
+              </div>
+              <div className="border-b border-slate-400 mb-1 w-full mx-2"></div>
               <div>ผู้อนุมัติ</div>
             </div>
           </div>

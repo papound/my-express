@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, Printer, RefreshCw, Layers, ArrowLeft, Download } from "lucide-react";
+import { createPortal } from "react-dom";
+import { X, Printer, RefreshCw, Layers, ArrowLeft, Download, PenTool } from "lucide-react";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
+import { SignaturePadModal } from "@/components/signatures/SignaturePadModal";
 import {
   InvoiceSheet,
   INVOICE_PAGES_CONFIG,
@@ -42,6 +44,12 @@ export function InvoiceDetailModal({
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | number>(1);
   const [popupBilnum, setPopupBilnum] = useState<string | null>(null);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Reset drill-down stack when the root docnum changes
   useEffect(() => {
@@ -105,7 +113,7 @@ export function InvoiceDetailModal({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose, docStack.length]);
 
-  if (!docnum || !currentDocnum) return null;
+  if (!docnum || !currentDocnum || !mounted) return null;
 
   const isSalesReturn =
     data?.invoice?.RECTYP === "5" || currentDocnum.toUpperCase().startsWith("SR");
@@ -116,16 +124,17 @@ export function InvoiceDetailModal({
   const isReceipt =
     data?.invoice?.RECTYP === "9" || currentDocnum.toUpperCase().startsWith("RE");
 
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-2.5 sm:p-4 md:p-6 overflow-y-auto">
+  return createPortal(
+    <div className="fixed inset-0 z-[60] overflow-y-auto">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal Dialog Content */}
-      <div className="relative w-full max-w-4xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 z-10 overflow-hidden my-3 sm:my-8 max-h-[92vh] flex flex-col">
+      <div className="min-h-full flex items-start justify-center p-2.5 sm:p-4 md:p-6 pointer-events-none">
+        {/* Modal Dialog Content */}
+        <div className="relative w-full max-w-4xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 z-10 overflow-hidden my-auto max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)] flex flex-col pointer-events-auto">
         {/* Modal Top Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-3 border-b border-slate-200 bg-slate-50 gap-2 shrink-0">
           <div className="flex items-center gap-2 min-w-0">
@@ -189,6 +198,16 @@ export function InvoiceDetailModal({
             >
               <Download size={14} className="text-emerald-600" />
               <span>ดาวน์โหลด</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowSignatureModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 hover:text-indigo-700 hover:bg-indigo-50 hover:border-indigo-200 transition shadow-sm"
+              title="จัดการและวาดลายเซ็นสำหรับเอกสาร"
+            >
+              <PenTool size={14} className="text-indigo-600" />
+              <span>ลายเซ็น</span>
             </button>
 
             <button
@@ -546,6 +565,18 @@ export function InvoiceDetailModal({
           }}
         />
       )}
-    </div>
+
+      {showSignatureModal && (
+        <SignaturePadModal
+          isOpen={showSignatureModal}
+          onClose={() => setShowSignatureModal(false)}
+          initialRole={
+            isReceipt ? "collector" : "authorized"
+          }
+        />
+      )}
+      </div>
+    </div>,
+    document.body
   );
 }

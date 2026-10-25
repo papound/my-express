@@ -3,6 +3,7 @@ import {
   getCompanyLogoBase64,
   getWatermarkLogoBase64,
   getAuthorizedSignatureBase64,
+  getSignatureBase64,
 } from "@/lib/logo";
 export { generateCashSaleHtml } from "./cashSaleTemplate";
 export { generateReceiptHtml } from "./receiptTemplate";
@@ -134,7 +135,12 @@ export function generateInvoiceHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getAuthorizedSignatureBase64();
+  const signatureBase64 = getSignatureBase64("authorized");
+  const approvedSignatureBase64 = getSignatureBase64("approved");
+  const collectorSignatureBase64 = getSignatureBase64("collector");
+  const checkedSignatureBase64 = getSignatureBase64("checked");
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
+  const billingSignatureBase64 = getSignatureBase64("billing");
 
   const fmtThaiDateShort = (d: Date | string | null): string => {
     if (!d) return "-";
@@ -575,7 +581,13 @@ export function generateInvoiceHtml(data: {
             </div>
 
             <div>
-              <div style="height: 28px;"></div>
+              ${approvedSignatureBase64 ? `
+                <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                  <img src="${approvedSignatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
+                </div>
+              ` : `
+                <div style="height: 28px;"></div>
+              `}
               <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
               <div style="font-size: 9.5px; margin-top: 2px;">ผู้ตรวจเช็คสินค้า/ Approved by</div>
             </div>
@@ -603,7 +615,12 @@ export function generateAdvanceInvoiceHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getAuthorizedSignatureBase64();
+  const signatureBase64 = getSignatureBase64("authorized");
+  const approvedSignatureBase64 = getSignatureBase64("approved");
+  const collectorSignatureBase64 = getSignatureBase64("collector");
+  const checkedSignatureBase64 = getSignatureBase64("checked");
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
+  const billingSignatureBase64 = getSignatureBase64("billing");
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";
@@ -974,7 +991,13 @@ export function generateAdvanceInvoiceHtml(data: {
                   <td style="width: 55%;">
                     <table style="width: 90%; margin: 0 auto;">
                       <tr style="height: 24px;">
-                        <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;"></td>
+                        <td style="border-bottom: 1px solid #444; width: 65%; vertical-align: bottom;">
+                          ${collectorSignatureBase64 ? `
+                            <div style="height: 36px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                              <img src="${collectorSignatureBase64}" style="height: 36px; width: auto; object-fit: contain; vertical-align: bottom;" />
+                            </div>
+                          ` : ""}
+                        </td>
                         <td style="width: 5%;"></td>
                         <td style="border-bottom: 1px solid #444; width: 30%; vertical-align: bottom;"></td>
                       </tr>
@@ -1007,7 +1030,13 @@ export function generateAdvanceInvoiceHtml(data: {
               </div>
 
               <div>
-                <div style="height: 28px;"></div>
+                ${approvedSignatureBase64 ? `
+                  <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                    <img src="${approvedSignatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
+                  </div>
+                ` : `
+                  <div style="height: 28px;"></div>
+                `}
                 <div style="border-bottom: 1px solid #444; width: 85%; margin: 0 auto;"></div>
                 <div style="font-size: 9.5px; margin-top: 2px;">ผู้ตรวจสอบ/ Approved by</div>
               </div>
@@ -1036,7 +1065,12 @@ export function generateSalesReturnHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getAuthorizedSignatureBase64();
+  const signatureBase64 = getSignatureBase64("authorized");
+  const approvedSignatureBase64 = getSignatureBase64("approved");
+  const collectorSignatureBase64 = getSignatureBase64("collector");
+  const checkedSignatureBase64 = getSignatureBase64("checked");
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
+  const billingSignatureBase64 = getSignatureBase64("billing");
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";
@@ -1474,7 +1508,12 @@ export function generateQuotationHtml(data: {
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getAuthorizedSignatureBase64();
+  const signatureBase64 = getSignatureBase64("authorized");
+  const approvedSignatureBase64 = getSignatureBase64("approved");
+  const collectorSignatureBase64 = getSignatureBase64("collector");
+  const checkedSignatureBase64 = getSignatureBase64("checked");
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
+  const billingSignatureBase64 = getSignatureBase64("billing");
 
   const fmtThaiDateShort = (d: Date | string | null): string => {
     if (!d) return "-";
@@ -1769,17 +1808,29 @@ export function generateQuotationHtml(data: {
             <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 11px;">
               <tr>
                 <td style="width: 33.33%; padding: 0 4px;">
-                  <div style="height: 32px;"></div>
+                  ${checkedSignatureBase64 ? `
+                    <div style="height: 42px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                      <img src="${checkedSignatureBase64}" style="height: 42px; width: auto; max-width: 110px; object-fit: contain; vertical-align: bottom;" />
+                    </div>
+                  ` : `<div style="height: 38px;"></div>`}
                   <div style="border-bottom: 1px solid #444; margin-bottom: 4px;"></div>
                   <div>ผู้ตรวจสอบ</div>
                 </td>
                 <td style="width: 33.33%; padding: 0 4px;">
-                  <div style="height: 32px;"></div>
+                  ${acknowledgedSignatureBase64 ? `
+                    <div style="height: 42px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                      <img src="${acknowledgedSignatureBase64}" style="height: 42px; width: auto; max-width: 110px; object-fit: contain; vertical-align: bottom;" />
+                    </div>
+                  ` : `<div style="height: 38px;"></div>`}
                   <div style="border-bottom: 1px solid #444; margin-bottom: 4px;"></div>
                   <div>ผู้รับทราบ</div>
                 </td>
                 <td style="width: 33.33%; padding: 0 4px;">
-                  <div style="height: 32px;"></div>
+                  ${approvedSignatureBase64 ? `
+                    <div style="height: 42px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                      <img src="${approvedSignatureBase64}" style="height: 42px; width: auto; max-width: 110px; object-fit: contain; vertical-align: bottom;" />
+                    </div>
+                  ` : `<div style="height: 38px;"></div>`}
                   <div style="border-bottom: 1px solid #444; margin-bottom: 4px;"></div>
                   <div>ผู้อนุมัติ</div>
                 </td>
@@ -1801,12 +1852,18 @@ export function generateBillingHtml(data: {
   invoices: any[];
   remarks?: any[];
   company?: any;
+  page?: number | "all";
 }): string {
-  const { billing, customer, invoices, remarks, company } = data;
+  const { billing, customer, invoices, remarks, company, page = "all" } = data;
 
   const logoBase64 = getCompanyLogoBase64();
   const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getAuthorizedSignatureBase64();
+  const signatureBase64 = getSignatureBase64("authorized");
+  const approvedSignatureBase64 = getSignatureBase64("approved");
+  const collectorSignatureBase64 = getSignatureBase64("collector");
+  const checkedSignatureBase64 = getSignatureBase64("checked");
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
+  const billingSignatureBase64 = getSignatureBase64("billing");
 
   const fmtThaiDateShort = (d: Date | string | null): string => {
     if (!d) return "-";
@@ -1819,7 +1876,7 @@ export function generateBillingHtml(data: {
     return `${day}/${month}/${yearShort}`;
   };
 
-  const BILLING_PAGES = [
+  const ALL_BILLING_PAGES = [
     {
       page: 1,
       title: "ใบวางบิล",
@@ -1831,6 +1888,11 @@ export function generateBillingHtml(data: {
       subtitle: "สำเนา (สำหรับฝ่ายการเงิน)",
     },
   ];
+
+  const BILLING_PAGES =
+    page && page !== "all"
+      ? ALL_BILLING_PAGES.filter((p) => p.page === Number(page))
+      : ALL_BILLING_PAGES;
 
   return `
 <!DOCTYPE html>
@@ -2127,12 +2189,12 @@ export function generateBillingHtml(data: {
                 ในนาม &nbsp; <strong>${company?.THINAM || ""}</strong>
               </div>
               <div style="text-align: center; margin-top: 4px;">
-                ${signatureBase64 ? `
-                  <div style="height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
-                    <img src="${signatureBase64}" style="height: 48px; width: auto; object-fit: contain; vertical-align: bottom;" />
+                ${billingSignatureBase64 ? `
+                  <div style="height: 52px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: -2px;">
+                    <img src="${billingSignatureBase64}" style="height: 52px; max-width: 180px; width: auto; object-fit: contain; vertical-align: bottom;" />
                   </div>
                 ` : `
-                  <div style="height: 32px;"></div>
+                  <div style="height: 36px;"></div>
                 `}
                 <div style="border-bottom: 1px solid #444; width: 70%; margin: 0 auto;"></div>
                 <div style="font-size: 10px; margin-top: 4px;">ชื่อผู้วางบิล</div>

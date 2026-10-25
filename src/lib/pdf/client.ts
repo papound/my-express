@@ -148,70 +148,16 @@ function isMobileDevice(): boolean {
 
 export async function printPdf(
   url: string,
-  title: string = "กำลังเตรียมพิมพ์เอกสาร..."
+  _title: string = "กำลังเตรียมพิมพ์เอกสาร..."
 ): Promise<void> {
-  // บน Android / Mobile browsers ไม่รองรับ window.print() ผ่าน hidden iframe
-  // ให้เปิดเอกสาร PDF ในแท็บใหม่เพื่อให้ Chrome Android แสดง PDF viewer ของระบบ ซึ่งสามารถสั่งพิมพ์หรือบันทึกได้ทันที
-  if (isMobileDevice()) {
-    window.open(url, "_blank");
-    return;
-  }
+  const printUrl = `${url}${url.includes("?") ? "&" : "?"}_t=${Date.now()}`;
 
-  const hideBackdrop = showPdfBackdrop(
-    title,
-    "ระบบกำลังสร้างและเรนเดอร์ PDF จาก Express Database...",
-    "print"
-  );
-
-  try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error(`ไม่สามารถโหลดไฟล์ PDF ได้ (${res.status})`);
-    }
-    const blob = await res.blob();
-    const blobUrl = URL.createObjectURL(blob);
-
-    const iframe = document.createElement("iframe");
-    iframe.style.position = "fixed";
-    iframe.style.right = "0";
-    iframe.style.bottom = "0";
-    iframe.style.width = "0";
-    iframe.style.height = "0";
-    iframe.style.border = "none";
-    iframe.style.opacity = "0";
-    iframe.style.pointerEvents = "none";
-    iframe.src = blobUrl;
-
-    document.body.appendChild(iframe);
-
-    // Safety timeout to dismiss backdrop if iframe onload doesn't trigger
-    const safetyTimer = setTimeout(() => {
-      hideBackdrop();
-    }, 8000);
-
-    iframe.onload = () => {
-      clearTimeout(safetyTimer);
-      try {
-        iframe.contentWindow?.focus();
-        iframe.contentWindow?.print();
-      } catch (err) {
-        console.error("Print dialog error:", err);
-      } finally {
-        setTimeout(() => {
-          hideBackdrop();
-        }, 600);
-
-        setTimeout(() => {
-          URL.revokeObjectURL(blobUrl);
-          iframe.remove();
-        }, 60000);
-      }
-    };
-  } catch (err) {
-    hideBackdrop();
-    console.error("Failed to print PDF:", err);
-    // Fallback: เปิดในแท็บใหม่
-    window.open(url, "_blank");
+  // เปิดไฟล์ PDF ต้นฉบับในแท็บใหม่ทันที
+  // วิธีนี้ป้องกันปัญหาเบราว์เซอร์ (Chrome/Edge) สั่งพิมพ์หน้าเว็บ HTML แทนเอกสาร PDF จาก hidden iframe sandbox
+  // และทำให้เอกสารที่พิมพ์ มีรูปแบบและข้อมูลตรงกับไฟล์ที่กดดาวน์โหลด (Download) 100% ทุกประการ
+  const win = window.open(printUrl, "_blank");
+  if (win) {
+    win.focus();
   }
 }
 
@@ -221,7 +167,7 @@ export async function downloadPdf(
   title: string = "กำลังดาวน์โหลดไฟล์ PDF..."
 ): Promise<void> {
   const safeFilename = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
-  const downloadUrl = `${url}${url.includes("?") ? "&" : "?"}download=1`;
+  const downloadUrl = `${url}${url.includes("?") ? "&" : "?"}download=1&_t=${Date.now()}`;
 
   const hideBackdrop = showPdfBackdrop(
     title,
