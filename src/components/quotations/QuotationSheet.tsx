@@ -1,7 +1,17 @@
 "use client";
 
 import React from "react";
+import { FileText, Eye, CheckCircle2, AlertCircle } from "lucide-react";
 import { bahtText } from "@/lib/baht-text";
+
+export interface LinkedInvoice {
+  DOCNUM: string;
+  DOCDAT: string | Date | null;
+  RECTYP: string;
+  NETAMT: number;
+  DOCSTAT: string;
+  BILNUM?: string | null;
+}
 
 export interface QuotationItem {
   STKCOD: string;
@@ -54,6 +64,7 @@ export interface QuotationDetailResponse {
     TELNUM: string;
     TAXID: string;
   };
+  invoices?: LinkedInvoice[];
 }
 
 function fmtMoney(n: number) {
@@ -77,14 +88,147 @@ function fmtThaiDateShort(d: string | null) {
 export function QuotationSheet({
   data,
   showItemCode = true,
+  onViewInvoice,
 }: {
   data: QuotationDetailResponse;
   showItemCode?: boolean;
+  onViewInvoice?: (docnum: string) => void;
 }) {
-  const { quotation, customer, items, remarks, company } = data;
+  const { quotation, customer, items, remarks, company, invoices } = data;
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-slate-300 p-5 sm:p-8 md:p-10 font-sans text-slate-900 relative overflow-hidden max-w-[850px] mx-auto select-text">
+    <div className="space-y-4 max-w-[850px] mx-auto select-text">
+      {/* Linked Sales Invoices Card */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200/90 p-4 sm:p-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 bg-blue-50 text-blue-700 rounded-xl shrink-0">
+              <FileText size={18} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">
+                บิลขายที่อ้างอิงใบเสนอราคานี้
+              </h3>
+              <p className="text-xs text-slate-500">
+                รายการขายสด / ขายเชื่อ ใน Express ที่ระบุเลขอ้างอิง {quotation.SONUM}
+              </p>
+            </div>
+          </div>
+          {invoices && invoices.length > 0 ? (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 self-start sm:self-auto shrink-0">
+              <CheckCircle2 size={13} />
+              <span>เปิดบิลแล้ว ({invoices.length} บิล)</span>
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 self-start sm:self-auto shrink-0">
+              <AlertCircle size={13} />
+              <span>ยังไม่มีการเปิดบิลขาย</span>
+            </span>
+          )}
+        </div>
+
+        {invoices && invoices.length > 0 ? (
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="bg-slate-50/80 text-slate-600 font-semibold text-left border-b border-slate-200/80">
+                  <th className="py-2.5 px-3">เลขที่บิล</th>
+                  <th className="py-2.5 px-3">ประเภทบิล</th>
+                  <th className="py-2.5 px-3">วันที่เอกสาร</th>
+                  <th className="py-2.5 px-3">ใบวางบิล</th>
+                  <th className="py-2.5 px-3 text-right">ยอดสุทธิ</th>
+                  <th className="py-2.5 px-3 text-center">ดูเอกสาร</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {invoices.map((inv) => {
+                  const isCredit =
+                    inv.RECTYP === "3" ||
+                    inv.RECTYP === "2" ||
+                    inv.DOCNUM.startsWith("IV");
+                  const isCash =
+                    inv.RECTYP === "1" || inv.DOCNUM.startsWith("HS");
+                  return (
+                    <tr
+                      key={inv.DOCNUM}
+                      className="hover:bg-slate-50/70 transition"
+                    >
+                      <td className="py-2.5 px-3 font-mono font-bold text-slate-900">
+                        {onViewInvoice ? (
+                          <button
+                            type="button"
+                            onClick={() => onViewInvoice(inv.DOCNUM)}
+                            className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                          >
+                            {inv.DOCNUM}
+                          </button>
+                        ) : (
+                          <span>{inv.DOCNUM}</span>
+                        )}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold ${
+                            isCredit
+                              ? "bg-blue-50 text-blue-700 border border-blue-200/70"
+                              : isCash
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200/70"
+                              : "bg-slate-100 text-slate-700"
+                          }`}
+                        >
+                          {isCredit
+                            ? "ขายเชื่อ (IV)"
+                            : isCash
+                            ? "ขายสด (HS)"
+                            : inv.RECTYP}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3 text-slate-600">
+                        {fmtThaiDateShort(
+                          inv.DOCDAT ? String(inv.DOCDAT) : null
+                        )}
+                      </td>
+                      <td className="py-2.5 px-3 font-mono text-slate-600">
+                        {inv.BILNUM ? (
+                          <span className="text-indigo-600 font-semibold bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200/60">
+                            {inv.BILNUM}
+                          </span>
+                        ) : (
+                          <span className="text-slate-400">-</span>
+                        )}
+                      </td>
+                      <td className="py-2.5 px-3 text-right font-mono font-bold text-slate-900">
+                        ฿{fmtMoney(inv.NETAMT)}
+                      </td>
+                      <td className="py-2.5 px-3 text-center">
+                        {onViewInvoice ? (
+                          <button
+                            type="button"
+                            onClick={() => onViewInvoice(inv.DOCNUM)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition cursor-pointer"
+                          >
+                            <Eye size={13} />
+                            <span>ดูบิล</span>
+                          </button>
+                        ) : (
+                          <span className="text-slate-400">-</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="py-3 text-center text-xs text-slate-400">
+            ยังไม่มีการบันทึกขายสดหรือขายเชื่อจากใบเสนอราคานี้ใน Express
+          </div>
+        )}
+      </div>
+
+      {/* Paper Container - Formatted exactly like Express Quotation */}
+      <div className="bg-white rounded-2xl shadow-xl border border-slate-300 p-5 sm:p-8 md:p-10 font-sans text-slate-900 relative overflow-hidden">
       {/* Header with circular logo and company text */}
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-start gap-3.5 sm:gap-4">
@@ -349,6 +493,7 @@ export function QuotationSheet({
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
 

@@ -7,6 +7,15 @@ import { AppShell } from "@/components/layout/AppShell";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import { Pagination } from "@/components/common/Pagination";
 import { QuotationDetailModal } from "@/components/quotations/QuotationDetailModal";
+import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
+
+interface LinkedInvoiceBrief {
+  DOCNUM: string;
+  DOCDAT: string | null;
+  RECTYP: string;
+  NETAMT: number;
+  DOCSTAT: string;
+}
 
 interface Quotation {
   SONUM: string;
@@ -18,6 +27,7 @@ interface Quotation {
   TOTAL: number;
   DOCSTAT: string;
   customer?: { CUSNAM: string };
+  invoices?: LinkedInvoiceBrief[];
 }
 
 const STATUS_CONFIG: Record<string, { label: string; badgeClass: string }> = {
@@ -66,6 +76,7 @@ export default function QuotationsPage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [selectedSonum, setSelectedSonum] = useState<string | null>(null);
+  const [popupInvoiceDocnum, setPopupInvoiceDocnum] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -228,22 +239,23 @@ export default function QuotationsPage() {
                 <th className="py-3.5 px-4 w-28">วันที่</th>
                 <th className="py-3.5 px-4">ลูกค้า</th>
                 <th className="py-3.5 px-4 w-28">วันส่งของ</th>
-                <th className="py-3.5 px-4 text-right w-36">ยอดสุทธิ</th>
+                <th className="py-3.5 px-4 text-right w-32">ยอดสุทธิ</th>
                 <th className="py-3.5 px-4 text-center w-28">สถานะ</th>
+                <th className="py-3.5 px-4 min-w-[130px]">บิลขายที่เปิด</th>
                 <th className="py-3.5 px-4 text-center w-28">พิมพ์ PDF</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="py-16 text-center text-slate-400">
+                  <td colSpan={8} className="py-16 text-center text-slate-400">
                     <RefreshCw className="animate-spin inline-block mr-2" size={16} />
                     กำลังโหลดข้อมูลใบเสนอราคา...
                   </td>
                 </tr>
               ) : records.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-16 text-center text-slate-400">
+                  <td colSpan={8} className="py-16 text-center text-slate-400">
                     ไม่พบรายการใบเสนอราคา
                   </td>
                 </tr>
@@ -292,6 +304,42 @@ export default function QuotationsPage() {
                         >
                           {statusCfg.label}
                         </span>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        {r.invoices && r.invoices.length > 0 ? (
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            {r.invoices.map((inv) => {
+                              const isCredit =
+                                inv.RECTYP === "3" ||
+                                inv.RECTYP === "2" ||
+                                inv.DOCNUM.startsWith("IV");
+                              const isCash =
+                                inv.RECTYP === "1" ||
+                                inv.DOCNUM.startsWith("HS");
+                              return (
+                                <button
+                                  key={inv.DOCNUM}
+                                  type="button"
+                                  onClick={() =>
+                                    setPopupInvoiceDocnum(inv.DOCNUM)
+                                  }
+                                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-mono font-bold border transition cursor-pointer ${
+                                    isCredit
+                                      ? "bg-blue-50 text-blue-700 border-blue-200/80 hover:bg-blue-100"
+                                      : isCash
+                                      ? "bg-emerald-50 text-emerald-700 border-emerald-200/80 hover:bg-emerald-100"
+                                      : "bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
+                                  }`}
+                                  title={`เปิดดูรายละเอียดบิล ${inv.DOCNUM} (Popup)`}
+                                >
+                                  <span>{inv.DOCNUM}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <span className="text-slate-400 text-[11px]">-</span>
+                        )}
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         <div className="flex items-center justify-center gap-1.5">
@@ -358,6 +406,12 @@ export default function QuotationsPage() {
       <QuotationDetailModal
         sonum={selectedSonum}
         onClose={() => setSelectedSonum(null)}
+      />
+
+      {/* Invoice Detail Popup on top of Quotations Table */}
+      <InvoiceDetailModal
+        docnum={popupInvoiceDocnum}
+        onClose={() => setPopupInvoiceDocnum(null)}
       />
     </div>
   </AppShell>

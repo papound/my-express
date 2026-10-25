@@ -18,10 +18,38 @@ export async function GET(request: Request) {
     const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
     const limit = Math.min(200, parseInt(searchParams.get("limit") ?? "20"));
 
-    const [rawSo, rawMas] = await Promise.all([
+    const [rawSo, rawMas, rawArtrn] = await Promise.all([
       readAll<Record<string, unknown>>("OESO"),
       readAll<Record<string, unknown>>("ARMAS"),
+      readAll<Record<string, unknown>>("ARTRN"),
     ]);
+
+    // Build map of SONUM -> Linked Invoices
+    const soInvoicesMap = new Map<
+      string,
+      Array<{
+        DOCNUM: string;
+        DOCDAT: Date | null;
+        RECTYP: string;
+        NETAMT: number;
+        DOCSTAT: string;
+      }>
+    >();
+
+    for (const r of rawArtrn) {
+      const sonum = cleanStr(r.SONUM);
+      if (!sonum) continue;
+      if (!soInvoicesMap.has(sonum)) {
+        soInvoicesMap.set(sonum, []);
+      }
+      soInvoicesMap.get(sonum)!.push({
+        DOCNUM: cleanStr(r.DOCNUM),
+        DOCDAT: cleanDate(r.DOCDAT),
+        RECTYP: cleanStr(r.RECTYP),
+        NETAMT: cleanNum(r.NETAMT),
+        DOCSTAT: cleanStr(r.DOCSTAT),
+      });
+    }
 
     const cusMap = new Map(
       rawMas.map((r) => [
@@ -32,9 +60,11 @@ export async function GET(request: Request) {
 
     let records = rawSo.map((r) => {
       const cuscod = cleanStr(r.CUSCOD);
+      const sonum = cleanStr(r.SONUM);
+      const linkedInvoices = soInvoicesMap.get(sonum) || [];
       return {
         SORECTYP: cleanStr(r.SORECTYP),
-        SONUM: cleanStr(r.SONUM),
+        SONUM: sonum,
         SODAT: cleanDate(r.SODAT),
         CUSCOD: cuscod,
         DEPCOD: cleanStr(r.DEPCOD),
@@ -51,6 +81,7 @@ export async function GET(request: Request) {
         USERID: cleanStr(r.USERID),
         PRNCNT: cleanNum(r.PRNCNT),
         customer: cusMap.get(cuscod),
+        invoices: linkedInvoices,
       };
     });
 
@@ -70,7 +101,8 @@ export async function GET(request: Request) {
           matchSearch(r.SONUM, search) ||
           matchSearch(r.CUSCOD, search) ||
           matchSearch(r.customer?.CUSNAM, search) ||
-          matchSearch(r.YOUREF, search)
+          matchSearch(r.YOUREF, search) ||
+          r.invoices.some((inv) => matchSearch(inv.DOCNUM, search))
       );
     }
 

@@ -9,13 +9,14 @@ export async function GET(
     const { sonum } = await params;
     const soNum = decodeURIComponent(sonum).trim();
 
-    const [rawSo, rawMas, rawSoIt, rawInfo, rawRm, rawTab] = await Promise.all([
+    const [rawSo, rawMas, rawSoIt, rawInfo, rawRm, rawTab, rawArtrn] = await Promise.all([
       readAll<Record<string, unknown>>("OESO"),
       readAll<Record<string, unknown>>("ARMAS"),
       readAll<Record<string, unknown>>("OESOIT"),
       readAll<Record<string, unknown>>("ISINFO"),
       readAll<Record<string, unknown>>("ARTRNRM"),
       readAll<Record<string, unknown>>("ISTAB"),
+      readAll<Record<string, unknown>>("ARTRN"),
     ]);
 
     const header = rawSo.find((r) => cleanStr(r.SONUM) === soNum);
@@ -106,12 +107,25 @@ export async function GET(
         }
       : null;
 
+    const linkedInvoices = rawArtrn
+      .filter((r) => cleanStr(r.SONUM) === soNum)
+      .map((r) => ({
+        DOCNUM: cleanStr(r.DOCNUM),
+        DOCDAT: cleanDate(r.DOCDAT),
+        RECTYP: cleanStr(r.RECTYP),
+        NETAMT: cleanNum(r.NETAMT),
+        DOCSTAT: cleanStr(r.DOCSTAT),
+        BILNUM: cleanStr(r.BILNUM),
+      }))
+      .sort((a, b) => (b.DOCDAT?.getTime() ?? 0) - (a.DOCDAT?.getTime() ?? 0));
+
     return NextResponse.json({
       quotation,
       customer: customerData,
       items,
       remarks,
       company,
+      invoices: linkedInvoices,
     });
   } catch (err) {
     console.error("GET /api/quotations/[sonum] error:", err);

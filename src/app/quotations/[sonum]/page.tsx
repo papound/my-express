@@ -9,6 +9,7 @@ import {
   QuotationSheet,
   type QuotationDetailResponse,
 } from "@/components/quotations/QuotationSheet";
+import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
 
 const STATUS_CONFIG: Record<string, { label: string; badgeClass: string }> = {
   N: {
@@ -41,6 +42,7 @@ export default function QuotationDetailPage({
   const [isPrinting, setIsPrinting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [showItemCode, setShowItemCode] = useState(true);
+  const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
 
   const handlePrint = async () => {
     if (!data?.quotation?.SONUM) return;
@@ -188,8 +190,18 @@ export default function QuotationDetailPage({
         </div>
 
         {/* Paper Container rendered via QuotationSheet */}
-        <QuotationSheet data={data} showItemCode={showItemCode} />
+        <QuotationSheet
+          data={data}
+          showItemCode={showItemCode}
+          onViewInvoice={(docnum) => setPopupDocnum(docnum)}
+        />
       </div>
+
+      {/* Invoice Detail Popup Modal */}
+      <InvoiceDetailModal
+        docnum={popupDocnum}
+        onClose={() => setPopupDocnum(null)}
+      />
     </AppShell>
   );
 }

@@ -7,6 +7,7 @@ import {
   QuotationSheet,
   type QuotationDetailResponse,
 } from "@/components/quotations/QuotationSheet";
+import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
 
 const STATUS_CONFIG: Record<string, { label: string; badgeClass: string }> = {
   N: {
@@ -40,17 +41,20 @@ export function QuotationDetailModal({
   const [isPrinting, setIsPrinting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [showItemCode, setShowItemCode] = useState(true);
+  const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
 
   useEffect(() => {
     if (!sonum) {
       setData(null);
       setError("");
+      setPopupDocnum(null);
       return;
     }
 
     const fetchData = async () => {
       setLoading(true);
       setError("");
+      setPopupDocnum(null);
       try {
         const res = await fetch(`/api/quotations/${encodeURIComponent(sonum)}`);
         if (!res.ok) {
@@ -73,12 +77,16 @@ export function QuotationDetailModal({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onClose();
+        if (popupDocnum) {
+          setPopupDocnum(null);
+        } else {
+          onClose();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+  }, [onClose, popupDocnum]);
 
   if (!sonum) return null;
 
@@ -214,10 +222,20 @@ export function QuotationDetailModal({
               {error || "ไม่พบข้อมูลใบเสนอราคา"}
             </div>
           ) : (
-            <QuotationSheet data={data} showItemCode={showItemCode} />
+            <QuotationSheet
+              data={data}
+              showItemCode={showItemCode}
+              onViewInvoice={(docnum) => setPopupDocnum(docnum)}
+            />
           )}
         </div>
       </div>
+
+      {/* Invoice Detail Popup on top of Quotation */}
+      <InvoiceDetailModal
+        docnum={popupDocnum}
+        onClose={() => setPopupDocnum(null)}
+      />
     </div>
   );
 }
