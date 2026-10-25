@@ -78,16 +78,8 @@ body {
 
 /* Sidebar */
 [data-theme="express"] aside {
-  background: linear-gradient(180deg, #261d15 0%, #30241a 50%, #1e1610 100%) !important;
-  border-right-color: #433325 !important;
-}
-[data-theme="express"] aside .border-slate-800\/60,
-[data-theme="express"] aside .border-slate-800\/80 {
-  border-color: #4a3828 !important;
-}
-[data-theme="express"] aside nav a:hover {
-  background-color: rgba(254, 226, 188, 0.12) !important;
-  color: #fee2bc !important;
+  background: linear-gradient(180deg, #241a12 0%, #2d2117 50%, #1c140e 100%) !important;
+  border-right-color: #453323 !important;
 }
 
 /* Dashboard Top Welcome Banner */

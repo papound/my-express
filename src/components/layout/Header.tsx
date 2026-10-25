@@ -96,7 +96,11 @@ export function Header({
         <button
           type="button"
           onClick={onToggleMenu}
-          className="p-2 -ml-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition cursor-pointer flex items-center justify-center shrink-0"
+          className={`p-2 -ml-1 rounded-xl transition cursor-pointer flex items-center justify-center shrink-0 ${
+            theme === "express"
+              ? "text-[#6e3e11] hover:text-[#3e2308] hover:bg-[#ebd5be]"
+              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          }`}
           title={isCollapsed ? "ขยายเมนูด้านข้าง (Sidebar)" : "หุบเมนูด้านข้าง (Sidebar)"}
           aria-label="สลับแถบเมนูหลัก"
         >
@@ -145,16 +149,32 @@ export function Header({
         <button
           type="button"
           onClick={() => setShowSignatureModal(true)}
-          className="flex items-center gap-1.5 px-2.5 py-1 sm:py-1.5 rounded-full text-xs font-semibold border border-indigo-200 bg-indigo-50/70 text-indigo-700 hover:bg-indigo-100/80 transition cursor-pointer"
+          className={`flex items-center gap-1.5 px-2.5 py-1 sm:py-1.5 rounded-full text-xs font-semibold border transition cursor-pointer ${
+            theme === "express"
+              ? "border-[#d8b88f] bg-[#fee2bc]/60 text-[#6e3e11] hover:bg-[#fee2bc]"
+              : "border-indigo-200 bg-indigo-50/70 text-indigo-700 hover:bg-indigo-100/80"
+          }`}
           title="ตั้งค่าและวาดลายเซ็นสำหรับเอกสาร PDF ทั้งหมด"
         >
-          <PenTool size={13} className="text-indigo-600" />
+          <PenTool
+            size={13}
+            className={theme === "express" ? "text-[#9c5717]" : "text-indigo-600"}
+          />
           <span className="hidden sm:inline">ลายเซ็น</span>
         </button>
 
         {/* Date Display */}
-        <div className="hidden md:flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100/80 px-3 py-1.5 rounded-full border border-slate-200">
-          <Calendar size={13} className="text-blue-600" />
+        <div
+          className={`hidden md:flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border ${
+            theme === "express"
+              ? "text-[#6e3e11] bg-[#fee2bc]/40 border-[#dfc39e]"
+              : "text-slate-600 bg-slate-100/80 border-slate-200"
+          }`}
+        >
+          <Calendar
+            size={13}
+            className={theme === "express" ? "text-[#9c5717]" : "text-blue-600"}
+          />
           <span>{currentDate}</span>
         </div>
 
