@@ -203,7 +203,7 @@ export function InvoiceDetailModal({
 
         {/* Modal Copy Switcher Tabs */}
         {data && !isSalesReturn && !isAdvanceInvoice && !isCashSale && !isReceipt && (
-          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto shrink-0">
+          <div className="px-4 py-2.5 border-b border-slate-100 bg-white flex items-center gap-2 overflow-x-auto shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <button
               type="button"
               onClick={() => setActiveTab("all")}
@@ -242,7 +242,7 @@ export function InvoiceDetailModal({
         )}
 
         {data && isAdvanceInvoice && (
-          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto shrink-0">
+          <div className="px-4 py-2.5 border-b border-slate-100 bg-white flex items-center gap-2 overflow-x-auto shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <button
               type="button"
               onClick={() => setActiveTab("all")}
@@ -281,7 +281,7 @@ export function InvoiceDetailModal({
         )}
 
         {data && isCashSale && (
-          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto shrink-0">
+          <div className="px-4 py-2.5 border-b border-slate-100 bg-white flex items-center gap-2 overflow-x-auto shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <button
               type="button"
               onClick={() => setActiveTab("all")}
@@ -320,7 +320,7 @@ export function InvoiceDetailModal({
         )}
 
         {data && isReceipt && (
-          <div className="px-4 py-2 border-b border-slate-100 bg-white flex items-center gap-1.5 overflow-x-auto shrink-0">
+          <div className="px-4 py-2.5 border-b border-slate-100 bg-white flex items-center gap-2 overflow-x-auto shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <button
               type="button"
               onClick={() => setActiveTab("all")}

@@ -19,6 +19,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Palette,
+  Boxes,
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -43,6 +44,11 @@ const navItems = [
     href: "/billing",
     label: "ใบวางบิล",
     icon: CreditCard,
+  },
+  {
+    href: "/inventory",
+    label: "ข้อมูลคลังสินค้า",
+    icon: Boxes,
   },
   {
     href: "/customers",
