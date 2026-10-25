@@ -33,7 +33,13 @@ function showPdfBackdrop(
   backdrop.id = "__pdf_backdrop__";
   backdrop.style.cssText = `
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     z-index: 999999;
     display: flex;
     align-items: center;
@@ -44,6 +50,8 @@ function showPdfBackdrop(
     transition: opacity 0.25s ease;
     opacity: 1;
     padding: 16px;
+    touch-action: none;
+    pointer-events: auto;
   `;
 
   const isPrint = iconType === "print";
@@ -215,13 +223,6 @@ export async function downloadPdf(
   const safeFilename = filename.endsWith(".pdf") ? filename : `${filename}.pdf`;
   const downloadUrl = `${url}${url.includes("?") ? "&" : "?"}download=1`;
 
-  // บน Android / Mobile browsers, Blob URL programmatic .click() มักถูกบล็อกโดย Chrome Android security policy
-  // การเรียก direct download URL พร้อม Content-Disposition: attachment จะส่งให้ Android Download Manager ดาวน์โหลดไฟล์ลงเครื่องทันที
-  if (isMobileDevice()) {
-    window.location.href = downloadUrl;
-    return;
-  }
-
   const hideBackdrop = showPdfBackdrop(
     title,
     "ระบบกำลังสร้างไฟล์ PDF และเตรียมดาวน์โหลดลงเครื่อง...",
@@ -248,7 +249,7 @@ export async function downloadPdf(
       hideBackdrop();
       URL.revokeObjectURL(blobUrl);
       a.remove();
-    }, 1000);
+    }, 1500);
   } catch (err) {
     hideBackdrop();
     console.error("Failed to download PDF:", err);
