@@ -230,7 +230,7 @@ export function QuotationSheet({
       </div>
 
       {/* Paper Container - Formatted exactly like Express Quotation */}
-      <div className="bg-white rounded-2xl shadow-xl border border-slate-300 p-5 sm:p-8 md:p-10 font-sans text-slate-900 relative overflow-hidden">
+      <div className="document-sheet bg-white rounded-2xl shadow-xl border border-slate-300 p-5 sm:p-8 md:p-10 font-sans text-slate-900 relative overflow-hidden">
       {/* Header with circular logo and company text */}
       <div className="flex justify-between items-start mb-2">
         <div className="flex items-start gap-3.5 sm:gap-4">

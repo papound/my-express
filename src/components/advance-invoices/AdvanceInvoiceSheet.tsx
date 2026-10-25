@@ -154,7 +154,7 @@ export function AdvanceInvoiceSheet({
   const isCheque = (invoice.CHQRCV || 0) > 0;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-300 p-4 sm:p-6 md:p-8 text-slate-800 relative overflow-hidden text-xs print:p-0 print:border-none print:shadow-none">
+    <div className="document-sheet bg-white rounded-2xl shadow-sm border border-slate-300 p-4 sm:p-6 md:p-8 text-slate-800 relative overflow-hidden text-xs print:p-0 print:border-none print:shadow-none">
       {/* Background Watermark */}
       <img
         src="/api/logo/watermark"
