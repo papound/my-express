@@ -101,6 +101,7 @@ export async function GET() {
       REMAMT: number;
       NETAMT: number;
       RECTYP: string;
+      BILNUM?: string | null;
       CUSCOD: string;
       customer?: { CUSNAM: string; PRENAM: string };
     }> = [];
@@ -113,6 +114,7 @@ export async function GET() {
       REMAMT: number;
       NETAMT: number;
       RECTYP: string;
+      BILNUM?: string | null;
       CUSCOD: string;
       customer?: { CUSNAM: string; PRENAM: string };
     }> = [];
@@ -142,6 +144,9 @@ export async function GET() {
       const duedat = cleanDate(r.DUEDAT) || docdat;
       const docstat = cleanStr(r.DOCSTAT);
       const customer = cusMap.get(cuscod);
+      const rawBilnum = cleanStr(r.BILNUM);
+      const bilnum =
+        rawBilnum && rawBilnum !== "~" && rawBilnum.length > 2 ? rawBilnum : null;
 
       if (docstat !== "C") {
         totalSales += net;
@@ -230,6 +235,7 @@ export async function GET() {
               REMAMT: rem,
               NETAMT: net,
               RECTYP: rectyp,
+              BILNUM: bilnum,
               CUSCOD: cuscod,
               customer,
             });
@@ -244,6 +250,7 @@ export async function GET() {
               REMAMT: rem,
               NETAMT: net,
               RECTYP: rectyp,
+              BILNUM: bilnum,
               CUSCOD: cuscod,
               customer,
             });
@@ -260,6 +267,7 @@ export async function GET() {
         REMAMT: rem,
         ADVNUM: validAdvnum,
         ADVAMT: advamt,
+        BILNUM: bilnum,
         appliedInvoices,
         DOCSTAT: docstat,
         customer,

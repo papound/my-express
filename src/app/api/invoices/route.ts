@@ -71,6 +71,9 @@ export async function GET(request: Request) {
       const advnum = cleanStr(r.ADVNUM);
       const advamt = cleanNum(r.ADVAMT);
       const validAdvnum = advnum && advnum.length > 2 ? advnum : null;
+      const rawBilnum = cleanStr(r.BILNUM);
+      const validBilnum =
+        rawBilnum && rawBilnum !== "~" && rawBilnum.length > 2 ? rawBilnum : null;
       const appliedInvoices = depositUsageMap.get(docnum) ?? [];
 
       return {
@@ -84,7 +87,7 @@ export async function GET(request: Request) {
         SLMCOD: cleanStr(r.SLMCOD),
         YOUREF: cleanStr(r.YOUREF),
         DUEDAT: cleanDate(r.DUEDAT),
-        BILNUM: cleanStr(r.BILNUM),
+        BILNUM: validBilnum,
         AMOUNT: cleanNum(r.AMOUNT),
         DISCAMT: cleanNum(r.DISCAMT),
         AFTDISC: cleanNum(r.AFTDISC),

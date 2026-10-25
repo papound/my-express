@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
+import { BillingDetailModal } from "@/components/billing/BillingDetailModal";
 
 interface SalesPeriodData {
   total: number;
@@ -47,6 +48,7 @@ interface OverdueInvoice {
   REMAMT: number;
   NETAMT: number;
   RECTYP: string;
+  BILNUM?: string | null;
   CUSCOD: string;
   customer?: {
     CUSNAM: string;
@@ -62,6 +64,7 @@ interface DueSoonInvoice {
   REMAMT: number;
   NETAMT: number;
   RECTYP: string;
+  BILNUM?: string | null;
   CUSCOD: string;
   customer?: {
     CUSNAM: string;
@@ -133,6 +136,7 @@ interface DashboardData {
     CUSCOD: string;
     NETAMT: number;
     REMAMT: number;
+    BILNUM?: string | null;
     ADVNUM?: string | null;
     ADVAMT?: number;
     appliedInvoices?: Array<{
@@ -181,6 +185,7 @@ export function DashboardView() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
+  const [popupBilnum, setPopupBilnum] = useState<string | null>(null);
   const [salesPeriod, setSalesPeriod] = useState<"all" | "month" | "week" | "today">("all");
   const [alertTab, setAlertTab] = useState<"overdue" | "dueSoon" | "deposits">("overdue");
 
@@ -731,6 +736,22 @@ export function DashboardView() {
                           >
                             {inv.DOCNUM}
                           </button>
+                          {inv.BILNUM && (
+                            <div className="mt-0.5">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setPopupBilnum(inv.BILNUM!);
+                                }}
+                                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition cursor-pointer"
+                                title={`คลิกเปิดดูใบวางบิล ${inv.BILNUM}`}
+                              >
+                                <FileText size={9} className="text-indigo-600 shrink-0" />
+                                <span>วางบิล: {inv.BILNUM}</span>
+                              </button>
+                            </div>
+                          )}
                         </td>
                         <td className="py-2.5 px-2 text-slate-600 font-medium">
                           {fmtDate(inv.DUEDAT)}
@@ -805,6 +826,22 @@ export function DashboardView() {
                           >
                             {inv.DOCNUM}
                           </button>
+                          {inv.BILNUM && (
+                            <div className="mt-0.5">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setPopupBilnum(inv.BILNUM!);
+                                }}
+                                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition cursor-pointer"
+                                title={`คลิกเปิดดูใบวางบิล ${inv.BILNUM}`}
+                              >
+                                <FileText size={9} className="text-indigo-600 shrink-0" />
+                                <span>วางบิล: {inv.BILNUM}</span>
+                              </button>
+                            </div>
+                          )}
                         </td>
                         <td className="py-2.5 px-2 text-slate-600 font-medium">
                           {fmtDate(inv.DUEDAT)}
@@ -982,6 +1019,24 @@ export function DashboardView() {
                           >
                             <Bookmark size={9} className="text-amber-600 shrink-0" />
                             <span>หักมัดจำ: {inv.ADVNUM}</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {/* If Sales bill with Billing Note (BILNUM) */}
+                      {inv.BILNUM && (
+                        <div className="mt-0.5">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPopupBilnum(inv.BILNUM!);
+                            }}
+                            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition cursor-pointer"
+                            title={`คลิกเปิดดูใบวางบิล ${inv.BILNUM}`}
+                          >
+                            <FileText size={9} className="text-indigo-600 shrink-0" />
+                            <span>วางบิล: {inv.BILNUM}</span>
                           </button>
                         </div>
                       )}
@@ -1184,6 +1239,16 @@ export function DashboardView() {
       <InvoiceDetailModal
         docnum={popupDocnum}
         onClose={() => setPopupDocnum(null)}
+      />
+
+      {/* Billing Detail Popup Modal */}
+      <BillingDetailModal
+        bilnum={popupBilnum}
+        onClose={() => setPopupBilnum(null)}
+        onViewInvoice={(ivDocnum) => {
+          setPopupBilnum(null);
+          setPopupDocnum(ivDocnum);
+        }}
       />
     </div>
   );

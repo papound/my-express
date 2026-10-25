@@ -10,7 +10,7 @@ export async function GET(
     const docNum = decodeURIComponent(docnum).trim();
 
     // Load all required tables in parallel
-    const [rawTrn, rawMas, rawCrd, rawRm, rawShip, rawInfo, rawTab, rawRcpIt] =
+    const [rawTrn, rawMas, rawCrd, rawRm, rawShip, rawInfo, rawTab, rawRcpIt, rawBil] =
       await Promise.all([
         readAll<Record<string, unknown>>("ARTRN"),
         readAll<Record<string, unknown>>("ARMAS"),
@@ -20,6 +20,7 @@ export async function GET(
         readAll<Record<string, unknown>>("ISINFO"),
         readAll<Record<string, unknown>>("ISTAB"),
         readAll<Record<string, unknown>>("ARRCPIT"),
+        readAll<Record<string, unknown>>("ARBIL"),
       ]);
 
     // Find invoice header
@@ -111,7 +112,12 @@ export async function GET(
       YOUREF: cleanStr(header.YOUREF),
       PAYTRM: cleanNum(header.PAYTRM),
       DUEDAT: cleanDate(header.DUEDAT),
-      BILNUM: cleanStr(header.BILNUM),
+      BILNUM:
+        cleanStr(header.BILNUM) &&
+        cleanStr(header.BILNUM) !== "~" &&
+        cleanStr(header.BILNUM).length > 2
+          ? cleanStr(header.BILNUM)
+          : null,
       AMOUNT: cleanNum(header.AMOUNT),
       DISCAMT: cleanNum(header.DISCAMT),
       AFTDISC: cleanNum(header.AFTDISC),
@@ -205,6 +211,22 @@ export async function GET(
         }
       : null;
 
+    // For Sales invoice with BILNUM, lookup billing summary
+    const validBilnum = invoice.BILNUM;
+    const billingRecord = validBilnum
+      ? rawBil.find((b) => cleanStr(b.BILNUM) === validBilnum)
+      : null;
+    const billingInfo = billingRecord
+      ? {
+          BILNUM: cleanStr(billingRecord.BILNUM),
+          BILDAT: cleanDate(billingRecord.BILDAT),
+          BILOUT: cleanDate(billingRecord.BILOUT),
+          APPDAT: cleanDate(billingRecord.APPDAT),
+          NETAMT: cleanNum(billingRecord.NETAMT),
+          DOCSTAT: cleanStr(billingRecord.DOCSTAT),
+        }
+      : null;
+
     return NextResponse.json({
       invoice,
       customer: customerData,
@@ -212,6 +234,7 @@ export async function GET(
       receiptItems,
       appliedInvoices,
       depositInfo,
+      billingInfo,
       remarks,
       shipTo: shipTo
         ? {

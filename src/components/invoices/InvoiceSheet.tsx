@@ -159,10 +159,12 @@ export function InvoiceSheet({
   data,
   config,
   onViewDeposit,
+  onViewBilling,
 }: {
   data: InvoiceData;
   config: InvoicePageConfig;
   onViewDeposit?: (docnum: string) => void;
+  onViewBilling?: (bilnum: string) => void;
 }) {
   const { invoice, customer, items, company } = data;
 
@@ -338,6 +340,35 @@ export function InvoiceSheet({
                 <span className="text-[9.5px] font-normal text-slate-500">Territory</span>
               </span>
               <span className="text-slate-800">{invoice.AREACOD || "-"}</span>
+            </div>
+
+            {/* Billing Note Status & Action */}
+            <div className="flex justify-between items-center pt-1 border-t border-dashed border-slate-200">
+              <span className="font-semibold text-slate-900 leading-tight">
+                ใบวางบิล{" "}
+                <span className="text-[9.5px] font-normal text-slate-500">Billing No.</span>
+              </span>
+              {invoice.BILNUM && invoice.BILNUM !== "~" ? (
+                onViewBilling ? (
+                  <button
+                    type="button"
+                    onClick={() => onViewBilling(invoice.BILNUM!)}
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/80 font-mono text-[10.5px] font-bold transition cursor-pointer"
+                    title={`คลิกเพื่อเปิดดูใบวางบิล ${invoice.BILNUM}`}
+                  >
+                    <Eye size={11} />
+                    <span>วางบิลแล้ว: {invoice.BILNUM}</span>
+                  </button>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-mono text-[10.5px] font-bold">
+                    <span>{invoice.BILNUM}</span>
+                  </span>
+                )
+              ) : (
+                <span className="text-[10px] text-slate-500 font-medium">
+                  {invoice.RECTYP === "1" ? "ขายสด (ไม่ต้องวางบิล)" : "ยังไม่ได้วางบิล"}
+                </span>
+              )}
             </div>
           </div>
         </div>

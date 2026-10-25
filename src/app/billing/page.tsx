@@ -6,6 +6,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import { Pagination } from "@/components/common/Pagination";
+import { BillingDetailModal } from "@/components/billing/BillingDetailModal";
 
 interface Billing {
   BILNUM: string;
@@ -64,6 +65,7 @@ export default function BillingPage() {
   const [dateTo, setDateTo] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const [popupBilnum, setPopupBilnum] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -261,9 +263,14 @@ export default function BillingPage() {
                       className="hover:bg-blue-50/30 transition-colors group"
                     >
                       <td className="py-3.5 px-4 font-mono font-bold text-slate-900 group-hover:text-blue-700">
-                        <Link href={`/billing/${encodeURIComponent(r.BILNUM)}`}>
+                        <button
+                          type="button"
+                          onClick={() => setPopupBilnum(r.BILNUM)}
+                          className="hover:underline text-left cursor-pointer transition text-blue-700 hover:text-blue-800"
+                          title="คลิกเพื่อเปิดดูรายละเอียดใบวางบิลแบบ Popup"
+                        >
                           {r.BILNUM}
-                        </Link>
+                        </button>
                       </td>
                       <td className="py-3.5 px-4 text-slate-600">
                         {fmtDate(r.BILDAT)}
@@ -299,12 +306,20 @@ export default function BillingPage() {
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         <div className="flex items-center justify-center gap-1.5">
-                          <Link
-                            href={`/billing/${encodeURIComponent(r.BILNUM)}`}
-                            className="p-1.5 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg border border-transparent hover:border-blue-200 transition"
-                            title="ดูรายละเอียดใบวางบิล"
+                          <button
+                            type="button"
+                            onClick={() => setPopupBilnum(r.BILNUM)}
+                            className="p-1.5 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg border border-transparent hover:border-blue-200 transition cursor-pointer"
+                            title="ดูรายละเอียดใบวางบิลแบบ Popup"
                           >
                             <Eye size={15} />
+                          </button>
+                          <Link
+                            href={`/billing/${encodeURIComponent(r.BILNUM)}`}
+                            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition"
+                            title="เปิดหน้ารายละเอียดเต็มจอ"
+                          >
+                            <span className="text-[10px] font-semibold">เปิด</span>
                           </Link>
                           <button
                             type="button"
@@ -355,6 +370,12 @@ export default function BillingPage() {
           setPage(1);
         }}
         loading={loading}
+      />
+
+      {/* Popup Modal for Billing Details */}
+      <BillingDetailModal
+        bilnum={popupBilnum}
+        onClose={() => setPopupBilnum(null)}
       />
     </div>
   </AppShell>

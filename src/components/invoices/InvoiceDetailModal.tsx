@@ -27,6 +27,7 @@ import {
   RECEIPT_PAGES_CONFIG,
   type ReceiptData,
 } from "@/components/receipts/ReceiptSheet";
+import { BillingDetailModal } from "@/components/billing/BillingDetailModal";
 
 export function InvoiceDetailModal({
   docnum,
@@ -40,6 +41,7 @@ export function InvoiceDetailModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | number>(1);
+  const [popupBilnum, setPopupBilnum] = useState<string | null>(null);
 
   // Reset drill-down stack when the root docnum changes
   useEffect(() => {
@@ -429,6 +431,7 @@ export function InvoiceDetailModal({
                       onViewDeposit={(aiDocnum) =>
                         setDocStack((prev) => [...prev, aiDocnum])
                       }
+                      onViewBilling={(bilnum) => setPopupBilnum(bilnum)}
                     />
                   </div>
                 ))}
@@ -445,6 +448,7 @@ export function InvoiceDetailModal({
                     onViewDeposit={(aiDocnum) =>
                       setDocStack((prev) => [...prev, aiDocnum])
                     }
+                    onViewBilling={(bilnum) => setPopupBilnum(bilnum)}
                   />
                 ))}
               </div>
@@ -508,6 +512,7 @@ export function InvoiceDetailModal({
                     onViewDeposit={(aiDocnum) =>
                       setDocStack((prev) => [...prev, aiDocnum])
                     }
+                    onViewBilling={(bilnum) => setPopupBilnum(bilnum)}
                   />
                 </div>
               ))}
@@ -522,12 +527,25 @@ export function InvoiceDetailModal({
                   onViewDeposit={(aiDocnum) =>
                     setDocStack((prev) => [...prev, aiDocnum])
                   }
+                  onViewBilling={(bilnum) => setPopupBilnum(bilnum)}
                 />
               ))}
             </div>
           )}
         </div>
       </div>
+
+      {/* Nested Billing Detail Modal (if user clicks billing note inside invoice) */}
+      {popupBilnum && (
+        <BillingDetailModal
+          bilnum={popupBilnum}
+          onClose={() => setPopupBilnum(null)}
+          onViewInvoice={(ivDocnum) => {
+            setPopupBilnum(null);
+            setDocStack((prev) => [...prev, ivDocnum]);
+          }}
+        />
+      )}
     </div>
   );
 }

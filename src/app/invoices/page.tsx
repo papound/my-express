@@ -12,11 +12,13 @@ import {
   Bookmark,
   Link2,
   Clock,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
+import { BillingDetailModal } from "@/components/billing/BillingDetailModal";
 import { Pagination } from "@/components/common/Pagination";
 
 interface Invoice {
@@ -32,6 +34,7 @@ interface Invoice {
   TOTAL: number;
   REMAMT: number;
   DOCSTAT: string;
+  BILNUM?: string | null;
   ADVNUM?: string | null;
   ADVAMT?: number;
   appliedInvoices?: Array<{
@@ -110,6 +113,7 @@ export default function InvoicesPage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [popupDocnum, setPopupDocnum] = useState<string | null>(null);
+  const [popupBilnum, setPopupBilnum] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -277,6 +281,7 @@ export default function InvoicesPage() {
                   <th className="py-3.5 px-4 text-right w-28">ยอดรวม</th>
                   <th className="py-3.5 px-4 text-right w-24">ภาษี (VAT)</th>
                   <th className="py-3.5 px-4 text-right w-32">จำนวนเงินสุทธิ</th>
+                  <th className="py-3.5 px-4 text-center w-28">ใบวางบิล</th>
                   <th className="py-3.5 px-4 text-center w-24">สถานะ</th>
                   <th className="py-3.5 px-4 text-center w-28">พิมพ์ / ดู</th>
                 </tr>
@@ -284,14 +289,14 @@ export default function InvoicesPage() {
               <tbody className="divide-y divide-slate-100">
                 {loading ? (
                   <tr>
-                    <td colSpan={9} className="py-16 text-center text-slate-400">
+                    <td colSpan={10} className="py-16 text-center text-slate-400">
                       <RefreshCw className="animate-spin inline-block mr-2" size={16} />
                       กำลังโหลดข้อมูลใบกำกับภาษี...
                     </td>
                   </tr>
                 ) : invoices.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-16 text-center text-slate-400">
+                    <td colSpan={10} className="py-16 text-center text-slate-400">
                       ไม่พบรายการเอกสารตามเงื่อนไขที่เลือก
                     </td>
                   </tr>
@@ -407,6 +412,33 @@ export default function InvoicesPage() {
                           ฿{fmtMoney(inv.NETAMT)}
                         </td>
                         <td className="py-3.5 px-4 text-center">
+                          {inv.BILNUM && inv.BILNUM !== "~" ? (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setPopupBilnum(inv.BILNUM!);
+                              }}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition cursor-pointer shadow-2xs"
+                              title={`คลิกเปิดดูใบวางบิล ${inv.BILNUM}`}
+                            >
+                              <FileText size={11} className="text-indigo-600 shrink-0" />
+                              <span>{inv.BILNUM}</span>
+                            </button>
+                          ) : inv.RECTYP === "3" || inv.RECTYP === "2" ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-medium bg-amber-50 text-amber-700 border border-amber-200/80">
+                              <Clock size={10} className="text-amber-500 shrink-0" />
+                              <span>ยังไม่วางบิล</span>
+                            </span>
+                          ) : inv.RECTYP === "1" ? (
+                            <span className="text-[10px] text-slate-400 font-medium">
+                              ไม่ต้องวางบิล (สด)
+                            </span>
+                          ) : (
+                            <span className="text-slate-300">-</span>
+                          )}
+                        </td>
+                        <td className="py-3.5 px-4 text-center">
                           <span className="inline-flex items-center gap-1.5 text-xs text-slate-700 font-medium">
                             <span
                               className={`w-1.5 h-1.5 rounded-full ${statusCfg.dotClass}`}
@@ -479,6 +511,16 @@ export default function InvoicesPage() {
         <InvoiceDetailModal
           docnum={popupDocnum}
           onClose={() => setPopupDocnum(null)}
+        />
+
+        {/* Billing Detail Popup Modal */}
+        <BillingDetailModal
+          bilnum={popupBilnum}
+          onClose={() => setPopupBilnum(null)}
+          onViewInvoice={(ivDocnum) => {
+            setPopupBilnum(null);
+            setPopupDocnum(ivDocnum);
+          }}
         />
       </div>
     </AppShell>
