@@ -222,7 +222,7 @@ export function InvoiceDetailModal({
 
         {/* Modal Copy Switcher Tabs */}
         {data && !isSalesReturn && !isAdvanceInvoice && !isCashSale && !isReceipt && (
-          <div className="px-4 py-2.5 border-b border-slate-100 bg-white flex items-center gap-2 overflow-x-auto shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="modal-copy-tabs px-4 py-2.5 border-b border-slate-100 bg-white flex items-center gap-2 overflow-x-auto shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <button
               type="button"
               onClick={() => setActiveTab("all")}

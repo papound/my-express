@@ -170,7 +170,7 @@ export function BillingDetailModal({
         </div>
 
         {/* Tab Controls for Copies */}
-        <div className="bg-slate-100/70 px-4 sm:px-6 py-2.5 border-b border-slate-200/80 flex items-center gap-2 overflow-x-auto shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="modal-copy-tabs bg-slate-100/70 px-4 sm:px-6 py-2.5 border-b border-slate-200/80 flex items-center gap-2 overflow-x-auto shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <button
             type="button"
             onClick={() => setActiveTab("all")}
@@ -208,7 +208,7 @@ export function BillingDetailModal({
         </div>
 
         {/* Modal Body */}
-        <div className="p-3 sm:p-5 md:p-6 overflow-y-auto relative space-y-4 flex-1 min-h-0">
+        <div className="p-3 sm:p-5 md:p-6 overflow-y-auto relative space-y-4 flex-1 min-h-0 bg-slate-50/40">
           {loading ? (
             <div className="py-20 text-center text-slate-400">
               <RefreshCw className="animate-spin inline-block mr-2" size={24} />

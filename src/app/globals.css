@@ -215,9 +215,20 @@ body {
 [data-theme="express"] .fixed.inset-0 .bg-white.rounded-3xl h3 {
   color: #3b2713 !important;
 }
-[data-theme="express"] .fixed.inset-0 .border-b.border-slate-100 {
-  background-color: #faf3e8 !important;
-  border-bottom-color: #dfc29d !important;
+[data-theme="express"] .fixed.inset-0 .border-b.border-slate-100,
+[data-theme="express"] .fixed.inset-0 .modal-copy-tabs,
+[data-theme="express"] .fixed.inset-0 .bg-slate-100\/70.border-b {
+  background-color: #edd5ba !important;
+  border-bottom-color: #dfc3a0 !important;
+}
+[data-theme="express"] .fixed.inset-0 .modal-copy-tabs button,
+[data-theme="express"] .fixed.inset-0 .bg-slate-100\/70.border-b button {
+  color: #5c432d !important;
+}
+[data-theme="express"] .fixed.inset-0 .modal-copy-tabs button.bg-slate-900,
+[data-theme="express"] .fixed.inset-0 .bg-slate-100\/70.border-b button.bg-slate-900 {
+  background-color: #ab6528 !important;
+  color: #ffffff !important;
 }
 [data-theme="express"] .fixed.inset-0 button.bg-slate-900 {
   background-color: #382414 !important;
@@ -392,25 +403,77 @@ body {
   color: #cbd5e1 !important;
 }
 
-/* Modal Copy Switcher Tabs Bar (ชุดที่ 1, 2, 3...) */
-[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white {
+/* Modal Copy Switcher Tabs Bar (Invoice, Billing, Product, etc.) */
+[data-theme="dark"] .fixed.inset-0 .modal-copy-tabs,
+[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white,
+[data-theme="dark"] .fixed.inset-0 .bg-slate-100\/70.border-b,
+[data-theme="dark"] .fixed.inset-0 [class*="bg-slate-100"].border-b {
   background-color: #0d1322 !important;
   border-bottom-color: #1e293b !important;
 }
-[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button.text-slate-600 {
+
+[data-theme="dark"] .fixed.inset-0 .modal-copy-tabs button,
+[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button,
+[data-theme="dark"] .fixed.inset-0 .bg-slate-100\/70.border-b button,
+[data-theme="dark"] .fixed.inset-0 [class*="bg-slate-100"].border-b button {
   color: #94a3b8 !important;
 }
-[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button.text-slate-600:hover {
+
+[data-theme="dark"] .fixed.inset-0 .modal-copy-tabs button:hover,
+[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button:hover,
+[data-theme="dark"] .fixed.inset-0 .bg-slate-100\/70.border-b button:hover,
+[data-theme="dark"] .fixed.inset-0 [class*="bg-slate-100"].border-b button:hover {
   background-color: #1e293b !important;
   color: #f8fafc !important;
 }
-[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button.bg-slate-900 {
+
+[data-theme="dark"] .fixed.inset-0 .modal-copy-tabs button.bg-slate-900,
+[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button.bg-slate-900,
+[data-theme="dark"] .fixed.inset-0 .bg-slate-100\/70.border-b button.bg-slate-900,
+[data-theme="dark"] .fixed.inset-0 [class*="bg-slate-100"].border-b button.bg-slate-900 {
   background-color: #334155 !important;
   color: #ffffff !important;
 }
 
+[data-theme="dark"] .fixed.inset-0 .modal-copy-tabs button[class*="bg-blue"],
+[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button[class*="bg-blue"],
+[data-theme="dark"] .fixed.inset-0 .bg-slate-100\/70.border-b button[class*="bg-blue"] {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .fixed.inset-0 .modal-copy-tabs button[class*="bg-purple"],
+[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button[class*="bg-purple"],
+[data-theme="dark"] .fixed.inset-0 .bg-slate-100\/70.border-b button[class*="bg-purple"] {
+  background-color: #9333ea !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .fixed.inset-0 .modal-copy-tabs button[class*="bg-amber"],
+[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button[class*="bg-amber"],
+[data-theme="dark"] .fixed.inset-0 .bg-slate-100\/70.border-b button[class*="bg-amber"] {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .fixed.inset-0 .modal-copy-tabs button[class*="bg-yellow"],
+[data-theme="dark"] .fixed.inset-0 .border-b.border-slate-100.bg-white button[class*="bg-yellow"],
+[data-theme="dark"] .fixed.inset-0 .bg-slate-100\/70.border-b button[class*="bg-yellow"] {
+  background-color: #ca8a04 !important;
+  color: #ffffff !important;
+}
+
+/* Document number badge in modal header */
+[data-theme="dark"] .fixed.inset-0 .border-b span.font-mono[class*="bg-indigo"],
+[data-theme="dark"] .fixed.inset-0 .border-b span.font-mono[class*="bg-blue"] {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: #334155 !important;
+  color: #93c5fd !important;
+}
+
 /* Modal Body Background Canvas (Behind the paper sheet) */
-[data-theme="dark"] .fixed.inset-0 .bg-slate-50\/40 {
+[data-theme="dark"] .fixed.inset-0 .bg-slate-50\/40,
+[data-theme="dark"] .fixed.inset-0 .overflow-y-auto.flex-1 {
   background-color: #060911 !important;
 }
 
@@ -430,6 +493,14 @@ body {
 [data-theme="dark"] .document-sheet .bg-white\/80,
 [data-theme="dark"] .document-sheet .bg-white\/95 {
   background-color: #ffffff !important;
+}
+
+[data-theme="dark"] .document-sheet .bg-slate-50,
+[data-theme="dark"] .document-sheet .bg-slate-50\/50,
+[data-theme="dark"] .document-sheet .bg-slate-100,
+[data-theme="dark"] .document-sheet .bg-slate-100\/70,
+[data-theme="dark"] .document-sheet .bg-slate-100\/80 {
+  background-color: #f8fafc !important;
 }
 
 [data-theme="dark"] .document-sheet .text-slate-950,
