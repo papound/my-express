@@ -338,7 +338,7 @@ export function BillingSheet({
         {/* Bottom Signatures Box */}
         <div className="border border-slate-700 rounded-lg overflow-hidden grid grid-cols-1 md:grid-cols-12 bg-white/80 text-[10.5px]">
           {/* Left: Receiver (6 cols) */}
-          <div className="p-3 sm:p-4 md:col-span-6 border-b md:border-b-0 md:border-r border-slate-700 space-y-3">
+          <div className="p-3 sm:p-4 md:col-span-6 border-b md:border-b-0 md:border-r border-slate-700 space-y-3 text-slate-800 font-medium">
             <div>
               ชื่อผู้รับวางบิล &nbsp; ____________________
             </div>
@@ -351,7 +351,7 @@ export function BillingSheet({
           </div>
 
           {/* Right: Issuer (6 cols) */}
-          <div className="p-3 sm:p-4 md:col-span-6 flex flex-col justify-between">
+          <div className="p-3 sm:p-4 md:col-span-6 flex flex-col justify-between text-slate-800">
             <div>
               ในนาม &nbsp;{" "}
               <strong className="text-slate-900 font-bold">

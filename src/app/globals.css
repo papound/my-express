@@ -272,20 +272,20 @@ body {
 }
 
 /* Headings & Text (outside document sheets) */
-[data-theme="dark"] h1:not(.document-sheet *),
-[data-theme="dark"] h2:not(.document-sheet *),
-[data-theme="dark"] h3:not(.document-sheet *),
-[data-theme="dark"] .text-slate-900:not(.document-sheet *) {
+[data-theme="dark"] h1:not(.document-sheet):not(.document-sheet *),
+[data-theme="dark"] h2:not(.document-sheet):not(.document-sheet *),
+[data-theme="dark"] h3:not(.document-sheet):not(.document-sheet *),
+[data-theme="dark"] .text-slate-900:not(.document-sheet):not(.document-sheet *) {
   color: #f8fafc !important;
 }
-[data-theme="dark"] .text-slate-800:not(.document-sheet *) {
+[data-theme="dark"] .text-slate-800:not(.document-sheet):not(.document-sheet *) {
   color: #e2e8f0 !important;
 }
-[data-theme="dark"] .text-slate-700:not(.document-sheet *) {
+[data-theme="dark"] .text-slate-700:not(.document-sheet):not(.document-sheet *) {
   color: #cbd5e1 !important;
 }
-[data-theme="dark"] .text-slate-600:not(.document-sheet *),
-[data-theme="dark"] .text-slate-500:not(.document-sheet *) {
+[data-theme="dark"] .text-slate-600:not(.document-sheet):not(.document-sheet *),
+[data-theme="dark"] .text-slate-500:not(.document-sheet):not(.document-sheet *) {
   color: #94a3b8 !important;
 }
 
@@ -485,7 +485,22 @@ body {
 [data-theme="express"] .document-sheet {
   background-color: #ffffff !important;
   color: #1e293b !important;
+  color-scheme: light !important;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.35), 0 8px 10px -6px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .document-sheet div,
+[data-theme="dark"] .document-sheet p,
+[data-theme="dark"] .document-sheet span,
+[data-theme="dark"] .document-sheet td,
+[data-theme="dark"] .document-sheet th,
+[data-theme="dark"] .document-sheet li {
+  color: #1e293b;
+}
+
+[data-theme="dark"] .document-sheet strong,
+[data-theme="dark"] .document-sheet b {
+  color: #0f172a !important;
 }
 
 [data-theme="dark"] .document-sheet .bg-white,
