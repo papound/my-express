@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-export type ThemeMode = "modern" | "express";
+export type ThemeMode = "modern" | "dark" | "express";
 
 interface ThemeContextType {
   theme: ThemeMode;
@@ -22,7 +22,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem("app_theme") as ThemeMode | null;
-      if (saved === "express" || saved === "modern") {
+      if (saved === "express" || saved === "dark" || saved === "modern") {
         setThemeState(saved);
         document.documentElement.setAttribute("data-theme", saved);
       } else {
@@ -44,7 +44,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const toggleTheme = () => {
-    const next = theme === "modern" ? "express" : "modern";
+    const order: ThemeMode[] = ["modern", "dark", "express"];
+    const currentIndex = order.indexOf(theme);
+    const next = order[(currentIndex + 1) % order.length];
     setTheme(next);
   };
 

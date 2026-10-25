@@ -40,8 +40,8 @@ export default function RootLayout({
             __html: `
               try {
                 var t = localStorage.getItem('app_theme');
-                if (t === 'express') {
-                  document.documentElement.setAttribute('data-theme', 'express');
+                if (t === 'express' || t === 'dark') {
+                  document.documentElement.setAttribute('data-theme', t);
                 } else {
                   document.documentElement.setAttribute('data-theme', 'modern');
                 }

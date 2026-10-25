@@ -20,6 +20,8 @@ import {
   PanelLeftOpen,
   Palette,
   Boxes,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -344,18 +346,23 @@ export function Sidebar({
                 title="คลิกเพื่อสลับธีมแสดงผล"
               >
                 <div className="flex items-center gap-2">
-                  <Palette
-                    size={14}
-                    className={isExpress ? "text-amber-400" : "text-blue-400"}
-                  />
+                  {theme === "express" ? (
+                    <Palette size={14} className="text-amber-400" />
+                  ) : theme === "dark" ? (
+                    <Moon size={14} className="text-indigo-400" />
+                  ) : (
+                    <Sun size={14} className="text-amber-400" />
+                  )}
                   <span>ธีมแสดงผล</span>
                 </div>
                 <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border ${
-                  isExpress
+                  theme === "express"
                     ? "bg-[#fee2bc] text-[#7a4816] border-[#dfc39e]"
+                    : theme === "dark"
+                    ? "bg-indigo-950/70 text-indigo-300 border-indigo-700/60"
                     : "bg-slate-800 text-slate-300 border-slate-700"
                 }`}>
-                  {isExpress ? "Express Classic" : "Modern"}
+                  {theme === "express" ? "Express Classic" : theme === "dark" ? "Dark Mode" : "Modern"}
                 </span>
               </button>
 
@@ -409,12 +416,21 @@ export function Sidebar({
                     ? "text-[#bfa285] hover:text-white hover:bg-[#3f2c1d]"
                     : "text-slate-400 hover:text-white hover:bg-white/10"
                 }`}
-                title={`ธีม: ${isExpress ? "Express Classic" : "Modern"} (คลิกเพื่อสลับ)`}
+                title={`ธีม: ${
+                  theme === "express"
+                    ? "Express Classic"
+                    : theme === "dark"
+                    ? "Dark Mode"
+                    : "Modern"
+                } (คลิกเพื่อสลับ)`}
               >
-                <Palette
-                  size={16}
-                  className={isExpress ? "text-amber-400" : "text-blue-400"}
-                />
+                {theme === "express" ? (
+                  <Palette size={16} className="text-amber-400" />
+                ) : theme === "dark" ? (
+                  <Moon size={16} className="text-indigo-400" />
+                ) : (
+                  <Sun size={16} className="text-amber-400" />
+                )}
               </button>
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs text-white uppercase ring-1 shadow-sm cursor-pointer ${

@@ -223,3 +223,161 @@ body {
   background-color: #382414 !important;
   color: #fce5be !important;
 }
+
+/* ==========================================================================
+   Dark Theme Mode (ธีมมืด สไตล์ Dark Slate / Zinc)
+   ========================================================================== */
+[data-theme="dark"] {
+  --background: #090d16;
+  --foreground: #f1f5f9;
+}
+
+[data-theme="dark"] body,
+[data-theme="dark"] .app-root-layout,
+[data-theme="dark"] .bg-slate-50\/60,
+[data-theme="dark"] .bg-slate-50 {
+  background-color: #090d16 !important;
+  color: #f1f5f9;
+}
+
+/* Custom Dark scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Header Bar */
+[data-theme="dark"] header {
+  background-color: rgba(15, 23, 42, 0.92) !important;
+  border-bottom-color: #1e293b !important;
+}
+[data-theme="dark"] header h1 {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] header p {
+  color: #94a3b8 !important;
+}
+
+/* Headings & Text */
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] .text-slate-900 {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+[data-theme="dark"] .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+[data-theme="dark"] .text-slate-600,
+[data-theme="dark"] .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Cards & Containers */
+[data-theme="dark"] .bg-white {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+[data-theme="dark"] .border-slate-200,
+[data-theme="dark"] .border-slate-200\/80,
+[data-theme="dark"] .border-slate-200\/60,
+[data-theme="dark"] .border-slate-100 {
+  border-color: #1e293b !important;
+}
+
+/* Filter & Search Cards */
+[data-theme="dark"] .bg-amber-50\/50,
+[data-theme="dark"] .bg-amber-50,
+[data-theme="dark"] .bg-slate-100\/80,
+[data-theme="dark"] .bg-slate-100 {
+  background-color: rgba(30, 41, 59, 0.7) !important;
+  border-color: #334155 !important;
+}
+
+/* Filter Tab Buttons */
+[data-theme="dark"] .bg-slate-100\/80 button,
+[data-theme="dark"] .bg-slate-100 button {
+  color: #94a3b8;
+}
+[data-theme="dark"] .bg-slate-100\/80 button.bg-white,
+[data-theme="dark"] .bg-slate-100 button.bg-white {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Input Fields */
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="date"],
+[data-theme="dark"] select {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] input::placeholder {
+  color: #64748b !important;
+}
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
+}
+
+/* Table Styles */
+[data-theme="dark"] table thead tr th {
+  background-color: #1e293b !important;
+  color: #93c5fd !important;
+  border-color: #334155 !important;
+  border-bottom: 2px solid #334155 !important;
+}
+[data-theme="dark"] table tbody tr {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+}
+[data-theme="dark"] table tbody tr:hover {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+}
+[data-theme="dark"] table tbody td {
+  border-color: #1e293b !important;
+}
+
+/* Pagination Bar */
+[data-theme="dark"] .Pagination,
+[data-theme="dark"] .flex.flex-col.sm\:flex-row.items-center.justify-between.gap-3.px-3.py-3.bg-white {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .Pagination button.bg-white,
+[data-theme="dark"] .Pagination select {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+/* Modals & Dialogs */
+[data-theme="dark"] .fixed.inset-0 .bg-white.rounded-2xl,
+[data-theme="dark"] .fixed.inset-0 .bg-white.rounded-3xl {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .fixed.inset-0 .bg-slate-50 {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+[data-theme="dark"] .fixed.inset-0 .bg-slate-50\/40 {
+  background-color: rgba(11, 15, 25, 0.8) !important;
+}
+
+/* Document Paper preview sheets inside modals: preserve readable invoice paper */
+[data-theme="dark"] .fixed.inset-0 .bg-white.shadow-sm.rounded-xl,
+[data-theme="dark"] .fixed.inset-0 .bg-white.shadow-md {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
