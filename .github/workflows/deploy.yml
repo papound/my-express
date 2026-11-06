@@ -100,6 +100,9 @@ jobs:
             echo \"==> Verifying container status...\"
             docker compose ps app
 
+            echo \"==> Cleaning up old dangling images on production...\"
+            docker image prune -f
+
             echo \"✓ Deploy completed successfully at \$(date)\"
           '"
 
