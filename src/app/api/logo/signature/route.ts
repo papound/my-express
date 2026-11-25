@@ -3,6 +3,7 @@ import {
   getAuthorizedSignatureBuffer,
   getSignaturesConfig,
 } from "@/lib/logo";
+import { getActiveDataPath } from "@/lib/dbf/company-context";
 
 const TRANSPARENT_1PX_PNG = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAEASTN754=",
@@ -49,7 +50,8 @@ export async function GET(request: Request) {
       role === "billing" ||
       (roleCfg && roleCfg.type === "default")
     ) {
-      const buffer = getAuthorizedSignatureBuffer();
+      const dataPath = await getActiveDataPath();
+      const buffer = getAuthorizedSignatureBuffer(dataPath);
       if (!buffer) {
         return new NextResponse(new Uint8Array(TRANSPARENT_1PX_PNG), {
           headers: { "Content-Type": "image/png" },

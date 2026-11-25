@@ -1,4 +1,5 @@
 import { readAll, cleanStr, cleanNum, cleanDate } from "@/lib/dbf/reader";
+import { getActiveDataPath } from "@/lib/dbf/company-context";
 import { renderHtmlToPdf } from "@/lib/pdf/renderer";
 import { generateBillingHtml } from "@/lib/pdf/templates";
 import { NextResponse } from "next/server";
@@ -91,6 +92,7 @@ export async function GET(
         }
       : null;
 
+    const dataPath = await getActiveDataPath();
     const html = generateBillingHtml({
       billing,
       customer: customerData,
@@ -98,6 +100,7 @@ export async function GET(
       remarks,
       company,
       page: pageParam ? (pageParam === "all" ? "all" : parseInt(pageParam, 10)) : "all",
+      dataPath,
     });
 
     const pdfBuffer = await renderHtmlToPdf(html);

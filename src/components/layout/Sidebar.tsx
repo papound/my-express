@@ -79,13 +79,50 @@ export function Sidebar({
     engName?: string;
     workingDate?: string;
   } | null>(null);
+  const [companies, setCompanies] = useState<
+    Array<{ id: string; name: string; engName?: string }>
+  >([]);
+  const [activeCompanyId, setActiveCompanyId] = useState<string>("");
+  const [switchingCompany, setSwitchingCompany] = useState(false);
 
   useEffect(() => {
     fetch("/api/company")
       .then((res) => res.json())
       .then((data) => setCompany(data))
       .catch((err) => console.error("Failed to load company info:", err));
+
+    fetch("/api/companies")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data?.companies)) {
+          setCompanies(data.companies);
+        }
+        if (data?.activeCompanyId) {
+          setActiveCompanyId(data.activeCompanyId);
+        }
+      })
+      .catch((err) => console.error("Failed to load companies:", err));
   }, []);
+
+  const handleSwitchCompany = async (companyId: string) => {
+    if (!companyId || companyId === activeCompanyId || switchingCompany) return;
+    setSwitchingCompany(true);
+    try {
+      const res = await fetch("/api/companies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ companyId }),
+      });
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        setSwitchingCompany(false);
+      }
+    } catch (err) {
+      console.error("Failed to switch company:", err);
+      setSwitchingCompany(false);
+    }
+  };
 
   return (
     <>
@@ -221,6 +258,37 @@ export function Sidebar({
               <Database size={13} className="text-emerald-400 shrink-0" />
               <span className="truncate">{company?.name ? `${company.name} (DBF Live)` : "Express (DBF Live)"}</span>
             </div>
+
+            {/* Company Switcher (shown when multiple Express companies exist) */}
+            {companies.length > 1 && (
+              <div className="pt-0.5">
+                <label
+                  htmlFor="company-switcher"
+                  className={`block text-[10px] font-semibold uppercase tracking-wider mb-1 px-0.5 ${
+                    isExpress ? "text-[#a88a6d]" : "text-slate-400"
+                  }`}
+                >
+                  สลับบริษัท ({companies.length})
+                </label>
+                <select
+                  id="company-switcher"
+                  value={activeCompanyId}
+                  disabled={switchingCompany}
+                  onChange={(e) => handleSwitchCompany(e.target.value)}
+                  className={`w-full px-2.5 py-1.5 rounded-lg text-[11px] font-medium border outline-none transition cursor-pointer disabled:opacity-60 ${
+                    isExpress
+                      ? "bg-[#241a12] border-[#543b27] text-[#fdf2e4] focus:border-[#d08342]"
+                      : "bg-slate-900 border-slate-700 text-slate-100 focus:border-blue-500"
+                  }`}
+                >
+                  {companies.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name !== c.id ? `${c.name} (${c.id})` : c.id}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
         ) : (
           /* Collapsed Mini Status Icons */

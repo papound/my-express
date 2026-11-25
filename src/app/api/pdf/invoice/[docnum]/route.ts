@@ -1,4 +1,5 @@
 import { readAll, cleanStr, cleanNum, cleanDate } from "@/lib/dbf/reader";
+import { getActiveDataPath } from "@/lib/dbf/company-context";
 import { renderHtmlToPdf } from "@/lib/pdf/renderer";
 import {
   generateInvoiceHtml,
@@ -156,6 +157,7 @@ export async function GET(
           })
       : [];
 
+    const dataPath = await getActiveDataPath();
     const html = isReceipt
       ? generateReceiptHtml({
           invoice,
@@ -164,6 +166,7 @@ export async function GET(
           receiptItems,
           remarks,
           company,
+          dataPath,
         })
       : isCashSale
       ? generateCashSaleHtml({
@@ -172,6 +175,7 @@ export async function GET(
           items,
           remarks,
           company,
+          dataPath,
         })
       : isAdvanceInvoice
       ? generateAdvanceInvoiceHtml({
@@ -180,6 +184,7 @@ export async function GET(
           items,
           remarks,
           company,
+          dataPath,
         })
       : isSalesReturn
       ? generateSalesReturnHtml({
@@ -188,6 +193,7 @@ export async function GET(
           items,
           remarks,
           company,
+          dataPath,
         })
       : generateInvoiceHtml({
           invoice,
@@ -195,6 +201,7 @@ export async function GET(
           items,
           remarks,
           company,
+          dataPath,
         });
 
     const pdfBuffer = await renderHtmlToPdf(html);

@@ -4,18 +4,18 @@
  */
 import path from "path";
 import { DBFFile } from "dbffile";
+import { getActiveDataPath } from "./company-context";
 
-const DATA_PATH = process.env.DBF_DATA_PATH || "./data/ThongTha";
-
-function getDbfPath(tableName: string): string {
-  return path.resolve(DATA_PATH, `${tableName.toUpperCase()}.DBF`);
+async function getDbfPath(tableName: string): Promise<string> {
+  const dataPath = await getActiveDataPath();
+  return path.resolve(dataPath, `${tableName.toUpperCase()}.DBF`);
 }
 
 /**
  * เปิดไฟล์ DBF และคืน DBFFile instance
  */
 export async function openTable(tableName: string): Promise<DBFFile> {
-  const filePath = getDbfPath(tableName);
+  const filePath = await getDbfPath(tableName);
   return await DBFFile.open(filePath, { encoding: "cp874" });
 }
 

@@ -13,9 +13,10 @@ services:
       - .env
     environment:
       - NODE_ENV=production
-      - DBF_DATA_PATH=/data/ThongTha
+      - DBF_ROOT_PATH=/data/express
+      - DBF_DATA_PATH=/data/express/ThongTha
       - AUTH_TRUST_HOST=true
       - PORT=3000
     volumes:
-      # Production path mounted via CIFS over Tailscale
-      - ${HOST_DBF_PATH:-/mnt/express/ThongTha}:/data/ThongTha:ro
+      # Production parent path mounted via CIFS over Tailscale (contains all Express companies)
+      - ${HOST_DBF_ROOT:-/mnt/express}:/data/express:ro

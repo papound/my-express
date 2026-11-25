@@ -21,14 +21,15 @@ export function generateReceiptHtml(data: {
   receiptItems?: any[];
   remarks?: any[];
   company?: any;
+  dataPath?: string;
 }): string {
-  const { invoice, customer, items, receiptItems, company } = data;
+  const { invoice, customer, items, receiptItems, company, dataPath } = data;
 
-  const logoBase64 = getCompanyLogoBase64();
-  const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getSignatureBase64("authorized");
-  const collectorSignatureBase64 = getSignatureBase64("collector");
-  const preparedSignatureBase64 = getSignatureBase64("prepared");
+  const logoBase64 = getCompanyLogoBase64(dataPath);
+  const watermarkBase64 = getWatermarkLogoBase64(dataPath);
+  const signatureBase64 = getSignatureBase64("authorized", dataPath);
+  const collectorSignatureBase64 = getSignatureBase64("collector", dataPath);
+  const preparedSignatureBase64 = getSignatureBase64("prepared", dataPath);
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";

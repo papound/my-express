@@ -6,11 +6,13 @@ import {
   type SignaturesMap,
   type SignatureRoleConfig,
 } from "@/lib/logo";
+import { getActiveDataPath } from "@/lib/dbf/company-context";
 
 export async function GET() {
   try {
+    const dataPath = await getActiveDataPath();
     const fullConfig = getSignaturesConfig() as Record<string, any>;
-    const defaultBase64 = getAuthorizedSignatureBase64();
+    const defaultBase64 = getAuthorizedSignatureBase64(dataPath);
     const library = Array.isArray(fullConfig.__library) ? fullConfig.__library : [];
     const config = { ...fullConfig };
     delete config.__library;

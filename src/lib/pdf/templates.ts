@@ -130,17 +130,18 @@ export function generateInvoiceHtml(data: {
   items: any[];
   remarks: any[];
   company?: any;
+  dataPath?: string;
 }): string {
-  const { invoice, customer, items, remarks, company } = data;
+  const { invoice, customer, items, remarks, company, dataPath } = data;
 
-  const logoBase64 = getCompanyLogoBase64();
-  const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getSignatureBase64("authorized");
-  const approvedSignatureBase64 = getSignatureBase64("approved");
-  const collectorSignatureBase64 = getSignatureBase64("collector");
-  const checkedSignatureBase64 = getSignatureBase64("checked");
-  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
-  const billingSignatureBase64 = getSignatureBase64("billing");
+  const logoBase64 = getCompanyLogoBase64(dataPath);
+  const watermarkBase64 = getWatermarkLogoBase64(dataPath);
+  const signatureBase64 = getSignatureBase64("authorized", dataPath);
+  const approvedSignatureBase64 = getSignatureBase64("approved", dataPath);
+  const collectorSignatureBase64 = getSignatureBase64("collector", dataPath);
+  const checkedSignatureBase64 = getSignatureBase64("checked", dataPath);
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged", dataPath);
+  const billingSignatureBase64 = getSignatureBase64("billing", dataPath);
 
   const fmtThaiDateShort = (d: Date | string | null): string => {
     if (!d) return "-";
@@ -610,17 +611,18 @@ export function generateAdvanceInvoiceHtml(data: {
   items: any[];
   remarks?: any[];
   company?: any;
+  dataPath?: string;
 }): string {
-  const { invoice, customer, items, company } = data;
+  const { invoice, customer, items, company, dataPath } = data;
 
-  const logoBase64 = getCompanyLogoBase64();
-  const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getSignatureBase64("authorized");
-  const approvedSignatureBase64 = getSignatureBase64("approved");
-  const collectorSignatureBase64 = getSignatureBase64("collector");
-  const checkedSignatureBase64 = getSignatureBase64("checked");
-  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
-  const billingSignatureBase64 = getSignatureBase64("billing");
+  const logoBase64 = getCompanyLogoBase64(dataPath);
+  const watermarkBase64 = getWatermarkLogoBase64(dataPath);
+  const signatureBase64 = getSignatureBase64("authorized", dataPath);
+  const approvedSignatureBase64 = getSignatureBase64("approved", dataPath);
+  const collectorSignatureBase64 = getSignatureBase64("collector", dataPath);
+  const checkedSignatureBase64 = getSignatureBase64("checked", dataPath);
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged", dataPath);
+  const billingSignatureBase64 = getSignatureBase64("billing", dataPath);
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";
@@ -1060,17 +1062,18 @@ export function generateSalesReturnHtml(data: {
   items: any[];
   remarks?: any[];
   company?: any;
+  dataPath?: string;
 }): string {
-  const { invoice, customer, items, remarks, company } = data;
+  const { invoice, customer, items, remarks, company, dataPath } = data;
 
-  const logoBase64 = getCompanyLogoBase64();
-  const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getSignatureBase64("authorized");
-  const approvedSignatureBase64 = getSignatureBase64("approved");
-  const collectorSignatureBase64 = getSignatureBase64("collector");
-  const checkedSignatureBase64 = getSignatureBase64("checked");
-  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
-  const billingSignatureBase64 = getSignatureBase64("billing");
+  const logoBase64 = getCompanyLogoBase64(dataPath);
+  const watermarkBase64 = getWatermarkLogoBase64(dataPath);
+  const signatureBase64 = getSignatureBase64("authorized", dataPath);
+  const approvedSignatureBase64 = getSignatureBase64("approved", dataPath);
+  const collectorSignatureBase64 = getSignatureBase64("collector", dataPath);
+  const checkedSignatureBase64 = getSignatureBase64("checked", dataPath);
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged", dataPath);
+  const billingSignatureBase64 = getSignatureBase64("billing", dataPath);
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";
@@ -1503,17 +1506,18 @@ export function generateQuotationHtml(data: {
   remarks?: any[];
   company?: any;
   showItemCode?: boolean;
+  dataPath?: string;
 }): string {
-  const { quotation, customer, items, remarks, company, showItemCode = true } = data;
+  const { quotation, customer, items, remarks, company, showItemCode = true, dataPath } = data;
 
-  const logoBase64 = getCompanyLogoBase64();
-  const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getSignatureBase64("authorized");
-  const approvedSignatureBase64 = getSignatureBase64("approved");
-  const collectorSignatureBase64 = getSignatureBase64("collector");
-  const checkedSignatureBase64 = getSignatureBase64("checked");
-  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
-  const billingSignatureBase64 = getSignatureBase64("billing");
+  const logoBase64 = getCompanyLogoBase64(dataPath);
+  const watermarkBase64 = getWatermarkLogoBase64(dataPath);
+  const signatureBase64 = getSignatureBase64("authorized", dataPath);
+  const approvedSignatureBase64 = getSignatureBase64("approved", dataPath);
+  const collectorSignatureBase64 = getSignatureBase64("collector", dataPath);
+  const checkedSignatureBase64 = getSignatureBase64("checked", dataPath);
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged", dataPath);
+  const billingSignatureBase64 = getSignatureBase64("billing", dataPath);
 
   const fmtThaiDateShort = (d: Date | string | null): string => {
     if (!d) return "-";
@@ -1853,17 +1857,18 @@ export function generateBillingHtml(data: {
   remarks?: any[];
   company?: any;
   page?: number | "all";
+  dataPath?: string;
 }): string {
-  const { billing, customer, invoices, remarks, company, page = "all" } = data;
+  const { billing, customer, invoices, remarks, company, page = "all", dataPath } = data;
 
-  const logoBase64 = getCompanyLogoBase64();
-  const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getSignatureBase64("authorized");
-  const approvedSignatureBase64 = getSignatureBase64("approved");
-  const collectorSignatureBase64 = getSignatureBase64("collector");
-  const checkedSignatureBase64 = getSignatureBase64("checked");
-  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged");
-  const billingSignatureBase64 = getSignatureBase64("billing");
+  const logoBase64 = getCompanyLogoBase64(dataPath);
+  const watermarkBase64 = getWatermarkLogoBase64(dataPath);
+  const signatureBase64 = getSignatureBase64("authorized", dataPath);
+  const approvedSignatureBase64 = getSignatureBase64("approved", dataPath);
+  const collectorSignatureBase64 = getSignatureBase64("collector", dataPath);
+  const checkedSignatureBase64 = getSignatureBase64("checked", dataPath);
+  const acknowledgedSignatureBase64 = getSignatureBase64("acknowledged", dataPath);
+  const billingSignatureBase64 = getSignatureBase64("billing", dataPath);
 
   const fmtThaiDateShort = (d: Date | string | null): string => {
     if (!d) return "-";

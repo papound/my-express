@@ -1,14 +1,18 @@
 import fs from "fs";
 import path from "path";
 
-const LOGO_DIRS = [
-  process.env.LOGO_PATH || "./data/logo",
-  process.env.DBF_DATA_PATH || "./data/ThongTha",
-  "./data",
-];
+function getLogoDirs(dataPath?: string): string[] {
+  const dirs = [
+    dataPath,
+    process.env.LOGO_PATH || "./data/logo",
+    process.env.DBF_DATA_PATH || "./data/ThongTha",
+    "./data",
+  ].filter((d): d is string => Boolean(d));
+  return Array.from(new Set(dirs));
+}
 
-function findLogoBuffer(isWatermark: boolean): Buffer | null {
-  for (const dirPath of LOGO_DIRS) {
+function findLogoBuffer(isWatermark: boolean, dataPath?: string): Buffer | null {
+  for (const dirPath of getLogoDirs(dataPath)) {
     const dir = path.resolve(dirPath);
     if (!fs.existsSync(dir)) continue;
 
@@ -40,9 +44,9 @@ function findLogoBuffer(isWatermark: boolean): Buffer | null {
 /**
  * ดึง Buffer ของ LOGO.bmp
  */
-export function getCompanyLogoBuffer(): Buffer | null {
+export function getCompanyLogoBuffer(dataPath?: string): Buffer | null {
   try {
-    return findLogoBuffer(false);
+    return findLogoBuffer(false, dataPath);
   } catch (err) {
     console.warn("Could not read company logo buffer:", err);
     return null;
@@ -52,9 +56,9 @@ export function getCompanyLogoBuffer(): Buffer | null {
 /**
  * ดึง Buffer ของ LOGOอ่อน2.bmp
  */
-export function getWatermarkLogoBuffer(): Buffer | null {
+export function getWatermarkLogoBuffer(dataPath?: string): Buffer | null {
   try {
-    return findLogoBuffer(true);
+    return findLogoBuffer(true, dataPath);
   } catch (err) {
     console.warn("Could not read watermark logo buffer:", err);
     return null;
@@ -64,9 +68,9 @@ export function getWatermarkLogoBuffer(): Buffer | null {
 /**
  * ดึง base64 data URL ของ LOGO.bmp
  */
-export function getCompanyLogoBase64(): string {
+export function getCompanyLogoBase64(dataPath?: string): string {
   try {
-    const buffer = getCompanyLogoBuffer();
+    const buffer = getCompanyLogoBuffer(dataPath);
     if (!buffer) return "";
     return `data:image/bmp;base64,${buffer.toString("base64")}`;
   } catch (err) {
@@ -78,9 +82,9 @@ export function getCompanyLogoBase64(): string {
 /**
  * ดึง base64 data URL ของ LOGOอ่อน2.bmp สำหรับลายน้ำ
  */
-export function getWatermarkLogoBase64(): string {
+export function getWatermarkLogoBase64(dataPath?: string): string {
   try {
-    const buffer = getWatermarkLogoBuffer();
+    const buffer = getWatermarkLogoBuffer(dataPath);
     if (!buffer) return "";
     return `data:image/bmp;base64,${buffer.toString("base64")}`;
   } catch (err) {
@@ -89,8 +93,8 @@ export function getWatermarkLogoBase64(): string {
   }
 }
 
-function findSignatureBuffer(): Buffer | null {
-  for (const dirPath of LOGO_DIRS) {
+function findSignatureBuffer(dataPath?: string): Buffer | null {
+  for (const dirPath of getLogoDirs(dataPath)) {
     const dir = path.resolve(dirPath);
     if (!fs.existsSync(dir)) continue;
 
@@ -125,9 +129,9 @@ function findSignatureBuffer(): Buffer | null {
 /**
  * ดึง Buffer ของ ลายเซ็นผู้รับมอบอำนาจ (my-express-authorized-signature.bmp)
  */
-export function getAuthorizedSignatureBuffer(): Buffer | null {
+export function getAuthorizedSignatureBuffer(dataPath?: string): Buffer | null {
   try {
-    return findSignatureBuffer();
+    return findSignatureBuffer(dataPath);
   } catch (err) {
     console.warn("Could not read authorized signature buffer:", err);
     return null;
@@ -137,9 +141,9 @@ export function getAuthorizedSignatureBuffer(): Buffer | null {
 /**
  * ดึง base64 data URL ของ ลายเซ็นผู้รับมอบอำนาจต้นฉบับ
  */
-export function getAuthorizedSignatureBase64(): string {
+export function getAuthorizedSignatureBase64(dataPath?: string): string {
   try {
-    const buffer = getAuthorizedSignatureBuffer();
+    const buffer = getAuthorizedSignatureBuffer(dataPath);
     if (!buffer) return "";
     const isPng = buffer.length > 8 && buffer[0] === 0x89 && buffer[1] === 0x50;
     const mime = isPng ? "image/png" : "image/bmp";
@@ -195,7 +199,7 @@ export function saveSignaturesConfig(cfg: SignaturesMap): void {
 /**
  * ดึง base64 data URL สำหรับบทบาทที่ระบุ
  */
-export function getSignatureBase64(role: string = "authorized"): string {
+export function getSignatureBase64(role: string = "authorized", dataPath?: string): string {
   try {
     const config = getSignaturesConfig();
     const roleCfg = config[role];
@@ -208,13 +212,13 @@ export function getSignatureBase64(role: string = "authorized"): string {
         return roleCfg.dataUrl;
       }
       if (roleCfg.type === "default") {
-        return getAuthorizedSignatureBase64();
+        return getAuthorizedSignatureBase64(dataPath);
       }
     }
 
     // Default fallbacks for roles that originally had default signature
     if (role === "authorized" || role === "billing") {
-      return getAuthorizedSignatureBase64();
+      return getAuthorizedSignatureBase64(dataPath);
     }
 
     return "";

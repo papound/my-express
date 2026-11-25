@@ -20,14 +20,15 @@ export function generateCashSaleHtml(data: {
   items: any[];
   remarks?: any[];
   company?: any;
+  dataPath?: string;
 }): string {
-  const { invoice, customer, items, company } = data;
+  const { invoice, customer, items, company, dataPath } = data;
 
-  const logoBase64 = getCompanyLogoBase64();
-  const watermarkBase64 = getWatermarkLogoBase64();
-  const signatureBase64 = getSignatureBase64("authorized");
-  const approvedSignatureBase64 = getSignatureBase64("approved");
-  const collectorSignatureBase64 = getSignatureBase64("collector");
+  const logoBase64 = getCompanyLogoBase64(dataPath);
+  const watermarkBase64 = getWatermarkLogoBase64(dataPath);
+  const signatureBase64 = getSignatureBase64("authorized", dataPath);
+  const approvedSignatureBase64 = getSignatureBase64("approved", dataPath);
+  const collectorSignatureBase64 = getSignatureBase64("collector", dataPath);
 
   const fmtThaiDateShort = (d: Date | string | null | undefined): string => {
     if (!d) return "-";

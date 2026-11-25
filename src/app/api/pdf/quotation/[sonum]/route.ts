@@ -1,4 +1,5 @@
 import { readAll, cleanStr, cleanNum, cleanDate } from "@/lib/dbf/reader";
+import { getActiveDataPath } from "@/lib/dbf/company-context";
 import { renderHtmlToPdf } from "@/lib/pdf/renderer";
 import { generateQuotationHtml } from "@/lib/pdf/templates";
 import { NextResponse } from "next/server";
@@ -104,6 +105,7 @@ export async function GET(
         }
       : null;
 
+    const dataPath = await getActiveDataPath();
     const html = generateQuotationHtml({
       quotation,
       customer: customerData,
@@ -111,6 +113,7 @@ export async function GET(
       remarks,
       company,
       showItemCode,
+      dataPath,
     });
 
     const pdfBuffer = await renderHtmlToPdf(html);
