@@ -1,28 +1,15 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { decode } from "@auth/core/jwt";
+import { verifyPassword } from "@/lib/password";
 
 interface AppUser {
   username: string;
-  password: string;
+  password?: string;
+  passwordHash?: string;
   name: string;
   role: string;
 }
-
-const DEFAULT_USERS: AppUser[] = [
-  {
-    username: "admin",
-    password: "admin1234",
-    name: "Administrator",
-    role: "admin",
-  },
-  {
-    username: "user1",
-    password: "user1234",
-    name: "ผู้ใช้งาน",
-    role: "user",
-  },
-];
 
 function getUsers(): AppUser[] {
   try {
@@ -31,10 +18,11 @@ function getUsers(): AppUser[] {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
-  } catch {
-    // fallback
+  } catch (err) {
+    console.warn("[auth] Failed to parse APP_USERS:", err);
   }
-  return DEFAULT_USERS;
+  console.warn("[auth] APP_USERS is not configured or empty; login is disabled.");
+  return [];
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -51,13 +39,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        const username =
+          typeof credentials?.username === "string"
+            ? credentials.username.trim()
+            : "";
+        const password =
+          typeof credentials?.password === "string" ? credentials.password : "";
+        if (!username || !password) return null;
+
         const users = getUsers();
-        const user = users.find(
-          (u) =>
-            u.username === credentials?.username &&
-            u.password === credentials?.password
-        );
-        if (!user) return null;
+        const user = users.find((u) => u.username === username);
+        const storedSecret = user?.passwordHash ?? user?.password;
+        if (!user || !storedSecret) return null;
+
+        const valid = await verifyPassword(password, storedSecret);
+        if (!valid) return null;
+
         return {
           id: user.username,
           name: user.name,
