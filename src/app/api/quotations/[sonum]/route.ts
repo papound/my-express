@@ -1,4 +1,5 @@
 import { readAll, cleanStr, cleanNum, cleanDate } from "@/lib/dbf/reader";
+import { triggerExpressQuotationWrite } from "@/lib/jenkins/express-write";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -131,6 +132,71 @@ export async function GET(
     console.error("GET /api/quotations/[sonum] error:", err);
     return NextResponse.json(
       { error: "ไม่สามารถโหลดรายละเอียดใบเสนอราคาได้", detail: String(err) },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ sonum: string }> }
+) {
+  try {
+    const { sonum } = await params;
+    const soNum = decodeURIComponent(sonum).trim();
+    const body = await request.json();
+    const action = body?.action === "cancel" ? "cancel" : "update";
+
+    if (action === "cancel") {
+      const res = await triggerExpressQuotationWrite({
+        action: "cancel",
+        sonum: soNum,
+      });
+      return NextResponse.json(res.data, { status: res.status });
+    }
+
+    const cuscod = typeof body?.cuscod === "string" ? body.cuscod.trim() : "";
+    const items = Array.isArray(body?.items) ? body.items : [];
+    if (!cuscod || items.length === 0) {
+      return NextResponse.json(
+        { ok: false, error: "cuscod and at least 1 item are required." },
+        { status: 400 }
+      );
+    }
+
+    const res = await triggerExpressQuotationWrite({
+      action: "update",
+      sonum: soNum,
+      cuscod,
+      sodat: typeof body?.sodat === "string" ? body.sodat : undefined,
+      youref: typeof body?.youref === "string" ? body.youref : "",
+      flgvat: typeof body?.flgvat === "string" ? body.flgvat : "2",
+      items,
+    });
+    return NextResponse.json(res.data, { status: res.status });
+  } catch (err) {
+    return NextResponse.json(
+      { ok: false, error: String(err) },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ sonum: string }> }
+) {
+  try {
+    const { sonum } = await params;
+    const soNum = decodeURIComponent(sonum).trim();
+    const res = await triggerExpressQuotationWrite({
+      action: "delete",
+      sonum: soNum,
+    });
+    return NextResponse.json(res.data, { status: res.status });
+  } catch (err) {
+    return NextResponse.json(
+      { ok: false, error: String(err) },
       { status: 500 }
     );
   }

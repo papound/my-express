@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, Printer, RefreshCw, Download, Tag, PenTool } from "lucide-react";
+import { X, Printer, RefreshCw, Download, Tag, PenTool, Pencil, Ban, Trash2 } from "lucide-react";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import { SignaturePadModal } from "@/components/signatures/SignaturePadModal";
 import {
   QuotationSheet,
   type QuotationDetailResponse,
 } from "@/components/quotations/QuotationSheet";
+import type { QuotationFormInitialData } from "@/components/quotations/CreateQuotationModal";
 import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
 
 const STATUS_CONFIG: Record<string, { label: string; badgeClass: string }> = {
@@ -33,13 +34,20 @@ const STATUS_CONFIG: Record<string, { label: string; badgeClass: string }> = {
 export function QuotationDetailModal({
   sonum,
   onClose,
+  activeCompanyId,
+  onEdit,
+  onMutated,
 }: {
   sonum: string | null;
   onClose: () => void;
+  activeCompanyId?: string;
+  onEdit?: (initial: QuotationFormInitialData) => void;
+  onMutated?: () => void;
 }) {
   const [data, setData] = useState<QuotationDetailResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mutating, setMutating] = useState<"cancel" | "delete" | null>(null);
   const [isPrinting, setIsPrinting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [showItemCode, setShowItemCode] = useState(true);
@@ -122,6 +130,62 @@ export function QuotationDetailModal({
       );
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const canWrite =
+    activeCompanyId === "WriteTes" &&
+    Boolean(data?.quotation) &&
+    (data?.invoices?.length ?? 0) === 0;
+  const docstat = data?.quotation?.DOCSTAT || "";
+
+  const handleEditClick = () => {
+    if (!data?.quotation || !onEdit) return;
+    const rawDate = data.quotation.SODAT ? String(data.quotation.SODAT).slice(0, 10) : new Date().toISOString().slice(0, 10);
+    onEdit({
+      sonum: data.quotation.SONUM,
+      cuscod: data.quotation.CUSCOD,
+      cusnam: data.customer?.CUSNAM || data.quotation.CUSCOD,
+      sodat: rawDate,
+      youref: data.quotation.YOUREF || "",
+      items: (data.items || []).map((it) => ({
+        stkcod: it.STKCOD,
+        stkdes: it.STKDES,
+        tqucod: it.TQUCOD || "ตั",
+        ordqty: it.ORDQTY,
+        unitpr: it.UNITPR,
+      })),
+    });
+  };
+
+  const handleCancelOrDelete = async (action: "cancel" | "delete") => {
+    if (!data?.quotation?.SONUM) return;
+    const targetSonum = data.quotation.SONUM;
+    const confirmMsg =
+      action === "cancel"
+        ? `ยืนยันยกเลิกใบเสนอราคา ${targetSonum} (DOCSTAT = C) ใน WriteTes?`
+        : `ยืนยันลบใบเสนอราคา ${targetSonum} ออกจาก WriteTes?`;
+    if (!window.confirm(confirmMsg)) return;
+
+    setMutating(action);
+    setError("");
+    try {
+      const res = await fetch(`/api/quotations/${encodeURIComponent(targetSonum)}`, {
+        method: action === "cancel" ? "PATCH" : "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: action === "cancel" ? JSON.stringify({ action: "cancel" }) : undefined,
+      });
+      const json = await res.json();
+      if (!res.ok || !json.ok) {
+        setError(json.error || `ไม่สามารถ${action === "cancel" ? "ยกเลิก" : "ลบ"}ใบเสนอราคาได้`);
+        return;
+      }
+      onMutated?.();
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "เกิดข้อผิดพลาด");
+    } finally {
+      setMutating(null);
     }
   };
 
@@ -217,6 +281,45 @@ export function QuotationDetailModal({
               <PenTool size={13} className="text-indigo-600" />
               <span>ลายเซ็น</span>
             </button>
+
+            {canWrite && docstat !== "F" && docstat !== "C" && onEdit && (
+              <button
+                type="button"
+                onClick={handleEditClick}
+                disabled={mutating !== null}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-xs font-semibold text-amber-800 hover:bg-amber-100 transition shadow-sm cursor-pointer disabled:opacity-50"
+                title="แก้ไขใบเสนอราคา (WriteTes)"
+              >
+                <Pencil size={13} />
+                <span>แก้ไข</span>
+              </button>
+            )}
+
+            {canWrite && docstat !== "F" && docstat !== "C" && (
+              <button
+                type="button"
+                onClick={() => handleCancelOrDelete("cancel")}
+                disabled={mutating !== null}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 border border-orange-200 text-xs font-semibold text-orange-700 hover:bg-orange-100 transition shadow-sm cursor-pointer disabled:opacity-50"
+                title="ยกเลิกใบเสนอราคา (DOCSTAT=C)"
+              >
+                {mutating === "cancel" ? <RefreshCw size={13} className="animate-spin" /> : <Ban size={13} />}
+                <span>ยกเลิกใบ</span>
+              </button>
+            )}
+
+            {canWrite && docstat !== "F" && (
+              <button
+                type="button"
+                onClick={() => handleCancelOrDelete("delete")}
+                disabled={mutating !== null}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-700 hover:bg-rose-100 transition shadow-sm cursor-pointer disabled:opacity-50"
+                title="ลบใบเสนอราคา (WriteTes)"
+              >
+                {mutating === "delete" ? <RefreshCw size={13} className="animate-spin" /> : <Trash2 size={13} />}
+                <span>ลบ</span>
+              </button>
+            )}
 
             <button
               type="button"

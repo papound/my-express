@@ -6,6 +6,7 @@ import {
   cleanSearchQuery,
   matchSearch,
 } from "@/lib/dbf/reader";
+import { triggerExpressQuotationWrite } from "@/lib/jenkins/express-write";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -120,6 +121,37 @@ export async function GET(request: Request) {
   } catch (err) {
     return NextResponse.json(
       { error: "ไม่สามารถโหลดใบเสนอราคา", detail: String(err) },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const cuscod = typeof body?.cuscod === "string" ? body.cuscod.trim() : "";
+    const items = Array.isArray(body?.items) ? body.items : [];
+    if (!cuscod || items.length === 0) {
+      return NextResponse.json(
+        { ok: false, error: "cuscod and at least 1 item are required." },
+        { status: 400 }
+      );
+    }
+
+    const res = await triggerExpressQuotationWrite({
+      action: "create",
+      cuscod,
+      sodat: typeof body?.sodat === "string" ? body.sodat : undefined,
+      youref: typeof body?.youref === "string" ? body.youref : "",
+      flgvat: typeof body?.flgvat === "string" ? body.flgvat : "2",
+      items,
+    });
+    return NextResponse.json(res.data, {
+      status: res.ok ? 201 : res.status,
+    });
+  } catch (err) {
+    return NextResponse.json(
+      { ok: false, error: String(err) },
       { status: 500 }
     );
   }

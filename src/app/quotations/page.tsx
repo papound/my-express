@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Search, RefreshCw, Printer, Calendar, ShoppingCart, Eye, Download, X } from "lucide-react";
+import { Search, RefreshCw, Printer, Calendar, ShoppingCart, Eye, Download, X, Plus } from "lucide-react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { printPdf, downloadPdf } from "@/lib/pdf/client";
 import { Pagination } from "@/components/common/Pagination";
 import { QuotationDetailModal } from "@/components/quotations/QuotationDetailModal";
+import { CreateQuotationModal, type QuotationFormInitialData } from "@/components/quotations/CreateQuotationModal";
 import { InvoiceDetailModal } from "@/components/invoices/InvoiceDetailModal";
 
 interface LinkedInvoiceBrief {
@@ -77,6 +78,16 @@ export default function QuotationsPage() {
   const [limit, setLimit] = useState(20);
   const [selectedSonum, setSelectedSonum] = useState<string | null>(null);
   const [popupInvoiceDocnum, setPopupInvoiceDocnum] = useState<string | null>(null);
+  const [activeCompanyId, setActiveCompanyId] = useState<string>("");
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingQuotation, setEditingQuotation] = useState<QuotationFormInitialData | null>(null);
+
+  useEffect(() => {
+    fetch("/api/companies")
+      .then((r) => r.json())
+      .then((j) => setActiveCompanyId(j.activeCompanyId || ""))
+      .catch(() => {});
+  }, []);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -116,13 +127,24 @@ export default function QuotationsPage() {
               พบข้อมูลทั้งหมด <strong className="text-slate-800">{total}</strong> ฉบับจาก OESO.DBF
             </p>
           </div>
-          <button
-            onClick={fetchData}
-            className="inline-flex items-center justify-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200/80 hover:bg-slate-50 rounded-xl shadow-sm transition self-start sm:self-auto"
-          >
-            <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
-            รีเฟรชข้อมูล
-          </button>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            {activeCompanyId === "WriteTes" && (
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition"
+              >
+                <Plus size={14} />
+                สร้างใบเสนอราคา (WriteTes)
+              </button>
+            )}
+            <button
+              onClick={fetchData}
+              className="inline-flex items-center justify-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200/80 hover:bg-slate-50 rounded-xl shadow-sm transition"
+            >
+              <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+              รีเฟรชข้อมูล
+            </button>
+          </div>
         </div>
 
         {/* Filter and Search */}
@@ -406,6 +428,13 @@ export default function QuotationsPage() {
       <QuotationDetailModal
         sonum={selectedSonum}
         onClose={() => setSelectedSonum(null)}
+        activeCompanyId={activeCompanyId}
+        onMutated={fetchData}
+        onEdit={(initial) => {
+          setSelectedSonum(null);
+          setEditingQuotation(initial);
+          setShowCreateModal(true);
+        }}
       />
 
       {/* Invoice Detail Popup on top of Quotations Table */}
@@ -413,6 +442,20 @@ export default function QuotationsPage() {
         docnum={popupInvoiceDocnum}
         onClose={() => setPopupInvoiceDocnum(null)}
       />
+
+      {/* Create / Edit Quotation Modal (WriteTes Sandbox only) */}
+      {showCreateModal && (
+        <CreateQuotationModal
+          initialData={editingQuotation}
+          onClose={() => {
+            setShowCreateModal(false);
+            setEditingQuotation(null);
+          }}
+          onCreated={() => {
+            fetchData();
+          }}
+        />
+      )}
     </div>
   </AppShell>
 );

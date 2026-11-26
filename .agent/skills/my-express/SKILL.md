@@ -75,39 +75,87 @@ export function matchSearch(target: string | null | undefined, query: string): b
 }
 ```
 
-### 2.2 Core DBF Tables & Field Relationships
+### 2.2 Complete Express DBF Table Directory (แฟ้มข้อมูลทั้งหมด 57 ตาราง)
 
-| Table Name | Description | Key Fields & Joins |
-| :--- | :--- | :--- |
-| `ARMAS.DBF` | Customer Master (ลูกหนี้/ลูกค้า) | `CUSCOD` (PK), `CUSNAM`, `PRENAM`, `ADDR01..03`, `ZIPCOD`, `TELNUM`, `TAXID`, `ORGNUM` (Branch 0=HQ), `PAYTRM` (Credit days), `CRLINE`, `STATUS` |
-| `ARTRN.DBF` | Sales Invoices & Credit Transactions (ใบขาย/ลูกหนี้) | `DOCNUM` (PK), `RECTYP`, `DOCDAT`, `CUSCOD` (FK -> ARMAS), `SONUM` (FK -> OESO), `BILNUM` (FK -> ARBIL), `AMOUNT`, `DISCAMT`, `AFTDISC`, `ADVAMT`, `VATAMT`, `NETAMT`, `TOTAL`, `RCVAMT`, `REMAMT`, `DOCSTAT` |
-| `STCRD.DBF` | Invoice Line Items (การ์ดสินค้า/รายการใบขาย) | `DOCNUM` (FK -> ARTRN), `SEQNUM`, `STKCOD` (FK -> STMAS), `STKDES`, `TRNQTY`, `TQUCOD` (Unit), `UNITPR`, `DISCAMT`, `TRNVAL`, `PACKING` |
-| `ARTRNRM.DBF` | Invoice Remarks / Notes (หมายเหตุใบแจ้งหนี้) | `DOCNUM` (FK -> ARTRN), `SEQNUM`, `REMARK` |
-| `OESO.DBF` | Sales Orders / Quotations Header (ใบเสนอราคา/สั่งขาย) | `SONUM` (PK), `SODAT`, `CUSCOD` (FK -> ARMAS), `PAYTRM`, `DLVDAT`, `AMOUNT`, `DISCAMT`, `VATAMT`, `NETAMT`, `TOTAL`, `DOCSTAT` |
-| `OESOIT.DBF` | Quotation Line Items (รายการใบเสนอราคา) | `SONUM` (FK -> OESO), `SEQNUM`, `STKCOD`, `STKDES`, `ORDQTY`, `UNITPR`, `DISCAMT`, `TRNVAL` |
-| `ARBIL.DBF` | Billing Notes Header (ใบวางบิล) | `BILNUM` (PK), `BILDAT`, `CUSCOD` (FK -> ARMAS), `BILOUT`, `APPDAT` (นัดรับเช็ค), `PAYCOND`, `NETAMT`, `DOCSTAT` |
-| `ARBILIT.DBF` | Billing Note Invoice Items (รายการบิลที่วาง) | `BILNUM` (FK -> ARBIL), `DOCNUM` (FK -> ARTRN), `RCVAMT`, `VATAMT` |
-| `STMAS.DBF` | Product Master (สินค้าคงคลัง) | `STKCOD` (PK), `STKDES`, `STKTYP`, `STKGRP`, `QUCOD`, `TOTBAL`, `TOTVAL`, `SELLPR1`, `STATUS` |
-| `STLOC.DBF` | Warehouse Stock Locations | `STKCOD`, `LOCCOD`, `BALQTY` |
-| `ISINFO.DBF` | Company Information (ข้อมูลบริษัท) | `THINAM`, `ENGNAM`, `ADDR01..02`, `TELNUM`, `TAXID`, `ORGNUM`, `VATRAT` |
-| `BKTRN.DBF` | Bank & Cheques (เช็ครับ/จ่าย) | `CHQNUM`, `CHQDAT`, `BNKCOD`, `AMOUNT`, `CHQSTAT` |
+| Module | Table | Description (TH) | Key Fields & Relationships |
+| :--- | :--- | :--- | :--- |
+| **AP (เจ้าหนี้/ซื้อ)** | `APBAL.DBF` | แฟ้มสะสมยอดเจ้าหนี้ | `SUPCOD` |
+| | `APBIL.DBF` | แฟ้มใบรับวางบิล | `BILNUM`, `SUPCOD` |
+| | `APMAS.DBF` | แฟ้มข้อมูลผู้จำหน่าย | `SUPCOD` (PK), `SUPNAM` |
+| | `APRCPCQ.DBF` | แฟ้มรายการใบจ่ายเงิน(เช็คจ่าย) | `CHQNUM`, `RCPNUM` |
+| | `APRCPIT.DBF` | แฟ้มรายการใบจ่ายเงิน(ใบรับส/ค) | `RCPNUM`, `DOCNUM` |
+| | `APTRN.DBF` | แฟ้มซื้อสด/ใบรับส.ค./ใบลดหนี้ | `DOCNUM` (PK), `RECTYP`, `SUPCOD` |
+| **AR (ลูกหนี้/ขาย)** | `ARBAL.DBF` | แฟ้มสะสมยอดลูกหนี้ | `CUSCOD` |
+| | `ARBIL.DBF` | แฟ้มใบวางบิล | `BILNUM` (PK), `BILDAT`, `CUSCOD` (-> `ARMAS`), `BILOUT`, `APPDAT`, `PAYCOND`, `NETAMT`, `DOCSTAT` |
+| | `ARBILIT.DBF` | แฟ้มรายการบิลที่วาง | `BILNUM` (-> `ARBIL`), `DOCNUM` (-> `ARTRN`), `RCVAMT`, `VATAMT` |
+| | `ARMAS.DBF` | แฟ้มข้อมูลลูกค้า | `CUSCOD` (PK), `CUSNAM`, `PRENAM`, `ADDR01..03`, `ZIPCOD`, `TELNUM`, `TAXID`, `ORGNUM` (0=HQ), `PAYTRM`, `CRLINE`, `STATUS` |
+| | `ARRCPCQ.DBF` | แฟ้มรายการใบเสร็จ(เช็ครับ) | `CHQNUM`, `RCPNUM` |
+| | `ARRCPIT.DBF` | แฟ้มรายการใบเสร็จ(ใบกำกับ) | `RCPNUM`, `DOCNUM` |
+| | `ARSHIP.DBF` | แฟ้มสถานที่ส่งของ | `CUSCOD`, `SHIPTO` |
+| | `ARTRN.DBF` | แฟ้มบิลขายสด/ใบกำกับ/ใบลดหนี้ | `DOCNUM` (PK), `RECTYP`, `DOCDAT`, `CUSCOD` (-> `ARMAS`), `SONUM` (-> `OESO`), `BILNUM` (-> `ARBIL`), `AMOUNT`, `DISCAMT`, `AFTDISC`, `ADVAMT`, `VATAMT`, `NETAMT`, `TOTAL`, `RCVAMT`, `REMAMT`, `DOCSTAT` |
+| | `ARTRNRM.DBF` | แฟ้มรายการคำอธิบายเพิ่มเติม | `DOCNUM` (-> `ARTRN`), `SEQNUM`, `REMARK` |
+| **BK / FA (ธนาคาร/สินทรัพย์)** | `BKMAS.DBF` | แฟ้มบัญชีเงินฝากธนาคาร | `BNKCOD` (PK), `BNKNAM` |
+| | `BKTRN.DBF` | แฟ้มรายการเคลื่อนไหวธนาคาร | `CHQNUM`, `CHQDAT`, `BNKCOD`, `AMOUNT`, `CHQSTAT` |
+| | `BKTRNIT.DBF` | แฟ้มรายการเคลื่อนไหวธนาคาร (ย่อย) | `CHQNUM`, `DOCNUM` |
+| | `FAMAS.DBF` | แฟ้มข้อมูลสินทรัพย์ถาวร | `FACOD` (PK) |
+| **GL (บัญชีแยกประเภท)** | `GLACC.DBF` | แฟ้มผังบัญชี | `ACCNUM` (PK) |
+| | `GLBAL.DBF` | แฟ้มยอดบัญชี | `ACCNUM` |
+| | `GLBUD.DBF` | แฟ้มงบประมาณ | `ACCNUM` |
+| | `GLINV.DBF` | แฟ้มบัญชีสินค้าคงเหลือปลายงวด | — |
+| | `GLJNL.DBF` | แฟ้มรายวัน | `JNLNUM` (PK) |
+| | `GLJNLIT.DBF` | แฟ้มข้อมูลรายวัน | `JNLNUM`, `ACCNUM` |
+| | `GLPTT.DBF` | แฟ้มเงินสดย่อย | — |
+| | `GLPTTIT.DBF` | แฟ้มรายการเงินสดย่อย | — |
+| | `GLREP.DBF` | แฟ้มงบการเงินบัญชี | — |
+| | `GLREPIT.DBF` | แฟ้มข้อมูลบรรทัดในงบการเงิน | — |
+| | `GLTPL.DBF` | แฟ้มต้นแบบรายวัน | — |
+| | `GLTPLIT.DBF` | แฟ้มรายการต้นแบบรายวัน | — |
+| **IS (ระบบ/ภาษี/เอกสาร)** | `ISACC.DBF` | แฟ้มชุดบัญชี | — |
+| | `ISFIXCOD.DBF` | ตารางการเปลี่ยนรหัส | — |
+| | `ISINFO.DBF` | แฟ้มข้อมูลบริษัท | `THINAM`, `ENGNAM`, `ADDR01..02`, `TELNUM`, `TAXID`, `ORGNUM`, `VATRAT` |
+| | `ISREP.DBF` | แฟ้มรายงานที่สร้างด้วยตนเอง | — |
+| | `ISRUN.DBF` | แฟ้มเลขที่เอกสาร | `PREFIX`, `DOCNUM` |
+| | `ISSN.DBF` | ทะเบียนหมายเลขสินค้า | `SERLNUM`, `STKCOD` |
+| | `ISSNIT.DBF` | ประวัติการบริการ | `SERLNUM` |
+| | `ISTAB.DBF` | ตารางข้อมูล (รหัสอ้างอิงต่างๆ) | `TABTYP`, `TYPCOD`, `THAIDESC` |
+| | `ISTAX.DBF` | แฟ้มภาษีหัก ณ ที่จ่าย | `DOCNUM`, `TAXID` |
+| | `ISVAT.DBF` | แฟ้มภาษีซื้อ/ภาษีขาย | `DOCNUM`, `VATPRD` |
+| **JB (งาน/โครงการ)** | `JBLIST.DBF` | แฟ้มขั้นตอนงาน | — |
+| | `JBMAS.DBF` | แฟ้มรหัสงาน | `JOBCOD` (PK) |
+| **OE / PO (สั่งขาย/สั่งซื้อ)** | `OESLM.DBF` | แฟ้มข้อมูลพนักงานขาย | `SLMCOD` (PK), `SLMNAM` |
+| | `OESO.DBF` | แฟ้มใบสั่งขาย / ใบเสนอราคา | `SONUM` (PK), `SORECTYP`, `SODAT`, `CUSCOD` (-> `ARMAS`), `PAYTRM`, `DLVDAT`, `AMOUNT`, `DISCAMT`, `VATAMT`, `NETAMT`, `TOTAL`, `DOCSTAT` |
+| | `OESOIT.DBF` | แฟ้มรายการใบสั่งขาย / เสนอราคา | `SONUM` (-> `OESO`), `SORECTYP`, `SEQNUM`, `STKCOD`, `STKDES`, `ORDQTY`, `UNITPR`, `DISCAMT`, `TRNVAL` |
+| | `POPR.DBF` | แฟ้มใบสั่งซื้อ | `PONUM` (PK), `SUPCOD` |
+| | `POPRIT.DBF` | แฟ้มรายการใบสั่งซื้อ | `PONUM` (-> `POPR`), `STKCOD` |
+| **ST (สินค้าคงคลัง)** | `STBOM.DBF` | แฟ้มส่วนประกอบสินค้า | `STKCOD` |
+| | `STCOD.DBF` | แฟ้มรหัสสินค้าของผู้ขาย/ลูกค้า | `STKCOD`, `CUSCOD` |
+| | `STCRD.DBF` | สต๊อคการ์ด / รายการใบขาย | `DOCNUM` (-> `ARTRN`), `SEQNUM`, `STKCOD` (-> `STMAS`), `STKDES`, `TRNQTY`, `TQUCOD` (Unit), `UNITPR`, `DISCAMT`, `TRNVAL`, `PACKING` |
+| | `STLOC.DBF` | แฟ้มคลังสินค้า | `STKCOD`, `LOCCOD`, `BALQTY` |
+| | `STMAS.DBF` | แฟ้มข้อมูลสินค้า | `STKCOD` (PK), `STKDES`, `STKTYP`, `STKGRP`, `QUCOD`, `TOTBAL`, `TOTVAL`, `SELLPR1`, `STATUS` |
+| | `STMIN.DBF` | แฟ้มจุดสั่งซื้อสินค้า | `STKCOD`, `LOCCOD` |
+| | `STPRI.DBF` | แฟ้มราคาขายสินค้า | `STKCOD` |
+| | `STTAK.DBF` | แฟ้มสินค้าเพื่อการตรวจนับ | `STKCOD`, `LOCCOD` |
+| | `STTRN.DBF` | แฟ้มรายการรับ/จ่ายสินค้า | `DOCNUM` |
 
-### 2.3 Express Document Codes (`RECTYP` & `DOCSTAT`)
+### 2.3 Express Document Codes (`RECTYP`, `SORECTYP` & `DOCSTAT`)
 
-**Document Types (`RECTYP` in `ARTRN.DBF`)**:
-- `0`: เงินมัดจำรับ (Advance / Deposit)
-- `1`: ขายเงินสด (Cash Sale — prefix `HS`)
-- `3`: ขายเงินเชื่อ / ใบกำกับภาษี (Credit Sale / Tax Invoice — prefix `IV`)
-- `4`: ใบเพิ่มหนี้ (Debit Note)
-- `5`: รับคืนสินค้า / ใบลดหนี้ (Sales Return / Credit Note — prefix `SR`)
-- `9`: รับชำระหนี้ / ใบเสร็จรับเงิน (Receipt — prefix `RE`)
+- **`RECTYP` (`ARTRN.DBF`)**: `0` เงินมัดจำรับ | `1` ขายเงินสด (`HS`) | `3` ขายเงินเชื่อ/ใบกำกับภาษี (`IV`) | `4` ใบเพิ่มหนี้ | `5` รับคืน/ใบลดหนี้ (`SR`) | `9` ใบเสร็จรับเงิน (`RE`)
+- **`SORECTYP` (`OESO.DBF` / `OESOIT.DBF`)**: `0` ใบสั่งขาย (`SO`) | `5` ใบเสนอราคา (`QT`)
+- **`DOCSTAT`**: `0` / `N` ปกติ (Active/Open) | `C` ยกเลิก | `P` ชำระแล้ว | `F` เสร็จสิ้น | `V` โอน GL แล้ว
 
-**Document Status (`DOCSTAT`)**:
-- `0`: ปกติ (Active / Open)
-- `C`: ยกเลิก (Cancelled)
-- `P`: ชำระแล้ว (Paid)
-- `F`: เสร็จสิ้น (Fulfilled / Completed)
-- `V`: โอนไปสมุดรายวัน GL แล้ว (Posted to General Ledger)
+### 2.4 Writing to Express DBF & Updating `.CDX` (VFPOLEDB Pattern)
+- Express `.DBF` tables use `BYTE28_TABLEFLAGS = 0x00` (non-structural `.CDX`). Standard SQL `INSERT INTO` via `VFPOLEDB` writes `.DBF` only and **does not** update `.CDX`.
+- To update both `.DBF` and `.CDX` live in `SHARED` mode without manual Reindex in Express Desktop, execute `EXECSCRIPT(...)` via 32-bit PowerShell (`SysWOW64`) + `VFPOLEDB.1` on the Windows host:
+  ```foxpro
+  SET EXCLUSIVE OFF
+  USE OESO IN 0 SHARED
+  SELECT OESO
+  SET INDEX TO OESO
+  APPEND BLANK
+  REPLACE ...
+  FLUSH
+  USE IN OESO
+  ```
 
 ---
 
@@ -284,3 +332,4 @@ services:
    - Avoid `flex items-center` with `overflow-y-auto` on the modal outer wrapper. Use `items-start justify-center` with `my-auto` inside the modal body, and mount to `document.body` via `createPortal()`.
 5. **Theme flash or React Hydration Error on reload:**
    - Confirm `suppressHydrationWarning` is present on both `<html>` and `<body>` in `src/app/layout.tsx`.
+
