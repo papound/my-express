@@ -84,18 +84,48 @@ export function getSnapshotStatus(): SnapshotStatus {
 }
 
 /**
+ * Check if Realtime root has at least one valid Express company (ISINFO.DBF).
+ */
+export function isRealtimeAvailable(): boolean {
+  const rtRoot = getRealtimeRootPath();
+  if (!fs.existsSync(rtRoot)) return false;
+  try {
+    const defaultId = getDefaultCompanyId();
+    if (findIsInfoPath(path.join(rtRoot, defaultId))) return true;
+    const entries = fs.readdirSync(rtRoot, { withFileTypes: true });
+    return entries.some(
+      (e) =>
+        e.isDirectory() &&
+        !e.name.startsWith(".") &&
+        !EXCLUDED_DIRS.has(e.name.toLowerCase()) &&
+        Boolean(findIsInfoPath(path.join(rtRoot, e.name)))
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Resolve current data mode ("realtime" | "snapshot") from cookie.
- * Falls back to "realtime" if snapshot root is unavailable.
+ * Automatically falls back to "snapshot" if realtime source is offline/unmounted.
  */
 export async function getDataMode(): Promise<DataMode> {
+  const snapAvailable = getSnapshotStatus().available;
+  const rtAvailable = isRealtimeAvailable();
   try {
     const cookieStore = await cookies();
     const selected = cookieStore.get(DATA_MODE_COOKIE_NAME)?.value?.trim();
-    if (selected === "snapshot" && getSnapshotStatus().available) {
+    if (selected === "snapshot" && snapAvailable) {
       return "snapshot";
+    }
+    if (selected === "realtime" && rtAvailable) {
+      return "realtime";
     }
   } catch {
     // cookies() may be unavailable outside request context
+  }
+  if (!rtAvailable && snapAvailable) {
+    return "snapshot";
   }
   return "realtime";
 }

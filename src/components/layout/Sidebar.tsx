@@ -86,6 +86,7 @@ export function Sidebar({
   >([]);
   const [activeCompanyId, setActiveCompanyId] = useState<string>("");
   const [activeMode, setActiveMode] = useState<"realtime" | "snapshot">("realtime");
+  const [realtimeAvailable, setRealtimeAvailable] = useState(true);
   const [snapshotAvailable, setSnapshotAvailable] = useState(false);
   const [snapshotUpdatedAt, setSnapshotUpdatedAt] = useState<string | null>(null);
   const [switchingCompany, setSwitchingCompany] = useState(false);
@@ -108,6 +109,9 @@ export function Sidebar({
         if (data?.activeMode === "snapshot" || data?.activeMode === "realtime") {
           setActiveMode(data.activeMode);
         }
+        if (typeof data?.realtimeAvailable === "boolean") {
+          setRealtimeAvailable(data.realtimeAvailable);
+        }
         setSnapshotAvailable(Boolean(data?.snapshotAvailable));
         setSnapshotUpdatedAt(data?.snapshotUpdatedAt ?? null);
       })
@@ -117,6 +121,7 @@ export function Sidebar({
   const handleSwitchMode = async (mode: "realtime" | "snapshot") => {
     if (mode === activeMode || switchingCompany) return;
     if (mode === "snapshot" && !snapshotAvailable) return;
+    if (mode === "realtime" && !realtimeAvailable) return;
     setSwitchingCompany(true);
     try {
       const res = await fetch("/api/companies", {
@@ -264,7 +269,7 @@ export function Sidebar({
                 <span className={`mr-1 ${isExpress ? "text-[#ab8e70]" : "text-slate-400"}`}>
                   วันที่ทำการ:
                 </span>
-                <strong className={isExpress ? "text-[#fdf2e4]" : "text-white"}>
+                <strong suppressHydrationWarning className={isExpress ? "text-[#fdf2e4]" : "text-white"}>
                   {new Date(company?.workingDate || Date.now()).toLocaleDateString("th-TH", {
                     day: "numeric",
                     month: "short",
@@ -318,9 +323,14 @@ export function Sidebar({
               >
                 <button
                   type="button"
-                  disabled={switchingCompany}
+                  disabled={switchingCompany || !realtimeAvailable}
                   onClick={() => handleSwitchMode("realtime")}
-                  className={`flex items-center justify-center gap-1 py-1 rounded-md transition cursor-pointer disabled:opacity-60 ${
+                  title={
+                    realtimeAvailable
+                      ? "อ่านข้อมูลสดจาก Express Server"
+                      : "Express Server ออฟไลน์ (/mnt/express ไม่พร้อมใช้งาน)"
+                  }
+                  className={`flex items-center justify-center gap-1 py-1 rounded-md transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
                     activeMode === "realtime"
                       ? isExpress
                         ? "bg-[#ab6528] text-white shadow-sm"

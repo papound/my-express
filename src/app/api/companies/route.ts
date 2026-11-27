@@ -5,6 +5,7 @@ import {
   getActiveCompanyId,
   getDataMode,
   getSnapshotStatus,
+  isRealtimeAvailable,
   listAvailableCompanies,
   type DataMode,
 } from "@/lib/dbf/company-context";
@@ -13,6 +14,7 @@ export async function GET() {
   try {
     const activeMode = await getDataMode();
     const snapshot = getSnapshotStatus();
+    const realtimeAvailable = isRealtimeAvailable();
     const [companies, activeCompanyId] = await Promise.all([
       listAvailableCompanies(activeMode),
       getActiveCompanyId(activeMode),
@@ -20,6 +22,7 @@ export async function GET() {
 
     return NextResponse.json({
       activeMode,
+      realtimeAvailable,
       snapshotAvailable: snapshot.available,
       snapshotUpdatedAt: snapshot.updatedAt,
       activeCompanyId,
@@ -35,6 +38,7 @@ export async function GET() {
     return NextResponse.json(
       {
         activeMode: "realtime",
+        realtimeAvailable: false,
         snapshotAvailable: false,
         snapshotUpdatedAt: null,
         activeCompanyId: "",
@@ -65,6 +69,13 @@ export async function POST(request: Request) {
     if (requestedMode === "snapshot" && !getSnapshotStatus().available) {
       return NextResponse.json(
         { error: "Snapshot source (/mnt/backup/my-express/current) is not available" },
+        { status: 400 }
+      );
+    }
+
+    if (requestedMode === "realtime" && !isRealtimeAvailable()) {
+      return NextResponse.json(
+        { error: "Realtime source (/mnt/express) is currently offline" },
         { status: 400 }
       );
     }
