@@ -1,4 +1,4 @@
-import { getActiveCompanyId } from "@/lib/dbf/company-context";
+import { getActiveCompanyId, getDataMode } from "@/lib/dbf/company-context";
 
 export const ALLOWED_WRITE_COMPANY = "WriteTes";
 
@@ -15,7 +15,19 @@ export interface JenkinsWriteResult {
 export async function triggerExpressQuotationWrite(
   payload: Record<string, unknown>
 ): Promise<JenkinsWriteResult> {
-  const activeCompany = await getActiveCompanyId();
+  const activeMode = await getDataMode();
+  if (activeMode !== "realtime") {
+    return {
+      ok: false,
+      status: 403,
+      data: {
+        ok: false,
+        error: "Write operations are disabled in Snapshot mode (Read-Only).",
+      },
+    };
+  }
+
+  const activeCompany = await getActiveCompanyId(activeMode);
   if (activeCompany !== ALLOWED_WRITE_COMPANY) {
     return {
       ok: false,

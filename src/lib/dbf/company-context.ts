@@ -4,6 +4,14 @@ import { cookies } from "next/headers";
 import { DBFFile } from "dbffile";
 
 export const COMPANY_COOKIE_NAME = "express_company";
+export const DATA_MODE_COOKIE_NAME = "express_data_mode";
+
+export type DataMode = "realtime" | "snapshot";
+
+export interface SnapshotStatus {
+  available: boolean;
+  updatedAt: string | null;
+}
 
 export interface CompanyOption {
   id: string;
@@ -28,15 +36,68 @@ function cleanDbfStr(value: unknown): string {
 }
 
 /**
- * Root directory containing Express company folders.
+ * Root directory containing Express company folders for Realtime mode.
  * Uses DBF_ROOT_PATH if set, otherwise parent of DBF_DATA_PATH (e.g. ./data or /data/express).
  */
-export function getDbfRootPath(): string {
+export function getDbfRootPath(mode: DataMode = "realtime"): string {
+  if (mode === "snapshot") {
+    return getSnapshotRootPath() || getRealtimeRootPath();
+  }
+  return getRealtimeRootPath();
+}
+
+function getRealtimeRootPath(): string {
   if (process.env.DBF_ROOT_PATH) {
     return path.resolve(process.env.DBF_ROOT_PATH);
   }
   const defaultDataPath = process.env.DBF_DATA_PATH || "./data/ThongTha";
   return path.dirname(path.resolve(defaultDataPath));
+}
+
+export function getSnapshotRootPath(): string | null {
+  const raw = process.env.DBF_SNAPSHOT_ROOT_PATH?.trim();
+  if (!raw) return null;
+  return path.resolve(raw);
+}
+
+/**
+ * Inspect whether snapshot root exists and return its latest modification timestamp.
+ */
+export function getSnapshotStatus(): SnapshotStatus {
+  const snapRoot = getSnapshotRootPath();
+  if (!snapRoot || !fs.existsSync(snapRoot)) {
+    return { available: false, updatedAt: null };
+  }
+
+  try {
+    const defaultId = getDefaultCompanyId();
+    const defaultIsInfo = findIsInfoPath(path.join(snapRoot, defaultId));
+    const statTarget = defaultIsInfo || snapRoot;
+    const stat = fs.statSync(statTarget);
+    return {
+      available: true,
+      updatedAt: stat.mtime.toISOString(),
+    };
+  } catch {
+    return { available: false, updatedAt: null };
+  }
+}
+
+/**
+ * Resolve current data mode ("realtime" | "snapshot") from cookie.
+ * Falls back to "realtime" if snapshot root is unavailable.
+ */
+export async function getDataMode(): Promise<DataMode> {
+  try {
+    const cookieStore = await cookies();
+    const selected = cookieStore.get(DATA_MODE_COOKIE_NAME)?.value?.trim();
+    if (selected === "snapshot" && getSnapshotStatus().available) {
+      return "snapshot";
+    }
+  } catch {
+    // cookies() may be unavailable outside request context
+  }
+  return "realtime";
 }
 
 export function getDefaultCompanyId(): string {
@@ -65,10 +126,11 @@ function isSafeFolderName(name: string): boolean {
 }
 
 /**
- * Scan DBF_ROOT_PATH for all subdirectories containing ISINFO.DBF.
+ * Scan the active mode's DBF root for all subdirectories containing ISINFO.DBF.
  */
-export async function listAvailableCompanies(): Promise<CompanyOption[]> {
-  const rootPath = getDbfRootPath();
+export async function listAvailableCompanies(mode?: DataMode): Promise<CompanyOption[]> {
+  const activeMode = mode ?? (await getDataMode());
+  const rootPath = getDbfRootPath(activeMode);
   const defaultId = getDefaultCompanyId();
   const companies: CompanyOption[] = [];
 
@@ -127,11 +189,12 @@ export async function listAvailableCompanies(): Promise<CompanyOption[]> {
 }
 
 /**
- * Resolve the currently selected company ID from cookie, validated against DBF_ROOT_PATH.
+ * Resolve the currently selected company ID from cookie, validated against active mode's root.
  */
-export async function getActiveCompanyId(): Promise<string> {
+export async function getActiveCompanyId(mode?: DataMode): Promise<string> {
+  const activeMode = mode ?? (await getDataMode());
   const defaultId = getDefaultCompanyId();
-  const rootPath = getDbfRootPath();
+  const rootPath = getDbfRootPath(activeMode);
 
   try {
     const cookieStore = await cookies();
@@ -153,8 +216,9 @@ export async function getActiveCompanyId(): Promise<string> {
  * Resolve the absolute filesystem path for the active company's DBF directory.
  */
 export async function getActiveDataPath(): Promise<string> {
-  const activeId = await getActiveCompanyId();
-  const rootPath = getDbfRootPath();
+  const activeMode = await getDataMode();
+  const activeId = await getActiveCompanyId(activeMode);
+  const rootPath = getDbfRootPath(activeMode);
   const resolved = path.join(rootPath, activeId);
   if (fs.existsSync(resolved)) {
     return resolved;

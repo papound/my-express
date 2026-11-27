@@ -79,13 +79,19 @@ export default function QuotationsPage() {
   const [selectedSonum, setSelectedSonum] = useState<string | null>(null);
   const [popupInvoiceDocnum, setPopupInvoiceDocnum] = useState<string | null>(null);
   const [activeCompanyId, setActiveCompanyId] = useState<string>("");
+  const [activeMode, setActiveMode] = useState<"realtime" | "snapshot">("realtime");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingQuotation, setEditingQuotation] = useState<QuotationFormInitialData | null>(null);
 
   useEffect(() => {
     fetch("/api/companies")
       .then((r) => r.json())
-      .then((j) => setActiveCompanyId(j.activeCompanyId || ""))
+      .then((j) => {
+        setActiveCompanyId(j.activeCompanyId || "");
+        if (j.activeMode === "snapshot" || j.activeMode === "realtime") {
+          setActiveMode(j.activeMode);
+        }
+      })
       .catch(() => {});
   }, []);
 
@@ -128,7 +134,7 @@ export default function QuotationsPage() {
             </p>
           </div>
           <div className="flex items-center gap-2 self-start sm:self-auto">
-            {activeCompanyId === "WriteTes" && (
+            {activeMode === "realtime" && activeCompanyId === "WriteTes" && (
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition"
@@ -428,7 +434,7 @@ export default function QuotationsPage() {
       <QuotationDetailModal
         sonum={selectedSonum}
         onClose={() => setSelectedSonum(null)}
-        activeCompanyId={activeCompanyId}
+        activeCompanyId={activeMode === "realtime" ? activeCompanyId : ""}
         onMutated={fetchData}
         onEdit={(initial) => {
           setSelectedSonum(null);

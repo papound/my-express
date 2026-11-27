@@ -22,6 +22,8 @@ import {
   Boxes,
   Moon,
   Sun,
+  Archive,
+  Radio,
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -83,6 +85,9 @@ export function Sidebar({
     Array<{ id: string; name: string; engName?: string }>
   >([]);
   const [activeCompanyId, setActiveCompanyId] = useState<string>("");
+  const [activeMode, setActiveMode] = useState<"realtime" | "snapshot">("realtime");
+  const [snapshotAvailable, setSnapshotAvailable] = useState(false);
+  const [snapshotUpdatedAt, setSnapshotUpdatedAt] = useState<string | null>(null);
   const [switchingCompany, setSwitchingCompany] = useState(false);
 
   useEffect(() => {
@@ -100,9 +105,35 @@ export function Sidebar({
         if (data?.activeCompanyId) {
           setActiveCompanyId(data.activeCompanyId);
         }
+        if (data?.activeMode === "snapshot" || data?.activeMode === "realtime") {
+          setActiveMode(data.activeMode);
+        }
+        setSnapshotAvailable(Boolean(data?.snapshotAvailable));
+        setSnapshotUpdatedAt(data?.snapshotUpdatedAt ?? null);
       })
       .catch((err) => console.error("Failed to load companies:", err));
   }, []);
+
+  const handleSwitchMode = async (mode: "realtime" | "snapshot") => {
+    if (mode === activeMode || switchingCompany) return;
+    if (mode === "snapshot" && !snapshotAvailable) return;
+    setSwitchingCompany(true);
+    try {
+      const res = await fetch("/api/companies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode }),
+      });
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        setSwitchingCompany(false);
+      }
+    } catch (err) {
+      console.error("Failed to switch data mode:", err);
+      setSwitchingCompany(false);
+    }
+  };
 
   const handleSwitchCompany = async (companyId: string) => {
     if (!companyId || companyId === activeCompanyId || switchingCompany) return;
@@ -246,17 +277,97 @@ export function Sidebar({
             {/* Database Status Pill */}
             <div
               className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] border ${
-                isExpress
+                activeMode === "snapshot"
+                  ? isExpress
+                    ? "bg-amber-950/50 border-amber-700/50 text-amber-200"
+                    : "bg-amber-950/40 border-amber-700/50 text-amber-200"
+                  : isExpress
                   ? "bg-[#2e2015]/80 border-[#4a3422] text-[#dfcaaf]"
                   : "bg-slate-800/60 border-slate-700/50 text-slate-300"
               }`}
             >
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <Database size={13} className="text-emerald-400 shrink-0" />
-              <span className="truncate">{company?.name ? `${company.name} (DBF Live)` : "Express (DBF Live)"}</span>
+              {activeMode === "snapshot" ? (
+                <>
+                  <Archive size={13} className="text-amber-400 shrink-0" />
+                  <span className="truncate">
+                    {company?.name ? `${company.name} (Snapshot)` : "Express (Snapshot)"}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="relative flex h-2 w-2 shrink-0">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <Database size={13} className="text-emerald-400 shrink-0" />
+                  <span className="truncate">
+                    {company?.name ? `${company.name} (DBF Live)` : "Express (DBF Live)"}
+                  </span>
+                </>
+              )}
+            </div>
+
+            {/* Data Source Mode Toggle (Realtime vs Snapshot) */}
+            <div className="pt-0.5">
+              <div
+                className={`grid grid-cols-2 gap-1 p-1 rounded-lg border text-[11px] font-semibold ${
+                  isExpress
+                    ? "bg-[#1c140e] border-[#4a3422]"
+                    : "bg-slate-950/70 border-slate-800"
+                }`}
+              >
+                <button
+                  type="button"
+                  disabled={switchingCompany}
+                  onClick={() => handleSwitchMode("realtime")}
+                  className={`flex items-center justify-center gap-1 py-1 rounded-md transition cursor-pointer disabled:opacity-60 ${
+                    activeMode === "realtime"
+                      ? isExpress
+                        ? "bg-[#ab6528] text-white shadow-sm"
+                        : "bg-emerald-600 text-white shadow-sm"
+                      : isExpress
+                      ? "text-[#bfa285] hover:text-[#fdf2e4]"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  <Radio size={12} />
+                  <span>Realtime</span>
+                </button>
+                <button
+                  type="button"
+                  disabled={switchingCompany || !snapshotAvailable}
+                  onClick={() => handleSwitchMode("snapshot")}
+                  title={
+                    snapshotAvailable
+                      ? snapshotUpdatedAt
+                        ? `Snapshot ล่าสุด: ${new Date(snapshotUpdatedAt).toLocaleString("th-TH")}`
+                        : "สลับไปอ่านจาก PVE Snapshot"
+                      : "ไม่พบโฟลเดอร์ Snapshot (/mnt/backup/my-express/current)"
+                  }
+                  className={`flex items-center justify-center gap-1 py-1 rounded-md transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+                    activeMode === "snapshot"
+                      ? "bg-amber-600 text-white shadow-sm"
+                      : isExpress
+                      ? "text-[#bfa285] hover:text-[#fdf2e4]"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  <Archive size={12} />
+                  <span>Snapshot</span>
+                </button>
+              </div>
+              {activeMode === "snapshot" && snapshotUpdatedAt && (
+                <p className="text-[10px] text-amber-300/90 mt-1 px-0.5 truncate">
+                  ข้อมูล ณ:{" "}
+                  {new Date(snapshotUpdatedAt).toLocaleString("th-TH", {
+                    day: "numeric",
+                    month: "short",
+                    year: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              )}
             </div>
 
             {/* Company Switcher (shown when multiple Express companies exist) */}
