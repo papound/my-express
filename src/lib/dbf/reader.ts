@@ -2,13 +2,30 @@
  * DBF Reader — อ่านไฟล์ DBF format (Visual FoxPro) ด้วย TIS-620 encoding
  * ใช้ library: dbffile
  */
+import fs from "fs";
 import path from "path";
 import { DBFFile } from "dbffile";
 import { getActiveDataPath } from "./company-context";
 
 async function getDbfPath(tableName: string): Promise<string> {
   const dataPath = await getActiveDataPath();
-  return path.resolve(dataPath, `${tableName.toUpperCase()}.DBF`);
+  const targetName = `${tableName.toUpperCase()}.DBF`;
+  const exactPath = path.resolve(dataPath, targetName);
+  if (fs.existsSync(exactPath)) {
+    return exactPath;
+  }
+
+  // Case-insensitive fallback for Linux filesystems (e.g. ext4 snapshots with istab.DBF)
+  try {
+    const entries = fs.readdirSync(dataPath);
+    const match = entries.find((f) => f.toUpperCase() === targetName);
+    if (match) {
+      return path.resolve(dataPath, match);
+    }
+  } catch {
+    // Fall through to exactPath so DBFFile.open throws the standard ENOENT
+  }
+  return exactPath;
 }
 
 /**
