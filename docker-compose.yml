@@ -20,6 +20,6 @@ services:
       - PORT=3000
     volumes:
       # Production parent path mounted via CIFS over Tailscale (contains all Express companies)
-      - ${HOST_DBF_ROOT:-/mnt/express}:/data/express:ro
+      - ${HOST_DBF_ROOT:-/mnt/express}:/data/express:ro,rslave
       # PVE local snapshot/backup path (read-only)
       - ${HOST_DBF_SNAPSHOT_ROOT:-/mnt/backup/my-express/current}:/data/express-snapshot:ro
